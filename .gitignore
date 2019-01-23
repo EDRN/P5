@@ -1,0 +1,16 @@
+.DS_Store
+._*
+.*.cfg
+bin
+eggs
+develop-eggs
+var
+*.sublime-workspace
+dist
+build
+parts
+.idea/
+plone/
+*.log
+site.cfg
+ops.cfg
