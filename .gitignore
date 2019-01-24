@@ -14,3 +14,4 @@ plone/
 *.log
 site.cfg
 ops.cfg
+MASTER-PACKAGE
