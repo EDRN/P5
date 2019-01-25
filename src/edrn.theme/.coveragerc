@@ -1,0 +1,6 @@
+[report]
+include =
+    src/edrnsite/*
+omit =
+    */test*
+    */upgrades/*
