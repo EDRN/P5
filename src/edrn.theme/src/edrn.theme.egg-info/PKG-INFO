@@ -1,0 +1,96 @@
+Metadata-Version: 1.1
+Name: edrn.theme
+Version: 5.0.0
+Summary: EDRN site theme
+Home-page: https://pypi.python.org/pypi/edrn.theme
+Author: Sean Kelly
+Author-email: kelly@seankelly.biz
+License: ALv2
+Description-Content-Type: UNKNOWN
+Description: ===============
+        edrn.theme
+        ===============
+        
+        This package provides the look-and-feel for the EDRN site.
+        
+        
+        
+        Features
+        --------
+        
+        • Rewritten from scratch for Plone 5
+        
+        
+        Examples
+        --------
+        
+        This add-on can be seen in action at the following sites:
+        • https://edrn.nci.nih.gov/
+        • https://edrn.jpl.nasa.gov/
+        
+        
+        Documentation
+        -------------
+        
+        Full documentation for end users can be found in the "docs" folder.
+        
+        
+        Translations
+        ------------
+        
+        This product has not been translated into any other languages than US English.
+        
+        
+        Installation
+        ------------
+        
+        Install edrn.theme by adding it to your buildout or by including it as a
+        dependency of a policy package and then running ``bin/buildout``
+        
+        
+        Contribute
+        ----------
+        
+        • Issue Tracker: https://github.com/EDRN/P5/issues
+        • Source Code: https://github.com/EDRN/P5
+        
+        
+        Support
+        -------
+        
+        If you are having issues, please let us know.
+        We have a mailing list located at: ic-portal@jpl.nasa.gov
+        
+        
+        License
+        -------
+        
+        The project is licensed under the ALv2.
+        
+        
+        Contributors
+        ============
+        
+        • Sean Kelly, kelly@seankelly.biz
+        
+        
+        Changelog
+        =========
+        
+        
+        5.0.0 (unreleased)
+        ------------------
+        
+        - Initial release.
+          [nutjob4life]
+        
+Keywords: Early Detection cancer Python Plone
+Platform: UNKNOWN
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Plone
+Classifier: Framework :: Plone :: 5.0
+Classifier: Framework :: Plone :: 5.1
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Operating System :: OS Independent
+Classifier: License :: OSI Approved :: Apache Software License

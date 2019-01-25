@@ -51,8 +51,8 @@ and then running ``bin/buildout``
 Contribute
 ----------
 
-- Issue Tracker: https://github.com/EDRN/edrnsite.policy/issues
-- Source Code: https://github.com/EDRN/edrnsite.policy
+• Issue Tracker: https://github.com/EDRN/P5/issues
+• Source Code: https://github.com/EDRN/P5
 
 
 Support
