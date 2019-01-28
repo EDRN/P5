@@ -1,5 +1,12 @@
-<?xml version="1.0"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <registry>
-<!-- -*- extra stuff goes here -*- -->
-
+    <record name='plone.site_title' field="site_title"
+        interface='Products.CMFPlone.interfaces.controlpanel.ISiteSchema'>
+        <field type="plone.registry.field.TextLine">
+            <default>Plone site</default>
+            <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">This shows up in the title bar of browsers and in syndication feeds.</description>
+            <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Site title</title>
+        </field>
+        <value>Early Detection Research Network</value>
+    </record>
 </registry>

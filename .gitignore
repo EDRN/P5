@@ -15,3 +15,5 @@ plone/
 site.cfg
 ops.cfg
 MASTER-PACKAGE
+*.py[co]
+*.egg-info

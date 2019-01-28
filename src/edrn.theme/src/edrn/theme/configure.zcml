@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:plone="http://namespaces.plone.org/plone"
@@ -24,7 +25,7 @@
       name="default"
       title="EDRN Theme"
       directory="profiles/default"
-      description="Installs the edrn.theme add-on."
+      description="Installs the EDRN look and feel add-on, edrn.theme."
       provides="Products.GenericSetup.interfaces.EXTENSION"
       post_handler=".setuphandlers.post_install"
       />
@@ -42,6 +43,8 @@
       factory=".setuphandlers.HiddenProfiles"
       name="edrn.theme-hiddenprofiles"
       />
+
+  <browser:resourceDirectory name='edrn.theme' directory='static'/>
 
   <!-- -*- extra stuff goes here -*- -->
 

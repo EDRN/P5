@@ -3,6 +3,6 @@
        accesskey="1"
        tal:attributes="href view/navigation_root_url"
        i18n:domain="plone">
-        <img src="" tal:attributes="src string:${context/portal_url}/++resource++edrn.theme.images/logo.png"
+        <img src="" tal:attributes="src string:${context/portal_url}/++resource++edrn.theme/edrn.png"
             alt="Early Detection Research Network" /></a>
 </div>

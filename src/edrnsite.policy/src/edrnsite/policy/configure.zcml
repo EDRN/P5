@@ -24,7 +24,7 @@
       name="default"
       title="EDRN Site Policy"
       directory="profiles/default"
-      description="Installs the edrnsite.policy add-on."
+      description="Installs the policy (settings and dependencies) for the EDRN site, the edrnsite.policy add-on."
       provides="Products.GenericSetup.interfaces.EXTENSION"
       post_handler=".setuphandlers.post_install"
       />

@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 """Setup tests for this package."""
+
+from edrnsite.policy.testing import EDRNSITE_POLICY_INTEGRATION_TESTING  # noqa
 from plone import api
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
-from edrnsite.policy.testing import EDRNSITE_POLICY_INTEGRATION_TESTING  # noqa
+from plone.registry.interfaces import IRegistry
 
 import unittest
 
@@ -31,6 +33,12 @@ class TestSetup(unittest.TestCase):
         self.assertIn(
             IEdrnsitePolicyLayer,
             utils.registered_layers())
+
+    def test_title(self):
+        '''Ensure the title is correct.'''
+        title = api.portal.get_registry_record('plone.site_title')
+        self.assertEquals(title, u'Early Detection Research Network',
+            u'Title not set to "Early Detection Research Network"')
 
 
 class TestUninstall(unittest.TestCase):

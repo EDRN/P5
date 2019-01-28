@@ -12,22 +12,14 @@
       layer="edrn.theme.interfaces.IEdrnThemeLayer"
       />
 
-  <!-- Publish static files -->
-  <plone:static
-      name="edrn.theme"
-      type="plone"
-      directory="static"
-      />
-
   <!-- Custom EDRN logo -->
   <browser:viewlet
     name='plone.logo'
     manager='plone.app.layout.viewlets.interfaces.IPortalHeader'
     class='plone.app.layout.viewlets.common.LogoViewlet'
     template='logo.pt'
-    layer='.interfaces.IThemeSpecific'
+    layer='edrn.theme.interfaces.IEdrnThemeLayer'
     permission='zope2.View'
     />
-
 
 </configure>

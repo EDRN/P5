@@ -1,6 +1,0 @@
-
-    [z3c.autoinclude.plugin]
-    target = plone
-    [console_scripts]
-    update_locale = edrn.theme.locales.update:update_locale
-    

@@ -41,6 +41,7 @@ setup(
     install_requires=[
         # -*- Extra requirements: -*-
         'Products.CMFPlone',
+        'edrn.theme',
         # == Provided by mr.bob: ==
         'plone.api>=1.8.4',
         'Products.GenericSetup>=1.8.2',
