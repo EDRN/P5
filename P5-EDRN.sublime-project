@@ -8,7 +8,8 @@
             "dist",
             "parts",
             "src",
-            "var"
+            "var",
+            "__pycache__"
          ],
          "file_exclude_patterns" : [
             ".*.cfg",
