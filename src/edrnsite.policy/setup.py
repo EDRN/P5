@@ -42,6 +42,7 @@ setup(
         # -*- Extra requirements: -*-
         'Products.CMFPlone',
         'edrn.theme',
+        'pas.plugins.ldap',
         # == Provided by mr.bob: ==
         'plone.api>=1.8.4',
         'Products.GenericSetup>=1.8.2',
