@@ -99,11 +99,3 @@ def main(argv):
 
 if __name__ == '__main__':
     sys.exit(0 if main(sys.argv[2:]) is True else -1)
-
-
-# >>> from node.ext.ldap.interfaces import ILDAPProps
-# >>> plugin = app.Plone7.acl_users.pasldap
-# >>> props = ILDAPProps(plugin)
-# >>> props.password = 'r.3>Wwj3FLTnFrHZ'
-# >>> import transaction
-# >>> transaction.commit()

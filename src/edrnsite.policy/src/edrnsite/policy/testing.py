@@ -7,7 +7,7 @@ from plone.app.testing import IntegrationTesting
 from plone.app.testing import PloneSandboxLayer
 from plone.testing import z2
 
-import edrnsite.policy
+import edrnsite.policy, edrn.theme
 
 
 class EdrnsitePolicyLayer(PloneSandboxLayer):
@@ -19,6 +19,7 @@ class EdrnsitePolicyLayer(PloneSandboxLayer):
         # The z3c.autoinclude feature is disabled in the Plone fixture base
         # layer.
         self.loadZCML(package=edrnsite.policy)
+        self.loadZCML(package=edrn.theme)
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'edrnsite.policy:default')
