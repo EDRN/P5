@@ -26,7 +26,7 @@ def post_install(context):
 # -----
 #
 # Add Plone site by hand, no add-ons:
-#   Import about-edrn.zexp by hand status: ✅ 
+#   Import about-edrn.zexp by hand status: ✅
 # Add Plone site by hand, with edrnsite.policy, but auto zexp import disabled:
 #   Import about-edrn.zexp by hand status: ✅
 # Add Plone site with collective.recipe.plonesite (no add-ons):
