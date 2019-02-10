@@ -8,7 +8,8 @@ from AccessControl.SecurityManager import setSecurityPolicy
 from Products.CMFCore.tests.base.security import PermissiveSecurityPolicy, OmnipotentUser
 from Products.CMFPlone.factory import addPloneSite
 from Testing import makerequest
-import sys, logging, transaction, argparse, os
+from zope.component.hooks import setSite
+import sys, logging, transaction, argparse, os, plone.api
 
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)-8s %(message)s')
@@ -64,6 +65,7 @@ def _loadZEXPFiles(app, username, password):
         logging.info('Object with key "edrn" not found in Zope app server; not loading ZEXP files')
         return True
     portal = app['edrn']
+    setSite(portal)
     zexpDir = os.environ.get('ZEXP_EXPORTS', '/usr/local/edrn/portal/zexp-exports')
     for objID in ('about-edrn',):
         if objID in portal.keys():
@@ -76,6 +78,9 @@ def _loadZEXPFiles(app, username, password):
         logging.info('Importing zexp file "%s" to portal path "/%s"', zexpFile, objID)
         portal._importObjectFromFile(zexpFile)
         transaction.commit()
+    logging.info('Clearing and rebuilding the catalog')
+    catalog = plone.api.portal.get_tool('portal_catalog')
+    catalog.clearFindAndRebuild()
     logging.info('Done importing ZEXP files')
 
 
