@@ -77,7 +77,6 @@ def setLDAPPassword(portal, password):
 
 
 def main(argv):
-    _logger.debug('argv = %s', repr(argv))
     if len(argv) == 2:
         password = argv[1]
     elif len(argv) == 1:
