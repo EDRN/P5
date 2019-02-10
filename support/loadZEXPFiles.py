@@ -67,7 +67,7 @@ def _loadZEXPFiles(app, username, password):
     portal = app['edrn']
     setSite(portal)
     zexpDir = os.environ.get('ZEXP_EXPORTS', '/usr/local/edrn/portal/zexp-exports')
-    for objID in ('about-edrn',):
+    for objID in ('about-edrn', 'resources'):
         if objID in portal.keys():
             logging.info('Path "/%s" already exists in portal; skipping zexp import of it', objID)
             continue
