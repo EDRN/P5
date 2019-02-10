@@ -19,6 +19,9 @@ To build::
 
     p5py2.7 bootstrap.py -c dev.cfg
     bin/buildout -c dev.cfg
-    bin/buildout -c dev.cfg install basic-site
+    bin/zope-debug run support/admin.py root root
+    bin/zope-debug run support/createEDRNSite.py root root
+    bin/zope-debug run support/ldap-password.py 'LDAP-PASSWORD-HERE'
+    env ZEXP_EXPORTS=/path/to/zexp-exports-dir bin/zope-debug run support/loadZEXPFiles.py root root
     bin/zope-debug fg
     curl http://localhost:6468/edrn

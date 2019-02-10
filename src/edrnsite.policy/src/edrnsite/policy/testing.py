@@ -7,7 +7,7 @@ from plone.app.testing import IntegrationTesting
 from plone.app.testing import PloneSandboxLayer
 from plone.testing import z2
 
-import edrnsite.policy, edrn.theme
+import edrnsite.policy, edrn.theme, pas.plugins.ldap, yafowil.plone
 
 
 class EdrnsitePolicyLayer(PloneSandboxLayer):
@@ -18,6 +18,8 @@ class EdrnsitePolicyLayer(PloneSandboxLayer):
         # Load any other ZCML that is required for your tests.
         # The z3c.autoinclude feature is disabled in the Plone fixture base
         # layer.
+        self.loadZCML(package=yafowil.plone)
+        self.loadZCML(package=pas.plugins.ldap)
         self.loadZCML(package=edrnsite.policy)
         self.loadZCML(package=edrn.theme)
 
