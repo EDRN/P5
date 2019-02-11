@@ -22,7 +22,7 @@ _EXTENSION_IDS = [
     'plonetheme.barceloneta:default', 'plone.app.caching:default', 'edrnsite.policy:default'
 ]
 _TO_IMPORT = (
-    'about-edrn', 'resources', 'network-consulting-team', 'informatics'
+    'about-edrn', 'resources', 'network-consulting-team', 'informatics', 'advocates', 'funding-opportunities', 'docs'
 )
 
 
