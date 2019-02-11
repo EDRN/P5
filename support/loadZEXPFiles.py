@@ -21,6 +21,9 @@ _argParser.add_argument('password', help=u"Zope admin password")
 _EXTENSION_IDS = [
     'plonetheme.barceloneta:default', 'plone.app.caching:default', 'edrnsite.policy:default'
 ]
+_TO_IMPORT = (
+    'about-edrn', 'resources', 'network-consulting-team'
+)
 
 
 def _setupLogging():
@@ -67,7 +70,7 @@ def _loadZEXPFiles(app, username, password):
     portal = app['edrn']
     setSite(portal)
     zexpDir = os.environ.get('ZEXP_EXPORTS', '/usr/local/edrn/portal/zexp-exports')
-    for objID in ('about-edrn', 'resources'):
+    for objID in _TO_IMPORT:
         if objID in portal.keys():
             logging.info('Path "/%s" already exists in portal; skipping zexp import of it', objID)
             continue
