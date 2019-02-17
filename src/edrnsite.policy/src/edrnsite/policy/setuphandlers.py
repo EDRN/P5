@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
+
+
 from Products.CMFPlone.interfaces import INonInstallable
 from zope.interface import implementer
-import transaction, plone.api, os, logging, os.path
+import plone.api, logging
+
 
 _logger = logging.getLogger(__name__)
+
+
+_ITEMS_TO_DELETE = ('news', 'events', 'Members')
 
 
 @implementer(INonInstallable)
@@ -20,6 +26,14 @@ def post_install(context):
     """Post install script"""
     # Do something at the end of the installation of this package.
     # activateBarcelonetaTheme(context)
+    portal = plone.api.portal.get()
+    toDelete = []
+    for item in _ITEMS_TO_DELETE:
+        if item in portal.keys():
+            toDelete.append(item)
+    if toDelete:
+        _logger.info('Deleting the following from the portal: %r', toDelete)
+        portal.manage_delObjects(toDelete)
 
 
 # Cases
