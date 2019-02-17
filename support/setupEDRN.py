@@ -79,21 +79,13 @@ def _installAdmin(app, username, password):
 def _createEDRNSite(app):
     if 'edrn' in app.keys():
         logging.info('Object with key "edrn" already found in Zope app server; not adding an EDRN site')
-        return True
+        return app['edrn']
     site = addPloneSite(
         app,
         'edrn',
         u'Early Detection Research Network',
         u'Biomarkers: the key to early detection',
         extension_ids=_EXTENSION_IDS,
-        setup_content=False
-    )
-    transaction.commit()
-    addPloneSite(
-        app,
-        'Plone',
-        u'Plone',
-        u'Why is this not slow',
         setup_content=False
     )
     transaction.commit()
