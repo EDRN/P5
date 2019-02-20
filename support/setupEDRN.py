@@ -11,8 +11,6 @@ from plone.app.dexterity.behaviors.exclfromnav import IExcludeFromNavigation
 from Products.CMFCore.tests.base.security import PermissiveSecurityPolicy, OmnipotentUser
 from Products.CMFPlone.factory import addPloneSite
 from Testing import makerequest
-from zope.event import notify
-from zope.lifecycleevent import modified
 import sys, logging, transaction, argparse, os, os.path, plone.api
 
 
@@ -107,7 +105,6 @@ def _setLDAPPassword(portal, password):
     logging.debug('Setting LDAP password')
     props.password = password
     transaction.commit()
-    # notify(modified(acl_users))
     return True
 
 
@@ -124,22 +121,48 @@ def _loadZEXPFiles(portal):
         logging.info('Importing zexp file "%s" to portal path "/%s"', zexpFile, objID)
         portal._importObjectFromFile(zexpFile)
         transaction.commit()
-        # notify(modified(portal))
-    logging.info('Clearing and rebuilding the catalog')
-    catalog = plone.api.portal.get_tool('portal_catalog')
-    catalog.clearFindAndRebuild()
     logging.info('Done importing ZEXP files')
     transaction.commit()
 
 
+def _addToQuickLinks(context):
+    u'''Add the "quicklinks" tag to the given context object.'''
+    if u'quicklinks' not in context.subject:
+        subjects = list(getattr(context, u'subject', tuple()))
+        subjects.append(u'quicklinks')
+        context.subject = tuple(subjects)
+
+
 def _tuneUp(portal):
+    u'''Final tweaks.'''
+
+    # First, make sure the Network Consulting Team is not in the global navbar
+    # but ensure it's on the Quick Links
     if 'network-consulting-team' in portal.keys():
         logging.info('Removing network-consulting-team from navigation')
         folder = portal['network-consulting-team']
         adapter = IExcludeFromNavigation(folder, None)
         if adapter is not None:
             adapter.exclude_from_nav = True
-            # notify(modified(folder))
+        _addToQuickLinks(folder)
+
+    # Add more items to the Quick Links
+    for path in (
+        'informatics',
+        'advocates',
+        'funding-opportunities',
+        'docs',
+        'administrivia/division-of-cancer-prevention',
+        'administrivia/cancer-biomarkers-research-group'
+    ):
+        folder = portal.unrestrictedTraverse(path)
+        _addToQuickLinks(folder)
+
+    # Finally, make sure everything is indexed so they appear where they need
+    # to be
+    logging.info('Clearing and rebuilding the catalog')
+    catalog = plone.api.portal.get_tool('portal_catalog')
+    catalog.clearFindAndRebuild()
     transaction.commit()
     return True
 
