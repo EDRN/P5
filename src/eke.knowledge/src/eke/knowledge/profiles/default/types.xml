@@ -4,4 +4,6 @@
     <object name='eke.knowledge.bodysystemfolder' meta_type='Dexterity FTI'/>
     <object name='eke.knowledge.disease' meta_type='Dexterity FTI'/>
     <object name='eke.knowledge.diseasefolder' meta_type='Dexterity FTI'/>
+    <object name='eke.knowledge.publication' meta_type='Dexterity FTI'/>
+    <object name='eke.knowledge.publicationfolder' meta_type='Dexterity FTI'/>
 </object>

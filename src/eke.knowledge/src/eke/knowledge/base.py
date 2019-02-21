@@ -162,7 +162,9 @@ class Ingestor(grok.Adapter):
         context = aq_inner(self.context)
         if not context.ingestEnabled: raise IngestDisabled(context)
         catalog = plone.api.portal.get_tool('portal_catalog')
-        statements = self._readRDF(context.rdfDataSource)
+        statements = {}
+        for rdfDataSource in context.rdfDataSources:
+            statements.update(self._readRDF(rdfDataSource))
         results = catalog(
             object_provides=IKnowledgeObject.__identifier__,
             path=dict(query='/'.join(context.getPhysicalPath()), depth=1)

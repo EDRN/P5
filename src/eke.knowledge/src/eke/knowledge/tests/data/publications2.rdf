@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bmdb="http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#" xmlns:edrn="http://edrn.nci.nih.gov/rdf/schema.rdf#" xmlns:edrntype="http://edrn.nci.nih.gov/rdf/types.rdf#" xmlns:dc="http://purl.org/dc/terms/">
+  <edrntype:Publication rdf:about="http://edrn.jpl.nasa.gov/bmdb/publications/view/252">
+    <dc:title>A Combination of MUC5AC and CA19-9 Improves the Diagnosis of Pancreatic Cancer: A Multicenter Study.</dc:title>
+    <dc:author>Batra SK</dc:author>
+    <edrn:journal>Am J Gastroenterol</edrn:journal>
+    <bmdb:Published>2017 Jan</bmdb:Published>
+    <bmdb:Created>2017-09-01 05:32:31</bmdb:Created>
+    <bmdb:Modified>2017-09-01 05:32:31</bmdb:Modified>
+    <edrn:pmid>27845339</edrn:pmid>
+  </edrntype:Publication>
+  <edrntype:Publication rdf:about="http://edrn.jpl.nasa.gov/bmdb/publications/view/253">
+    <dc:title>Association Between Combined TMPRSS2:ERG and PCA3 RNA Urinary Testing and Detection of Aggressive Prostate Cancer.</dc:title>
+    <dc:author>Taneja S</dc:author>
+    <edrn:journal>JAMA Oncol</edrn:journal>
+    <bmdb:Published>2017 Aug 1</bmdb:Published>
+    <bmdb:Created>2018-09-06 11:27:22</bmdb:Created>
+    <bmdb:Modified>2018-09-06 11:27:22</bmdb:Modified>
+    <edrn:pmid>28520829</edrn:pmid>
+  </edrntype:Publication>
+</rdf:RDF>

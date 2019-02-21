@@ -49,8 +49,9 @@ _TO_IMPORT = (
     'secretome'
 )
 _RDF_FOLDERS = (
-    ('resources', 'eke.knowledge.bodysystemfolder', u'Body Systems', u'Body systems are organs of the body.', u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/body-systems/@@rdf'),
-    ('resources', 'eke.knowledge.diseasefolder', u'Diseases', u'Ailements affecting body systems.', u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/diseases/@@rdf'),
+    ('resources', 'eke.knowledge.bodysystemfolder', u'Body Systems', u'Body systems are organs of the body.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/body-systems/@@rdf']),
+    ('resources', 'eke.knowledge.diseasefolder', u'Diseases', u'Ailements affecting body systems.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/diseases/@@rdf']),
+    (None, 'eke.knowledge.publicationfolder', u'Publications', u'Items published by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf', u'http://edrn.jpl.nasa.gov/bmdb/rdf/publications']),
 )
 
 
@@ -190,7 +191,7 @@ def _publish(context, workflowTool=None):
 
 def _ingest(portal):
     folders, paths = [], []
-    for containerPath, fti, title, desc, url in _RDF_FOLDERS:
+    for containerPath, fti, title, desc, urls in _RDF_FOLDERS:
         if containerPath is None:
             container = portal
         else:
@@ -200,13 +201,12 @@ def _ingest(portal):
             fti,
             title=title,
             description=desc,
-            rdfDataSource=url,
+            rdfDataSources=urls,
             ingestEnabled=True
         )
         folders.append(folder)
-
         if containerPath is None:
-            paths.append(uncode(folder.id))
+            paths.append(unicode(folder.id))
         else:
             paths.append(unicode(containerPath + '/' + folder.id))
     for f in folders:
