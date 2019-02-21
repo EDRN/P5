@@ -17,3 +17,4 @@ ops.cfg
 MASTER-PACKAGE
 *.py[co]
 *.egg-info
+robot_output.xml
