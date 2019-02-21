@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<registry xmlns:i18n='http://xml.zope.org/namespaces/i18n'>
+    <record name='eke.knowledge.interfaces.IPanel.ingestEnabled'
+        interface='eke.knowledge.interfaces.IPanel'
+        field='ingestEnabled'>
+        <field type='plone.registry.field.Bool'>
+            <title i18n:domain='eke.knowledge' i18n:translate=''>Ingest Enabled</title>
+            <description i18n:domain='eke.knowledge' i18n:translate=''>
+                Globally enable RDF ingest.
+            </description>
+            <default>True</default>
+        </field>
+        <value>True</value>
+    </record>
+    <record name='eke.knowledge.interfaces.IPanel.ingestStart'
+        interface='eke.knowledge.interfaces.IPanel'
+        field='ingestStart'>
+        <field type='plone.registry.field.Datetime'>
+            <title i18n:domain='eke.knowledge' i18n:translate=''>Ingest Start Time</title>
+            <description i18n:domain='eke.knowledge' i18n:translate=''>
+                When set this tells the time an active ingest started. Do not set this value manually.
+            </description>
+        </field>
+    </record>
+    <record name='eke.knowledge.interfaces.IPanel.objects'
+        interface='eke.knowledge.interfaces.IPanel'
+        field='objects'>
+        <field type='plone.registry.field.List'>
+            <title i18n:domain='eke.knowledge' i18n:translate=''>Ingest Objects</title>
+            <description i18n:domain='eke.knowledge' i18n:translate=''>
+                Paths to objects in the portal that support RDF ingest.
+            </description>
+            <value_type type='plone.registry.field.TextLine'>
+                <title i18n:domain='eke.knowledge' i18n:translate=''>Object Path</title>
+            </value_type>
+        </field>
+    </record>
+
+</registry>

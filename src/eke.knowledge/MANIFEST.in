@@ -1,0 +1,5 @@
+graft src/eke
+graft docs
+include *.rst
+global-exclude *.pyc *.pyo
+
