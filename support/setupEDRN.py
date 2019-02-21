@@ -6,11 +6,16 @@
 from AccessControl.SecurityManagement import newSecurityManager, noSecurityManager
 from AccessControl.SecurityManager import setSecurityPolicy
 from node.ext.ldap.interfaces import ILDAPProps
-from zope.component.hooks import setSite
 from plone.app.dexterity.behaviors.exclfromnav import IExcludeFromNavigation
+from plone.dexterity.utils import createContentInContainer
+from plone.registry.interfaces import IRegistry
+from Products.CMFCore.interfaces import IFolderish
 from Products.CMFCore.tests.base.security import PermissiveSecurityPolicy, OmnipotentUser
+from Products.CMFCore.WorkflowCore import WorkflowException
 from Products.CMFPlone.factory import addPloneSite
 from Testing import makerequest
+from zope.component import getUtility
+from zope.component.hooks import setSite
 import sys, logging, transaction, argparse, os, os.path, plone.api
 
 
@@ -42,6 +47,9 @@ _TO_IMPORT = (
     'researchers',
     'resources',
     'secretome'
+)
+_RDF_FOLDERS = (
+    ('resources', 'eke.knowledge.bodysystemfolder', u'Body Systems', u'Body systems are organs of the body.', u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/body-systems/@@rdf'),
 )
 
 
@@ -167,6 +175,47 @@ def _tuneUp(portal):
     return True
 
 
+def _publish(context, workflowTool=None):
+    try:
+        if workflowTool is None: workflowTool = plone.api.portal.get_tool('portal_workflow')
+        workflowTool.doActionFor(context, action='publish')
+        context.reindexObject()
+    except WorkflowException:
+        pass
+    if IFolderish.providedBy(context):
+        for itemID, subItem in context.contentItems():
+            _publish(subItem, workflowTool)
+
+
+def _ingest(portal):
+    folders, paths = [], []
+    for containerPath, fti, title, desc, url in _RDF_FOLDERS:
+        if containerPath is None:
+            container = portal
+        else:
+            container = portal.unrestrictedTraverse(containerPath)
+        folder = createContentInContainer(
+            container,
+            fti,
+            title=title,
+            description=desc,
+            rdfDataSource=url,
+            ingestEnabled=True
+        )
+        folders.append(folder)
+
+        if containerPath is None:
+            paths.append(uncode(folder.id))
+        else:
+            paths.append(unicode(containerPath + '/' + folder.id))
+    for f in folders:
+        _publish(f)
+    registry = getUtility(IRegistry)
+    registry['eke.knowledge.interfaces.IPanel.objects'] = paths
+    ingestor = portal.unrestrictedTraverse('@@ingestRDF')
+    ingestor()
+
+
 def _setupEDRN(app, username, password, ldapPassword):
     app = makerequest.makerequest(app)
     _setupZopeSecurity(app)
@@ -177,6 +226,7 @@ def _setupEDRN(app, username, password, ldapPassword):
     _loadZEXPFiles(portal)  # Stack traces; see https://community.plone.org/t/stack-trace-when-loading-zexp-from-a-script/8060
     _setLDAPPassword(portal, ldapPassword)
     _tuneUp(portal)
+    _ingest(portal)
     noSecurityManager()
     transaction.commit()
 
