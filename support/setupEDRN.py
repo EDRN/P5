@@ -50,6 +50,7 @@ _TO_IMPORT = (
 )
 _RDF_FOLDERS = (
     ('resources', 'eke.knowledge.bodysystemfolder', u'Body Systems', u'Body systems are organs of the body.', u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/body-systems/@@rdf'),
+    ('resources', 'eke.knowledge.diseasefolder', u'Diseases', u'Ailements affecting body systems.', u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/diseases/@@rdf'),
 )
 
 

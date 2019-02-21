@@ -6,8 +6,9 @@ u'''Abstract (or not)) base classes for EKE'''
 from . import _
 from .errors import IngestDisabled, IngestError, RDFTypeMismatchError, TitlePredicateMissingError
 from .interfaces import IIngestor
-from .utils import IngestConsequences, publish
 from .knowledgefolder import IKnowledgeFolder
+from .knowledgeobject import IKnowledgeObject
+from .utils import IngestConsequences, publish
 from Acquisition import aq_inner
 from five import grok
 from plone.dexterity.utils import createContentInContainer
@@ -163,7 +164,7 @@ class Ingestor(grok.Adapter):
         catalog = plone.api.portal.get_tool('portal_catalog')
         statements = self._readRDF(context.rdfDataSource)
         results = catalog(
-            object_provides=IKnowledgeFolder.__identifier__,
+            object_provides=IKnowledgeObject.__identifier__,
             path=dict(query='/'.join(context.getPhysicalPath()), depth=1)
         )
         existingBrains = {}

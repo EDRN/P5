@@ -18,8 +18,8 @@ First, we shall require a test browser::
 Now to exercise the code.
 
 
-Body System Folders
-===================
+Body Systems
+============
 
 Body systems (aka Organs) are contained in folders that can go anywhere::
 
@@ -79,3 +79,52 @@ Let's enable ingest and try again::
     u'Rectum'
     >>> obj2.identifier
     u'urn:edrn:organs:rectum'
+
+
+Diseases
+========
+
+Similar to body systems but also contain a reference field::
+
+    >>> browser.open(portalURL)
+    >>> l = browser.getLink(id='eke-knowledge-diseasefolder')
+    >>> l.url.endswith('++add++eke.knowledge.diseasefolder')
+    True
+    >>> l.click()
+    >>> browser.getControl(name='form.widgets.title').value = u'Diseases'
+    >>> browser.getControl(name='form.widgets.description').value = u'Some testing diseases.'
+    >>> browser.getControl(name='form.widgets.rdfDataSource').value = u'testscheme://localhost/rdf/diseases'
+    >>> browser.getControl(name='form.widgets.ingestEnabled:list').value = True
+    >>> browser.getControl(name='form.buttons.save').click()
+    >>> 'diseases' in portal.keys()
+    True
+
+Ingesting::
+
+    >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases']
+    >>> transaction.commit()
+    >>> browser.open(portalURL + '/@@ingestRDF')
+    >>> browser.contents
+    '...RDF Ingest Report...Objects Created (2)...'
+    >>> folder = portal['diseases']
+    >>> len(folder.keys())
+    2
+    >>> keys = folder.keys()
+    >>> keys.sort()
+    >>> keys
+    ['anal-seepage', 'rectocele']
+    >>> obj1 = folder['anal-seepage']
+    >>> obj1.title
+    u'Anal seepage'
+    >>> obj1.identifier
+    u'http://edrn.nci.nih.gov/data/diseases/1'
+    >>> obj1.description
+    u'Seepage of pus or mucus from the anus'
+    >>> obj1.icd9Code
+    u'204.9'
+    >>> obj1.icd10Code
+    u'C81-Q96'
+    >>> len(obj1.affectedOrgans)
+    1
+    >>> obj1.affectedOrgans[0].to_object.title
+    u'Anus'
