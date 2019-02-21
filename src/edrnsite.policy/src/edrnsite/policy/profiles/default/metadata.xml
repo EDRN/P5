@@ -5,6 +5,7 @@
         <dependency>profile-plone.app.dexterity:default</dependency>
         <dependency>profile-plone.app.contenttypes:default</dependency>
         <dependency>profile-edrn.theme:default</dependency>
+        <dependency>profile-eke.knowledge:default</dependency>
         <dependency>profile-pas.plugins.ldap.plonecontrolpanel:default</dependency>
     </dependencies>
 </metadata>
