@@ -18,3 +18,5 @@ MASTER-PACKAGE
 *.py[co]
 *.egg-info
 robot_output.xml
+zexp-exports
+typescript
