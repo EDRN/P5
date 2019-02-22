@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
+from plone.app.textfield.value import RichTextValue
 from plone.dexterity.utils import createContentInContainer
 from plone.portlet.collection.collection import Assignment as CollectionPortletAssignment
 from plone.portlets.interfaces import ILocalPortletAssignable, IPortletManager, IPortletAssignmentMapping
@@ -11,13 +12,28 @@ from zope.component import getUtility, getMultiAdapter
 from zope.container import contained
 from zope.container.interfaces import INameChooser
 from zope.interface import implementer
-import plone.api, logging
+import plone.api, logging, transaction
 
 
 _logger = logging.getLogger(__name__)
 
 
 _ITEMS_TO_DELETE = ('news', 'events', 'Members')
+_HOME_PAGE_DESC = u'''The Early Detection Research Network (EDRN), an initiative of the National Cancer Institute (NCI), brings together dozens of institutions to help accelerate the translation of biomarker information into clinical applications and to evaluate new ways of testing cancer in its earliest stages and for cancer risk.'''
+_HOME_PAGE_BODY = u'''<p><strong>Check out the <a class="internal-link" href="resources/highlights">EDRN Highlights</a> — a listing of our accomplishments and milestones.</strong></p>
+<table>
+<tbody>
+<tr>
+<td><a href="about-edrn/scicomponents">► Scientific Components</a></td>
+<td><a href="advocates">► For Public, Patients, Advocates</a></td>
+</tr>
+<tr>
+<td><a href="colops">► Collaborative Opportunities</a> (how to join EDRN)</td>
+<td><a href="researchers">► For Researchers</a></td>
+</tr>
+</tbody>
+</table>
+'''
 
 
 @implementer(INonInstallable)
@@ -131,6 +147,22 @@ def _addQuickLinks(portal):
     mapping[chooser.chooseName(None, assignment)] = assignment
 
 
+def _addHomePage(portal):
+    if 'front-page' in portal.keys():
+        portal.manage_delObjects(['front-page'])
+    frontPage = createContentInContainer(
+        portal,
+        'Document',
+        id='front-page',
+        title=u'EDRN',
+        description=_HOME_PAGE_DESC,
+        text=RichTextValue(_HOME_PAGE_BODY, 'text/html', 'text/x-html-safe')
+    )
+    portal.setDefaultPage(frontPage.id)
+    _publish(frontPage)
+    return frontPage
+
+
 def post_install(context):
     """Post install script"""
     # Do something at the end of the installation of this package.
@@ -145,6 +177,9 @@ def post_install(context):
         portal.manage_delObjects(toDelete)
     _removePortlets(portal)
     _addQuickLinks(portal)
+    _addHomePage(portal)
+    transaction.commit()
+
 
 # Cases
 # -----
