@@ -1,48 +1,57 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <configure
-    xmlns="http://namespaces.zope.org/zope"
-    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    xmlns:i18n="http://namespaces.zope.org/i18n"
-    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns='http://namespaces.zope.org/zope'
+    xmlns:genericsetup='http://namespaces.zope.org/genericsetup'
+    xmlns:i18n='http://namespaces.zope.org/i18n'
+    xmlns:plone='http://namespaces.plone.org/plone'
     xmlns:grok='http://namespaces.zope.org/grok'
-    i18n_domain="eke.knowledge">
+    xmlns:faceted='http://namespaces.zope.org/faceted'
+    i18n_domain='eke.knowledge'>
 
-  <i18n:registerTranslations directory="locales" />
+    <i18n:registerTranslations directory='locales' />
 
-  <!--
+    <!--
     Be careful if you use general includeDependencies, it can have sideffects!
     Better import explicite packages or configurations ;)
-  -->
-  <!--<includeDependencies package="." />-->
+    -->
+    <!--<includeDependencies package='.' />-->
 
-  <include package=".browser" />
-  <include file="permissions.zcml" />
-  <include file="upgrades.zcml" />
-  <grok:grok package='.'/>
+    <include package='.browser' />
+    <include file='permissions.zcml' />
+    <include file='upgrades.zcml' />
+    <grok:grok package='.'/>
 
-  <genericsetup:registerProfile
-      name="default"
-      title="EDRN Knowledge Environment (EKE)"
-      directory="profiles/default"
-      description="Installs the eke.knowledge add-on, providing basic knowledge types and RDF ingest."
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      post_handler=".setuphandlers.post_install"
-      />
+    <genericsetup:registerProfile
+        name='default'
+        title='EDRN Knowledge Environment (EKE)'
+        directory='profiles/default'
+        description='Installs the eke.knowledge add-on, providing basic knowledge types and RDF ingest.'
+        provides='Products.GenericSetup.interfaces.EXTENSION'
+        post_handler='.setuphandlers.post_install'
+    />
 
-  <genericsetup:registerProfile
-      name="uninstall"
-      title="EKE Knowledge Environment (uninstall)"
-      directory="profiles/uninstall"
-      description="Uninstalls the eke.knowledge add-on."
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      post_handler=".setuphandlers.uninstall"
-      />
+    <genericsetup:registerProfile
+        name='uninstall'
+        title='EKE Knowledge Environment (uninstall)'
+        directory='profiles/uninstall'
+        description='Uninstalls the eke.knowledge add-on.'
+        provides='Products.GenericSetup.interfaces.EXTENSION'
+        post_handler='.setuphandlers.uninstall'
+    />
 
-  <utility
-      factory=".setuphandlers.HiddenProfiles"
-      name="eke.knowledge-hiddenprofiles"
-      />
+    <utility
+        factory='.setuphandlers.HiddenProfiles'
+        name='eke.knowledge-hiddenprofiles'
+    />
 
-  <!-- -*- extra stuff goes here -*- -->
+    <!-- -*- extra stuff goes here -*- -->
+    <faceted:view
+        name='faceted_publications_view'
+        template='templates/faceted_publications_view.pt'
+        title='Faceted Publications View'
+        permission='zope2.View'
+    />
+
+
 
 </configure>

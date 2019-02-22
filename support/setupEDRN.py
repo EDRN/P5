@@ -5,6 +5,9 @@
 
 from AccessControl.SecurityManagement import newSecurityManager, noSecurityManager
 from AccessControl.SecurityManager import setSecurityPolicy
+from eea.facetednavigation.interfaces import ICriteria
+from eea.facetednavigation.layout.interfaces import IFacetedLayout
+from eke.knowledge.publication import IPublication
 from node.ext.ldap.interfaces import ILDAPProps
 from plone.app.dexterity.behaviors.exclfromnav import IExcludeFromNavigation
 from plone.dexterity.utils import createContentInContainer
@@ -14,7 +17,7 @@ from Products.CMFCore.tests.base.security import PermissiveSecurityPolicy, Omnip
 from Products.CMFCore.WorkflowCore import WorkflowException
 from Products.CMFPlone.factory import addPloneSite
 from Testing import makerequest
-from zope.component import getUtility
+from zope.component import getUtility, getMultiAdapter
 from zope.component.hooks import setSite
 import sys, logging, transaction, argparse, os, os.path, plone.api
 
@@ -48,10 +51,56 @@ _TO_IMPORT = (
     'resources',
     'secretome'
 )
+
+
+def _null(context):
+    u'''do noting with the given context object'''
+    pass
+
+
+def _applyFacetsToPublications(context):
+    u'''Faceted navigation on publications'''
+    portal = plone.api.portal.get()
+    request = portal.REQUEST
+    subtyper = getMultiAdapter((context, request), name=u'faceted_subtyper')
+    if subtyper.is_faceted or not subtyper.can_enable: return
+    subtyper.enable()
+    criteria = ICriteria(context)
+    for cid in criteria.keys():
+        criteria.delete(cid)
+    criteria.add('resultsperpage', 'bottom', 'default', title='Results per page', hidden=False, start=0, end=60, step=20,
+        default=20)
+    criteria.add(
+        'checkbox', 'bottom', 'default',
+        title='Portal Type',
+        hidden=True,
+        index='portal_type',
+        operator='or',
+        vocabulary=u'eea.faceted.vocabularies.FacetedPortalTypes',
+        default=[u'eke.knowledge.publication'],
+        count=False,
+        maxitems=0,
+        sortreversed=False,
+        hidezerocount=False
+    )
+    criteria.add('text', 'top', 'default', title=u'Search', hidden=False, index='SearchableText',
+        wildcard=True, count=False, onlyallelements=True)
+    criteria.add('text', 'top', 'advanced', title=u'Search Titles Only', hidden=False, index='Title', count=False,
+        wildcard=True, onlyallelements=True)
+    criteria.add('text', 'top', 'advanced', title=u'Authors', hidden=False, index='authors', count=False,
+        wildcard=True, onlyallelements=True)
+    criteria.add('text', 'top', 'advanced', title=u'Journal', hidden=False, index='journal', count=False,
+        wildcard=True, onlyallelements=True)
+    criteria.add('text', 'top', 'advanced', title=u'Abstract', hidden=False, index='Description', count=False,
+        wildcard=True, onlyallelements=True)
+    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=False)
+    IFacetedLayout(context).update_layout('faceted_publications_view')
+
+
 _RDF_FOLDERS = (
-    ('resources', 'eke.knowledge.bodysystemfolder', u'Body Systems', u'Body systems are organs of the body.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/body-systems/@@rdf']),
-    ('resources', 'eke.knowledge.diseasefolder', u'Diseases', u'Ailements affecting body systems.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/diseases/@@rdf']),
-    (None, 'eke.knowledge.publicationfolder', u'Publications', u'Items published by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf', u'http://edrn.jpl.nasa.gov/bmdb/rdf/publications']),
+    ('resources', 'eke.knowledge.bodysystemfolder', u'Body Systems', u'Body systems are organs of the body.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/body-systems/@@rdf'], _null),
+    ('resources', 'eke.knowledge.diseasefolder', u'Diseases', u'Ailements affecting body systems.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/diseases/@@rdf'], _null),
+    (None, 'eke.knowledge.publicationfolder', u'Publications', u'Items published by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf', u'http://edrn.jpl.nasa.gov/bmdb/rdf/publications'], _applyFacetsToPublications),
 )
 
 
@@ -191,7 +240,7 @@ def _publish(context, workflowTool=None):
 
 def _ingest(portal):
     folders, paths = [], []
-    for containerPath, fti, title, desc, urls in _RDF_FOLDERS:
+    for containerPath, fti, title, desc, urls, postFunction in _RDF_FOLDERS:
         if containerPath is None:
             container = portal
         else:
@@ -204,6 +253,7 @@ def _ingest(portal):
             rdfDataSources=urls,
             ingestEnabled=True
         )
+        postFunction(folder)
         folders.append(folder)
         if containerPath is None:
             paths.append(unicode(folder.id))

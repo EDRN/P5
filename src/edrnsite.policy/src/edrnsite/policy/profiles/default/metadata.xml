@@ -7,5 +7,6 @@
         <dependency>profile-edrn.theme:default</dependency>
         <dependency>profile-eke.knowledge:default</dependency>
         <dependency>profile-pas.plugins.ldap.plonecontrolpanel:default</dependency>
+        <dependency>profile-eea.facetednavigation:default</dependency>
     </dependencies>
 </metadata>
