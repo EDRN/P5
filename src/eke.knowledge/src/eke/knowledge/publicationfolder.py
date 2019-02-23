@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 
-u'''EKE Knowledge: Disease Folder'''
+u'''EKE Knowledge: Publication Folder'''
 
 from .base import Ingestor
 from .publication import IPublication
