@@ -8,7 +8,7 @@ from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PloneSandboxLayer
 from plone.testing import z2
-import eke.knowledge, pkg_resources, urllib2, urllib, httplib
+import eke.knowledge, pkg_resources, urllib2, urllib, httplib, eea.facetednavigation
 
 
 class TestSchemeHandler(urllib2.BaseHandler):
@@ -38,6 +38,7 @@ class EkeKnowledgeLayer(PloneSandboxLayer):
         # Load any other ZCML that is required for your tests.
         # The z3c.autoinclude feature is disabled in the Plone fixture base
         # layer.
+        self.loadZCML(package=eea.facetednavigation)
         self.loadZCML(package=eke.knowledge)
         urllib2.install_opener(urllib2.build_opener(TestSchemeHandler))
 

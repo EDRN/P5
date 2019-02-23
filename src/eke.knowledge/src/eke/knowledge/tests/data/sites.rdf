@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:ns1="http://edrn.nci.nih.gov/rdf/schema.rdf#" xmlns:ns2="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="http://edrn.nci.nih.gov/data/sites/815">
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3892"/>
+    <ns1:fundEnd>8/31/2021 12:00:00 AM</ns1:fundEnd>
+    <ns2:title>H. Lee Moffitt Cancer Center and Research Institute  Inc. </ns2:title>
+    <ns1:pi rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3733"/>
+    <ns1:fwa>FWA00001464         </ns1:fwa>
+    <ns1:program>We propose to establish the Moffitt Imaging Biomarker Validation Center (MIBVAC) focused on imaging biomarker validations for early cancer detection and accurate risk assessments by leveraging our team of strong experts, resources, planned imaging biomarker validation studies, and analysis and network collaboration structures. In previous studies we have demonstrated that various measurements from breast images quantify breast cancer risk. The large cooperative National Lung Screening Trial (NLST) also showed a significant survival improvement for individuals screened by low dose CT compared to those screened with conventional radiography. Additionally, we have recently shown that CT image analysis (radiomics) can improve classification in this data set. However, due to difficulties in obtaining accurate and reproducible measurements and high false-positive rates of current imaging, cancer imaging biomarkers have not been routinely incorporated into clinical risk assessment. If these imaging biomarkers can be accurately tailored at the individual level, their impact will be significantly improved for early cancer detection and intervention. MIBVAC plans to achieve this challenging yet quite achievable goal by rigorously evaluating and validating these imaging biomarkers for rapid translation into clinical and practical applications. We have four specific aims: (Aim 1) Establish breast imaging resources for EDRN both with our existing and new case-control datasets of breast images and to evaluate and validate breast imaging biomarkers based on newly-established case-control dataset of digital breast tomosynthesis (TS) images, (Aim 2) Evaluate and validate lung imaging biomarkers for early detection of cancer first based on NLST low-dose CT (LDCT) cohorts and then expanding with a newly-established case-control cohort of higher resolution LDCT, (Aim 3) Conduct validation studies with imaging biomarkers for EDRN partners and others for other malignancies, and (Aim 4) Refine and validate imaging biomarkers analytically for early detection of breast, lung, and other cancers and to construct MIBVAC imaging data and specimen resources for EDRN collaborations and sharing.</ns1:program>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3917"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4060"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3943"/>
+    <ns1:memberType>Clinical Validation Center</ns1:memberType>
+    <ns1:abbrevName>HLMCC</ns1:abbrevName>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3733"/>
+    <ns1:coi rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3917"/>
+    <ns1:fundStart>9/1/2016 12:00:00 AM</ns1:fundStart>
+    <rdf:type rdf:resource="http://edrn.nci.nih.gov/rdf/types.rdf#Site"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://edrn.nci.nih.gov/data/sites/240">
+    <ns1:pi rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1957"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3232"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3027"/>
+    <ns2:title>Vanderbilt -Ingram Cancer Center</ns2:title>
+    <ns1:program>This multidisciplinary effort of experts in biomarker research proposes to renew their commitment to the EDRN and to lead our Clinical Validation Center ever closer to impacting patient care. Therefore we propose to test best candidate biomarkers of lung cancer developed at our and other institutions for added value in the assessment of the risk for, and diagnosis of, lung cancer compared to the standard of care. The hypothesis is that addition of imaging and molecular biomarkers measured by chest computed tomography and in the sputum, the bronchial epithelium and blood, likely in a multivariable manner, could improve the identification of high risk individuals for lung cancer and improve CT screening overall results by reducing false-positive tests. We propose a three way approach. First we will test candidate biomarkers for lung cancer development in an observational study of selected very high risk individuals from the Nashville community performing repeated measurements of clinical, imaging (low-dose chest CT) variables, as well as molecular biomarker signatures, some of which will be obtained from bronchoscopy. Second, we propose to validate the most promising diagnostic candidate signatures to each test in carefully designed prospective study of individuals presenting with indeterminate pulmonary nodules. Third, we will test a novel molecular imaging tracer in a population of intermediate and high risk lung nodules. This tracer will be compared to standard of care FDG PET, and if significantly better, should have huge impact on the management of lung nodules. Our CVC will also centralize an effort to collect and store pertinent clinical data and tissues (blood, urine, and the airways specimens) and make these resources available to the community and to collaborators within and outside of the EDRN program, including the industry partners.</ns1:program>
+    <ns1:coi rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3565"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2957"/>
+    <ns1:fwa>FWA00005756         </ns1:fwa>
+    <ns1:abbrevName>VICC</ns1:abbrevName>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3275"/>
+    <ns1:fundStart>4/1/2016 12:00:00 AM</ns1:fundStart>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3437"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3565"/>
+    <ns1:fundEnd>3/31/2021 12:00:00 AM</ns1:fundEnd>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3919"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4036"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1988"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3970"/>
+    <ns1:memberType>Clinical Validation Center</ns1:memberType>
+    <rdf:type rdf:resource="http://edrn.nci.nih.gov/rdf/types.rdf#Site"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3303"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1957"/>
+  </rdf:Description>
+</rdf:RDF>

@@ -34,18 +34,23 @@ class Ingestor(grok.Adapter):
     def getTitles(self, predicates):
         u'''Get the DC title from ``predicates``. Override this if you need'''
         return predicates.get(DC_TITLE)
-    def _checkPredicates(self, predicates):
+    def getObjID(self, subjectURI, titles, predicates):
+        u'''Return a custom object ID to use or None if we should just let a behavior like
+        name-from-title do it for us. Subclasses may override this.'''
+        return None
+    def _checkPredicates(self, subjectURI, predicates):
         u'''Check the given ``predicates`` to see if they're appropriate for the interfaces of the objects
-        to be created. If so, return the type's interface, the FTI, the predicate map, and the object's title.
-        If not, raise an error.'''
+        to be created. If so, return the type's interface, the FTI, the predicate map, and the object's title,
+        and a possible object ID for it to use.  If not, raise an error.'''
         iface = self.getInterfaceForContainedObjects()
         fti = iface.getTaggedValue('fti')
         predicateMap = iface.getTaggedValue('predicates')
         ndeededTypeURI = rdflib.URIRef(iface.getTaggedValue('typeURI'))
         typeURI, titles = predicates[rdflib.RDF.term('type')][0], self.getTitles(predicates)
+        objID = self.getObjID(subjectURI, titles, predicates)
         if typeURI != ndeededTypeURI: raise RDFTypeMismatchError(ndeededTypeURI, typeURI)
         if not titles or not titles[0]: raise TitlePredicateMissingError()
-        return iface, fti, predicateMap, unicode(titles[0])
+        return iface, fti, predicateMap, unicode(titles[0]), objID
     def _setValue(self, obj, fti, iface, predicate, predicateMap, values):
         u'''Look up the field of ``obj`` matching ``predicate`` in the ``predicateMap``` and set it to ``values```.
         Use the ``fti`` to warn of any issue and access fields via the ``iface``.'''
@@ -55,6 +60,9 @@ class Ingestor(grok.Adapter):
             _logger.info(u'Type %s needs pred %s but not given; leaving %s un-set', fti, predicate, fieldName)
             return
         field = iface.get(fieldName)
+        if field is None:
+            _logger.info(u'Field %s does not exist in %s', fieldName, fti)
+            return
         fieldBinding = field.bind(obj)
         if isReference:
             idUtil = getUtility(IIntIds)
@@ -84,11 +92,14 @@ class Ingestor(grok.Adapter):
         for uri in uris:
             predicates = statements[uri]
             try:
-                iface, fti, predicateMap, title = self._checkPredicates(predicates)
+                iface, fti, predicateMap, title, objID = self._checkPredicates(uri, predicates)
             except IngestError as ex:
                 _logger.exception(u'Ingest error on %s: %r; skipping %s', u'/'.join(context.getPhysicalPath()), ex, uri)
                 continue
-            obj = createContentInContainer(context, fti, title=title, identifier=unicode(uri))
+            if objID is None:
+                obj = createContentInContainer(context, fti, title=title, identifier=unicode(uri))
+            else:
+                obj = createContentInContainer(context, fti, id=objID, title=title, identifier=unicode(uri))
             for predicate in predicateMap:
                 predicate = rdflib.URIRef(predicate)
                 if predicate == DC_TITLE: continue  # Already set
@@ -113,7 +124,7 @@ class Ingestor(grok.Adapter):
             obj = brain.getObject()
             predicates = statements[uri]
             objectUpdated = False
-            iface, fti, predicateMap, title = self._checkPredicates(predicates)
+            iface, fti, predicateMap, title, objID = self._checkPredicates(uri, predicates)
             for predicate, (fieldName, isReference) in predicateMap.iteritems():
                 field = iface.get(fieldName)
                 fieldBinding = field.bind(obj)

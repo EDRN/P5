@@ -165,3 +165,36 @@ Ingesting::
     >>> keys.sort()
     >>> keys
     ['a-combination-of-muc5ac-and-ca19-9-improves-the-diagnosis-of-pancreatic-cancer-a-multicenter-study', 'association-between-combined-tmprss2-erg-and-pca3-rna-urinary-testing-and-detection-of-aggressive-prostate-cancer', 'early-detection-of-nsclc-with-scfv-selected-against-igm-autoantibody', 'evaluation-of-serum-protein-profiling-by-surface-enhanced-laser-desorption-ionization-time-of-flight-mass-spectrometry-for-the-detection-of-prostate-cancer-i-assessment-of-platform-reproducibility']
+
+
+Sites
+=====
+
+    >>> browser.open(portalURL)
+    >>> l = browser.getLink(id='eke-knowledge-sitefolder')
+    >>> l.url.endswith('++add++eke.knowledge.sitefolder')
+    True
+    >>> l.click()
+    >>> browser.getControl(name='form.widgets.title').value = u'Sites'
+    >>> browser.getControl(name='form.widgets.description').value = u'Some testing sites.'
+    >>> browser.getControl(name='form.widgets.ingestEnabled:list').value = True
+    >>> browser.getControl(name='form.buttons.save').click()
+    >>> 'sites' in portal.keys()
+    True
+    >>> folder = portal['sites']
+    >>> folder.rdfDataSources= [u'testscheme://localhost/rdf/sites']
+
+Ingesting::
+
+    >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'sites']
+    >>> transaction.commit()
+    >>> browser.open(portalURL + '/@@ingestRDF')
+    >>> browser.contents
+    '...RDF Ingest Report...Objects Created (2)...'
+    >>> len(folder.keys())
+    2
+    >>> keys = folder.keys()
+    >>> keys.sort()
+    >>> keys
+    ['240-vanderbilt-ingram-cancer-center', '815-h-lee-moffitt-cancer-center-and-research']
+

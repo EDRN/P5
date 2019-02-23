@@ -101,6 +101,7 @@ _RDF_FOLDERS = (
     ('resources', 'eke.knowledge.bodysystemfolder', u'Body Systems', u'Body systems are organs of the body.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/body-systems/@@rdf'], _null),
     ('resources', 'eke.knowledge.diseasefolder', u'Diseases', u'Ailements affecting body systems.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/diseases/@@rdf'], _null),
     (None, 'eke.knowledge.publicationfolder', u'Publications', u'Items published by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf', u'http://edrn.jpl.nasa.gov/bmdb/rdf/publications'], _applyFacetsToPublications),
+    (None, 'eke.knowledge.sitefolder', u'Sites', u'Institutions and PIs in EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/sites/@@rdf'], _null),
 )
 
 
@@ -276,10 +277,9 @@ def _setupEDRN(app, username, password, ldapPassword):
     setSite(portal)
     _loadZEXPFiles(portal)  # Stack traces; see https://community.plone.org/t/stack-trace-when-loading-zexp-from-a-script/8060
     _setLDAPPassword(portal, ldapPassword)
-    _tuneUp(portal)
     _ingest(portal)
+    _tuneUp(portal)  # this should be the last step always as it clears/rebuids the catalog and commits the txn
     noSecurityManager()
-    transaction.commit()
 
 
 def main(argv):
