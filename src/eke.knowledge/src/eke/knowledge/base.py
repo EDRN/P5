@@ -51,13 +51,13 @@ class Ingestor(grok.Adapter):
         if typeURI != ndeededTypeURI: raise RDFTypeMismatchError(ndeededTypeURI, typeURI)
         if not titles or not titles[0]: raise TitlePredicateMissingError()
         return iface, fti, predicateMap, unicode(titles[0]), objID
-    def _setValue(self, obj, fti, iface, predicate, predicateMap, values):
+    def setValue(self, obj, fti, iface, predicate, predicateMap, values):
         u'''Look up the field of ``obj`` matching ``predicate`` in the ``predicateMap``` and set it to ``values```.
         Use the ``fti`` to warn of any issue and access fields via the ``iface``.'''
         catalog = plone.api.portal.get_tool('portal_catalog')
         fieldName, isReference = predicateMap[unicode(predicate)]
         if not values:
-            _logger.info(u'Type %s needs pred %s but not given; leaving %s un-set', fti, predicate, fieldName)
+            _logger.info(u'Type %s for needs pred %s but not given; leaving %s un-set', fti, predicate, fieldName)
             return
         field = iface.get(fieldName)
         if field is None:
@@ -107,7 +107,7 @@ class Ingestor(grok.Adapter):
                 if not values: continue  # No values? Skip
                 values = [i.toPython() for i in values]
                 try:
-                    self._setValue(obj, fti, iface, predicate, predicateMap, values)
+                    self.setValue(obj, fti, iface, predicate, predicateMap, values)
                 except schema.ValidationError:
                     _logger.exception(u'Data "%r" for field %s invalid—skipping', values, predicate)
                     continue
@@ -127,6 +127,7 @@ class Ingestor(grok.Adapter):
             iface, fti, predicateMap, title, objID = self._checkPredicates(uri, predicates)
             for predicate, (fieldName, isReference) in predicateMap.iteritems():
                 field = iface.get(fieldName)
+                if field is None: continue
                 fieldBinding = field.bind(obj)
                 newVals = predicates.get(rdflib.URIRef(predicate), [])
                 newVals = [i.toPython() for i in newVals]
@@ -138,18 +139,18 @@ class Ingestor(grok.Adapter):
                     currentRefs.sort()
                     newVals.sort()
                     if currentRefs != newVals:
-                        self._setValue(obj, fti, iface, predicate, predicateMap, newVals)
+                        self.setValue(obj, fti, iface, predicate, predicateMap, newVals)
                         objectUpdated = True
                 else:
                     currentVals = fieldBinding.get(obj)
                     if schema.interfaces.ICollection.providedBy(field):
                         if currentVals != newVals:
-                            self._setValue(obj, fti, iface, predicate, predicateMap, newVals)
+                            self.setValue(obj, fti, iface, predicate, predicateMap, newVals)
                             objectUpdated = True
                     else:
                         if len(newVals) > 0:
                             if currentVals != newVals[0]:
-                                self._setValue(obj, fti, iface, predicate, predicateMap, newVals)
+                                self.setValue(obj, fti, iface, predicate, predicateMap, newVals)
                                 objectUpdated = True
             if objectUpdated:
                 obj.reindexObject()
