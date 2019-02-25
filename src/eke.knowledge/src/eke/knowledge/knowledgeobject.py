@@ -20,7 +20,7 @@ class IKnowledgeObject(model.Schema):
         description=_(u'A short summary of this object.'),
         required=False,
     )
-    identifier = schema.URI(
+    identifier = schema.TextLine(
         title=_(u'Identifier'),
         description=_(u'RDF Subject URI of this object'),
         required=True,
