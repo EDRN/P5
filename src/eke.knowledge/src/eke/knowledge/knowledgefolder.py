@@ -4,8 +4,11 @@
 u'''EKE Knowledge: Knowledge Folder'''
 
 from eke.knowledge import _
+from five import grok
 from plone.supermodel import model
 from zope import schema
+from Acquisition import aq_inner
+import plone.api
 
 
 class IKnowledgeFolder(model.Schema):
@@ -35,3 +38,17 @@ class IKnowledgeFolder(model.Schema):
         description=_(u'True if this folder should update its contents, false otherwise.'),
         required=False
     )
+
+
+class KnowledgeFolderView(grok.View):
+    grok.baseclass()
+    grok.context(IKnowledgeFolder)
+    grok.require('zope2.View')
+    def contents(self):
+        context = aq_inner(self.context)
+        catalog = plone.api.portal.get_tool('portal_catalog')
+        return catalog(path={'query': '/'.join(context.getPhysicalPath()), 'depth': 1}, sort_on='sortable_title')
+    def isManager(self):
+        context = aq_inner(self.context)
+        membership = plone.api.portal.get_tool('portal_membership')
+        return membership.checkPermission('Manage Portal', context)
