@@ -123,7 +123,6 @@ class ISite(IKnowledgeObject):
 
 ISite.setTaggedValue('predicates', {
     u'http://purl.org/dc/terms/title': ('title', False),
-    u'http://purl.org/dc/terms/description': ('description', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#abstract': ('description', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#abbrevName': ('abbreviation', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#fundStart': ('fundingStartDate', False),
@@ -131,6 +130,7 @@ ISite.setTaggedValue('predicates', {
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#fwa': ('fwaNumber', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#program': ('specialty', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#url': ('homePage', False),
+    u'http://edrn.nci.nih.gov/rdf/schema.rdf#memberType': ('memberType', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#historicalNotes': ('historicalNotes', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#pi': ('principalInvestigator', True),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#copi': ('coPrincipalInvestigators', True),
