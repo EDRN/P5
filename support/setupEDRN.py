@@ -19,7 +19,7 @@ from Products.CMFPlone.factory import addPloneSite
 from Testing import makerequest
 from zope.component import getUtility, getMultiAdapter
 from zope.component.hooks import setSite
-import sys, logging, transaction, argparse, os, os.path, plone.api
+import sys, logging, transaction, argparse, os, os.path, plone.api, csv, codecs
 
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)-8s %(message)s')
@@ -51,6 +51,40 @@ _TO_IMPORT = (
     'resources',
     'secretome'
 )
+
+
+# From https://docs.python.org/2/library/csv.html
+class UTF8Recoder(object):
+    """
+    Iterator that reads an encoded stream and reencodes the input to UTF-8
+    """
+    def __init__(self, f, encoding):
+        self.reader = codecs.getreader(encoding)(f)
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        return self.reader.next().encode("utf-8")
+
+
+# From https://docs.python.org/2/library/csv.html
+class UnicodeReader(object):
+    """
+    A CSV reader which will iterate over lines in the CSV file "f",
+    which is encoded in the given encoding.
+    """
+
+    def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
+        f = UTF8Recoder(f, encoding)
+        self.reader = csv.reader(f, dialect=dialect, **kwds)
+
+    def next(self):
+        row = self.reader.next()
+        return [unicode(s, "utf-8") for s in row]
+
+    def __iter__(self):
+        return self
 
 
 def _null(context):
@@ -102,6 +136,7 @@ _RDF_FOLDERS = (
     ('resources', 'eke.knowledge.diseasefolder', u'Diseases', u'Ailements affecting body systems.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/diseases/@@rdf'], _null),
     (None, 'eke.knowledge.publicationfolder', u'Publications', u'Items published by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf', u'http://edrn.jpl.nasa.gov/bmdb/rdf/publications'], _applyFacetsToPublications),
     (None, 'eke.knowledge.sitefolder', u'Sites', u'Institutions and PIs in EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/sites/@@rdf'], _null),
+#    (None, 'eke.knowledge.sitefolder', u'Sites', u'Institutions and PIs in EDRN.', [u'file:/tmp/1-site.rdf'], _null),    
 )
 
 
@@ -193,6 +228,27 @@ def _addToQuickLinks(context):
         context.subject = tuple(subjects)
 
 
+def _setSiteProposals(portal):
+    u'''HK entered this stuff by hand on the old portal.'''
+    # Organ or proposal text can be empty strings
+    catalog = plone.api.portal.get_tool('portal_catalog')
+    with open(os.path.join('data', 'site-hand-info.csv'), 'rb') as f:
+        reader = UnicodeReader(f)
+        for row in reader:
+            identifier, organs, proposal = row
+            results = catalog(identifier=identifier, object_provides='eke.knowledge.site.ISite')
+            if len(results) == 0:
+                logging.info('No sites matching %s found; skipping', identifier)
+                continue
+            elif len(results) > 1:
+                logging.critical('Multiple sites matching %s found (%d); should not happen', results, len(results))
+                raise Exception('Multiple sites matching %s found (%d); should not happen' % (results, len(results)))
+            else:
+                site = results[0].getObject()
+                site.organs = organs.split(u',')
+                site.proposal = proposal
+
+
 def _tuneUp(portal):
     u'''Final tweaks.'''
 
@@ -217,6 +273,9 @@ def _tuneUp(portal):
     ):
         folder = portal.unrestrictedTraverse(path)
         _addToQuickLinks(folder)
+
+    # Set site proposal
+    _setSiteProposals(portal)
 
     # Finally, make sure everything is indexed so they appear where they need
     # to be
@@ -285,11 +344,15 @@ def _setupEDRN(app, username, password, ldapPassword):
 def main(argv):
     _setupLogging()
     try:
+        installDir = os.environ.get('EDRN_PORTAL_HOME')
+        if not installDir:
+            raise Exception('The EDRN_PORTAL_HOME environment variable is not set')
+        os.chdir(installDir)
         global app
         args = _argParser.parse_args(argv[1:])
         _setupEDRN(app, args.username, args.password, args.ldapPassword)
     except Exception as ex:
-        logging.exception(u'This sucks: %s', unicode(ex))
+        logging.exception(u'This is most unfortunate: %s', unicode(ex))
         return False
     return True
 
