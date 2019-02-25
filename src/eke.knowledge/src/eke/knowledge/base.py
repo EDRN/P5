@@ -57,7 +57,7 @@ class Ingestor(grok.Adapter):
         catalog = plone.api.portal.get_tool('portal_catalog')
         fieldName, isReference = predicateMap[unicode(predicate)]
         if not values:
-            _logger.info(u'Type %s for needs pred %s but not given; leaving %s un-set', fti, predicate, fieldName)
+            _logger.info(u'Type %s needs pred %s but not given; leaving %s un-set', fti, predicate, fieldName)
             return
         field = iface.get(fieldName)
         if field is None:
@@ -104,7 +104,7 @@ class Ingestor(grok.Adapter):
                 predicate = rdflib.URIRef(predicate)
                 if predicate == DC_TITLE: continue  # Already set
                 values = predicates.get(predicate)
-                if not values: continue  # No values? Skip
+                if not values: continue
                 values = [i.toPython() for i in values]
                 try:
                     self.setValue(obj, fti, iface, predicate, predicateMap, values)
@@ -127,7 +127,9 @@ class Ingestor(grok.Adapter):
             iface, fti, predicateMap, title, objID = self._checkPredicates(uri, predicates)
             for predicate, (fieldName, isReference) in predicateMap.iteritems():
                 field = iface.get(fieldName)
-                if field is None: continue
+                if field is None:
+                    _logger.info('=== During update of %r field %s was not found, skipping', iface, fieldName)
+                    continue
                 fieldBinding = field.bind(obj)
                 newVals = predicates.get(rdflib.URIRef(predicate), [])
                 newVals = [i.toPython() for i in newVals]
