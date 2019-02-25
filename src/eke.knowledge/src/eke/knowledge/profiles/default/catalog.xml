@@ -1,21 +1,54 @@
 <?xml version='1.0'?>
 <object name='portal_catalog'>
+    <!-- Every knowledge obj gets an RDF subject URI "identifier"; also needed as a column for ingest -->
     <index name='identifier' meta_type='FieldIndex'>
         <indexed_attr value='identifier'/>
     </index>
+    <column value='identifier'/>
+
+    <!-- Facet search and display of authors of IPublication -->
     <index name='authors' meta_type='ZCTextIndex'>
         <indexed_attr value='authors'/>
         <extra name='index_type' value='Okapi BM25 Rank'/>
         <extra name='lexicon_id' value='plone_lexicon'/>
     </index>
+    <column value='authors'/>
+
+    <!-- Display of journals of IPublication -->
     <index name='journal' meta_type='FieldIndex'>
         <indexed_attr value='journal' />
     </index>
+    <column value='journal'/>
+
+    <!-- Display of years of IPublication -->
     <index name='year' meta_type='FieldIndex'>
         <indexed_attr value='year' />
     </index>
-    <column value='identifier'/>
-    <column value='authors'/>
-    <column value='journal'/>
     <column value='year' />
+
+    <!-- Display of organs of ISite -->
+    <index name='organs' meta_type='KeywordIndex'>
+        <indexed_attr value='organs' />
+    </index>
+    <column value='organs' />
+
+    <!-- Display of member type of ISite -->
+    <index name='memberType' meta_type='KeywordIndex'>
+        <indexed_attr value='memberType' />
+    </index>
+    <column value='memberType' />
+
+    <!-- Display of speciality in ISite -->
+    <index name='specialty' meta_type='FieldIndex'>
+        <indexed_attr value='specialty' />
+    </index>
+    <column value='specialty'/>
+
+    <!-- Display of proposal text of ISite -->
+    <index name='proposal' meta_type='ZCTextIndex'>
+        <indexed_attr value='proposal' />
+        <extra name='index_type' value='Okapi BM25 Rank'/>
+        <extra name='lexicon_id' value='plone_lexicon'/>
+    </index>
+    <column value='proposal' />
 </object>

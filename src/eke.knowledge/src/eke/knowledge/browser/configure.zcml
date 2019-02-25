@@ -27,4 +27,13 @@
         permission='cmf.ManagePortal'
     />
 
+    <!-- Macros -->
+    <browser:page
+        for='*'
+        permission='zope2.Public'
+        name='siteByTypeSection'
+        template='templates/sitebytypesection.pt'
+    />
+    
+
 </configure>

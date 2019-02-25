@@ -1,0 +1,97 @@
+<div metal:define-macro='siteByTypeSection'>
+    <table class='listing sitesByType'>
+        <thead>
+            <th i18n:translate='siteFolder_titleHeading'>Site</th>
+            <th i18n:translate='siteFolder_investigatorHeading'>Investigator</th>
+            <th i18n:translate='siteFolder_organHeading' tal:condition='showOrgans'>Organ</th>
+        </thead>
+        <tbody>
+            <div tal:repeat='item sitesInThisSection'>
+            <tr>
+                <td tal:define='url item/url; description item/description; title item/title;'>
+                    <a href='#' title='A risque site of ill repute.' tal:content='title'
+                        tal:attributes='href url; title description;'> 
+                        Hottest Site Ever
+                    </a>
+                </td>
+                <td tal:define='piURL item/piURL|nothing; piName item/investigator|nothing;' class="piLink">
+                    <a tal:condition='piURL' href='#' tal:attributes='href piURL' tal:content='piName'>
+                        Dr Online
+                    </a>
+                    <span tal:condition='not:piURL' tal:content='piName'>
+                        Dr Offline
+                    </span>
+                </td>
+                <td tal:condition='showOrgans' tal:content="python:', '.join(item['organs'])">
+                    Anus, Rectum
+                </td>
+            </tr>
+            <tr><td colspan=3>
+                <span tal:condition='python:item["specialty"] and len(item["specialty"]) > 20'>
+                     <dl class='collapsible collapsedOnLoad' style='margin: 0 0 1em 0;'>
+                         <dt class='collapsibleHeader' style='margin: .8em 0 0 0;'>
+                            <h6 tal:content='python:item["specialty"][0:150]+"..."'></h6>
+                         </dt>
+                         <dd class='collapsibleContent'>
+                            <h6 tal:content='python:item["specialty"]'>Program Description</h6>
+                         </dd>
+                     </dl>
+                </span>
+            </td>
+            </tr>
+            </div>
+        </tbody>
+    </table>
+</div>
+<div metal:define-macro='bdlSection'>
+    <div tal:repeat='organGroup bdls'>
+        <h4 tal:condition='organGroup/title' tal:content='organGroup/title'>Anus</h4>
+        <h4 tal:condition='not:organGroup/title' i18n:translate='heading_noAssocOrgan'>
+            Sites With No Associated Organ
+        </h4>
+        <div tal:repeat='proposalGroup organGroup/proposalGroups'>
+            <tal:define define='proposalName proposalGroup/title; actualSites proposalGroup/sites;'>
+                <table class='listing sitesByType'>
+                    <thead>
+                        <th i18n:translate='siteFolder_investigatorHeading'>Investigator</th>
+                        <th i18n:translate='siteFolder_titleHeading'>Site</th>
+                    </thead>
+                    <tbody>
+                        <tr tal:repeat='item actualSites'>
+                            <td tal:define='piURL item/piURL|nothing; piName item/investigator|nothing;' class="piLink">
+                                <a tal:condition='piURL' href='#' tal:attributes='href piURL' tal:content='piName'>
+                                    Dr Online
+                                </a>
+                                <span tal:condition='not:piURL' tal:content='piName'>
+                                    Dr Offline
+                                </span>
+                            </td>
+                            <td tal:define='url item/url; description item/description; title item/title;'>
+                                <a href='#' title='A risque site of ill repute.' tal:content='title'
+                                    tal:attributes='href url; title description;'> 
+                                    Hottest Site Ever
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h5 tal:condition='proposalName' tal:content='proposalName'>Some stupid proposal</h5>
+                <h5 tal:condition='not:proposalName'>(No Proposal)</h5>
+                <h6 tal:condition='python:proposalName and actualSites'>Project Summary</h6>
+                <span tal:condition='python:proposalName and actualSites'>
+                    <span tal:condition='python:actualSites[0]["specialty"]'>
+                         <dl class='collapsible collapsedOnLoad'>
+                             <dt class='collapsibleHeader'>
+                                <h6 tal:content='python:actualSites[0]["specialty"][0:150]+"..."'></h6>
+                             </dt>
+                             <dd class='collapsibleContent'>
+                                <h6 tal:content='python:actualSites[0]["specialty"]'>Program Description</h6>
+                             </dd>
+                         </dl>
+                    </span>
+                </span>
+            </tal:define>
+            <br>
+        </div>
+    </div>
+</div>
