@@ -1,8 +1,9 @@
 # encoding: utf-8
 
 from . import _
-from bodysystem import IBodySystem
-from knowledgeobject import IKnowledgeObject
+from .bodysystem import IBodySystem
+from .dublincore import TITLE_URI, DESCRIPTION_URI
+from .knowledgeobject import IKnowledgeObject
 from zope import schema
 
 
@@ -28,8 +29,8 @@ class IDisease(IKnowledgeObject):
 
 
 IDisease.setTaggedValue('predicates', {
-    u'http://purl.org/dc/terms/title': ('title', False),
-    u'http://purl.org/dc/terms/description': ('description', False),
+    TITLE_URI: ('title', False),
+    DESCRIPTION_URI: ('description', False),
     u'http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#icd9': ('icd9Code', False),
     u'http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#icd10': ('icd10Code', False),
     u'http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#bodySystemsAffected': ('affectedOrgans', True)

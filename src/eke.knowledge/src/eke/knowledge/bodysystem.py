@@ -1,6 +1,8 @@
 # encoding: utf-8
 
-from knowledgeobject import IKnowledgeObject
+
+from .dublincore import TITLE_URI, DESCRIPTION_URI
+from .knowledgeobject import IKnowledgeObject
 
 
 class IBodySystem(IKnowledgeObject):
@@ -8,8 +10,8 @@ class IBodySystem(IKnowledgeObject):
 
 
 IBodySystem.setTaggedValue('predicates', {
-    u'http://purl.org/dc/terms/title': ('title', False),
-    u'http://purl.org/dc/terms/description': ('description', False)
+    TITLE_URI: ('title', False),
+    DESCRIPTION_URI: ('description', False)
 })
 IBodySystem.setTaggedValue('fti', 'eke.knowledge.bodysystem')
 IBodySystem.setTaggedValue('typeURI', u'http://edrn.nci.nih.gov/rdf/types.rdf#BodySystem')
