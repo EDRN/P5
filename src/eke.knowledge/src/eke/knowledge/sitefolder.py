@@ -3,19 +3,27 @@
 
 u'''EKE Knowledge: Site Folder'''
 
+from . import _
 from .base import Ingestor
 from .knowledgefolder import IKnowledgeFolder, KnowledgeFolderView
 from .site import ISite
+from .utils import publish
 from Acquisition import aq_inner
 from five import grok
+from plone.dexterity.utils import createContentInContainer
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize.view import memoize
+from zope import schema
 from zope.component import getUtility
-import urlparse, logging, plone.api
+import urlparse, logging, plone.api, rdflib
 
 
 _logger = logging.getLogger(__name__)
+_piURI = u'http://edrn.nci.nih.gov/rdf/schema.rdf#pi'
 _memberTypeURI = u'http://edrn.nci.nih.gov/rdf/schema.rdf#memberType'
+_surnamePredicateURI = rdflib.URIRef('http://xmlns.com/foaf/0.1/surname')
+_middleNamePredicateURI = rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#middleName')
+_givenNamePredicateURI = rdflib.URIRef('http://xmlns.com/foaf/0.1/givenname')
 _edrnSiteTypes = frozenset((
     u'Biomarker Reference Laboratories',
     u'Biomarker Developmental Laboratories',
@@ -32,6 +40,16 @@ _edrnSiteTypes = frozenset((
 
 class ISiteFolder(IKnowledgeFolder):
     u'''Site folder.'''
+    peopleDataSources = schema.List(
+        title=_(u'People RDF Data Sources'),
+        description=_(u'URLs to sources of Resource Description Format (RDF) data for people.'),
+        required=False,
+        value_type=schema.URI(
+            title=_(u'people RDF Data Source'),
+            description=_(u'URL to a source of RDF data for people.'),
+            required=False,
+        )
+    )
 
 
 class SiteIngestor(Ingestor):
@@ -46,7 +64,6 @@ class SiteIngestor(Ingestor):
         title = u'%s %s' % (urlparse.urlparse(subjectURI)[2].split('/')[-1], title)
         return normalize(title)
     def setValue(self, obj, fti, iface, predicate, predicateMap, values):
-        _logger.info("Site-overridden value setting pred %s to values %r for %s", predicate, values, fti)
         if unicode(predicate) == _memberTypeURI:
             if values:
                 memberType = values[0]
@@ -62,8 +79,79 @@ class SiteIngestor(Ingestor):
                 elif memberType == u'SPORE':
                     # CA-697
                     memberType = u'SPOREs'
-            values = [memberType]
+                values = [memberType]
         super(SiteIngestor, self).setValue(obj, fti, iface, predicate, predicateMap, values)
+    def getPredicateValue(self, predicateURI, predicates):
+        u'''Return a single unicode value from the ``predicates`` matching the given
+        ``predicateURI or an empty unicode string if not found.'''
+        if predicateURI in predicates:
+            return unicode(predicates[predicateURI][0])
+        else:
+            return u''
+    def getNameComponents(self, predicates):
+        return (
+            self.getPredicateValue(_surnamePredicateURI, predicates),
+            self.getPredicateValue(_givenNamePredicateURI, predicates),
+            self.getPredicateValue(_middleNamePredicateURI, predicates)
+        )
+    def createPersonTitle(self, predicates):
+        last, first, middle = self.getNameComponents(predicates)
+        given = first
+        if not given:
+            given = middle
+        else:
+            if middle:
+                given += ' ' + middle
+        if not given:
+            return last
+        else:
+            return u'{}, {}'.format(last, given)
+    def createPerson(self, context, identifier, predicates):
+        person = createContentInContainer(
+            context,
+            'eke.knowledge.person',
+            title=self.createPersonTitle(predicates),
+            identifier=identifier,
+        )
+        return person
+    def ingest(self):
+        u'''Override Ingestor.ingest so we can handle people'''
+        context = aq_inner(self.context)
+        catalog, portal = plone.api.portal.get_tool('portal_catalog'), plone.api.portal.get()
+        consequences = super(SiteIngestor, self).ingest()
+        _logger.info('At this point, we got %r', consequences)
+        catalog.reindexIndex('identifier', portal.REQUEST)
+        siteStatments, peopleStatements = {}, {}
+        siteDataSources = context.rdfDataSources if context.rdfDataSources is not None else []
+        peopleDataSources = context.peopleDataSources if context.peopleDataSources is not None else []
+        for siteURL in siteDataSources:
+            siteStatments.update(self.readRDF(siteURL))
+        for personURL in peopleDataSources:
+            peopleStatements.update(self.readRDF(personURL))
+        for siteIdentifier, predicates in siteStatments.iteritems():
+            piPredicateURI = rdflib.URIRef(_piURI)
+            if piPredicateURI in predicates:
+                pis = predicates[piPredicateURI]
+                if len(pis) > 0 and pis[0]:
+                    piIdentifier = pis[0]
+                    if piIdentifier in peopleStatements:
+                        results = catalog(identifier=unicode(siteIdentifier))
+                        if len(results) > 1:
+                            _logger.critical('Got multiple matches for %s', unicode(siteIdentifier))
+                        elif len(results) == 0:
+                            _logger.critical('Just created site %s not found in catalog', unicode(siteIdentifier))
+                        else:
+                            siteBrain = results[0]
+                            results = catalog(identifier=unicode(piIdentifier))
+                            if len(results) == 0:
+                                site = siteBrain.getObject()
+                                person = self.createPerson(site, piIdentifier, peopleStatements[piIdentifier])
+                                if person is not None:
+                                    site.principalInvestigator = person
+                                    consequences.created.append(person)
+        _logger.warn('Got %d site statements, %d people statements', len(siteStatments), len(peopleStatements))
+        publish(context)
+        return consequences
 
 
 class View(KnowledgeFolderView):
