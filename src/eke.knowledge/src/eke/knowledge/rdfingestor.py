@@ -14,7 +14,7 @@ import logging, transaction, plone.api
 
 
 _logger = logging.getLogger(__name__)
-_dawnOfTime = datetime(1970, 1, 1, 0, 0, 0, 0)
+DAWN_OF_TIME = datetime(1970, 1, 1, 0, 0, 0, 0)
 
 
 class RDFIngestor(grok.View):
@@ -27,7 +27,7 @@ class RDFIngestor(grok.View):
         registry = getUtility(IRegistry)
         ingestStart = registry['eke.knowledge.interfaces.IPanel.ingestStart']
         self.completeResults, self.skipped = IngestConsequences([], [], []), []
-        if ingestStart and ingestStart > _dawnOfTime:
+        if ingestStart and ingestStart > DAWN_OF_TIME:
             self.ingestStart, self.ingestRunning = ingestStart, True
         else:
             try:
@@ -49,7 +49,7 @@ class RDFIngestor(grok.View):
                         self.skipped.append(folder)
             finally:
                 self.ingestRunning = False
-                registry['eke.knowledge.interfaces.IPanel.ingestStart'] = _dawnOfTime
+                registry['eke.knowledge.interfaces.IPanel.ingestStart'] = DAWN_OF_TIME
                 self.completeResults.created.sort(lambda a, b: cmp(a.title, b.title))
                 self.completeResults.updated.sort(lambda a, b: cmp(a.title, b.title))
                 self.completeResults.deleted.sort()
