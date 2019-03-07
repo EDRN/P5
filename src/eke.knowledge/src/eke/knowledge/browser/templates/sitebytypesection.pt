@@ -22,8 +22,12 @@
                         Dr Offline
                     </span>
                 </td>
-                <td tal:condition='showOrgans' tal:content="python:', '.join(item['organs'])">
-                    Anus, Rectum
+                <td tal:condition='showOrgans' tal:define='
+                    organs python:item.get("organs", []);
+                    organs python:[] if organs is None else organs;
+                    organs python:[] if len(organs) == 0 else organs;
+                '>
+                    <span tal:content='python:u", ".join(organs)'>anus, rectum</span>
                 </td>
             </tr>
             <tr><td colspan=3>
