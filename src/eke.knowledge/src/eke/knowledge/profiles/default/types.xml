@@ -4,8 +4,11 @@
     <object name='eke.knowledge.bodysystemfolder' meta_type='Dexterity FTI'/>
     <object name='eke.knowledge.disease' meta_type='Dexterity FTI'/>
     <object name='eke.knowledge.diseasefolder' meta_type='Dexterity FTI'/>
+    <object name='eke.knowledge.person' meta_type='Dexterity FTI'/>
+    <object name='eke.knowledge.protocol' meta_type='Dexterity FTI'/>
+    <object name='eke.knowledge.protocolfolder' meta_type='Dexterity FTI'/>
     <object name='eke.knowledge.publication' meta_type='Dexterity FTI'/>
     <object name='eke.knowledge.publicationfolder' meta_type='Dexterity FTI'/>
-    <object name='eke.knowledge.sitefolder' meta_type='Dexterity FTI'/>
     <object name='eke.knowledge.site' meta_type='Dexterity FTI'/>
+    <object name='eke.knowledge.sitefolder' meta_type='Dexterity FTI'/>
 </object>
