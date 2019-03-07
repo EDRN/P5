@@ -30,70 +30,18 @@ _argParser.add_argument('password', help=u"Zope admin password")
 _argParser.add_argument('ldapPassword', help=u"LDAP password")
 
 
-_EXTENSION_IDS = [
-    'plonetheme.barceloneta:default', 'plone.app.caching:default', 'edrnsite.policy:default'
-]
-_TO_IMPORT = (
-    'about-edrn',
-    'advocates',
-    'beta',
-    'cancer-bioinformatics-workshop',
-    'c-edrn',
-    'docs',
-    'EDRN RFA guidelines-v4.pdf',
-    'FOA-guidelines',
-    'funding-opportunities',
-    'informatics',
-    'microrna',
-    'network-consulting-team',
-    'new-user-information',
-    'researchers',
-    'resources',
-    'secretome'
-)
-
-
-# From https://docs.python.org/2/library/csv.html
-class UTF8Recoder(object):
-    """
-    Iterator that reads an encoded stream and reencodes the input to UTF-8
-    """
-    def __init__(self, f, encoding):
-        self.reader = codecs.getreader(encoding)(f)
-
-    def __iter__(self):
-        return self
-
-    def next(self):
-        return self.reader.next().encode("utf-8")
-
-
-# From https://docs.python.org/2/library/csv.html
-class UnicodeReader(object):
-    """
-    A CSV reader which will iterate over lines in the CSV file "f",
-    which is encoded in the given encoding.
-    """
-
-    def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
-        f = UTF8Recoder(f, encoding)
-        self.reader = csv.reader(f, dialect=dialect, **kwds)
-
-    def next(self):
-        row = self.reader.next()
-        return [unicode(s, "utf-8") for s in row]
-
-    def __iter__(self):
-        return self
-
-
 def _null(context):
-    u'''do noting with the given context object'''
+    u'''Do noting with the given context object. Must be defined before _RDF_FOLDERS below.'''
     pass
 
 
+def _setupSites(context):
+    u'''Do extra stuff for sites: people. Must be defined before _RDF_FOLDERS below.'''
+    context.peopleDataSources = [_PEOPLE_RDF]
+
+
 def _applyFacetsToPublications(context):
-    u'''Faceted navigation on publications'''
+    u'''Faceted navigation on publications. Must be defined before _RDF_FOLDERS below.'''
     portal = plone.api.portal.get()
     request = portal.REQUEST
     subtyper = getMultiAdapter((context, request), name=u'faceted_subtyper')
@@ -131,13 +79,71 @@ def _applyFacetsToPublications(context):
     IFacetedLayout(context).update_layout('faceted_publications_view')
 
 
+
+
+_EXTENSION_IDS = [
+    'plonetheme.barceloneta:default', 'plone.app.caching:default', 'edrnsite.policy:default'
+]
+_TO_IMPORT = (
+    'about-edrn',
+    'advocates',
+    'beta',
+    'cancer-bioinformatics-workshop',
+    'c-edrn',
+    'docs',
+    'EDRN RFA guidelines-v4.pdf',
+    'FOA-guidelines',
+    'funding-opportunities',
+    'informatics',
+    'microrna',
+    'network-consulting-team',
+    'new-user-information',
+    'researchers',
+    'resources',
+    'secretome'
+)
+_PEOPLE_RDF = u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/registered-person/@@rdf'
 _RDF_FOLDERS = (
     ('resources', 'eke.knowledge.bodysystemfolder', u'Body Systems', u'Body systems are organs of the body.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/body-systems/@@rdf'], _null),
     ('resources', 'eke.knowledge.diseasefolder', u'Diseases', u'Ailements affecting body systems.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/diseases/@@rdf'], _null),
     (None, 'eke.knowledge.publicationfolder', u'Publications', u'Items published by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf', u'http://edrn.jpl.nasa.gov/bmdb/rdf/publications'], _applyFacetsToPublications),
-    (None, 'eke.knowledge.sitefolder', u'Sites', u'Institutions and PIs in EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/sites/@@rdf'], _null),
+    (None, 'eke.knowledge.sitefolder', u'Sites', u'Institutions and PIs in EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/sites/@@rdf'], _setupSites),
 #    (None, 'eke.knowledge.sitefolder', u'Sites', u'Institutions and PIs in EDRN.', [u'file:/tmp/1-site.rdf'], _null),    
 )
+
+
+# From https://docs.python.org/2/library/csv.html
+class UTF8Recoder(object):
+    """
+    Iterator that reads an encoded stream and reencodes the input to UTF-8
+    """
+    def __init__(self, f, encoding):
+        self.reader = codecs.getreader(encoding)(f)
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        return self.reader.next().encode("utf-8")
+
+
+# From https://docs.python.org/2/library/csv.html
+class UnicodeReader(object):
+    """
+    A CSV reader which will iterate over lines in the CSV file "f",
+    which is encoded in the given encoding.
+    """
+
+    def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
+        f = UTF8Recoder(f, encoding)
+        self.reader = csv.reader(f, dialect=dialect, **kwds)
+
+    def next(self):
+        row = self.reader.next()
+        return [unicode(s, "utf-8") for s in row]
+
+    def __iter__(self):
+        return self
 
 
 def _setupLogging():
