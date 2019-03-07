@@ -32,6 +32,15 @@ class IPanel(Interface):
             description=_(u'Path to an object to ingest.')
         )
     )
+    resetIngestState = schema.Bool(
+        title=_(u'Reset Ingest'),
+        description=_(
+            u'Check this box to reset the ingest status. This is typically only done during '
+            u'development. This re-enables ingest and unsets the ingest start time, effectively '
+            u'ignoring those two settings above.'
+        ),
+        required=False,
+    )
 
 
 class IIngestor(Interface):
