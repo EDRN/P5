@@ -35,5 +35,19 @@
             </value_type>
         </field>
     </record>
+    <record name='eke.knowledge.interfaces.IPanel.resetIngestState'
+        interface='eke.knowledge.interfaces.IPanel'
+        field='resetIngestState'>
+        <field type='plone.registry.field.Bool'>
+            <title i18n:domain='eke.knowledge' i18n:translate=''>Reset Ingest State</title>
+            <description i18n:domain='eke.knowledge' i18n:translate=''>
+                Resets the ingest status. This is typically only done during
+                development. This re-enables ingest and unsets the ingest start
+                time.
+            </description>
+            <default>False</default>
+        </field>
+        <value>False</value>
+    </record>
 
 </registry>
