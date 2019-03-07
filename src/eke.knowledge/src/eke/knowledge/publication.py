@@ -55,7 +55,7 @@ class IPublication(IKnowledgeObject):
 
 
 IPublication.setTaggedValue('predicates', {
-    u'http://purl.org/dc/terms/title': ('title', False),
+    dublincore.TITLE_URI: ('title', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#abstract': ('description', False),
     dublincore.AUTHOR_URI: ('authors', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#issue': ('issue', False),
