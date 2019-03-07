@@ -148,6 +148,8 @@ class SiteIngestor(Ingestor):
                                 person = self.createPerson(site, piIdentifier, peopleStatements[piIdentifier])
                                 if person is not None:
                                     site.principalInvestigator = person
+                                    site.piObjectID = person.id
+                                    site.piName = person.title
                                     consequences.created.append(person)
         _logger.warn('Got %d site statements, %d people statements', len(siteStatments), len(peopleStatements))
         publish(context)
@@ -196,12 +198,11 @@ class View(KnowledgeFolderView):
                 #     piName = uidBrain.Title
                 # else:
                 #     piURL = piName = None
-                piURL = piName = None
                 sites.append(dict(
                     title=brain.Title,
                     description=brain.Description,
-                    investigator=piName,
-                    piURL=piURL,
+                    investigator=brain.piName,
+                    piObjectID=brain.piObjectID,
                     url=brain.getURL(),
                     specialty=brain.specialty
                 ))
@@ -317,19 +318,10 @@ class View(KnowledgeFolderView):
                 continue
             if memberType not in sites:
                 sites[memberType] = []
-            # P5 doesn't have a uid_catalog
-            # if i.piUID:
-            #     uidBrain = uidCatalog(UID=i.piUID)[0]
-            #     piURL = uidBrain.getURL(relative=False)
-            #     piName = uidBrain.Title
-            # else:
-            #     piURL = piName = None
-            piURL = piName = None
             sites[memberType].append(dict(
                 title=i.Title,
                 description=i.Description,
-                investigator=piName,
-                piURL=piURL,
+                investigator=i.piName,
                 organs=i.organs,
                 proposal=i.proposal,
                 url=i.getURL(),

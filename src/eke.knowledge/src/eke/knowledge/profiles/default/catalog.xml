@@ -51,4 +51,16 @@
         <extra name='lexicon_id' value='plone_lexicon'/>
     </index>
     <column value='proposal' />
+
+    <!-- Display of PI in ISite -->
+    <index name='piObjectID' meta_type='FieldIndex'>
+        <indexed_attr value='piObjectID' />
+    </index>
+    <column value='piObjectID'/>
+    <index name='piName' meta_type='FieldIndex'>
+        <indexed_attr value='piName' />
+    </index>
+    <column value='piName'/>
+
+
 </object>

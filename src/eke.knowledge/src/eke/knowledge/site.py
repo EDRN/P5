@@ -125,6 +125,16 @@ class ISite(IKnowledgeObject):
         description=_(u'Title of the proposal that produced this site (for BDLs only).'),
         required=False,
     )
+    piObjectID = schema.TextLine(
+        title=_(u'PI Object ID'),
+        description=_(u'Object identifier of the principal investigator.'),
+        required=False,
+    )
+    piName = schema.TextLine(
+        title=_(u'PI Name'),
+        description=_(u'Name of the principal investigator.'),
+        required=False,
+    )
 
 
 ISite.setTaggedValue('predicates', {

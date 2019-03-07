@@ -14,11 +14,13 @@
                         Hottest Site Ever
                     </a>
                 </td>
-                <td tal:define='piURL item/piURL|nothing; piName item/investigator|nothing;' class="piLink">
-                    <a tal:condition='piURL' href='#' tal:attributes='href piURL' tal:content='piName'>
+                <td tal:define='piObjectID item/piObjectID|nothing; piName item/investigator|nothing;'
+                    class="piLink">
+                    <a tal:condition='piObjectID' href='#' tal:content='piName'
+                        tal:attributes='href string:${item/url}/${piObjectID}'>
                         Dr Online
                     </a>
-                    <span tal:condition='not:piURL' tal:content='piName'>
+                    <span tal:condition='not:piObjectID' tal:content='piName'>
                         Dr Offline
                     </span>
                 </td>
@@ -62,11 +64,13 @@
                     </thead>
                     <tbody>
                         <tr tal:repeat='item actualSites'>
-                            <td tal:define='piURL item/piURL|nothing; piName item/investigator|nothing;' class="piLink">
-                                <a tal:condition='piURL' href='#' tal:attributes='href piURL' tal:content='piName'>
+                            <td tal:define='piObjectID item/piObjectID|nothing; piName item/investigator|nothing;'
+                                class="piLink">
+                                <a tal:condition='piObjectID' tal:content='piName'
+                                    href='#' tal:attributes='href string:${item/url}/${piObjectID}'>
                                     Dr Online
                                 </a>
-                                <span tal:condition='not:piURL' tal:content='piName'>
+                                <span tal:condition='not:piObjectID' tal:content='piName'>
                                     Dr Offline
                                 </span>
                             </td>
