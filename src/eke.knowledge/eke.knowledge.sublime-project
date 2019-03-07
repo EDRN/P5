@@ -3,7 +3,7 @@
         [
         {
             "path": ".",
-            "folder_exclude_patterns": ["bin", "dep-src", "develop-eggs", "dist", "build", "*.egg-info", "parts", "var", "__pycache__"],
+            "folder_exclude_patterns": ["bin", "dep-src", "develop-eggs", "dist", "build", "*.egg-info", "parts", "var", "__pycache__", "test_*"],
             "file_exclude_patterns": [".*.cfg", "bootstrap.py", "doc.txt", "*.sublime-*"]
         }
 	]
