@@ -1,6 +1,9 @@
 # encoding: utf-8
 
 from . import _, dublincore
+from .person import IPerson
+from Acquisition import aq_inner
+from five import grok
 from knowledgeobject import IKnowledgeObject
 from zope import schema
 
@@ -59,12 +62,12 @@ class ISite(IKnowledgeObject):
         description=_(u'Various notes made by various individuals within EDRN about this EDRN site.'),
         required=False,
     )
-    # principalInvestigator = schema.Object(
-    #     title=_(u'Principal Investigator'),
-    #     description=_(u'The leading investigator leading EDRN research at this site.'),
-    #     required=False,
-    #     schema=IPerson
-    # )
+    principalInvestigator = schema.Object(
+        title=_(u'Principal Investigator'),
+        description=_(u'The leading investigator leading EDRN research at this site.'),
+        required=False,
+        schema=IPerson
+    )
     # coPrincipalInvestigators = schema.List(
     #     title=_(u'Co-Principal Investigators'),
     #     description=_(u'Additional leading principal investigators.'),
@@ -95,11 +98,14 @@ class ISite(IKnowledgeObject):
     #         schema=IPerson
     #     )
     # )
-    piUID = schema.TextLine(
-        title=_(u'PI UID'),
-        description=_(u'Unique identifier of the principal investigator.'),
-        required=False,
-    )
+
+    # No longer neeed:
+    # piUID = schema.TextLine(
+    #     title=_(u'PI UID'),
+    #     description=_(u'Unique identifier of the principal investigator.'),
+    #     required=False,
+    # )
+
     siteID = schema.TextLine(
         title=_(u'Site ID'),
         description=_(u'DMCC-assigned identifier of the site.'),
@@ -122,7 +128,7 @@ class ISite(IKnowledgeObject):
 
 
 ISite.setTaggedValue('predicates', {
-    u'http://purl.org/dc/terms/title': ('title', False),
+    dublincore.TITLE_URI: ('title', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#abstract': ('description', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#abbrevName': ('abbreviation', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#fundStart': ('fundingStartDate', False),
@@ -132,11 +138,23 @@ ISite.setTaggedValue('predicates', {
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#url': ('homePage', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#memberType': ('memberType', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#historicalNotes': ('historicalNotes', False),
-    u'http://edrn.nci.nih.gov/rdf/schema.rdf#pi': ('principalInvestigator', True),
-    u'http://edrn.nci.nih.gov/rdf/schema.rdf#copi': ('coPrincipalInvestigators', True),
-    u'http://edrn.nci.nih.gov/rdf/schema.rdf#coi': ('coInvestigators', True),
-    u'http://edrn.nci.nih.gov/rdf/schema.rdf#investigator': ('investigators', True),
+    # Handled specially in SiteFolderIngest.ingest:
+    # u'http://edrn.nci.nih.gov/rdf/schema.rdf#pi': ('principalInvestigator', True),
+    # u'http://edrn.nci.nih.gov/rdf/schema.rdf#copi': ('coPrincipalInvestigators', True),
+    # u'http://edrn.nci.nih.gov/rdf/schema.rdf#coi': ('coInvestigators', True),
+    # u'http://edrn.nci.nih.gov/rdf/schema.rdf#investigator': ('investigators', True),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#organ': ('organs', False)
 })
 ISite.setTaggedValue('fti', 'eke.knowledge.site')
 ISite.setTaggedValue('typeURI', u'http://edrn.nci.nih.gov/rdf/types.rdf#Site')
+
+
+class View(grok.View):
+    grok.context(ISite)
+    grok.require('zope2.View')
+    def showSponsor(self):
+        context = aq_inner(self.context)
+        memberType = context.memberType
+        if not memberType: return False
+        memberType = memberType.strip()
+        return memberType.startswith(u'Associate') or memberType.startswith('Assocaite')  # Thanks DMCC. Ugh >.<

@@ -1,0 +1,72 @@
+<html
+    i18n:domain='eke.knowledge'
+    lang='en'
+    metal:use-macro='context/main_template/macros/master'
+    xml:lang='en'
+    xmlns:i18n='http://xml.zope.org/namespaces/i18n'
+    xmlns:metal='http://xml.zope.org/namespaces/metal'
+    xmlns:tal='http://xml.zope.org/namespaces/tal'
+    xmlns='http://www.w3.org/1999/xhtml'>
+    <head>
+        <title>Site View</title>
+    </head>
+    <body>
+        <metal:content-core fill-slot='content-core'>
+            <metal:content-core define-macro='content-core'>
+
+                <div id="site-abbreviation">
+                    <label for='parent-fieldname-abbreviation' i18n:translate='label_abbreviation'>Abbreviation:</label>
+                    <span id='parent-fieldname-abbreviation' tal:content='structure context/abbreviation'>XQY</span>
+                </div>
+
+                <div id="site-column-container">
+                    <div id="site-main-column">
+                        <p class='documentDescription'>
+                            <span id='parent-fieldname-description' tal:content='context/description'>Description.</span>
+                        </p>
+                        <div>
+                            <label for='parent-fieldname-memberType' i18n:translate='label_memberType'>Member Type:</label>
+                            <span id='parent-fieldname-memberType' tal:content='structure context/memberType'>Adults Only</span>
+                        </div>
+                        <div>
+                            <label for='parent-fieldname-homePage' i18n:translate='label_homePage'>Home Page:</label>
+                            <a href='#' tal:attributes='href context/homePage' 
+                                tal:content='context/homePage'>http://superclubs.com/</a>
+                        </div>
+                        <div tal:condition='view/showSponsor'>
+                            <label for='parent-fieldname-sponsor' i18n:translate='label_sponsor'>Sponsor:</label>
+                            <a href='#' tal:attributes='href context/sponsor/getURL' id='parent-fieldname-sponsor'
+                                tal:content='context/sponsor/Title'>
+                                Sponsor
+                            </a>
+                        </div>
+                    </div>
+                    <div id="site-right-column">
+                        <div>
+                            <label for='parent-fieldname-principalInvestigator' i18n:translate='label_principalInvestigator'>
+                                Principal Investigator:
+                            </label>
+                            <a href='#' tal:attributes='href context/principalInvestigator/absolute_url'
+                                id='parent-fieldname-principalInvestigator'
+                                tal:content='context/principalInvestigator/Title'>
+                                Joe PI
+                            </a>
+                        </div>
+                    </div>
+
+<!--
+                        <div tal:condition='view/showOrgans'>
+                            <label for='parent-fieldname-organ' i18n:translate='label_organ'>Organs:</label>
+                            <ul id='parent-fieldname-organ'>
+                                <li tal:repeat='organ context/organs'>
+                                    <span tal:replace='organ'>Anus</span>
+                                </li>
+                            </ul>
+                        </div>
+-->
+                </div>
+                <div class="visualClear"><!-- --></div>
+            </metal:content-core>
+        </metal:content-core>
+    </body>
+</html>
