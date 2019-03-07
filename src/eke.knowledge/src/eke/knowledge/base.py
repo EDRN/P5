@@ -4,6 +4,7 @@ u'''Abstract (or not)) base classes for EKE'''
 
 
 from . import _
+from .dublincore import TITLE_URI
 from .errors import IngestDisabled, IngestError, RDFTypeMismatchError, TitlePredicateMissingError
 from .interfaces import IIngestor
 from .knowledgefolder import IKnowledgeFolder
@@ -20,7 +21,7 @@ from zope.intid.interfaces import IIntIds
 import rdflib, plone.api, logging
 
 
-DC_TITLE = rdflib.URIRef(u'http://purl.org/dc/terms/title')
+DC_TITLE = rdflib.URIRef(TITLE_URI)
 
 _logger = logging.getLogger(__name__)
 
@@ -146,19 +147,24 @@ class Ingestor(grok.Adapter):
                 else:
                     currentVals = fieldBinding.get(obj)
                     if schema.interfaces.ICollection.providedBy(field):
-                        if currentVals != newVals:
+                        if currentVals != newVals and currentVals is not None:
                             self.setValue(obj, fti, iface, predicate, predicateMap, newVals)
                             objectUpdated = True
                     else:
                         if len(newVals) > 0:
                             if currentVals != newVals[0]:
+                                # Note that site memberType may always be triggered here because
+                                # the new value may be "Associate Member C2 - Former" whereas we
+                                # truncate that in setValue to "Associate Member C". This just
+                                # causes unneeded object updates but is otherwise harmless (if
+                                # slow).
                                 self.setValue(obj, fti, iface, predicate, predicateMap, newVals)
                                 objectUpdated = True
             if objectUpdated:
                 obj.reindexObject()
                 updatedObjects.append(obj)
         return updatedObjects
-    def _readRDF(self, url):
+    def readRDF(self, url):
         u'''Read the RDF statements and return s/p/o dict'''
         graph = rdflib.Graph()
         graph.parse(url)
@@ -178,7 +184,7 @@ class Ingestor(grok.Adapter):
         catalog = plone.api.portal.get_tool('portal_catalog')
         statements = {}
         for rdfDataSource in context.rdfDataSources:
-            statements.update(self._readRDF(rdfDataSource))
+            statements.update(self.readRDF(rdfDataSource))
         results = catalog(
             object_provides=IKnowledgeObject.__identifier__,
             path=dict(query='/'.join(context.getPhysicalPath()), depth=1)
