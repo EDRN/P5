@@ -14,6 +14,13 @@ import plone.api
 class IngestConsequences(object):
     def __init__(self, created, updated, deleted):
         self.created, self.updated, self.deleted = created, updated, deleted
+    def __repr__(self):
+        return '{}(created={},updated={},deleted={})'.format(
+            self.__class__.__name__,
+            len(self.updated),
+            len(self.updated),
+            len(self.deleted)
+        )
 
 
 # Functions
