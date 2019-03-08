@@ -33,13 +33,16 @@
                             <a href='#' tal:attributes='href context/homePage' 
                                 tal:content='context/homePage'>http://superclubs.com/</a>
                         </div>
+<!--
                         <div tal:condition='view/showSponsor'>
                             <label for='parent-fieldname-sponsor' i18n:translate='label_sponsor'>Sponsor:</label>
-                            <a href='#' tal:attributes='href context/sponsor/getURL' id='parent-fieldname-sponsor'
+                            <a href='#' tal:attributes='href context/sponsor/absolute_url'
+                                id='parent-fieldname-sponsor'
                                 tal:content='context/sponsor/Title'>
                                 Sponsor
                             </a>
                         </div>
+-->
                     </div>
                     <div id="site-right-column">
                         <div>
