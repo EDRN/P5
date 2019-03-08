@@ -7,7 +7,6 @@ from AccessControl.SecurityManagement import newSecurityManager, noSecurityManag
 from AccessControl.SecurityManager import setSecurityPolicy
 from eea.facetednavigation.interfaces import ICriteria
 from eea.facetednavigation.layout.interfaces import IFacetedLayout
-from eke.knowledge.publication import IPublication
 from node.ext.ldap.interfaces import ILDAPProps
 from plone.app.dexterity.behaviors.exclfromnav import IExcludeFromNavigation
 from plone.dexterity.utils import createContentInContainer
@@ -79,8 +78,6 @@ def _applyFacetsToPublications(context):
     IFacetedLayout(context).update_layout('faceted_publications_view')
 
 
-
-
 _EXTENSION_IDS = [
     'plonetheme.barceloneta:default', 'plone.app.caching:default', 'edrnsite.policy:default'
 ]
@@ -108,7 +105,7 @@ _RDF_FOLDERS = (
     ('resources', 'eke.knowledge.diseasefolder', u'Diseases', u'Ailements affecting body systems.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/diseases/@@rdf'], _null),
     (None, 'eke.knowledge.publicationfolder', u'Publications', u'Items published by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf', u'http://edrn.jpl.nasa.gov/bmdb/rdf/publications'], _applyFacetsToPublications),
     (None, 'eke.knowledge.sitefolder', u'Sites', u'Institutions and PIs in EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/sites/@@rdf'], _setupSites),
-#    (None, 'eke.knowledge.sitefolder', u'Sites', u'Institutions and PIs in EDRN.', [u'file:/tmp/1-site.rdf'], _null),    
+    (None, 'eke.knowledge.protocolfolder', u'Protocols', u'Studies pursued by EDRN.', ['https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/protocols/@@rdf'], _null)
 )
 
 

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+   xmlns:ns1="http://edrn.nci.nih.gov/rdf/schema.rdf#"
+   xmlns:ns2="http://purl.org/dc/terms/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+>
+  <rdf:Description rdf:about="http://edrn.nci.nih.gov/data/protocols/279">
+    <ns1:finalSampleSize>see Lung Set A</ns1:finalSampleSize>
+    <ns1:eligibilityCriteria>See Lung Reference Set A</ns1:eligibilityCriteria>
+    <ns1:protocolType>Collaboration</ns1:protocolType>
+    <ns2:title>Lung Reference Set A Application:  Edward Hirschowitz - University of Kentucky (2009)</ns2:title>
+    <ns1:dataSharingPlan>Lab Data will be analyzed by the DMCC and shared according the LCBG/NCI guidelines.  Data will not be publicly available until the reference set is depleted</ns1:dataSharingPlan>
+    <ns1:objective>We are continuing validation with two advanced objectives: 1) To evaluate assay performance for established lung cancer diagnosed in a clinical population 2) to confirm results that indicate this marker set may detect cancer and predict the onset of NSCLC prior to radiographic detection in a screened population.</ns1:objective>
+    <ns1:inSituDataSharingPlan>Yes</ns1:inSituDataSharingPlan>
+    <rdf:type rdf:resource="http://edrn.nci.nih.gov/rdf/types.rdf#Protocol"/>
+    <ns1:coordinatingInvestigatorSite rdf:resource="http://edrn.nci.nih.gov/data/sites/5"/>
+    <ns1:cancerType>162                                                                                                 </ns1:cancerType>
+    <ns1:collaborativeGroupText>Lung and Upper Aerodigestive Cancers Research Group                  </ns1:collaborativeGroupText>
+    <ns1:leadInvestigatorSite rdf:resource="http://edrn.nci.nih.gov/data/sites/515"/>
+    <ns1:analyticMethod>Assay. The diagnostic chip includes capture proteins for the most predictive markers and empty T7 phage controls in replicates of eight, randomly distributed across the chip. The methodology for all studies will be identical to that described in published manuscripts and preliminary results section.</ns1:analyticMethod>
+    <ns1:fieldOfResearch>Proteomics</ns1:fieldOfResearch>
+    <ns1:phasedStatus>1</ns1:phasedStatus>
+    <ns1:bmName>T7</ns1:bmName>
+    <ns1:startDate>Mar 26 2009 12:00AM</ns1:startDate>
+    <ns1:estimatedFinishDate>Mar 25 2010 12:00AM</ns1:estimatedFinishDate>
+    <ns1:finishDate>Feb 27 2012 12:00AM</ns1:finishDate>
+    <ns1:abbreviatedName>Lung Ref Set A  App: Hirschowitz (2009)</ns1:abbreviatedName>
+    <ns1:aims>Aim 1. To pre-validate assay performance in a high-risk clinical population from an alternate demographic. We intend to validate the predictive accuracy of our markers for clinically diagnosed lung cancer, identify the limits of the assay in individuals with benign lung disease, and determine marker specificity for lung vs. other cancers. Pre-validation will define performance in samples from an alternate demographic and generate classifiers with which to construct optimalperformance criteria that can be applied to class prediction for subsequent blinded analysis of a larger EDRN clinical reference set.</ns1:aims>
+    <ns1:plannedSampleSize>150 cases and 150 high risk controls w/lesions - Lung Set A pre-validation</ns1:plannedSampleSize>
+    <ns1:blinding>Samples were blinded at NCI-Frederick</ns1:blinding>
+    <ns1:projectFlag>Protocol</ns1:projectFlag>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://edrn.nci.nih.gov/data/protocols/316">
+    <ns1:protocolType>Validation</ns1:protocolType>
+    <ns1:leadInvestigatorSite rdf:resource="http://edrn.nci.nih.gov/data/sites/726"/>
+    <ns1:analyticMethod>TBD</ns1:analyticMethod>
+    <ns1:bmName>Biomarkers that pass the test on the HCC Phase 2 Validation Set will be included in the Phase 3 study. These makers, along with DCP, will not be measured in real time, but will be assayed retrospectively in a blinded fashion either from samples collected from the entire prospective cohort or from a nested case-control sample embedded in the whole cohort.</ns1:bmName>
+    <ns1:fieldOfResearch>Proteomics</ns1:fieldOfResearch>
+    <ns1:secureOutcome>Ongoing</ns1:secureOutcome>
+    <ns1:dataSharingPlan>Data will be made available when the reference set is depleted</ns1:dataSharingPlan>
+    <ns1:estimatedFinishDate>Aug 31 2014 12:00AM</ns1:estimatedFinishDate>
+    <ns1:abbreviatedName>HEDS</ns1:abbreviatedName>
+    <ns1:cancerType>155                                                                                                 </ns1:cancerType>
+    <ns1:inSituDataSharingPlan>Yes</ns1:inSituDataSharingPlan>
+    <ns1:outcome>Ongoing</ns1:outcome>
+    <ns1:coordinatingInvestigatorSite rdf:resource="http://edrn.nci.nih.gov/data/sites/5"/>
+    <ns1:finalSampleSize>Ongoing</ns1:finalSampleSize>
+    <ns1:aims>The Specific Aims of the HEDS study are:
+
+Aim 1:   (a) To determine the incidence rate and the performance of ultrasound, and the biomarkers, alpha-fetoprotein (AFP), AFP-L3%, and des-gamma carboxy-prothrombin (DCP), in detecting preclinical hepatocellular carcinoma (HCC). (b) To evaluate the performance of novel biomarkers for the detection of preclinical HCC.
+
+Aim 2:   To determine the cost-effectiveness of surveillance strategies for HCC.
+
+Aim 3:   To determine the performance of biomarkers in the prognosis of patients with HCC.
+
+Aim 4:   To establish a biorepository of longitudinally collected biospecimens from this cohort of cirrhotic patients. These biospecimens will form a reference set to be used for future EDRN biomarker validation research.
+</ns1:aims>
+    <ns1:phasedStatus>3</ns1:phasedStatus>
+    <ns1:fieldOfResearch>Glycomics</ns1:fieldOfResearch>
+    <ns1:eligibilityCriteria>Eligibility criteria for controls are:
+&amp;#149;Able and willing to provide written informed consent
+&amp;#149;Age &amp;#062; 18 years of age
+&amp;#149;Albumin, Bilirubin, Creatinine and INR (used to calculate MELD and Child Class) lab result date within 6 months prior to consent OR up to 2 weeks after consent
+&amp;#149;Ultrasound or other imaging within 6 months prior to consent OR up to 2 weeks after consent showing no liver mass
+&amp;#149;Diagnosis of cirrhosis based one or more of the following:
+oHistology
+oUS, MRI or CT showing cirrhotic appearing liver with splenomegaly and platelet count
+of &amp;#060; 120 mm-3 
+oElastography, done by ultrasound or MRI showing a cirrhotic liver
+oA FibroTest result of F4 (stage 4), indicating cirrhosis 
+oVarices on endoscopy or an abdominal imaging test AND presence of chronic liver disease
+&amp;#149;MELD &amp;#060; 15 OR INR is &amp;#060; 1.5, Total Bilirubin is &amp;#060; 1.7 and patient has a history of intrinsic renal disease
+
+Exclusion Criteria
+&amp;#149;Clinical evidence of significant hepatic decompensation
+oRefractory ascites
+oGrade 3-4 encephalopathy
+oHepatorenal syndrome
+oChild Class C
+&amp;#149;Listed for liver transplantation and noted for an “exception”
+&amp;#149;Known AIDS related diseases
+&amp;#149;Detection of HCC at initial evaluation
+&amp;#149;Significant co-morbid medical conditions with life expectancy less than one year
+&amp;#149;Cancer history within the last 5 years (excluding non-melanoma skin cancer)
+&amp;#149;Need for long-term immunosuppressive therapy for solid organ transplant
+&amp;#149;Prior solid organ transplant
+
+</ns1:eligibilityCriteria>
+    <ns1:objective>Part 1:  
+The first part of this study is to conduct follow-up for patients that were enrolled in the EDRN Phase 2 Validation Study called DCP (13). For this part of the study, four groups are defined as follows:
+
+a)   Vanguard Controls are cirrhotic controls, from the Phase 2 trial that have not developed HCC and sign a new consent form for HEDS participation. These patients will be followed for a minimum of an additional 24 months and have biospecimens collected every 6 months. 
+b)   Vanguard Interval Controls are cirrhotic controls, from the Phase 2 trial that have not developed HCC and do not sign a new consent form for HEDS participation. This group will have outcome data abstracted from their medical records.
+c)   Vanguard Interval Cases are cirrhotic controls from the Phase 2 trial that developed HCC after completion of the Phase 2 trial but prior to the current study. This group will have outcome data abstracted from their medical records.
+d)   Vanguard Cases are HCC cases from the Phase 2 trial. This group will have outcome data abstracted from their medical records.
+
+Part 2:  
+New Controls - The second part of this study is the new accrual of cirrhotic controls at the seven participating sites. These patients will be followed for a minimum of 24 months and have biospecimens collected every 6 months. Data will be collected every 6 months: ultrasound, AFP, liver function tests, complete blood counts, MELD scores and any changes in medical history, personal cancer history and family cancer history.
+</ns1:objective>
+    <ns2:title>Hepatocellular carcinoma Early Detection Strategy study</ns2:title>
+    <ns1:startDate>Sep  1 2009 12:00AM</ns1:startDate>
+    <ns1:blinding>all specimens are blinded</ns1:blinding>
+    <ns1:collaborativeGroupText>G.I. and Other Associated Cancers Research Group                  </ns1:collaborativeGroupText>
+    <rdf:type rdf:resource="http://edrn.nci.nih.gov/rdf/types.rdf#Protocol"/>
+    <ns1:projectFlag>Protocol</ns1:projectFlag>
+  </rdf:Description>
+</rdf:RDF>

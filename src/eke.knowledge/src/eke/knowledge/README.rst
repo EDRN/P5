@@ -183,10 +183,43 @@ Sites
     True
     >>> folder = portal['sites']
     >>> folder.rdfDataSources= [u'testscheme://localhost/rdf/sites']
+    >>> folder.peopleDataSources = [u'testscheme://localhost/rdf/people']
 
 Ingesting::
 
     >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'sites']
+    >>> transaction.commit()
+    >>> browser.open(portalURL + '/@@ingestRDF')
+    >>> browser.contents
+    '...RDF Ingest Report...Objects Created (4)...Objects Updated (2)...'
+    >>> len(folder.keys())
+    2
+    >>> keys = folder.keys()
+    >>> keys.sort()
+    >>> keys
+    ['240-vanderbilt-ingram-cancer-center', '815-h-lee-moffitt-cancer-center-and-research']
+
+
+Protocols
+=========
+
+    >>> browser.open(portalURL)
+    >>> l = browser.getLink(id='eke-knowledge-protocolfolder')
+    >>> l.url.endswith('++add++eke.knowledge.protocolfolder')
+    True
+    >>> l.click()
+    >>> browser.getControl(name='form.widgets.title').value = u'Protocols'
+    >>> browser.getControl(name='form.widgets.description').value = u'Some testing protocols.'
+    >>> browser.getControl(name='form.widgets.ingestEnabled:list').value = True
+    >>> browser.getControl(name='form.buttons.save').click()
+    >>> 'protocols' in portal.keys()
+    True
+    >>> folder = portal['protocols']
+    >>> folder.rdfDataSources= [u'testscheme://localhost/rdf/protocols']
+
+Ingesting::
+
+    >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'protocols']
     >>> transaction.commit()
     >>> browser.open(portalURL + '/@@ingestRDF')
     >>> browser.contents
@@ -196,5 +229,4 @@ Ingesting::
     >>> keys = folder.keys()
     >>> keys.sort()
     >>> keys
-    ['240-vanderbilt-ingram-cancer-center', '815-h-lee-moffitt-cancer-center-and-research']
-
+    ['hepatocellular-carcinoma-early-detection-strategy-study', 'lung-reference-set-a-application-edward-hirschowitz-university-of-kentucky-2009']

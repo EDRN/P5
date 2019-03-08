@@ -167,6 +167,7 @@
             <element>eke.knowledge.diseasefolder</element>
             <element>eke.knowledge.publicationfolder</element>
             <element>eke.knowledge.sitefolder</element>
+            <element>eke.knowledge.protocolfolder</element>
         </value>
     </record>
 
