@@ -52,10 +52,10 @@
                         Batch python:modules["Products.CMFPlone"].Batch;
                         b_size python:int(request.get("b_size", 20));
                         b_start python:int(request.get("b_start", 0));
-                        results python:context.restrictedTraverse("@@contentlisting")(batch=True, b_size=b_size, b_start=b_start);
+                        results python:context.restrictedTraverse("@@contentlisting")(batch=True, b_size=b_size, b_start=b_start, sort_on="sortable_title");
                         batch python:Batch(results, b_size, b_start);
                 '>
-                    <table>
+                    <table class='listing' summary='Protocols' i18n:attributes='summary'>
                         <thead>
                             <tr>
                                 <th>Title</th>
@@ -64,22 +64,26 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr tal:repeat='item results'>
-                                <td tal:content='item/Title'>Blah blah</td>
-                                <td tal:define='desc item/Description'>
-                                    <span tal:replace='python:plone_view.cropText(desc, desc_length)'>
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                    </span>
-                                </td>
-                                <td tal:content='item/piName'>
-                                    Joe Blow
-                                </td>
-                            </tr>
+                            <tal:row repeat='item results'>
+                                <tal:define define='oddrow repeat/item/odd'>
+                                    <tr class='odd' tal:attributes='class python:"odd" if oddrow else "even"'>
+                                        <td tal:content='item/Title'>Blah blah</td>
+                                        <td tal:define='desc item/Description'>
+                                            <span tal:replace='python:plone_view.cropText(desc, desc_length)'>
+                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                                                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                                                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                            </span>
+                                        </td>
+                                        <td tal:content='item/piName'>
+                                            Joe Blow
+                                        </td>
+                                    </tr>
+                                </tal:define>
+                            </tal:row>
                         </tbody>
                     </table>
                     <div metal:use-macro='context/batch_macros/macros/navigation'/>
