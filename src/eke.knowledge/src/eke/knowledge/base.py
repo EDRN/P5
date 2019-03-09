@@ -18,6 +18,7 @@ from z3c.relationfield import RelationValue
 from zope import schema
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
+from zope.interface import Invalid
 import rdflib, plone.api, logging
 
 
@@ -46,11 +47,11 @@ class Ingestor(grok.Adapter):
         iface = self.getInterfaceForContainedObjects()
         fti = iface.getTaggedValue('fti')
         predicateMap = iface.getTaggedValue('predicates')
-        ndeededTypeURI = rdflib.URIRef(iface.getTaggedValue('typeURI'))
+        neededTypeURI = rdflib.URIRef(iface.getTaggedValue('typeURI'))
         typeURI, titles = predicates[rdflib.RDF.term('type')][0], self.getTitles(predicates)
         objID = self.getObjID(subjectURI, titles, predicates)
-        if typeURI != ndeededTypeURI: raise RDFTypeMismatchError(ndeededTypeURI, typeURI)
-        if not titles or not titles[0]: raise TitlePredicateMissingError()
+        if typeURI != neededTypeURI: raise RDFTypeMismatchError(neededTypeURI, typeURI)
+        if not titles or not titles[0]: raise TitlePredicateMissingError(subjectURI)
         return iface, fti, predicateMap, unicode(titles[0]), objID
     def setValue(self, obj, fti, iface, predicate, predicateMap, values):
         u'''Look up the field of ``obj`` matching ``predicate`` in the ``predicateMap``` and set it to ``values```.
@@ -80,12 +81,16 @@ class Ingestor(grok.Adapter):
             elif len(items) > 0:
                 fieldBinding.set(obj, rvs[0])
         else:  # Non-reference field
-            if schema.interfaces.ICollection.providedBy(field):  # Multi-valued
-                fieldBinding.validate(values)
-                fieldBinding.set(obj, values)
-            else:  # Scalar
-                fieldBinding.validate(values[0])
-                fieldBinding.set(obj, values[0])
+            try:
+                values = [textString.strip() for textString in values]
+                if schema.interfaces.ICollection.providedBy(field):  # Multi-valued
+                    fieldBinding.validate(values)
+                    fieldBinding.set(obj, values)
+                else:  # Scalar
+                    fieldBinding.validate(values[0])
+                    fieldBinding.set(obj, values[0])
+            except Invalid as ex:
+                _logger.exception('Invalid data type for field %s type %s', fieldName, fti)
     def createObjects(self, context, uris, statements):
         u'''Create objects in ``context`` identified by ``uris`` and described in the ``statements``.  Return
         sequence of those created objects. Subclasses may override this for special ingest needs.'''
@@ -136,7 +141,11 @@ class Ingestor(grok.Adapter):
                 newVals = [i.toPython() for i in newVals]
                 if isReference:
                     rvs = fieldBinding.get(obj)
-                    paths = [i.to_path for i in rvs]
+                    if rvs is None: continue
+                    if schema.interfaces.ICollection.providedBy(field):
+                        paths = [i.to_path for i in rvs]
+                    else:
+                        paths = [rvs.to_path]
                     matches = catalog(path={'query': paths, 'depth': 0})
                     currentRefs = [i['identifier'].decode('utf-8') for i in matches]
                     currentRefs.sort()
@@ -201,4 +210,4 @@ class Ingestor(grok.Adapter):
         newObjects = self.createObjects(context, newURIs, statements)
         updatedObjects = self.updateObjects(context, updateURIs, existingBrains, statements)
         context.manage_delObjects([existingBrains[i]['id'].decode('utf-8') for i in deadURIs])
-        return IngestConsequences(newObjects, updatedObjects, deadURIs)
+        return IngestConsequences(newObjects, updatedObjects, deadURIs, statements)

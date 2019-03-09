@@ -229,4 +229,4 @@ Ingesting::
     >>> keys = folder.keys()
     >>> keys.sort()
     >>> keys
-    ['hepatocellular-carcinoma-early-detection-strategy-study', 'lung-reference-set-a-application-edward-hirschowitz-university-of-kentucky-2009']
+    ['279-lung-reference-set-a-application-edward', '316-hepatocellular-carcinoma-early-detection']

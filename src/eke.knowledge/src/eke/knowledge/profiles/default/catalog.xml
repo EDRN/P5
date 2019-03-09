@@ -52,7 +52,7 @@
     </index>
     <column value='proposal' />
 
-    <!-- Display of PI in ISite -->
+    <!-- Display of PI in ISite, IProtocolFolder -->
     <index name='piObjectID' meta_type='FieldIndex'>
         <indexed_attr value='piObjectID' />
     </index>

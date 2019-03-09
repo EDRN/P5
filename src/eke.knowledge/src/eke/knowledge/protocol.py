@@ -48,7 +48,7 @@ class IProtocol(IKnowledgeObject):
         required=False,
         schema=ISite
     )
-    bmName = schema.TextLine(
+    bmName = schema.Text(
         title=_(u'Biomarker Name'),
         description=_(u'A protocol may have associated with it a biomarker name, which turns out to be free text for anything.'),
         required=False
@@ -58,7 +58,7 @@ class IProtocol(IKnowledgeObject):
         description=_(u'Text explaining the collaborative nature of this protocol.'),
         required=False
     )
-    phasedStatus = schema.TextLine(
+    phasedStatus = schema.Text(
         title=_(u'Phased Status'),
         description=_(u'Status of this protocol when phased through time and space.'),
         required=False
@@ -103,22 +103,22 @@ class IProtocol(IKnowledgeObject):
         description=_(u'The data sharing plan that is actually in place in the protocol.'),
         required=False,
     )
-    startDate = schema.TextLine(
+    startDate = schema.Text(
         title=_(u'Start Date'),
         description=_(u'When this protocol began or will begin.'),
         required=False,
     )
-    estimatedFinishDate = schema.TextLine(
+    estimatedFinishDate = schema.Text(
         title=_(u'Estimated Finish Date'),
         description=_(u'When this protocol is predicted to cease.'),
         required=False,
     )
-    finishDate = schema.TextLine(
+    finishDate = schema.Text(
         title=_(u'Finish Date'),
         description=_(u'When this protocol actually ceased.'),
         required=False,
     )
-    design = schema.TextLine(
+    design = schema.Text(
         title=_(u'Design'),
         description=_(u'The design type of this protocol.'),
         required=False,
@@ -132,7 +132,7 @@ class IProtocol(IKnowledgeObject):
             description=_(u'A code identifying a single field of research.')
         )
     )
-    abbrevName = schema.TextLine(
+    abbrevName = schema.Text(
         title=_(u'Abbreviated Name'),
         description=_(u'A shorter and possibly far more convenient name for the protocol.'),
         required=False,
@@ -148,7 +148,7 @@ class IProtocol(IKnowledgeObject):
         required=False,
         default=False,
     )
-    protocolType = schema.TextLine(
+    protocolType = schema.Text(
         title=_(u'Protocol Type'),
         description=_(u'The kind of protocol this is.'),
         required=False,
@@ -173,12 +173,12 @@ class IProtocol(IKnowledgeObject):
         description=_(u'The secure outcome (or expected secure outcome) of executing this protocol.'),
         required=False,
     )
-    plannedSampleSize = schema.TextLine(
+    plannedSampleSize = schema.Text(
         title=_(u'Planned Sample Size'),
         description=_(u'The size of the sample the protocol is expected to use.'),
         required=False,
     )
-    finalSampleSize = schema.TextLine(
+    finalSampleSize = schema.Text(
         title=_(u'Final Sample Size'),
         description=_(u'The size of the sample the protocol actually used.'),
         required=False,
@@ -243,32 +243,32 @@ class IProtocol(IKnowledgeObject):
             schema=IProtocol
         )
     )
-    animalSubjectTraining = schema.TextLine(
+    animalSubjectTraining = schema.Text(
         title=_(u'Animal Subject Training'),
         description=_(u'A note about whether animal subject training is required, has been given, or has not been given.'),
         required=False,
     )
-    humanSubjectTraining = schema.TextLine(
+    humanSubjectTraining = schema.Text(
         title=_(u'Human Subject Training'),
         description=_(u'A note about whether human subject training is required, has been given, or has not been given.'),
         required=False,
     )
-    irbApproval = schema.TextLine(
+    irbApproval = schema.Text(
         title=_(u'IRB Approval'),
         description=_(u'A note about whether Internal Review Board approval is required, has been given, or has not been given.'),
         required=False,
     )
-    originalIRBApprovalDate = schema.TextLine(
+    originalIRBApprovalDate = schema.Text(
         title=_(u'Original IRB Approval Date'),
         description=_(u'techniques date on which the first, original IRB approval was given for this protocol.'),
         required=False,
     )
-    currentIRBApprovalDate = schema.TextLine(
+    currentIRBApprovalDate = schema.Text(
         title=_(u'Current IRB Approval Date'),
         description=_(u'The date on which the current IRB approval was given for this protocol.'),
         required=False,
     )
-    currentIRBExpirationDate = schema.TextLine(
+    currentIRBExpirationDate = schema.Text(
         title=_(u'Current IRB Expiration Date'),
         description=_(u'The date on which the current IRB approval will expire.'),
         required=False,
@@ -278,7 +278,7 @@ class IProtocol(IKnowledgeObject):
         description=_(u'General notes about the Internal Review Board with regard to this protocol.'),
         required=False,
     )
-    irbNumber = schema.TextLine(
+    irbNumber = schema.Text(
         title=_(u'IRB Number'),
         description=_(u'The approval identification number given to this protocol by the Internal Review Board.'),
         required=False,
@@ -292,7 +292,7 @@ class IProtocol(IKnowledgeObject):
             description=_(u'The role the site plays in executing this protocol.')
         )
     )
-    reportingStage = schema.TextLine(
+    reportingStage = schema.Text(
         title=_(u'Reporting Stage'),
         description=_(u'Sequence of reporting for this protocol.'),
         required=False,
@@ -319,11 +319,16 @@ class IProtocol(IKnowledgeObject):
             schema=Interface
         )
     )
+    piName = schema.TextLine(
+        title=_(u'PI Name'),
+        description=_(u'Name of the principal investigator.'),
+        required=False,
+    )
 
 
 IProtocol.setTaggedValue('predicates', {
     TITLE_URI: ('title', False),
-    DESCRIPTION_URI: ('abstract', False),
+    DESCRIPTION_URI: ('description', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#involvedInvestigatorSite': ('involvedInvestigatorSite', True),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#coordinatingInvestigatorSite': ('coordinatingInvestigatorSite', True),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#leadInvestigatorSite': ('leadInvestigatorSite', True),

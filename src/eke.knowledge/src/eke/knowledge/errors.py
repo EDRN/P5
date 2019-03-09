@@ -18,8 +18,10 @@ class RDFTypeMismatchError(IngestError):
 
 class TitlePredicateMissingError(IngestError):
     u'''Error when required Dublin Core "title" predicate is missing. Everything needs a title.'''
-    def __init__(self):
-        super(TitlePredicateMissingError, self).__init__(u'Dublin Core "title" term missing; is required')
+    def __init__(self, subjectURI):
+        super(TitlePredicateMissingError, self).__init__(
+            u'Dublin Core "title" term missing on {}; is required'.format(subjectURI)
+        )
 
 
 class IngestDisabled(IngestError):

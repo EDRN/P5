@@ -119,13 +119,11 @@ class SiteIngestor(Ingestor):
         context = aq_inner(self.context)
         catalog, portal = plone.api.portal.get_tool('portal_catalog'), plone.api.portal.get()
         consequences = super(SiteIngestor, self).ingest()
+        siteStatments = consequences.statements
         _logger.info('At this point, we got %r', consequences)
         catalog.reindexIndex('identifier', portal.REQUEST)
-        siteStatments, peopleStatements = {}, {}
-        siteDataSources = context.rdfDataSources if context.rdfDataSources is not None else []
+        peopleStatements = {}
         peopleDataSources = context.peopleDataSources if context.peopleDataSources is not None else []
-        for siteURL in siteDataSources:
-            siteStatments.update(self.readRDF(siteURL))
         for personURL in peopleDataSources:
             peopleStatements.update(self.readRDF(personURL))
         for siteIdentifier, predicates in siteStatments.iteritems():
