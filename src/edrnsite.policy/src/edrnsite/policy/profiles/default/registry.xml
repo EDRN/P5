@@ -168,6 +168,7 @@
             <element>eke.knowledge.publicationfolder</element>
             <element>eke.knowledge.sitefolder</element>
             <element>eke.knowledge.protocolfolder</element>
+            <element>eke.knowledge.datasetfolder</element>
         </value>
     </record>
 

@@ -52,6 +52,12 @@
         title='Faceted Publications View'
         permission='zope2.View'
     />
+    <faceted:view
+        name='faceted_datasets_view'
+        template='templates/faceted_datasets_view.pt'
+        title='Faceted Datasets View'
+        permission='zope2.View'
+    />
 
     <browser:resourceDirectory name='eke.knowledge' directory='static'/>
 

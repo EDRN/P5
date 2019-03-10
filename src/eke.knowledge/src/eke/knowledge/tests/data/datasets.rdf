@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:cas="urn:oodt:" xmlns:edrn="urn:edrn:" xmlns:x="http://edrn.nci.nih.gov/rdf/schema.rdf#">
+    <edrn:GSTP1_Methylation rdf:about="http://edrn.jpl.nasa.gov/ecas/data/dataset/urn:edrn:GSTP1_Methylation">
+        <edrn:Date>01/22/2015</edrn:Date>
+        <edrn:PubMedID>24769028</edrn:PubMedID>
+        <x:protocol rdf:resource="http://edrn.nci.nih.gov/data/protocols/397"/>
+        <edrn:DataCustodian>David Sidransky, M.D.</edrn:DataCustodian>
+        <x:organ rdf:resource="http://edrn.nci.nih.gov/data/body-systems/Prostate"/>
+        <edrn:DataDisclaimer>Data and information released from the National Cancer Institute (NCI) are provided on an "AS IS" basis, without warranty of any kind, including without limitation the warranties of merchantability, fitness for a particular purpose and non-infringement. Availability of this d\
+ata and information does not constitute scientific publication. For information may contain errors or be incomplete.NCI and its employees make no representation or warranty, express or implied, including without limitation any warranties of merchantability or fitness for a particular purpose \
+or warranties as to the identity or ownership of data or information, the quality, accuracy or completeness of data or information, or that the use of such data or information will not infringe any patent, intellectual property or proprietary rights of any party.NCI shall not be liable for an\
+y claim for any loss, harm, illness or other damage or injury arising from access to or use of data or information, including without limitation any direct, indirect, incidental, exemplary, special or consequential damages, even if advised of the possibility of such damages.In accordance with\
+ scientific standards, appropriate acknowledgment of NCI should be made in any publications or other disclosures concerning data or information made available by NCI.</edrn:DataDisclaimer>
+        <edrn:CollaborativeGroup>Prostate and Urologic</edrn:CollaborativeGroup>
+        <edrn:DatasetId>urn:edrn:GSTP1_Methylation</edrn:DatasetId>
+        <x:AccessGrantedTo>Sidransky Johns Hopkins University School of Medicine</x:AccessGrantedTo>
+        <x:AccessGrantedTo>Feng Fred Hutchinson Cancer Research Center</x:AccessGrantedTo>
+        <x:AccessGrantedTo>Crichton JPL</x:AccessGrantedTo>
+        <x:AccessGrantedTo>Srivastava National Cancer Institute</x:AccessGrantedTo>
+        <x:AccessGrantedTo>Super User</x:AccessGrantedTo>
+        <x:site rdf:resource="http://edrn.nci.nih.gov/data/sites/86"/>
+        <x:QAState>Accepted</x:QAState>
+        <edrn:DataCustodianEmail>dsidrans@jhmi.edu</edrn:DataCustodianEmail>
+        <edrn:DataSetName>GSTP1 Methylation</edrn:DataSetName>
+        <edrn:DatasetURL/>
+        <edrn:Discipline>Epigenomics</edrn:Discipline>
+        <edrn:RecommendedSoftware>SAS universal viewer 1.4</edrn:RecommendedSoftware>
+        <edrn:DateDatasetFrozen/>
+        <edrn:LeadPI>David Sidransky</edrn:LeadPI>
+        <x:protocol rdf:resource="http://edrn.nci.nih.gov/data/protocols/397"/>
+        <edrn:ResultsAndConclusionSummary>
+            Greater GSTP1 promoter methylation in cancer tissue was independently associated with the risk of recurrence in patients with early prostate cancer. 
+            This suggests that GSTP1 promoter methylation may be a potential tissue based recurrence marker.
+            </edrn:ResultsAndConclusionSummary>
+        <edrn:MethodDetails>
+            We evaluated the extent of promoter methylation of genes previously reported as aberrantly methylated in prostate cancer (AIM1, APC, CCND2, GPX3, GSTP1, MCAM, RARβ2, SSBP2 and TIMP3) by quantitative fluorogenic methylation-specific polymerase chain reaction. We used cancer tissue from a nested case-control study of 452 patients surgically treated for prostate cancer. Recurrence cases and controls were compared and the association between methylation extent and recurrence risk was estimated by logistic regression adjusting for patient age at prostatectomy, prostatectomy year, stage, grade, surgical margins and preprostatectomy prostate specific antigen. 
+            All statistical tests were 2-sided with p &lt;= 0.05 considered statistically significant.
+            </edrn:MethodDetails>
+        <edrn:PublishState>yes</edrn:PublishState>
+    </edrn:GSTP1_Methylation>
+    <edrn:UPittLabMAPOvarianData rdf:about="http://edrn.jpl.nasa.gov/ecas/data/dataset/urn:edrn:UPittLabMAPOvarianData">
+        <edrn:Date>2008-06-24T20:12:00.000Z</edrn:Date>
+        <edrn:DataCustodianPhone>TBD</edrn:DataCustodianPhone>
+        <x:protocol rdf:resource="http://edrn.nci.nih.gov/data/protocols/119"/>
+        <edrn:ResearchSupport>N N.I.H., Extramural</edrn:ResearchSupport>
+        <edrn:ResearchSupport>U.S. Gov't, Non-P.H.S.</edrn:ResearchSupport>
+        <edrn:ResearchSupport>U.S. Gov't, P.H.S.</edrn:ResearchSupport>
+        <edrn:DataCustodian>Tina Xiao</edrn:DataCustodian>
+        <edrn:DataDisclaimer>Data and information released from the National Cancer Institute (NCI) are provided on an "AS IS" basis, without warranty of any kind, including without limitation the warranties of merchantability, fitness for a particular purpose and non-infringement. Availability of this data and information does not constitute scientific publication. Data and/or information may contain errors or be incomplete.
+NCI and its employees make no representation or warranty, express or implied, including without limitation any warranties of merchantability or fitness for a particular purpose or warranties as to the identity or ownership of data or information, the quality, accuracy or completeness of data or information, or that the use of such data or information will not infringe any patent, intellectual property or proprietary rights of any party.
+NCI shall not be liable for any claim for any loss, harm, illness or other damage or injury arising from access to or use of data or information, including without limitation any direct, indirect, incidental, exemplary, special or consequential damages, even if advised of the possibility of such damages.
+In accordance with scientific standards, appropriate acknowledgment of NCI should be made in any publications or other disclosures concerning data or information made available by NCI. 
+      	</edrn:DataDisclaimer>
+        <x:organ rdf:resource="http://edrn.nci.nih.gov/data/body-systems/Ovary"/>
+        <edrn:CollaborativeGroup>Breast/GYN</edrn:CollaborativeGroup>
+        <edrn:DatasetId>urn:edrn:UPittLabMAPOvarianData</edrn:DatasetId>
+        <edrn:StudyDesign>TBD</edrn:StudyDesign>
+        <x:AccessGrantedTo>Breast and Gynecologic</x:AccessGrantedTo>
+        <x:AccessGrantedTo>Super User</x:AccessGrantedTo>
+        <x:site rdf:resource="http://edrn.nci.nih.gov/data/sites/5"/>
+        <edrn:DataCustodianEmail>TBD</edrn:DataCustodianEmail>
+        <x:QAState>Under Review</x:QAState>
+        <edrn:StudyConclusion>The presented data show that simultaneous testing of a panel of serum cytokines and CA-125 
+        using LabMAP technology may present a promising approach for ovarian cancer detection.
+        </edrn:StudyConclusion>
+        <edrn:DataSetName>University of Pittsburg Ovarian Data</edrn:DataSetName>
+        <edrn:StudyResults>Concentrations of 24 cytokines (cytokines/chemokines, growth, and angiogenic 
+        factors) in combination with cancer antigen-125 (CA-125), were measured in sera of 44 patients 
+        with early-stage ovarian cancer, 45 healthy women, and 37 patients with benign pelvic tumors. 
+        Six markers, i.e., interleukin (IL)-6, IL-8, epidermal growth factor (EGF), vascular endothelial 
+        growth factor (VEGF), monocyte chemoattractant protein-1 (MCP-1), and CA-125, showed significant 
+        differences in serum concentrations between ovarian cancer and control groups. Out of this group, 
+        IL-6, IL-8, VEGF, EGF, and CA-125, were used in a classification tree analysis that resulted in 
+        84 percent sensitivity at 95 percent specificity. The receiver operator characteristic curve created using the 
+        combination of markers produced sensitivities between 90 percent and 100 percent in the area of 80 percent to 90 percent 
+        specificity, whereas the receiver operator characteristic curve for CA-125 alone resulted in 
+        sensitivities of 70 percent to 80 percent. The classification tree analysis for discrimination of benign 
+        condition from ovarian cancer used CA-125, granulocyte colony-stimulating factor (G-CSF), IL-6, 
+        EGF, and VEGF resulting in 86.5 percent sensitivity and 93.0 percent specificity.
+        </edrn:StudyResults>
+        <edrn:AnalyticMethods>TBD</edrn:AnalyticMethods>
+        <edrn:GrantSupport>1R01 CA098642-01A1/CA/NCI</edrn:GrantSupport>
+        <edrn:GrantSupport>R03 CA102888/CA/NCI</edrn:GrantSupport>
+        <edrn:StudyBackground>Early detection of ovarian cancer might improve 
+        clinical outcome. Some studies have shown the role of cytokines as a 
+        new group of tumor markers for ovarian cancer. We hypothesized that a 
+        panel comprised of multiple cytokines, which individually may not show 
+        strong correlation with the disease, might provide higher diagnostic power.
+        </edrn:StudyBackground>
+        <edrn:StudyMethods>To evaluate the diagnostic utility of cytokine panel, we used a novel multianalyte 
+        LabMAP profiling technology that allows simultaneous measurement of multiple 
+        markers.
+        </edrn:StudyMethods>
+        <x:protocol rdf:resource="http://edrn.nci.nih.gov/data/protocols/119"/>
+        <edrn:LeadPI>Anna Lokshin</edrn:LeadPI>
+        <edrn:EligibilityCriteria>TBD</edrn:EligibilityCriteria>
+        <edrn:ResultsAndConclusionSummary>TBD</edrn:ResultsAndConclusionSummary>
+        <edrn:MethodDetails>TBD</edrn:MethodDetails>
+        <edrn:PublishState>yes</edrn:PublishState>
+    </edrn:UPittLabMAPOvarianData>
+</rdf:RDF>

@@ -78,6 +78,38 @@ def _applyFacetsToPublications(context):
     IFacetedLayout(context).update_layout('faceted_publications_view')
 
 
+def _applyFacetsToDatasets(context):
+    u'''Faceted navigation on datasets. Must be defined before _RDF_FOLDERS below.'''
+    portal = plone.api.portal.get()
+    request = portal.REQUEST
+    subtyper = getMultiAdapter((context, request), name=u'faceted_subtyper')
+    if subtyper.is_faceted or not subtyper.can_enable: return
+    subtyper.enable()
+    criteria = ICriteria(context)
+    for cid in criteria.keys():
+        criteria.delete(cid)
+    criteria.add('resultsperpage', 'bottom', 'default', title='Results per page', hidden=False, start=0, end=60, step=20,
+        default=20)
+    criteria.add(
+        'checkbox', 'bottom', 'default',
+        title='Portal Type',
+        hidden=True,
+        index='portal_type',
+        operator='or',
+        vocabulary=u'eea.faceted.vocabularies.FacetedPortalTypes',
+        default=[u'eke.knowledge.dataset'],
+        count=False,
+        maxitems=0,
+        sortreversed=False,
+        hidezerocount=False
+    )
+    criteria.add('text', 'top', 'default', title=u'Search', hidden=False, index='SearchableText',
+        wildcard=True, count=False, onlyallelements=True)
+    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=False)
+    # Needs debugging
+    # IFacetedLayout(context).update_layout('faceted_datasets_view')
+
+
 _EXTENSION_IDS = [
     'plonetheme.barceloneta:default', 'plone.app.caching:default', 'edrnsite.policy:default'
 ]
@@ -105,7 +137,8 @@ _RDF_FOLDERS = (
     ('resources', 'eke.knowledge.diseasefolder', u'Diseases', u'Ailements affecting body systems.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/diseases/@@rdf'], _null),
     (None, 'eke.knowledge.publicationfolder', u'Publications', u'Items published by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf', u'http://edrn.jpl.nasa.gov/bmdb/rdf/publications'], _applyFacetsToPublications),
     (None, 'eke.knowledge.sitefolder', u'Sites', u'Institutions and PIs in EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/sites/@@rdf'], _setupSites),
-    (None, 'eke.knowledge.protocolfolder', u'Protocols', u'Studies pursued by EDRN.', ['https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/protocols/@@rdf'], _null)
+    (None, 'eke.knowledge.protocolfolder', u'Protocols', u'Studies pursued by EDRN.', ['https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/protocols/@@rdf'], _null),
+    (None, 'eke.knowledge.datasetfolder', u'Datasets', u'Data collected by EDRN.', ['https://edrn.nci.nih.gov/miscellaneous-knowledge-system-artifacts/science-data-rdf/at_download/file'], _applyFacetsToDatasets),
 )
 
 

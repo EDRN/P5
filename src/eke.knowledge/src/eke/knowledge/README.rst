@@ -230,3 +230,35 @@ Ingesting::
     >>> keys.sort()
     >>> keys
     ['279-lung-reference-set-a-application-edward', '316-hepatocellular-carcinoma-early-detection']
+
+
+Science Data
+============
+
+    >>> browser.open(portalURL)
+    >>> l = browser.getLink(id='eke-knowledge-datasetfolder')
+    >>> l.url.endswith('++add++eke.knowledge.datasetfolder')
+    True
+    >>> l.click()
+    >>> browser.getControl(name='form.widgets.title').value = u'Datasets'
+    >>> browser.getControl(name='form.widgets.description').value = u'Some testing datasets.'
+    >>> browser.getControl(name='form.widgets.ingestEnabled:list').value = True
+    >>> browser.getControl(name='form.buttons.save').click()
+    >>> 'datasets' in portal.keys()
+    True
+    >>> folder = portal['datasets']
+    >>> folder.rdfDataSources= [u'testscheme://localhost/rdf/datasets']
+
+Ingesting::
+
+    >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'protocols', u'datasets']
+    >>> transaction.commit()
+    >>> browser.open(portalURL + '/@@ingestRDF')
+    >>> browser.contents
+    '...RDF Ingest Report...Objects Created (2)...'
+    >>> len(folder.keys())
+    2
+    >>> keys = folder.keys()
+    >>> keys.sort()
+    >>> keys
+    ['gstp1-methylation', 'university-of-pittsburg-ovarian-data']
