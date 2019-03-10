@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 
-u'''EKE Knowledge: Site Folder'''
+u'''EKE Knowledge: Protocol Folder'''
 
 from .base import Ingestor
 from .knowledgefolder import IKnowledgeFolder, KnowledgeFolderView
