@@ -9,6 +9,7 @@ from eea.facetednavigation.interfaces import ICriteria
 from eea.facetednavigation.layout.interfaces import IFacetedLayout
 from node.ext.ldap.interfaces import ILDAPProps
 from plone.app.dexterity.behaviors.exclfromnav import IExcludeFromNavigation
+from plone.app.textfield.value import RichTextValue
 from plone.dexterity.utils import createContentInContainer
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces import IFolderish
@@ -29,9 +30,28 @@ _argParser.add_argument('password', help=u"Zope admin password")
 _argParser.add_argument('ldapPassword', help=u"LDAP password")
 
 
+_BIOMARKER_DISCLAIMER = u'''<p>The EDRN is involved in researching hundreds of biomarkers. The following is
+a partial list of biomarkers and associated results that are currently available for access and viewing.
+The bioinformatics team at EDRN is currently working with EDRN collaborative groups to capture, curate,
+review, and post the results as it is available. EDRN also provides secure access to additional biomarker
+information not available to the public that is currently under review by EDRN research groups. If you have
+access to this information, please ensure that you are logged in. If you are unsure or would like access,
+please <a href="contact-info">contact the operator</a> for more information.</p>
+'''
+
+
 def _null(context):
     u'''Do noting with the given context object. Must be defined before _RDF_FOLDERS below.'''
     pass
+
+
+def _setupBiomarkers(context):
+    u'''Do extra stuff for biomarkers. Must be defined before _RDF_FOLDERS below.'''
+    context.bmoDataSource = u'https://edrn.jpl.nasa.gov/bmdb/rdf/biomarkerorgans?qastate=all'
+    context.bmuDataSource = u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/biomuta/@@rdf'
+    context.idDataSource = u'https://edrn.jpl.nasa.gov/cancerdataexpo/idsearch'
+    context.disclaimer = RichTextValue(_BIOMARKER_DISCLAIMER, 'text/html', 'text/x-html-safe')
+    # TODO: Do facets here too
 
 
 def _setupSites(context):
@@ -137,8 +157,10 @@ _RDF_FOLDERS = (
     ('resources', 'eke.knowledge.diseasefolder', u'Diseases', u'Ailements affecting body systems.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/diseases/@@rdf'], _null),
     (None, 'eke.knowledge.publicationfolder', u'Publications', u'Items published by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf', u'http://edrn.jpl.nasa.gov/bmdb/rdf/publications'], _applyFacetsToPublications),
     (None, 'eke.knowledge.sitefolder', u'Sites', u'Institutions and PIs in EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/sites/@@rdf'], _setupSites),
-    (None, 'eke.knowledge.protocolfolder', u'Protocols', u'Studies pursued by EDRN.', ['https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/protocols/@@rdf'], _null),
-    (None, 'eke.knowledge.datasetfolder', u'Datasets', u'Data collected by EDRN.', ['https://edrn.nci.nih.gov/miscellaneous-knowledge-system-artifacts/science-data-rdf/at_download/file'], _applyFacetsToDatasets),
+    (None, 'eke.knowledge.protocolfolder', u'Protocols', u'Studies pursued by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/protocols/@@rdf'], _null),
+    (None, 'eke.knowledge.datasetfolder', u'Science Data', u'Data collected by EDRN.', [u'https://edrn.nci.nih.gov/miscellaneous-knowledge-system-artifacts/science-data-rdf/at_download/file'], _applyFacetsToDatasets),
+    # TODO: turned off while I debug other issues
+    # (None, 'eke.knowledge.biomarkerfolder', u'Biomarkers', u'Indicators for cancer.', [u'https://edrn.jpl.nasa.gov/bmdb/rdf/biomarkers?qastate=all'], _setupBiomarkers)
 )
 
 

@@ -262,3 +262,63 @@ Ingesting::
     >>> keys.sort()
     >>> keys
     ['gstp1-methylation', 'university-of-pittsburg-ovarian-data']
+
+
+
+Biomarkers
+==========
+
+    >>> browser.open(portalURL)
+    >>> l = browser.getLink(id='eke-knowledge-biomarkerfolder')
+    >>> l.url.endswith('++add++eke.knowledge.biomarkerfolder')
+    True
+    >>> l.click()
+    >>> browser.getControl(name='form.widgets.title').value = u'Biomarkers'
+    >>> browser.getControl(name='form.widgets.description').value = u'Some testing biomarkers.'
+    >>> browser.getControl(name='form.widgets.ingestEnabled:list').value = True
+    >>> browser.getControl(name='form.widgets.bmoDataSource').value = u'testscheme://localhost/rdf/bmo'
+    >>> browser.getControl(name='form.widgets.bmuDataSource').value = u'testscheme://localhost/rdf/bmu'
+    >>> browser.getControl(name='form.widgets.idDataSource').value = u'https://edrn.jpl.nasa.gov/cancerdataexpo/idsearch'
+    >>> browser.getControl(name='form.buttons.save').click()
+    >>> 'biomarkers' in portal.keys()
+    True
+    >>> folder = portal['biomarkers']
+    >>> folder.rdfDataSources = [u'testscheme://localhost/rdf/biomarkers']
+
+Before ingesting, let's make sure the types work::
+
+    >>> browser.open(portalURL + '/biomarkers')
+    >>> l = browser.getLink(id='eke-knowledge-elementalbiomarker')
+    >>> l.url.endswith('++add++eke.knowledge.elementalbiomarker')
+    True
+    >>> l.click()
+    >>> browser.getControl(name='form.widgets.biomarkerType').value = u'Sticky'
+    >>> browser.getControl(name='form.widgets.shortName').value = u'SHRT'
+    >>> browser.getControl(name='form.widgets.hgncName').value = u'SHRT-1'
+    >>> browser.getControl(name='form.widgets.bmAliases').value = u'ST-1\nST-2'
+    >>> browser.getControl(name='form.widgets.indicatedBodySystems').value = u'Anus\nRectum'
+    >>> browser.getControl(name='form.widgets.accessGroups').value = u'urn:group-1\nurn:group-2'
+    >>> browser.getControl(name='form.widgets.biomarkerKind').value = u'Elemental'
+    >>> browser.getControl(name='form.widgets.geneName').value = u'Eugene'
+    >>> browser.getControl(name='form.widgets.uniProtAC').value = u'Accession Two'
+    >>> browser.getControl(name='form.widgets.mutCount').value = u'123'
+    >>> browser.getControl(name='form.widgets.pmidCount').value = u'456'
+    >>> browser.getControl(name='form.widgets.cancerDOCount').value = u'789'
+    >>> browser.getControl(name='form.widgets.affProtFuncSiteCount').value = u'10'
+    >>> browser.getControl(name='form.widgets.qaState').value = u'Excellent'
+    >>> browser.getControl(name='form.widgets.datasets').value = u'data-1\ndata-2'
+    >>> browser.getControl(name='form.widgets.title').value = u'Sticky Biomarker'
+    >>> browser.getControl(name='form.widgets.description').value = u'Careful, this one is sticky.'
+    >>> browser.getControl(name='form.widgets.identifier').value = u'urn:biomarker:sticky'
+    >>> browser.getControl(name='form.buttons.save').click()
+    >>> 'sticky-biomarker' in folder.keys()
+    True
+    >>> biomarker = folder['sticky-biomarker']
+    >>> biomarker.biomarkerType
+    u'Sticky'
+    >>> biomarker.shortName
+    u'SHRT'
+    >>> biomarker.hgncName
+    u'SHRT-1'
+
+Need to post-form do: protocols, publications, datasets, and maybe bmAliases, and other multi-valued things above.

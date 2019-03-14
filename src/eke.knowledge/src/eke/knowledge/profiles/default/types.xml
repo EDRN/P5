@@ -13,4 +13,26 @@
     <object name='eke.knowledge.publicationfolder' meta_type='Dexterity FTI'/>
     <object name='eke.knowledge.site' meta_type='Dexterity FTI'/>
     <object name='eke.knowledge.sitefolder' meta_type='Dexterity FTI'/>
+
+    <!--
+        Biomarkers
+        ==========
+
+        Containment is as follows:
+        📂 biomarkerfolder
+          📂 elementalbiomarker
+            📂 biomarkerbodysystem
+              📂 bodysystemstudy
+                📄 studystatistics
+          📂 biomarkerpanel
+            📂 biomarkerbodysystem
+              📂 bodysystemstudy
+                📄 studystatistics
+    -->
+    <object name='eke.knowledge.biomarkerbodysystem' meta_type='Dexterity FTI'/>
+    <object name='eke.knowledge.biomarkerfolder' meta_type='Dexterity FTI'/>
+    <object name='eke.knowledge.biomarkerpanel' meta_type='Dexterity FTI'/>
+    <object name='eke.knowledge.bodysystemstudy' meta_type='Dexterity FTI'/>
+    <object name='eke.knowledge.elementalbiomarker' meta_type='Dexterity FTI'/>
+    <object name='eke.knowledge.studystatistics' meta_type='Dexterity FTI'/>
 </object>
