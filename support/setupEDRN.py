@@ -11,6 +11,8 @@ from node.ext.ldap.interfaces import ILDAPProps
 from plone.app.dexterity.behaviors.exclfromnav import IExcludeFromNavigation
 from plone.app.textfield.value import RichTextValue
 from plone.dexterity.utils import createContentInContainer
+from plone.portlet.static.static import Assignment as StaticPortletAssignment
+from plone.portlets.interfaces import IPortletManager, IPortletAssignmentMapping
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces import IFolderish
 from Products.CMFCore.tests.base.security import PermissiveSecurityPolicy, OmnipotentUser
@@ -19,6 +21,7 @@ from Products.CMFPlone.factory import addPloneSite
 from Testing import makerequest
 from zope.component import getUtility, getMultiAdapter
 from zope.component.hooks import setSite
+from zope.container.interfaces import INameChooser
 import sys, logging, transaction, argparse, os, os.path, plone.api, csv, codecs
 
 
@@ -37,6 +40,67 @@ review, and post the results as it is available. EDRN also provides secure acces
 information not available to the public that is currently under review by EDRN research groups. If you have
 access to this information, please ensure that you are logged in. If you are unsure or would like access,
 please <a href="contact-info">contact the operator</a> for more information.</p>
+'''
+_QUICKLINKS_BODY = u'''<div class='edrnQuickLinks'>
+    <ul id='edrn-quicklinks'>
+        <li id='q-nct'>
+            <a href='resolveuid/{network-consulting-team}'>
+                Network Consulting Team
+            </a>
+        </li>
+        <li id='q-informatics'>
+            <a href='resolveuid/{informatics}'>
+                Informatics
+            </a>
+        </li>
+        <li id='q-collabGroups'>
+            <a href='collaborative-groups'>
+                Collaborative Groups
+            </a>
+        </li>
+        <li id='q-advocates'>
+            <a href='resolveuid/{advocates}'>
+                Public, Patients, Advocates
+            </a>
+        </li>
+        <li id='q-fund'>
+            <a href='resolveuid/{funding-opportunities}'>
+                Funding Opportunities
+            </a>
+        </li>
+        <li id='q-sites'>
+            <a href='resolveuid/{sites}'>Sites</a>
+        </li>
+        <li id='q-members'>
+            <a href='members-list'>Member Directory</a>
+        </li>
+        <li id='q-committees'>
+            <a href='committees'>
+                Committees
+            </a>
+        </li>
+        <li id='q-standards'>
+            <a href='https://edrn.jpl.nasa.gov/standards/'>
+                Biomarker Informatics Standards
+            </a>
+        </li>
+        <li id='q-dcp'>
+            <a class='link-plain' href='https://prevention.cancer.gov/'>
+                Division of Cancer Prevention
+            </a>
+        </li>
+        <li id='q-cbrg'>
+            <a class='link-plain' href='https://prevention.cancer.gov/research-groups/cancer-biomarkers'>
+                Cancer Biomarkers Research Group
+            </a>
+        </li>
+        <li id='q-book'>
+            <a href='resolveuid/{docs}'>
+                Bookshelf
+            </a>
+        </li>
+    </ul>
+</div>
 '''
 
 
@@ -263,9 +327,12 @@ def _setLDAPPassword(portal, password):
 
 def _loadZEXPFiles(portal):
     zexpDir = os.environ.get('ZEXP_EXPORTS', '/usr/local/edrn/portal/zexp-exports')
+    uids = {}
     for objID in _TO_IMPORT:
         if objID in portal.keys():
             logging.info('Path "/%s" already exists in portal; skipping zexp import of it', objID)
+            obj = portal[objID]
+            uids[unicode(objID)] = obj.UID()
             continue
         zexpFile = os.path.join(zexpDir, objID + '.zexp')
         if not os.path.isfile(zexpFile):
@@ -274,8 +341,11 @@ def _loadZEXPFiles(portal):
         logging.info('Importing zexp file "%s" to portal path "/%s"', zexpFile, objID)
         portal._importObjectFromFile(zexpFile)
         transaction.commit()
+        obj = portal[objID]
+        uids[unicode(objID)] = obj.UID()
     logging.info('Done importing ZEXP files')
     transaction.commit()
+    return uids
 
 
 def _addToQuickLinks(context):
@@ -357,7 +427,7 @@ def _publish(context, workflowTool=None):
 
 
 def _ingest(portal):
-    folders, paths = [], []
+    folders, paths, uids = [], [], {}
     for containerPath, fti, title, desc, urls, postFunction in _RDF_FOLDERS:
         if containerPath is None:
             container = portal
@@ -379,10 +449,25 @@ def _ingest(portal):
             paths.append(unicode(containerPath + '/' + folder.id))
     for f in folders:
         _publish(f)
+        uids[f.id] = f.UID()
     registry = getUtility(IRegistry)
     registry['eke.knowledge.interfaces.IPanel.objects'] = paths
     ingestor = portal.unrestrictedTraverse('@@ingestRDF')
     ingestor()
+    return uids
+
+
+def _doStaticQuickLinksPortlet(portal, uids):
+    body = _QUICKLINKS_BODY.format(**uids)
+    assignment = StaticPortletAssignment(
+        header=u'Quick Links',
+        text=RichTextValue(body, 'text/html', 'text/html'),
+        omit_border=False
+    )
+    manager = getUtility(IPortletManager, u'plone.leftcolumn')
+    mapping = getMultiAdapter((portal, manager), IPortletAssignmentMapping)
+    chooser = INameChooser(mapping)
+    mapping[chooser.chooseName(None, assignment)] = assignment
 
 
 def _setupEDRN(app, username, password, ldapPassword):
@@ -392,9 +477,10 @@ def _setupEDRN(app, username, password, ldapPassword):
     _installAdmin(app, username, password)
     portal = _createEDRNSite(app)
     setSite(portal)
-    _loadZEXPFiles(portal)  # Stack traces; see https://community.plone.org/t/stack-trace-when-loading-zexp-from-a-script/8060
+    uids = _loadZEXPFiles(portal)  # Stack traces; see https://community.plone.org/t/stack-trace-when-loading-zexp-from-a-script/8060
     _setLDAPPassword(portal, ldapPassword)
-    _ingest(portal)
+    uids.update(_ingest(portal))
+    _doStaticQuickLinksPortlet(portal, uids)
     _tuneUp(portal)  # this should be the last step always as it clears/rebuids the catalog and commits the txn
     noSecurityManager()
 

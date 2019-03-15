@@ -3,7 +3,10 @@
 
 from plone.app.textfield.value import RichTextValue
 from plone.dexterity.utils import createContentInContainer
-from plone.portlet.collection.collection import Assignment as CollectionPortletAssignment
+
+# This was a nice idea (auto-generate QuickLinks) but Dan wants the static HTML version instead:
+# from plone.portlet.collection.collection import Assignment as CollectionPortletAssignment
+
 from plone.portlets.interfaces import ILocalPortletAssignable, IPortletManager, IPortletAssignmentMapping
 from Products.CMFCore.interfaces import IFolderish
 from Products.CMFCore.WorkflowCore import WorkflowException
@@ -129,22 +132,23 @@ def _addQuickLinks(portal):
                 remoteUrl=url
             )
     _publish(folder)
-    assignment = CollectionPortletAssignment(
-        header=u'Quick Links',
-        uid=quickLinks.UID(),
-        limit=None,
-        random=False,
-        show_more=False,
-        show_dates=False,
-        exclude_context=False,
-        no_icons=True,
-        no_thumbs=True,
-        thumb_scale=None
-    )
-    manager = getUtility(IPortletManager, u'plone.leftcolumn')
-    mapping = getMultiAdapter((portal, manager), IPortletAssignmentMapping)
-    chooser = INameChooser(mapping)
-    mapping[chooser.chooseName(None, assignment)] = assignment
+    # This was a nice idea (auto-generate QuickLinks) but Dan wants the static HTML version instead:
+    # assignment = CollectionPortletAssignment(
+    #     header=u'Quick Links',
+    #     uid=quickLinks.UID(),
+    #     limit=None,
+    #     random=False,
+    #     show_more=False,
+    #     show_dates=False,
+    #     exclude_context=False,
+    #     no_icons=True,
+    #     no_thumbs=True,
+    #     thumb_scale=None
+    # )
+    # manager = getUtility(IPortletManager, u'plone.leftcolumn')
+    # mapping = getMultiAdapter((portal, manager), IPortletAssignmentMapping)
+    # chooser = INameChooser(mapping)
+    # mapping[chooser.chooseName(None, assignment)] = assignment
 
 
 def _addHomePage(portal):

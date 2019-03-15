@@ -33,16 +33,19 @@
                 </td>
             </tr>
             <tr><td colspan=3>
-                <span tal:condition='python:item["specialty"] and len(item["specialty"]) > 20'>
-                     <dl class='collapsible collapsedOnLoad' style='margin: 0 0 1em 0;'>
-                         <dt class='collapsibleHeader' style='margin: .8em 0 0 0;'>
-                            <h6 tal:content='python:item["specialty"][0:150]+"..."'></h6>
-                         </dt>
-                         <dd class='collapsibleContent'>
-                            <h6 tal:content='python:item["specialty"]'>Program Description</h6>
-                         </dd>
-                     </dl>
-                </span>
+                <div tal:condition='python:item["specialty"] and len(item["specialty"]) > 20'>
+                    <div class='collapse'>
+                        <h3 tal:content='python:item["specialty"][0:150]+"..."'>Progra...</h3>
+                        <div tal:content='python:item["specialty"]'>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </div>
+                    </div>
+                </div>
             </td>
             </tr>
             </div>
@@ -86,18 +89,23 @@
                 <h5 tal:condition='proposalName' tal:content='proposalName'>Some stupid proposal</h5>
                 <h5 tal:condition='not:proposalName'>(No Proposal)</h5>
                 <h6 tal:condition='python:proposalName and actualSites'>Project Summary</h6>
-                <span tal:condition='python:proposalName and actualSites'>
-                    <span tal:condition='python:actualSites[0]["specialty"]'>
-                         <dl class='collapsible collapsedOnLoad'>
-                             <dt class='collapsibleHeader'>
-                                <h6 tal:content='python:actualSites[0]["specialty"][0:150]+"..."'></h6>
-                             </dt>
-                             <dd class='collapsibleContent'>
-                                <h6 tal:content='python:actualSites[0]["specialty"]'>Program Description</h6>
-                             </dd>
-                         </dl>
-                    </span>
-                </span>
+                <div tal:condition='python:proposalName and actualSites'>
+                    <tal:if condition='python:actualSites[0]["specialty"]'>
+
+                        <div class='collapse'>
+                            <h3 tal:content='python:actualSites[0]["specialty"][0:150]+"..."'>Progra...</h3>
+                            <div tal:content='python:actualSites[0]["specialty"]'>
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            </div>
+                        </div>
+
+                    </tal:if>
+                </div>
             </tal:define>
             <br>
         </div>

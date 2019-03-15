@@ -189,6 +189,12 @@
                     </tal:repeat>
                 </div>
 
+                <script type='text/javascript'>
+                    $('.collapse').accordion({
+                        collapsible: true,
+                        active: false
+                    });
+                </script>
 
             </metal:content-core>
         </metal:content-core>
