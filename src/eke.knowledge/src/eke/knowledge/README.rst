@@ -198,6 +198,26 @@ Ingesting::
     >>> keys.sort()
     >>> keys
     ['240-vanderbilt-ingram-cancer-center', '815-h-lee-moffitt-cancer-center-and-research']
+    >>> site = folder['240-vanderbilt-ingram-cancer-center']
+    >>> site.keys()
+    ['massion-pierre']
+    >>> person = site['massion-pierre']
+    >>> person.title
+    u'Massion, Pierre'
+    >>> person.surname
+    u'Massion'
+    >>> person.givenName
+    u'Pierre'
+    >>> person.edrnTitle
+    u'EDRN Principal Investigator'
+    >>> person.phone
+    u'555-555-5555'
+    >>> person.fax
+    u'000-555-1212'
+    >>> person.mbox
+    u'mailto:pierre.massion@vanderbilt.edu'
+    >>> person.accountName
+    u'pmassion'
 
 
 Protocols

@@ -7,7 +7,8 @@ from . import _
 from .base import Ingestor
 from .knowledgefolder import IKnowledgeFolder, KnowledgeFolderView
 from .site import ISite
-from .utils import publish
+from .utils import publish, setValue
+from .person import IPerson
 from Acquisition import aq_inner
 from five import grok
 from plone.dexterity.utils import createContentInContainer
@@ -36,6 +37,23 @@ _edrnSiteTypes = frozenset((
     u'Associate Member C',
     u'SPOREs',
 ))
+_personPredicates = (
+    (rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#edrnTitle'), 'edrnTitle'),
+    (rdflib.URIRef(u'http://www.w3.org/2001/vcard-rdf/3.0#fax'), 'fax'),
+    (rdflib.URIRef(u'http://xmlns.com/foaf/0.1/accountName'), 'accountName'),
+    (rdflib.URIRef(u'http://xmlns.com/foaf/0.1/mbox'), 'mbox'),
+    (rdflib.URIRef(u'http://xmlns.com/foaf/0.1/phone'), 'phone'),
+    (rdflib.URIRef(u'http://xmlns.com/foaf/0.1/surname'), 'surname'),
+    (rdflib.URIRef(u'http://xmlns.com/foaf/0.1/givenname'), 'givenName'),
+)
+_personAddressPredicateSuffixes = (
+    u'Address',
+    u'Address2',
+    u'City',
+    u'Country',
+    u'PostalCode',
+    u'State',
+)
 
 
 class ISiteFolder(IKnowledgeFolder):
@@ -113,6 +131,13 @@ class SiteIngestor(Ingestor):
             title=self.createPersonTitle(predicates),
             identifier=identifier,
         )
+        for predicate, fieldName in _personPredicates:
+            if predicate in predicates:
+                values = predicates.get(predicate)
+                if values:
+                    value = unicode(values[0])
+                    if value:
+                        setattr(person, fieldName, value)
         return person
     def ingest(self):
         u'''Override Ingestor.ingest so we can handle people'''

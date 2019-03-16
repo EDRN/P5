@@ -1,8 +1,10 @@
+
 # encoding: utf-8
 
 from . import _
 from knowledgeobject import IKnowledgeObject
 from zope import schema
+from five import grok
 
 
 class IPerson(IKnowledgeObject):
@@ -109,3 +111,12 @@ IPerson.setTaggedValue('predicates', {
 })
 IPerson.setTaggedValue('fti', 'eke.knowledge.site')
 IPerson.setTaggedValue('typeURI', u'http://edrn.nci.nih.gov/rdf/types.rdf#Site')
+
+
+class View(grok.View):
+    grok.context(IPerson)
+    grok.require('zope2.View')
+    def protocols(self):
+        return ([], [])
+    def publications(self):
+        return []
