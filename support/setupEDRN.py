@@ -380,15 +380,16 @@ def _setSiteProposals(portal):
 def _tuneUp(portal):
     u'''Final tweaks.'''
 
-    # First, make sure the Network Consulting Team is not in the global navbar
-    # but ensure it's on the Quick Links
-    if 'network-consulting-team' in portal.keys():
-        logging.info('Removing network-consulting-team from navigation')
-        folder = portal['network-consulting-team']
-        adapter = IExcludeFromNavigation(folder, None)
-        if adapter is not None:
-            adapter.exclude_from_nav = True
-        _addToQuickLinks(folder)
+    # First, a couple folders that shouldn't be in global nav but shold be
+    # in theQuick Links
+    for folderID in ('network-consulting-team', 'sites'):
+        if folderID in portal.keys():
+            logging.info('Removing %s from navigation', folderID)
+            folder = portal[folderID]
+            adapter = IExcludeFromNavigation(folder, None)
+            if adapter is not None:
+                adapter.exclude_from_nav = True
+            _addToQuickLinks(folder)
 
     # Add more items to the Quick Links
     for path in (
