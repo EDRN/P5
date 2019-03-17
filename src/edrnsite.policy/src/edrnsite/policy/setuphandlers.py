@@ -63,7 +63,7 @@ def _publish(context, workflowTool=None):
 
 
 def _removePortlets(portal):
-    u'''Remove all portlets everywhere. See
+    u'''Remove all left/right portlets everywhere. See
     https://community.plone.org/t/remove-the-default-portlet-assignments-using-genericsetup/2857/5
     for more.'''
     catalog = plone.api.portal.get_tool('portal_catalog')
