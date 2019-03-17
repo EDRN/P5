@@ -152,6 +152,7 @@ class SiteIngestor(Ingestor):
         for personURL in peopleDataSources:
             peopleStatements.update(self.readRDF(personURL))
         for siteIdentifier, predicates in siteStatments.iteritems():
+            # Set up principal inveestigators
             piPredicateURI = rdflib.URIRef(_piURI)
             if piPredicateURI in predicates:
                 pis = predicates[piPredicateURI]
@@ -174,6 +175,9 @@ class SiteIngestor(Ingestor):
                                     site.piObjectID = person.id
                                     site.piName = person.title
                                     consequences.created.append(person)
+                                # While we're here, set the siteID
+                                site.siteID = urlparse.urlparse(siteIdentifier)[2].split('/')[-1]
+        catalog.reindexIndex('siteID', portal.REQUEST)
         _logger.warn('Got %d site statements, %d people statements', len(siteStatments), len(peopleStatements))
         publish(context)
         return consequences

@@ -52,6 +52,11 @@ class IPublication(IKnowledgeObject):
         description=_(u'Location of the publication.'),
         required=False,
     )
+    siteID = schema.TextLine(
+        title=_(u'Site ID'),
+        description=_(u'DMCC-assigned identifier for the site that wrote this publication.'),
+        required=False,
+    )
 
 
 IPublication.setTaggedValue('predicates', {
@@ -64,7 +69,8 @@ IPublication.setTaggedValue('predicates', {
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#pmid': ('pubMedID', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#year': ('year', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#month': ('month', False),
-    u'http://edrn.nci.nih.gov/rdf/schema.rdf#pubURL': ('pubURL', False)
+    u'http://edrn.nci.nih.gov/rdf/schema.rdf#pubURL': ('pubURL', False),
+    u'http://edrn.nci.nih.gov/rdf/schema.rdf#site': ('siteID', False)
 })
 IPublication.setTaggedValue('fti', 'eke.knowledge.publication')
 IPublication.setTaggedValue('typeURI', u'http://edrn.nci.nih.gov/rdf/types.rdf#Publication')

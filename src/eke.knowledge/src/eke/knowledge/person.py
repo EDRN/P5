@@ -2,9 +2,12 @@
 # encoding: utf-8
 
 from . import _
+from .publication import IPublication
+from Acquisition import aq_inner
+from five import grok
 from knowledgeobject import IKnowledgeObject
 from zope import schema
-from five import grok
+import plone.api
 
 
 class IPerson(IKnowledgeObject):
@@ -119,4 +122,14 @@ class View(grok.View):
     def protocols(self):
         return ([], [])
     def publications(self):
-        return []
+        context = aq_inner(self.context)
+        catalog = plone.api.portal.get_tool('portal_catalog')
+        results = catalog(
+            object_provides=IPublication.__identifier__,
+            siteID=context.siteID,
+            sort_on='sortable_title'
+        )
+        publications = []
+        for i in results:
+            publications.append(i.getObject())  # Any reason we're waking up objects here?
+        return publications

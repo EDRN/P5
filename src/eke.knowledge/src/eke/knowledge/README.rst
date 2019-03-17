@@ -199,6 +199,10 @@ Ingesting::
     >>> keys
     ['240-vanderbilt-ingram-cancer-center', '815-h-lee-moffitt-cancer-center-and-research']
     >>> site = folder['240-vanderbilt-ingram-cancer-center']
+    >>> site.identifier
+    u'http://edrn.nci.nih.gov/data/sites/240'
+    >>> site.siteID
+    u'240'
     >>> site.keys()
     ['massion-pierre']
     >>> person = site['massion-pierre']
