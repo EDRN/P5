@@ -21,37 +21,34 @@
 
                 <div id="site-column-container">
                     <div id="site-main-column">
-                        <p class='documentDescription'>
-                            <span id='parent-fieldname-description' tal:content='context/description'>Description.</span>
-                        </p>
                         <div>
                             <label for='parent-fieldname-memberType' i18n:translate='label_memberType'>Member Type:</label>
                             <span id='parent-fieldname-memberType' tal:content='structure context/memberType'>Adults Only</span>
                         </div>
-                        <div>
+                        <div tal:condition='context/homePage'>
                             <label for='parent-fieldname-homePage' i18n:translate='label_homePage'>Home Page:</label>
                             <a href='#' tal:attributes='href context/homePage' 
                                 tal:content='context/homePage'>http://superclubs.com/</a>
                         </div>
-<!--
+
                         <div tal:condition='view/showSponsor'>
                             <label for='parent-fieldname-sponsor' i18n:translate='label_sponsor'>Sponsor:</label>
-                            <a href='#' tal:attributes='href context/sponsor/absolute_url'
+                            <a href='#' tal:attributes='href context/sponsor/to_object/absolute_url'
                                 id='parent-fieldname-sponsor'
-                                tal:content='context/sponsor/Title'>
+                                tal:content='context/sponsor/to_object/Title'>
                                 Sponsor
                             </a>
                         </div>
--->
+
                     </div>
                     <div id="site-right-column">
                         <div>
-                            <label for='parent-fieldname-principalInvestigator' i18n:translate='label_principalInvestigator'>
+                            <label for='principalInvestigator' i18n:translate='label_principalInvestigator'>
                                 Principal Investigator:
                             </label>
-                            <a href='#' tal:attributes='href context/principalInvestigator/absolute_url'
-                                id='parent-fieldname-principalInvestigator'
-                                tal:content='context/principalInvestigator/Title'>
+                            <a href='#' tal:attributes='href context/principalInvestigator/to_object/absolute_url'
+                                id='principalInvestigator'
+                                tal:content='context/principalInvestigator/to_object/Title'>
                                 Joe PI
                             </a>
                         </div>
@@ -71,5 +68,6 @@
                 <div class="visualClear"><!-- --></div>
             </metal:content-core>
         </metal:content-core>
+
     </body>
 </html>

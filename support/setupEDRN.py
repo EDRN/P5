@@ -175,6 +175,19 @@ def _applyFacetsToDatasets(context):
     criteria.add('resultsperpage', 'bottom', 'default', title='Results per page', hidden=False, start=0, end=60, step=20,
         default=20)
     criteria.add(
+        'checkbox', 'left', 'default',
+        title='Organs',
+        hidden=False,
+        index='bodySystemName',
+        operator='or',
+        vocabulary=u'eke.knowledge.vocabularies.IndicatedBodySystems',
+        default=[],
+        count=False,
+        maxitems=0,
+        sortreversed=False,
+        hidezerocount=False
+    )
+    criteria.add(
         'checkbox', 'bottom', 'default',
         title='Portal Type',
         hidden=True,
@@ -190,8 +203,10 @@ def _applyFacetsToDatasets(context):
     criteria.add('text', 'top', 'default', title=u'Search', hidden=False, index='SearchableText',
         wildcard=True, count=False, onlyallelements=True)
     criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=False)
-    # Needs debugging
+    # Needs more debugging stil:
     # IFacetedLayout(context).update_layout('faceted_datasets_view')
+    # So for now:
+    IFacetedLayout(context).update_layout('view')
 
 
 _EXTENSION_IDS = [

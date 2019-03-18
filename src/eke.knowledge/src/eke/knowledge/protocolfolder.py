@@ -12,13 +12,19 @@ from five import grok
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize.view import memoize
 from zope.component import getUtility
-import urlparse, logging, plone.api, rdflib
+import urlparse, logging, plone.api, rdflib, dublincore
 
 
 _logger = logging.getLogger(__name__)
 _siteSpecificTypeURI = rdflib.URIRef('http://edrn.nci.nih.gov/rdf/types.rdf#ProtocolSiteSpecific')
 _projectFlagURI = rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#projectFlag')
 _leadInvestigatorSiteURI = rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#leadInvestigatorSite')
+_descriptionPredicates = (
+    dublincore.DESCRIPTION_URI,
+    rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#objective'),
+    rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#aims'),
+    rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#outcome')
+)
 
 
 class IProtocolFolder(IKnowledgeFolder):
@@ -62,24 +68,36 @@ class ProtocolIngestor(Ingestor):
                     p = context[objectID]
                 else:
                     p = results[0].getObject()
+                # Set project flag
                 p.project = True if isProject else False
+                # Set PI
                 siteIdentifier = unicode(predicates.get(_leadInvestigatorSiteURI, [u''])[0])
                 if siteIdentifier:
                     results = catalog(identifier=siteIdentifier, object_provides=ISite.__identifier__)
                     if len(results) == 1:
-                        p.piName = results[0].getObject().piName
+                        site = results[0].getObject()
+                        p.piName = site.piName
+                        # p.
+                # Compute description
+                for predicateName in _descriptionPredicates:
+                    values = predicates.get(predicateName, [])
+                    if values:
+                        value = unicode(values[0])
+                        if value:
+                            p.description = value
+                            break
         return consequences
 
 
 class View(KnowledgeFolderView):
     grok.context(IProtocolFolder)
-    @memoize
-    def protocols(self):
-        context = aq_inner(self.context)
-        catalog = plone.api.portal.get_tool('portal_catalog')
-        results = catalog(
-            object_provides=IProtocol.__identifier__,
-            path=dict(query='/'.join(context.getPhysicalPath()), depth=1),
-            sort_on='sportable_title'
-        )
-        return [dict(title=i.Title, description=i.Description, url=i.getURL(), piName=i.piName) for i in results]
+    # @memoize
+    # def protocols(self):
+    #     context = aq_inner(self.context)
+    #     catalog = plone.api.portal.get_tool('portal_catalog')
+    #     results = catalog(
+    #         object_provides=IProtocol.__identifier__,
+    #         path=dict(query='/'.join(context.getPhysicalPath()), depth=1),
+    #         sort_on='sportable_title'
+    #     )
+    #     return [dict(booger=i.Title, description=i.Description, url=i.getURL(), piName=i.piName) for i in results]

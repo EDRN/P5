@@ -4,6 +4,7 @@ from . import _
 from .disease import IDisease
 from .dublincore import TITLE_URI, DESCRIPTION_URI
 from .publication import IPublication
+from .person import IPerson
 from .site import ISite
 from Acquisition import aq_inner
 from five import grok
@@ -11,6 +12,8 @@ from knowledgeobject import IKnowledgeObject
 from plone.memoize.view import memoize
 from zope import schema
 from zope.interface import Interface
+from z3c.relationfield.schema import RelationChoice, RelationList
+from plone.app.vocabularies.catalog import CatalogSource
 import plone.api
 
 
@@ -25,28 +28,28 @@ class IProtocol(IKnowledgeObject):
 
 class IProtocol(IKnowledgeObject):
     '''Protocol.'''
-    involvedInvestigatorSites = schema.List(
+    involvedInvestigatorSites = RelationList(
         title=_(u'Involved Involved Sites'),
         description=_(u'Sites at which the investigators are involved with this protocol.'),
         required=False,
-        value_type=schema.Object(
+        value_type=RelationChoice(
             title=_(u'Involved Investigator Site'),
             description=_(u'Site at which the investigator is involved with this protocol.'),
             required=False,
-            schema=ISite
+            source=CatalogSource(object_provides=ISite.__identifier__)
         )
     )
-    coordinatingInvestigatorSite = schema.Object(
+    coordinatingInvestigatorSite = RelationChoice(
         title=_(u'Coordinating Investigator Site'),
         description=_(u'Site at which the coordinating investigator is located.'),
         required=False,
-        schema=ISite
+        source=CatalogSource(object_provides=ISite.__identifier__)
     )
-    leadInvestigatorSite = schema.Object(
+    leadInvestigatorSite = RelationChoice(
         title=_(u'Lead Investigator Site'),
         description=_(u'Site at which you can find the investigator leading this protocol.'),
         required=False,
-        schema=ISite
+        source=CatalogSource(object_provides=ISite.__identifier__)
     )
     bmName = schema.Text(
         title=_(u'Biomarker Name'),
@@ -78,14 +81,14 @@ class IProtocol(IKnowledgeObject):
         description=_(u'How investigators were effectively blinded by various techniques to assure impartiality.'),
         required=False
     )
-    cancerTypes = schema.List(
+    cancerTypes = RelationList(
         title=_(u'Cancer Types'),
         description=_(u'What cancers this protocol is analyzing.'),
         required=False,
-        value_type=schema.Object(
+        value_type=RelationChoice(
             title=_(u'Cancer Type'),
             description=_(u'A cancer this protocol is analyzing.'),
-            schema=IDisease
+            source=CatalogSource(object_provides=IDisease.__identifier__)
         )
     )
     comments = schema.Text(
@@ -153,14 +156,14 @@ class IProtocol(IKnowledgeObject):
         description=_(u'The kind of protocol this is.'),
         required=False,
     )
-    publications = schema.List(
+    publications = RelationList(
         title=_(u'Publications'),
         description=_(u'What publications have been published about this protocol.'),
         required=False,
-        value_type=schema.Object(
+        value_type=RelationChoice(
             title=_(u'Publication'),
             description=_(u'A single publication'),
-            schema=IPublication
+            source=CatalogSource(object_provides=IPublication.__identifier__)
         )
     )
     outcome = schema.Text(
@@ -183,64 +186,64 @@ class IProtocol(IKnowledgeObject):
         description=_(u'The size of the sample the protocol actually used.'),
         required=False,
     )
-    isAPilotFor = schema.List(
+    isAPilotFor = RelationList(
         title=_(u'Piloting Protocol'),
         description=_(u'The protocols—if any—for which this protocol is a pilot.'),
         required=False,
-        value_type=schema.Object(
+        value_type=RelationChoice(
             title=_(u'Piloting Protocol'),
             description=_(u'The protocol—if any—for which this protocol is a pilot.'),
-            schema=IProtocol
+            source=CatalogSource(object_provides=IProtocol.__identifier__)
         )
     )
-    obtainsData = schema.List(
+    obtainsData = RelationList(
         title=_(u'Data Source Protocols'),
         description=_(u'The protocols—if any—from which this protocol obtains data.'),
         required=False,
-        value_type=schema.Object(
+        value_type=RelationChoice(
             title=_(u'Data Source Protocol'),
             description=_(u'The protocol—if any—for which this protocol obtains data.'),
-            schema=IProtocol
+            source=CatalogSource(object_provides=IProtocol.__identifier__)
         )
     )
-    providesData = schema.List(
+    providesData = RelationList(
         title=_(u'Data Sink Protocols'),
         description=_(u'The protocols—if any—to which this protocol provides data.'),
         required=False,
-        value_type=schema.Object(
+        value_type=RelationChoice(
             title=_(u'Data Sink Protocol'),
             description=_(u'The protocol—if any—to which this protocol provides data.'),
-            schema=IProtocol
+            source=CatalogSource(object_provides=IProtocol.__identifier__)
         )
     )
-    obtainsSpecimens = schema.List(
+    obtainsSpecimens = RelationList(
         title=_(u'Specimen Source Protocols'),
         description=_(u'The protocols—if any—from which this protocol obtains specimens.'),
         required=False,
-        value_type=schema.Object(
+        value_type=RelationChoice(
             title=_(u'Specimen Source Protocol'),
             description=_(u'The protocol—if any—for which this protocol obtains specimens.'),
-            schema=IProtocol
+            source=CatalogSource(object_provides=IProtocol.__identifier__)
         )
     )
-    providesSpecimens = schema.List(
+    providesSpecimens = RelationList(
         title=_(u'Specimen Sink Protocols'),
         description=_(u'The protocols—if any—to which this protocol provides specimens.'),
         required=False,
-        value_type=schema.Object(
+        value_type=RelationChoice(
             title=_(u'Specimen Sink Protocol'),
             description=_(u'The protocol—if any—to which this protocol provides specimens.'),
-            schema=IProtocol
+            source=CatalogSource(object_provides=IProtocol.__identifier__)
         )
     )
-    relatedProtocols = schema.List(
+    relatedProtocols = RelationList(
         title=_(u'Related Protocols'),
         description=_(u'The protocols—if any—to which this protocol has some relationship.'),
         required=False,
-        value_type=schema.Object(
+        value_type=RelationChoice(
             title=_(u'Related Protocol'),
             description=_(u'The protocol—if any—to which this protocol has some relationship.'),
-            schema=IProtocol
+            source=CatalogSource(object_provides=IProtocol.__identifier__)
         )
     )
     animalSubjectTraining = schema.Text(
@@ -297,32 +300,38 @@ class IProtocol(IKnowledgeObject):
         description=_(u'Sequence of reporting for this protocol.'),
         required=False,
     )
-    biomarkers = schema.List(
+    biomarkers = RelationList(
         title=_(u'Biomarkers'),
         description=_(u'Biomarkers being studied by this protocol.'),
         required=False,
-        value_type=schema.Object(
+        value_type=RelationChoice(
             title=_(u'Biomarker'),
             description=_(u'A single biomarker being studied by this protocol.'),
             required=False,
-            schema=Interface
+            source=CatalogSource()  # TODO: Constrain to IBiomarker?
         )
     )
-    datasets = schema.List(
+    datasets = RelationList(
         title=_(u'Datasets'),
         description=_(u'Datasets generated by this protocol.'),
         required=False,
-        value_type=schema.Object(
+        value_type=RelationChoice(
             title=_(u'Dataset'),
             description=_(u'A single dataset generated by this protocol.'),
             required=False,
-            schema=Interface
+            source=CatalogSource()  # TODO: Constrain to IDataset?
         )
     )
     piName = schema.TextLine(
         title=_(u'PI Name'),
         description=_(u'Name of the principal investigator.'),
         required=False,
+    )
+    principalInvestigator = RelationChoice(
+        title=_(u'Principal Investigtaor'),
+        description=_(u'The investigator principally in charge.'),
+        required=False,
+        source=CatalogSource(object_provides=IPerson.__identifier__)
     )
 
 

@@ -6,16 +6,18 @@ u'''EKE Knowledge: Site Folder'''
 from . import _
 from .base import Ingestor
 from .knowledgefolder import IKnowledgeFolder, KnowledgeFolderView
+from .person import IPerson
 from .site import ISite
 from .utils import publish, setValue
-from .person import IPerson
 from Acquisition import aq_inner
 from five import grok
 from plone.dexterity.utils import createContentInContainer
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize.view import memoize
+from z3c.relationfield import RelationValue
 from zope import schema
 from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
 import urlparse, logging, plone.api, rdflib
 
 
@@ -143,6 +145,7 @@ class SiteIngestor(Ingestor):
         u'''Override Ingestor.ingest so we can handle people'''
         context = aq_inner(self.context)
         catalog, portal = plone.api.portal.get_tool('portal_catalog'), plone.api.portal.get()
+        idUtility = getUtility(IIntIds)
         consequences = super(SiteIngestor, self).ingest()
         siteStatments = consequences.statements
         _logger.info('At this point, we got %r', consequences)
@@ -171,7 +174,7 @@ class SiteIngestor(Ingestor):
                                 site = siteBrain.getObject()
                                 person = self.createPerson(site, piIdentifier, peopleStatements[piIdentifier])
                                 if person is not None:
-                                    site.principalInvestigator = person
+                                    site.principalInvestigator = RelationValue(idUtility.getId(person))
                                     site.piObjectID = person.id
                                     site.piName = person.title
                                     consequences.created.append(person)

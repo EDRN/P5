@@ -5,6 +5,8 @@ from .person import IPerson
 from Acquisition import aq_inner
 from five import grok
 from knowledgeobject import IKnowledgeObject
+from plone.app.vocabularies.catalog import CatalogSource
+from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
 
 
@@ -20,11 +22,11 @@ class ISite(IKnowledgeObject):
         description=_(u'A short name for the site.'),
         required=False,
     )
-    sponsor = schema.Object(
+    sponsor = RelationChoice(
         title=_(u'Sponsoring Site'),
         description=_(u"What site, if any, that sponsors this site's membership in EDRN."),
         required=False,
-        schema=ISite  # Requires ISite already declared, see above.
+        source=CatalogSource(object_provides=ISite.__identifier__)  # Requires ISite already declared, see above.
     )
     fundingStartDate = schema.TextLine(
         title=_(u'Funding Start Date'),
@@ -62,11 +64,11 @@ class ISite(IKnowledgeObject):
         description=_(u'Various notes made by various individuals within EDRN about this EDRN site.'),
         required=False,
     )
-    principalInvestigator = schema.Object(
+    principalInvestigator = RelationChoice(
         title=_(u'Principal Investigator'),
         description=_(u'The leading investigator leading EDRN research at this site.'),
         required=False,
-        schema=IPerson
+        source=CatalogSource(object_provides=IPerson.__identifier__)
     )
     # coPrincipalInvestigators = schema.List(
     #     title=_(u'Co-Principal Investigators'),
@@ -153,7 +155,8 @@ ISite.setTaggedValue('predicates', {
     # u'http://edrn.nci.nih.gov/rdf/schema.rdf#copi': ('coPrincipalInvestigators', True),
     # u'http://edrn.nci.nih.gov/rdf/schema.rdf#coi': ('coInvestigators', True),
     # u'http://edrn.nci.nih.gov/rdf/schema.rdf#investigator': ('investigators', True),
-    u'http://edrn.nci.nih.gov/rdf/schema.rdf#organ': ('organs', False)
+    u'http://edrn.nci.nih.gov/rdf/schema.rdf#organ': ('organs', False),
+    u'http://edrn.nci.nih.gov/rdf/schema.rdf#sponsor': ('sponsor', True),
 })
 ISite.setTaggedValue('fti', 'eke.knowledge.site')
 ISite.setTaggedValue('typeURI', u'http://edrn.nci.nih.gov/rdf/types.rdf#Site')
@@ -167,4 +170,6 @@ class View(grok.View):
         memberType = context.memberType
         if not memberType: return False
         memberType = memberType.strip()
-        return memberType.startswith(u'Associate') or memberType.startswith('Assocaite')  # Thanks DMCC. Ugh >.<
+        potential = memberType.startswith(u'Associate') or memberType.startswith('Assocaite')  # Thanks DMCC. Ugh >.<
+        sponsorAvailable = context.sponsor is not None and context.sponsor.to_object is not None
+        return potential and sponsorAvailable

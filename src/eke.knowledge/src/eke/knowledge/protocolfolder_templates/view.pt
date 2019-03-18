@@ -67,8 +67,12 @@
                             <tal:row repeat='item results'>
                                 <tal:define define='oddrow repeat/item/odd'>
                                     <tr class='odd' tal:attributes='class python:"odd" if oddrow else "even"'>
-                                        <td tal:content='item/Title'>Blah blah</td>
-                                        <td tal:define='desc item/Description'>
+                                        <td>
+                                            <a href='#' tal:attributes='href item/getURL' tal:content='item/title'>
+                                                My Protocol
+                                            </a>
+                                        </td>
+                                        <td tal:define='desc item/description'>
                                             <span tal:replace='python:plone_view.cropText(desc, desc_length)'>
                                                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                                                 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,

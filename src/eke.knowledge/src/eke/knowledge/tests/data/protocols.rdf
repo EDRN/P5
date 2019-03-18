@@ -10,7 +10,6 @@
     <ns1:protocolType>Collaboration</ns1:protocolType>
     <ns2:title>Lung Reference Set A Application:  Edward Hirschowitz - University of Kentucky (2009)</ns2:title>
     <ns1:dataSharingPlan>Lab Data will be analyzed by the DMCC and shared according the LCBG/NCI guidelines.  Data will not be publicly available until the reference set is depleted</ns1:dataSharingPlan>
-    <ns1:objective>We are continuing validation with two advanced objectives: 1) To evaluate assay performance for established lung cancer diagnosed in a clinical population 2) to confirm results that indicate this marker set may detect cancer and predict the onset of NSCLC prior to radiographic detection in a screened population.</ns1:objective>
     <ns1:inSituDataSharingPlan>Yes</ns1:inSituDataSharingPlan>
     <rdf:type rdf:resource="http://edrn.nci.nih.gov/rdf/types.rdf#Protocol"/>
     <ns1:coordinatingInvestigatorSite rdf:resource="http://edrn.nci.nih.gov/data/sites/5"/>
@@ -25,10 +24,10 @@
     <ns1:estimatedFinishDate>Mar 25 2010 12:00AM</ns1:estimatedFinishDate>
     <ns1:finishDate>Feb 27 2012 12:00AM</ns1:finishDate>
     <ns1:abbreviatedName>Lung Ref Set A  App: Hirschowitz (2009)</ns1:abbreviatedName>
-    <ns1:aims>Aim 1. To pre-validate assay performance in a high-risk clinical population from an alternate demographic. We intend to validate the predictive accuracy of our markers for clinically diagnosed lung cancer, identify the limits of the assay in individuals with benign lung disease, and determine marker specificity for lung vs. other cancers. Pre-validation will define performance in samples from an alternate demographic and generate classifiers with which to construct optimalperformance criteria that can be applied to class prediction for subsequent blinded analysis of a larger EDRN clinical reference set.</ns1:aims>
     <ns1:plannedSampleSize>150 cases and 150 high risk controls w/lesions - Lung Set A pre-validation</ns1:plannedSampleSize>
     <ns1:blinding>Samples were blinded at NCI-Frederick</ns1:blinding>
     <ns1:projectFlag>Protocol</ns1:projectFlag>
+    <ns1:outcome>Sticky</ns1:outcome>
   </rdf:Description>
   <rdf:Description rdf:about="http://edrn.nci.nih.gov/data/protocols/316">
     <ns1:protocolType>Validation</ns1:protocolType>

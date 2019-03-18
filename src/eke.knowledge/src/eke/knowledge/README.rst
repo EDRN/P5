@@ -15,6 +15,11 @@ First, we shall require a test browser::
     >>> portal = layer['portal']    
     >>> portalURL = portal.absolute_url()
 
+We'll also have a second browser that's unprivileged for some later
+demonstrations::
+
+    >>> unprivilegedBrowser = Browser(app)
+
 Now to exercise the code.
 
 
@@ -254,6 +259,9 @@ Ingesting::
     >>> keys.sort()
     >>> keys
     ['279-lung-reference-set-a-application-edward', '316-hepatocellular-carcinoma-early-detection']
+    >>> protocol = folder['279-lung-reference-set-a-application-edward']
+    >>> protocol.description
+    u'Sticky'
 
 
 Science Data
@@ -286,7 +294,77 @@ Ingesting::
     >>> keys.sort()
     >>> keys
     ['gstp1-methylation', 'university-of-pittsburg-ovarian-data']
+    >>> dataset = folder['gstp1-methylation']
+    >>> dataset.bodySystemName
+    u'Prostate'
 
+
+Collaborative Groups
+====================
+
+First, a folder to hold them all::
+
+    >>> browser.open(portalURL)
+    >>> l = browser.getLink(id='eke-knowledge-collaborativegroupsfolder')
+    >>> l.url.endswith('++add++eke.knowledge.collaborativegroupsfolder')
+    True
+    >>> l.click()
+    >>> browser.getControl(name='form.widgets.title').value = u'Collaborative Groups'
+    >>> browser.getControl(name='form.widgets.description').value = u'Some testing collaborative groups.'
+    >>> browser.getControl(name='form.buttons.save').click()
+    >>> 'collaborative-groups' in portal.keys()
+    True
+    >>> folder = portal['collaborative-groups']
+    >>> folder.title
+    u'Collaborative Groups'
+    >>> folder.description
+    u'Some testing collaborative groups.'
+
+Now let's try group workspaces::
+
+    >>> l = browser.getLink(id='eke-knowledge-groupspacefolder')
+    >>> l.url.endswith('++add++eke.knowledge.groupspacefolder')
+    True
+    >>> l.click()
+    >>> browser.getControl(name='form.widgets.title').value = u'MySpace'
+    >>> browser.getControl(name='form.widgets.description').value = u'A defunct workspace.'
+    >>> browser.getControl(name='form.widgets.save').click()
+
+Group workspaces—which are folders—should automatically create an index page
+that's the default view of the folder, turn off the right-side portlets, and
+include their special index page::
+
+    >>> 'portal-column-two' in browser.contents
+    False
+    >>> group = folder['myspace']
+    >>> 'index_html' in group.keys()
+    True
+    >>> group.getDefaultPage()
+    'index_html'
+
+And you can comment::
+
+    >>> 'Add comment' in browser.contents
+    True
+
+Plus tabs for the group's stuff::
+
+    >>> overview = browser.contents.index('fieldset-overview')
+    >>> documents = browser.contents.index('fieldset-documents')
+    >>> overview < documents
+    True
+
+Since we're logged in, the special note about logging in to view additional
+information doesn't appear::
+
+    >>> 'If you are a member of this group,' in browser.contents
+    False
+
+But an unprivileged user does get it::
+
+    >>> unprivilegedBrowser.open(portalURL + '/collaborative-groups/myspace')
+    >>> unprivilegedBrowser.contents
+    '...If you are a member of this group...log in...'
 
 
 Biomarkers
