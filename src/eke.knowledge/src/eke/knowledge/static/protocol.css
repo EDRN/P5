@@ -1,0 +1,11 @@
+@charset "utf-8";
+
+.teamProjectBeacon {
+    float: right;
+}
+.nonEDRNBeacon {
+    float: right;
+}
+.protocolTitle {
+    margin-right: 80px;
+}
