@@ -170,7 +170,6 @@ def _addHomePage(portal):
 def post_install(context):
     """Post install script"""
     # Do something at the end of the installation of this package.
-    # activateBarcelonetaTheme(context)
     portal = plone.api.portal.get()
     toDelete = []
     for item in _ITEMS_TO_DELETE:
