@@ -1,0 +1,32 @@
+@charset "utf-8";
+
+body {
+    background: white !important;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.plone-navbar {
+    background-color: #727272;
+    color: white;
+    border-bottom: solid 1px black;
+}
+.plone-nav > li > a:hover,
+.plone-nav > li > a:focus {
+    text-decoration: none;
+    background-color: white;
+    color: gray;
+}
+.plone-navbar-nav > li > a {
+
+}
+.plone-navbar-nav > .selected > a,
+.plone-navbar-nav > .selected > a:hover,
+.plone-navbar-nav > .selected > a:focus {
+    color: black;
+    background-color: white;
+    border: 0px;
+    border-top: solid 1px #aaa;
+    border-right: solid 1px #aaa;
+    border-bottom: solid 1px #fff;
+    border-left: solid 1px #aaa;
+}

@@ -39,12 +39,14 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
+        'setuptools',
         # -*- Extra requirements: -*-
         'Products.CMFPlone',
         # == Provided by mr.bob: ==
         'plone.api>=1.8.4',
+        'plone.app.theming',
+        'plone.app.themingplugins',
         'Products.GenericSetup>=1.8.2',
-        'setuptools',
         'z3c.jbot',
     ],
     extras_require={

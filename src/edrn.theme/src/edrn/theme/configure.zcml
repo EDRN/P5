@@ -9,11 +9,7 @@
 
   <i18n:registerTranslations directory="locales" />
 
-  <!--
-    Be careful if you use general includeDependencies, it can have sideffects!
-    Better import explicite packages or configurations ;)
-  -->
-  <!--<includeDependencies package="." />-->
+  <includeDependencies package="." />
 
   <include package=".browser" />
 
@@ -45,6 +41,11 @@
       />
 
   <browser:resourceDirectory name='edrn.theme' directory='static'/>
+  <plone:static
+      directory='theme'
+      type='theme'
+      name='edrn'
+  />
 
   <!-- -*- extra stuff goes here -*- -->
 
