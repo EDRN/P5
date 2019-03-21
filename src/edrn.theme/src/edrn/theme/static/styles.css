@@ -83,3 +83,8 @@ ul#edrn-quicklinks li {
 #q-members       a {background: url(++resource++edrn.theme/s-membersList.gif);}
 #q-informatics   a {background: url(++resource++edrn.theme/s-informatics.png);}
 #q-nct           a {background: url(++resource++edrn.theme/s-nct.png);}
+
+#portal-footer-wrapper {
+    background-color: white;
+    color: black;
+}
