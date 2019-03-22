@@ -1,0 +1,150 @@
+@charset "UTF-8";
+
+.cbInfoBox {
+    border: 1px solid #bbb;
+    padding: 0.5em;
+    width: 240px;
+    margin: 0.5em 0;
+}
+.collaborativeGroupContainer {
+    float: left;
+    padding-right: 0.5em;
+}
+.collaborativeGroupContainer h1 {
+    font: 20pt "Georgia", Times, "Times New Roman", serif;
+    color: rgb(166, 0, 0);
+    border-bottom: none;
+    margin-bottom: 0.2em;
+    line-height: 90%;
+    padding-top: 0.2em;
+}
+.collaborativeGroupContainer h2 {
+    font: 14pt "Georgia", Times, "Times New Roman", serif;
+    color: rgb(166, 0, 0);
+    border-bottom: none;
+    margin-bottom: 0.2em;
+    line-height: 90%;
+}
+.collaborativeGroupContainer .documentDescription {
+    line-height: 12pt;
+    font-size: 10pt;
+}
+.topCollabGroupItems .discreet {
+    line-height: 1em;
+    color: red !important;
+}
+#collabGroupDetails {
+    margin-top: 0;
+}
+#content .collaborativeGroupContainer .formTabs {
+    margin-left: 0;
+    font-size: 9pt;
+}
+
+.cbMemberBox {
+    border: 1px solid #bbb;
+    padding: 0.5em;
+    width: 240px;
+    margin: 0.5em 0;
+}
+.cbMemberBox h2 {
+    background: transparent url(++resource++h2-members.png) no-repeat top left;
+    margin-top: 0;
+    height: 32px;
+    padding: 0.5em 0 0 36px;
+}
+.cbDetailBox {
+    border: 1px solid #bbb;
+    padding: 0.5em;
+    margin: 0.5em 0;
+}
+.collaborativeGroupContainer #collabGroupDetails {
+    width: 470px;
+}
+.collabDetailList dd {
+    line-height: 1.1em;
+    padding-top: 0 !important;
+    padding-left: 1em;
+}
+.topCollabGroupItems {
+    border: 1px solid #bbb;
+    padding: 0.5em;
+    width: 194px;
+    margin: 0.5em 0;
+    float: left;
+    margin-right: 0.5em;
+}
+.cbProjectsHeading {
+    background: transparent url(++resource++h2-projects.png) no-repeat top left;
+    margin-top: 0;
+    height: 32px;
+    padding: 0.5em 0 0 36px;
+}
+.cbEventsHeading {
+    background: transparent url(++resource++h2-events.png) no-repeat top left;
+    margin-top: 0;
+    height: 32px;
+    padding: 0.5em 0 0 36px;
+}
+.cbHighlightsHeading {
+    background: transparent url(++resource++h2-highlights.png) no-repeat top left;
+    margin-top: 0;
+    height: 32px;
+    padding: 0.5em 0 0 36px;
+}
+.topCGEvents dd {
+    line-height: 1.1em;
+    padding-top: 0 !important;
+    padding-left: 1em;
+}
+.topCollabGroupItemDescription {
+    color: rgb(170, 170, 170);
+    font-size: 8pt;
+    line-height: 9pt;
+}
+.viewMoreEDRNStuffLink {
+    text-align: right;
+}
+.membersColumn {
+    font-size: 8pt;
+    float: left;
+}
+.collaborationsNewContentButtons {
+    text-align: center;
+}
+.collaborationsNewContentButtons li {
+    display: inline;
+    padding: 0 1em;
+}
+.collaborationsNewContentButtons a {
+    -moz-border-radius: 8px;
+    -moz-box-shadow: rgba(0,0,0,1) 0 1px 0;
+    -webkit-border-radius: 8px;
+    -webkit-box-shadow: rgba(0,0,0,1) 0 1px 0;
+    background: #d66581;
+    background: -moz-linear-gradient(top, #a82b1b, #d66581);
+    background: -webkit-gradient(linear, left top, left bottom, from(#a82b1b), to(#d66581));
+    border-radius: 8px;
+    border-top: 1px solid #fa0f36;
+    box-shadow: rgba(0,0,0,1) 0 1px 0;
+    color: white;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    padding: 5px 10px;
+    text-decoration: none;
+    text-shadow: rgba(0,0,0,.4) 0 1px 0;
+    vertical-align: middle;
+}
+.collaborationsNewContentButtons a:visited {
+    color: white !important;
+}
+.collaborationsNewContentButtons a:hover {
+    border-top-color: #b8a064;
+    background: #b8a064 !important;
+    color: white;
+}
+.collaborationsNewContentButtons a:active {
+    border-top-color: #7992a3;
+    background: #7992a3;
+}
+

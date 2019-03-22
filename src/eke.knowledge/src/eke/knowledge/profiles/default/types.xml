@@ -13,6 +13,9 @@
     <object name='eke.knowledge.publicationfolder' meta_type='Dexterity FTI'/>
     <object name='eke.knowledge.site' meta_type='Dexterity FTI'/>
     <object name='eke.knowledge.sitefolder' meta_type='Dexterity FTI'/>
+    <object name='eke.knowledge.collaborationsfolder' meta_type='Dexterity FTI'/>
+    <object name='eke.knowledge.groupspacefolder' meta_type='Dexterity FTI'/>
+    <object name='eke.knowledge.groupspaceindex' meta_type='Dexterity FTI'/>
 
     <!--
         Biomarkers
