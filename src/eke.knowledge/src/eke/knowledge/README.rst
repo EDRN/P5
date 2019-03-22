@@ -345,7 +345,6 @@ include their special index page::
 .. And you can comment::
 
 ..     >>> browser.open(portalURL + '/collaborative-groups/myspace')
-..     >>> with open('/tmp/log.html', 'w') as xxx: xxx.write(browser.contents)
 ..     >>> 'Add comment' in browser.contents
 ..     True
 
