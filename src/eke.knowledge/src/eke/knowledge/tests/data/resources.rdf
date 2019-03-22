@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bmdb="http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#" xmlns:edrn="http://edrn.nci.nih.gov/rdf/schema.rdf#" xmlns:edrntype="http://edrn.nci.nih.gov/rdf/types.rdf#" xmlns:dc="http://purl.org/dc/terms/">
+  <bmdb:ExternalResource rdf:about="http://www.genome.ad.jp/dbget-bin/www_bget?hsa+94025">
+    <bmdb:URI>http://www.genome.ad.jp/dbget-bin/www_bget?hsa+94025</bmdb:URI>
+    <bmdb:Description>KEGG entry 94025 Homo sapiens MUC16, cell surface associated</bmdb:Description>
+  </bmdb:ExternalResource>
+  <bmdb:ExternalResource rdf:about="http://ca.expasy.org/uniprot/Q8WXI7">
+    <bmdb:URI>http://ca.expasy.org/uniprot/Q8WXI7</bmdb:URI>
+    <bmdb:Description>UniProtKB/Swiss-Prot entry Q8WXI7 Mucin-16</bmdb:Description>
+  </bmdb:ExternalResource>
+</rdf:RDF>
