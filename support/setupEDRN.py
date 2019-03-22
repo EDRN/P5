@@ -203,10 +203,7 @@ def _applyFacetsToDatasets(context):
     criteria.add('text', 'top', 'default', title=u'Search', hidden=False, index='SearchableText',
         wildcard=True, count=False, onlyallelements=True)
     criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=False)
-    # Needs more debugging stil:
-    # IFacetedLayout(context).update_layout('faceted_datasets_view')
-    # So for now:
-    IFacetedLayout(context).update_layout('view')
+    IFacetedLayout(context).update_layout('faceted_datasets_view')
 
 
 _EXTENSION_IDS = [
