@@ -7,7 +7,7 @@ from plone.app.testing import IntegrationTesting
 from plone.app.testing import PloneSandboxLayer
 from plone.testing import z2
 
-import edrnsite.policy, edrn.theme, pas.plugins.ldap, yafowil.plone
+import edrnsite.policy, edrn.theme, pas.plugins.ldap, yafowil.plone, eke.knowledge, eea.facetednavigation
 
 
 class EdrnsitePolicyLayer(PloneSandboxLayer):
@@ -22,6 +22,7 @@ class EdrnsitePolicyLayer(PloneSandboxLayer):
         self.loadZCML(package=pas.plugins.ldap)
         self.loadZCML(package=edrnsite.policy)
         self.loadZCML(package=edrn.theme)
+        self.loadZCML(package=eea.facetednavigation)
         self.loadZCML(package=eke.knowledge)
 
     def setUpPloneSite(self, portal):
