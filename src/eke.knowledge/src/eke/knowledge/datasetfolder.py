@@ -52,6 +52,13 @@ class DatasetIngestor(Ingestor):
                     # eCAS doesn't use valid URIs to body systems so we manually extract them
                     organ = urlparse.urlparse(unicode(predicates[_bodySystemPredicateURI][0]))[2].split('/')[-1]
                     dataset.bodySystemName = organ
+        # Set protocol names
+        objs = list(consequences.created)
+        objs.extend(consequences.updated)
+        for obj in objs:
+            rv = obj.protocol
+            if rv is None or rv.to_object is None: continue
+            obj.protocolName = rv.to_object.title
         portal = plone.api.portal.get()
         catalog.reindexIndex('identifier', portal.REQUEST)
         return consequences

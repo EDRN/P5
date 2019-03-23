@@ -51,6 +51,7 @@
           <thead>
             <tr>
               <th i18n:translate='ekeKnowledgeTableHeadingDataset'>Dataest</th>
+              <th i18n:translate='ekeKnowledgeTableHeadingProtocol'>Protocol</th>
             </tr>
           </thead>
           <tbody metal:define-slot='entries'>
@@ -70,6 +71,9 @@
                       tal:content='item_title_or_id'>
                       Advanced rhinoplasty dataset
                     </a>
+                  </td>
+                  <td tal:content='item/protocolName'>
+                    Booga booga!
                   </td>
                 </tr>
               </metal:block>
