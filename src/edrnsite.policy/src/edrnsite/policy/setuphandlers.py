@@ -157,15 +157,15 @@ def _addHomePage(portal):
             portal.manage_delObjects([objID])
         except AttributeError:
             pass
-    with open(os.path.join(os.path.dirname(__file__), 'content', 'collage.jpg'), 'rb') as f:
+    with open(os.path.join(os.path.dirname(__file__), 'content', 'edrn-researcher-800x533-00.jpg'), 'rb') as f:
         imageData = f.read()
     collage = createContentInContainer(
         portal,
         'Image',
         id='image-collage',
         title=u'EDRN Collage',
-        description=u'A collage featuring images of health, family, and biomarker research.',
-        image=NamedBlobImage(data=imageData, contentType='image/jpeg', filename=u'collage.jpg')
+        description=u'A collage featuring images of biomarker research.',
+        image=NamedBlobImage(data=imageData, contentType='image/jpeg', filename=u'edrn-researcher-800x533-00.jpg')
     )
     frontPage = createContentInContainer(
         portal,
