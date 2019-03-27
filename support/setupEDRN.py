@@ -102,6 +102,14 @@ _QUICKLINKS_BODY = u'''<div class='edrnQuickLinks'>
     </ul>
 </div>
 '''
+_BLANK_UIDS = {
+    u'advocates': u'Unknown',
+    u'docs': u'Unknown',
+    u'funding-opportunities': u'Unknown',
+    u'informatics': u'Unknown',
+    u'network-consulting-team': u'Unknown',
+    u'sites': u'Unknown',
+}
 
 
 def _null(context):
@@ -483,6 +491,16 @@ def _doStaticQuickLinksPortlet(portal, uids):
     mapping[chooser.chooseName(None, assignment)] = assignment
 
 
+def _setGlobalNavOrder(portal):
+    u'''Set the order of global navigation'''
+    portal = plone.api.portal.get()
+    items = ['resources', 'publications', 'protocols', 'science-data', 'about-edrn']
+    items.reverse()
+    for item in items:
+        if item in portal.keys():
+            portal.moveObjectsToTop([item])
+
+
 def _setupEDRN(app, username, password, ldapPassword):
     app = makerequest.makerequest(app)
     _setupZopeSecurity(app)
@@ -490,10 +508,12 @@ def _setupEDRN(app, username, password, ldapPassword):
     _installAdmin(app, username, password)
     portal = _createEDRNSite(app)
     setSite(portal)
-    uids = _loadZEXPFiles(portal)  # Stack traces; see https://community.plone.org/t/stack-trace-when-loading-zexp-from-a-script/8060
+    uids = _BLANK_UIDS
+    uids.update(_loadZEXPFiles(portal))  # Stack traces; see https://community.plone.org/t/stack-trace-when-loading-zexp-from-a-script/8060
     _setLDAPPassword(portal, ldapPassword)
     uids.update(_ingest(portal))
     _doStaticQuickLinksPortlet(portal, uids)
+    _setGlobalNavOrder(portal)
     _tuneUp(portal)  # this should be the last step always as it clears/rebuids the catalog and commits the txn
     noSecurityManager()
 
