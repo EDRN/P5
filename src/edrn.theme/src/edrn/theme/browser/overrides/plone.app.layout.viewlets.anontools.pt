@@ -1,0 +1,16 @@
+<div id="portal-anontools" tal:condition="python:view.user_actions">
+  <ul>
+    <li>
+      <tal:actions repeat="action view/user_actions">
+        <tal:if condition='python:action["id"] == "personaltools-dmcc-site" or view.anonymous'>
+          <a href="" style='padding-right: 1em;'
+             tal:attributes="action"
+             tal:content="action/title"
+             i18n:translate="">
+              action title
+          </a>
+        </tal:if>
+      </tal:actions>
+    </li>
+  </ul>
+</div>
