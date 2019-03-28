@@ -297,6 +297,12 @@ Ingesting::
     >>> dataset.bodySystemName
     u'Prostate'
 
+And the statistical graphics are back::
+
+    >>> browser.open(portalURL + '/datasets/@@dataset_summary_report')
+    >>> browser.contents
+    '...<style>...<script>...datasetColor...'
+
 
 Collaborative Groups
 ====================

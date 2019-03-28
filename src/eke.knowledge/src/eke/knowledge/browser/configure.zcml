@@ -27,6 +27,14 @@
         permission='cmf.ManagePortal'
     />
 
+    <!--Reporting graphs for datasets -->
+    <browser:page
+        for='*'
+        permission='zope2.Public'
+        name='dataset_summary_report'
+        template='templates/dataset_summary_report.pt'
+    />
+
     <!-- Macros -->
     <browser:page
         for='*'

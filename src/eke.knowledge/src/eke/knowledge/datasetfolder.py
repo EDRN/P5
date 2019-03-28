@@ -3,18 +3,17 @@
 
 u'''EKE Knowledge: Dataset Folder'''
 
+from . import _
 from .base import Ingestor
 from .dataset import IDataset
 from .dublincore import TITLE_URI
-from .knowledgefolder import IKnowledgeFolder, KnowledgeFolderView
+from .knowledgefolder import IKnowledgeFolder
 from Acquisition import aq_inner
 from five import grok
-from plone.i18n.normalizer.interfaces import IIDNormalizer
-from plone.memoize.view import memoize
-from zope.component import getUtility
+from zope import schema
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
-import urlparse, logging, plone.api, rdflib
+import urlparse, logging, plone.api, rdflib, urllib2, contextlib
 
 
 _logger = logging.getLogger(__name__)
@@ -25,6 +24,16 @@ _bodySystemPredicateURI = rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#
 
 class IDatasetFolder(IKnowledgeFolder):
     u'''Dataset folder.'''
+    dsSumDataSource = schema.TextLine(
+        title=_(u'Summary Data Source'),
+        description=_(u'URL to a source of summary statistics that describes science data for this folder.'),
+        required=False,
+    )
+    dataSummary = schema.Text(
+        title=_(u'Data Summary'),
+        description=_(u'JSON data that describe summary information for the data in this folder.'),
+        required=False,
+    )
 
 
 class DatasetIngestor(Ingestor):
@@ -41,7 +50,11 @@ class DatasetIngestor(Ingestor):
             predicates[rdflib.RDF.type] = [_datasetTypeURI]
             filtered[subjectURI] = predicates
         return filtered
+    def getSummaryData(self, source):
+        with contextlib.closing(urllib2.urlopen(source)) as bytestring:
+            return bytestring.read()
     def ingest(self):
+        context = aq_inner(self.context)
         consequences = super(DatasetIngestor, self).ingest()
         catalog = plone.api.portal.get_tool('portal_catalog')
         for uri, predicates in consequences.statements.iteritems():
@@ -60,6 +73,11 @@ class DatasetIngestor(Ingestor):
             if rv is None or rv.to_object is None: continue
             obj.protocolName = rv.to_object.title
         portal = plone.api.portal.get()
+        # Add summary data
+        if context.dsSumDataSource:
+            context.dataSummary = self.getSummaryData(context.dsSumDataSource)
+        else:
+            context.dataSummary = u'{}'
         catalog.reindexIndex('identifier', portal.REQUEST)
         return consequences
         # Set bodySystemName, protocolName, piNames manually; bodySystemName done
@@ -79,3 +97,14 @@ class IndicatedBodySystemsVocabulary(object):
 
 
 grok.global_utility(IndicatedBodySystemsVocabulary, name=u'eke.knowledge.vocabularies.IndicatedBodySystems')
+
+
+class DatasetSummary(grok.View):
+    grok.context(IDatasetFolder)
+    grok.require('zope2.View')
+    grok.name('summary')
+    def render(self):
+        context = aq_inner(self.context)
+        self.request.response.setHeader('Content-type', 'application/json; charset=utf-8')
+        self.request.response.setHeader('Content-Transfer-Encoding', '8bit')
+        return context.dataSummary

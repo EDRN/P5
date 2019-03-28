@@ -46,11 +46,24 @@
                         navigation_root_url context/@@plone_portal_state/navigation_root_url;
                         pas_member context/@@pas_member;">
     <tal:listing condition="batch">
-<!-- Need summarizer -->
+        <div class='dataset-summary-report'>
+          <center><u><h4># Datasets by Organ Statistics:</h4></u></center>
+          <span id='analyitcs-display'>
+            <iframe width='100%' height='190px' frameborder='0' src='@@dataset_summary_report'>
+              Statistics
+            </iframe>
+          </span>
+        </div>
+        
+    <!-- KLUDGE: "listingBar" this text MUST appear in the faceted results.  eea.facetednavigation
+    checks to see of "listingBar" is present and, if not, assumes there are too few results to
+    bother displaying any of the widgets.  But we want the widgets displayed always.  P.O.S.
+    -->
+        <code style='display: none;'>listingBar</code>
         <table class='listing datasetsTable'>
           <thead>
             <tr>
-              <th i18n:translate='ekeKnowledgeTableHeadingDataset'>Dataest</th>
+              <th i18n:translate='ekeKnowledgeTableHeadingDataset'>Dataset</th>
               <th i18n:translate='ekeKnowledgeTableHeadingProtocol'>Associated Protocol</th>
             </tr>
           </thead>

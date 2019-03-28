@@ -33,6 +33,8 @@ _argParser.add_argument('password', help=u"Zope admin password")
 _argParser.add_argument('ldapPassword', help=u"LDAP password")
 
 
+_DATASETS_SUMMARY_URL = u'https://edrn.jpl.nasa.gov/cancerdataexpo/summarizer-data/dataset/@@summary'
+
 _BIOMARKER_DISCLAIMER = u'''<p>The EDRN is involved in researching hundreds of biomarkers. The following is
 a partial list of biomarkers and associated results that are currently available for access and viewing.
 The bioinformatics team at EDRN is currently working with EDRN collaborative groups to capture, curate,
@@ -214,6 +216,11 @@ def _applyFacetsToDatasets(context):
     IFacetedLayout(context).update_layout('faceted_datasets_view')
 
 
+def _setupDatasets(context):
+    _applyFacetsToDatasets(context)
+    context.dsSumDataSource = _DATASETS_SUMMARY_URL
+
+
 _EXTENSION_IDS = [
     'plonetheme.barceloneta:default', 'plone.app.caching:default', 'edrnsite.policy:default'
 ]
@@ -242,7 +249,7 @@ _RDF_FOLDERS = (
     (None, 'eke.knowledge.publicationfolder', u'Publications', u'Items published by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf', u'http://edrn.jpl.nasa.gov/bmdb/rdf/publications'], _applyFacetsToPublications),
     (None, 'eke.knowledge.sitefolder', u'Sites', u'Institutions and PIs in EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/sites/@@rdf'], _setupSites),
     (None, 'eke.knowledge.protocolfolder', u'Protocols', u'Studies pursued by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/protocols/@@rdf'], _null),
-    (None, 'eke.knowledge.datasetfolder', u'Science Data', u'Data collected by EDRN.', [u'https://edrn.nci.nih.gov/miscellaneous-knowledge-system-artifacts/science-data-rdf/at_download/file'], _applyFacetsToDatasets),
+    (None, 'eke.knowledge.datasetfolder', u'Science Data', u'Data collected by EDRN.', [u'https://edrn.nci.nih.gov/miscellaneous-knowledge-system-artifacts/science-data-rdf/at_download/file'], _setupDatasets),
     # TODO: turned off while I debug other issues
     # (None, 'eke.knowledge.biomarkerfolder', u'Biomarkers', u'Indicators for cancer.', [u'https://edrn.jpl.nasa.gov/bmdb/rdf/biomarkers?qastate=all'], _setupBiomarkers)
 )
