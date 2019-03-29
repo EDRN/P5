@@ -170,6 +170,12 @@ Ingesting::
     >>> keys
     ['a-combination-of-muc5ac-and-ca19-9-improves-the-diagnosis-of-pancreatic-cancer-a-multicenter-study', 'association-between-combined-tmprss2-erg-and-pca3-rna-urinary-testing-and-detection-of-aggressive-prostate-cancer', 'early-detection-of-nsclc-with-scfv-selected-against-igm-autoantibody', 'evaluation-of-serum-protein-profiling-by-surface-enhanced-laser-desorption-ionization-time-of-flight-mass-spectrometry-for-the-detection-of-prostate-cancer-i-assessment-of-platform-reproducibility']
 
+The statistical graphics made a comeback::
+
+    >>> browser.open(portalURL + '/publications/@@publication_timeline_report')
+    >>> browser.contents
+    '...<style>...<script>...'
+
 
 Sites
 =====

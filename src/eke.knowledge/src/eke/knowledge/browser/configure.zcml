@@ -35,6 +35,14 @@
         template='templates/dataset_summary_report.pt'
     />
 
+    <!--Reporting graphs for publications -->
+    <browser:page
+        for='*'
+        permission='zope2.Public'
+        name='publication_timeline_report'
+        template='templates/publication_timeline_report.pt'
+    />
+
     <!-- Macros -->
     <browser:page
         for='*'

@@ -46,9 +46,8 @@
                         navigation_root_url context/@@plone_portal_state/navigation_root_url;
                         pas_member context/@@pas_member;">
     <tal:listing condition="batch">
-<!-- Need summarizer -->
-<!--        <center><h4>Publication Timeline Frequency Stats</h4></center> -->
-<!--        <iframe width="100%" height="190px" frameborder="0" src="publication_timeline_report"/> -->
+       <center><h4>Publication Timeline Frequency Stats</h4></center>
+       <iframe width="100%" height="190px" frameborder="0" src="@@publication_timeline_report"/>
         <table class='listing publicationsTable'>
           <thead>
             <tr>
