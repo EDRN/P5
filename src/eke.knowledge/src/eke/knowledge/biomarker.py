@@ -188,7 +188,7 @@ class IBiomarkerBodySystem(IKnowledgeObject, IResearchedObject, IPhasedObject, I
     bodySystem = RelationChoice(
         title=_(u'Organ'),
         description=_(u'The organ for which the biomarker indicates diseases.'),
-        required=True,
+        required=False,
         source=CatalogSource(object_provides=IBodySystem.__identifier__)
     )
     cliaCertification = schema.Bool(
@@ -210,7 +210,7 @@ class IBodySystemStudy(IKnowledgeObject, IResearchedObject):
     protocol = RelationChoice(
         title=_(u'Study'),
         description=_(u'The study or protocol referenced by specific organ with regard to a biomarker.'),
-        required=True,
+        required=False,
         source=CatalogSource(object_provides=IProtocol.__identifier__)
     )
     decisionRule = schema.Text(

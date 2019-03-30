@@ -153,8 +153,8 @@ Publications
     >>> browser.getControl(name='form.buttons.save').click()
     >>> 'publications' in portal.keys()
     True
-    >>> folder = portal['publications']
-    >>> folder.rdfDataSources= [u'testscheme://localhost/rdf/publications1', u'testscheme://localhost/rdf/publications2']
+    >>> publicationsFolder = portal['publications']
+    >>> publicationsFolder.rdfDataSources= [u'testscheme://localhost/rdf/publications1', u'testscheme://localhost/rdf/publications2']
 
 Ingesting::
 
@@ -163,9 +163,9 @@ Ingesting::
     >>> browser.open(portalURL + '/@@ingestRDF')
     >>> browser.contents
     '...RDF Ingest Report...Objects Created (4)...'
-    >>> len(folder.keys())
+    >>> len(publicationsFolder.keys())
     4
-    >>> keys = folder.keys()
+    >>> keys = publicationsFolder.keys()
     >>> keys.sort()
     >>> keys
     ['a-combination-of-muc5ac-and-ca19-9-improves-the-diagnosis-of-pancreatic-cancer-a-multicenter-study', 'association-between-combined-tmprss2-erg-and-pca3-rna-urinary-testing-and-detection-of-aggressive-prostate-cancer', 'early-detection-of-nsclc-with-scfv-selected-against-igm-autoantibody', 'evaluation-of-serum-protein-profiling-by-surface-enhanced-laser-desorption-ionization-time-of-flight-mass-spectrometry-for-the-detection-of-prostate-cancer-i-assessment-of-platform-reproducibility']
@@ -191,9 +191,9 @@ Sites
     >>> browser.getControl(name='form.buttons.save').click()
     >>> 'sites' in portal.keys()
     True
-    >>> folder = portal['sites']
-    >>> folder.rdfDataSources= [u'testscheme://localhost/rdf/sites']
-    >>> folder.peopleDataSources = [u'testscheme://localhost/rdf/people']
+    >>> sitesFolder = portal['sites']
+    >>> sitesFolder.rdfDataSources= [u'testscheme://localhost/rdf/sites']
+    >>> sitesFolder.peopleDataSources = [u'testscheme://localhost/rdf/people']
 
 Ingesting::
 
@@ -202,13 +202,13 @@ Ingesting::
     >>> browser.open(portalURL + '/@@ingestRDF')
     >>> browser.contents
     '...RDF Ingest Report...Objects Created (4)...Objects Updated (2)...'
-    >>> len(folder.keys())
+    >>> len(sitesFolder.keys())
     2
-    >>> keys = folder.keys()
+    >>> keys = sitesFolder.keys()
     >>> keys.sort()
     >>> keys
     ['240-vanderbilt-ingram-cancer-center', '815-h-lee-moffitt-cancer-center-and-research']
-    >>> site = folder['240-vanderbilt-ingram-cancer-center']
+    >>> site = sitesFolder['240-vanderbilt-ingram-cancer-center']
     >>> site.identifier
     u'http://edrn.nci.nih.gov/data/sites/240'
     >>> site.siteID
@@ -248,8 +248,8 @@ Protocols
     >>> browser.getControl(name='form.buttons.save').click()
     >>> 'protocols' in portal.keys()
     True
-    >>> folder = portal['protocols']
-    >>> folder.rdfDataSources= [u'testscheme://localhost/rdf/protocols']
+    >>> protocolsFolder = portal['protocols']
+    >>> protocolsFolder.rdfDataSources= [u'testscheme://localhost/rdf/protocols']
 
 Ingesting::
 
@@ -258,13 +258,13 @@ Ingesting::
     >>> browser.open(portalURL + '/@@ingestRDF')
     >>> browser.contents
     '...RDF Ingest Report...Objects Created (2)...'
-    >>> len(folder.keys())
+    >>> len(protocolsFolder.keys())
     2
-    >>> keys = folder.keys()
+    >>> keys = protocolsFolder.keys()
     >>> keys.sort()
     >>> keys
     ['279-lung-reference-set-a-application-edward', '316-hepatocellular-carcinoma-early-detection']
-    >>> protocol = folder['279-lung-reference-set-a-application-edward']
+    >>> protocol = protocolsFolder['279-lung-reference-set-a-application-edward']
     >>> protocol.description
     u'Sticky'
 
@@ -283,8 +283,8 @@ Science Data
     >>> browser.getControl(name='form.buttons.save').click()
     >>> 'datasets' in portal.keys()
     True
-    >>> folder = portal['datasets']
-    >>> folder.rdfDataSources= [u'testscheme://localhost/rdf/datasets']
+    >>> dataFolder = portal['datasets']
+    >>> dataFolder.rdfDataSources= [u'testscheme://localhost/rdf/datasets']
 
 Ingesting::
 
@@ -293,13 +293,13 @@ Ingesting::
     >>> browser.open(portalURL + '/@@ingestRDF')
     >>> browser.contents
     '...RDF Ingest Report...Objects Created (2)...'
-    >>> len(folder.keys())
+    >>> len(dataFolder.keys())
     2
-    >>> keys = folder.keys()
+    >>> keys = dataFolder.keys()
     >>> keys.sort()
     >>> keys
     ['gstp1-methylation', 'university-of-pittsburg-ovarian-data']
-    >>> dataset = folder['gstp1-methylation']
+    >>> dataset = dataFolder['gstp1-methylation']
     >>> dataset.bodySystemName
     u'Prostate'
 
@@ -325,10 +325,10 @@ First, a folder to hold them all, and in the darkness bind them::
     >>> browser.getControl(name='form.buttons.save').click()
     >>> 'collaborative-groups' in portal.keys()
     True
-    >>> folder = portal['collaborative-groups']
-    >>> folder.title
+    >>> collaborationsFolder = portal['collaborative-groups']
+    >>> collaborationsFolder.title
     u'Collaborative Groups'
-    >>> folder.description
+    >>> collaborationsFolder.description
     u'Some testing collaborative groups.'
 
 Now let's try group workspaces::
@@ -347,7 +347,7 @@ include their special index page::
 
     >>> 'portal-column-two' in browser.contents
     False
-    >>> group = folder['myspace']
+    >>> group = collaborationsFolder['myspace']
     >>> 'index_html' in group.keys()
     True
     >>> group.getDefaultPage()
@@ -391,16 +391,34 @@ Biomarkers
     >>> browser.getControl(name='form.widgets.title').value = u'Biomarkers'
     >>> browser.getControl(name='form.widgets.description').value = u'Some testing biomarkers.'
     >>> browser.getControl(name='form.widgets.ingestEnabled:list').value = True
-    >>> browser.getControl(name='form.widgets.bmoDataSource').value = u'testscheme://localhost/rdf/bmo'
+    >>> browser.getControl(name='form.widgets.bmoDataSource').value = u'testscheme://localhost/rdf/biomarker-organs-a'
     >>> browser.getControl(name='form.widgets.bmuDataSource').value = u'testscheme://localhost/rdf/bmu'
     >>> browser.getControl(name='form.widgets.idDataSource').value = u'https://edrn.jpl.nasa.gov/cancerdataexpo/idsearch'
     >>> browser.getControl(name='form.buttons.save').click()
     >>> 'biomarkers' in portal.keys()
     True
-    >>> folder = portal['biomarkers']
-    >>> folder.rdfDataSources = [u'testscheme://localhost/rdf/biomarkers']
+    >>> biomarkersFolder = portal['biomarkers']
+    >>> biomarkersFolder.rdfDataSources = [u'testscheme://localhost/rdf/biomarker-a']
+    >>> transaction.commit()
 
-Before ingesting, let's make sure the types work::
+Before ingesting, let's make sure the types work, like the folder we just made::
+
+    >>> biomarkersFolder.title
+    u'Biomarkers'
+    >>> biomarkersFolder.description
+    u'Some testing biomarkers.'
+    >>> biomarkersFolder.ingestEnabled
+    True
+    >>> biomarkersFolder.rdfDataSources
+    [u'testscheme://localhost/rdf/biomarker-a']
+    >>> biomarkersFolder.bmoDataSource
+    u'testscheme://localhost/rdf/biomarker-organs-a'
+    >>> biomarkersFolder.bmuDataSource
+    u'testscheme://localhost/rdf/bmu'
+    >>> biomarkersFolder.idDataSource
+    u'https://edrn.jpl.nasa.gov/cancerdataexpo/idsearch'
+
+These folders contain biomarkers (both elemental and panel)::
 
     >>> browser.open(portalURL + '/biomarkers')
     >>> l = browser.getLink(id='eke-knowledge-elementalbiomarker')
@@ -426,14 +444,168 @@ Before ingesting, let's make sure the types work::
     >>> browser.getControl(name='form.widgets.description').value = u'Careful, this one is sticky.'
     >>> browser.getControl(name='form.widgets.identifier').value = u'urn:biomarker:sticky'
     >>> browser.getControl(name='form.buttons.save').click()
-    >>> 'sticky-biomarker' in folder.keys()
+    >>> 'sticky-biomarker' in biomarkersFolder.keys()
     True
-    >>> biomarker = folder['sticky-biomarker']
+    >>> biomarker = biomarkersFolder['sticky-biomarker']
+
+Now let's link it up::
+
+    >>> from zope.component import getUtility
+    >>> from zope.intid.interfaces import IIntIds
+    >>> from z3c.relationfield import RelationValue
+    >>> intIDUtil = getUtility(IIntIds)
+    >>> protocolRVs = [RelationValue(intIDUtil.getId(obj)) for (identifier, obj) in protocolsFolder.contentItems()]
+    >>> pubRVs = [RelationValue(intIDUtil.getId(obj)) for (identifier, obj) in publicationsFolder.contentItems()]
+    >>> biomarker.protocols, biomarker.publications = protocolRVs, pubRVs
+    >>> from zope.lifecycleevent import ObjectModifiedEvent
+    >>> from zope.event import notify
+    >>> notify(ObjectModifiedEvent(biomarker))
+
+And check it out::
+
     >>> biomarker.biomarkerType
     u'Sticky'
     >>> biomarker.shortName
     u'SHRT'
     >>> biomarker.hgncName
     u'SHRT-1'
+    >>> linkedProtocols = [i.to_path for i in biomarker.protocols]
+    >>> linkedProtocols.sort()
+    >>> linkedProtocols
+    ['/plone/protocols/279-lung-reference-set-a-application-edward', '/plone/protocols/316-hepatocellular-carcinoma-early-detection']
+    >>> linkedPubs = [i.to_path for i in biomarker.publications]
+    >>> linkedPubs.sort()
+    >>> linkedPubs
+    ['/plone/publications/a-combination-of-muc5ac-and-ca19-9-improves-the-diagnosis-of-pancreatic-cancer-a-multicenter-study', '/plone/publications/association-between-combined-tmprss2-erg-and-pca3-rna-urinary-testing-and-detection-of-aggressive-prostate-cancer', '/plone/publications/early-detection-of-nsclc-with-scfv-selected-against-igm-autoantibody', '/plone/publications/evaluation-of-serum-protein-profiling-by-surface-enhanced-laser-desorption-ionization-time-of-flight-mass-spectrometry-for-the-detection-of-prostate-cancer-i-assessment-of-platform-reproducibility']
 
-Need to post-form do: protocols, publications, datasets, and maybe bmAliases, and other multi-valued things above.
+Child objects work too::
+
+    >>> browser.open(portalURL + '/biomarkers/sticky-biomarker')
+    >>> l = browser.getLink(id='eke-knowledge-biomarkerbodysystem')
+    >>> l.url.endswith('++add++eke.knowledge.biomarkerbodysystem')
+    True
+    >>> l.click()
+    >>> browser.getControl(name='form.widgets.title').value = u'Colon'
+    >>> browser.getControl(name='form.widgets.description').value = u'Longish organ.'
+    >>> browser.getControl(name='form.widgets.identifier').value = u'urn:biomarker:sticky:colon'
+    >>> browser.getControl(name='form.widgets.qaState').value = u'High'
+    >>> browser.getControl(name='form.widgets.phase').value = u'Laservision'
+    >>> browser.getControl(name='form.widgets.performanceComment').value = u'Oh yeah baby.'
+    >>> browser.getControl(name='form.buttons.save').click()
+    >>> 'colon' in biomarker.keys()
+    True
+    >>> biomarkerBodySystem = biomarker['colon']
+    >>> biomarkerBodySystem.protocols = protocolRVs
+    >>> biomarkerBodySystem.publications = pubRVs
+    >>> notify(ObjectModifiedEvent(biomarkerBodySystem))
+
+Did it work?
+
+    >>> biomarkerBodySystem.qaState
+    u'High'
+    >>> biomarkerBodySystem.phase
+    u'Laservision'
+    >>> biomarkerBodySystem.performanceComment
+    u'Oh yeah baby.'
+    >>> linkedProtocols = [i.to_path for i in biomarkerBodySystem.protocols]
+    >>> linkedProtocols.sort()
+    >>> linkedProtocols
+    ['/plone/protocols/279-lung-reference-set-a-application-edward', '/plone/protocols/316-hepatocellular-carcinoma-early-detection']
+    >>> linkedPubs = [i.to_path for i in biomarkerBodySystem.publications]
+    >>> linkedPubs.sort()
+    >>> linkedPubs
+    ['/plone/publications/a-combination-of-muc5ac-and-ca19-9-improves-the-diagnosis-of-pancreatic-cancer-a-multicenter-study', '/plone/publications/association-between-combined-tmprss2-erg-and-pca3-rna-urinary-testing-and-detection-of-aggressive-prostate-cancer', '/plone/publications/early-detection-of-nsclc-with-scfv-selected-against-igm-autoantibody', '/plone/publications/evaluation-of-serum-protein-profiling-by-surface-enhanced-laser-desorption-ionization-time-of-flight-mass-spectrometry-for-the-detection-of-prostate-cancer-i-assessment-of-platform-reproducibility']
+
+But it can have child objects too::
+
+    >>> browser.open(portalURL + '/biomarkers/sticky-biomarker/colon')
+    >>> l = browser.getLink(id='eke-knowledge-bodysystemstudy')
+    >>> l.url.endswith('++add++eke.knowledge.bodysystemstudy')
+    True
+    >>> l.click()
+    >>> browser.getControl(name='form.widgets.decisionRule').value = u'It rules all right.'
+    >>> browser.getControl(name='form.widgets.title').value = u'Colon Study'
+    >>> browser.getControl(name='form.widgets.description').value = u'A deep study of the colon.'
+    >>> browser.getControl(name='form.widgets.identifier').value = u'urn:biomarker:sticky:colon:colon-study'
+    >>> browser.getControl(name='form.buttons.save').click()
+    >>> 'colon-study' in biomarkerBodySystem.keys()
+    True
+    >>> bodySystemStudy = biomarkerBodySystem['colon-study']
+    >>> myProtocolRV, otherProtocolRVs = protocolRVs[0], protocolRVs[1:]
+    >>> bodySystemStudy.protocol = myProtocolRV
+    >>> bodySystemStudy.protocols = otherProtocolRVs
+    >>> bodySystemStudy.publications = pubRVs
+    >>> notify(ObjectModifiedEvent(bodySystemStudy))
+
+Working? Yes::
+
+    >>> bodySystemStudy.decisionRule
+    u'It rules all right.'
+    >>> bodySystemStudy.title
+    u'Colon Study'
+    >>> bodySystemStudy.protocol.to_path
+    '/plone/protocols/279-lung-reference-set-a-application-edward'
+    >>> linkedProtocols = [i.to_path for i in bodySystemStudy.protocols]
+    >>> linkedProtocols.sort()
+    >>> linkedProtocols
+    ['/plone/protocols/316-hepatocellular-carcinoma-early-detection']
+    >>> linkedPubs = [i.to_path for i in bodySystemStudy.publications]
+    >>> linkedPubs.sort()
+    >>> linkedPubs
+    ['/plone/publications/a-combination-of-muc5ac-and-ca19-9-improves-the-diagnosis-of-pancreatic-cancer-a-multicenter-study', '/plone/publications/association-between-combined-tmprss2-erg-and-pca3-rna-urinary-testing-and-detection-of-aggressive-prostate-cancer', '/plone/publications/early-detection-of-nsclc-with-scfv-selected-against-igm-autoantibody', '/plone/publications/evaluation-of-serum-protein-profiling-by-surface-enhanced-laser-desorption-ionization-time-of-flight-mass-spectrometry-for-the-detection-of-prostate-cancer-i-assessment-of-platform-reproducibility']
+
+Oh but we're not done::
+
+    >>> browser.open(portalURL + '/biomarkers/sticky-biomarker/colon/colon-study')
+    >>> l = browser.getLink(id='eke-knowledge-studystatistics')
+    >>> l.url.endswith('++add++eke.knowledge.studystatistics')
+    True
+    >>> l.click()
+    >>> browser.getControl(name='form.widgets.title').value = u'Statistics for the Colon Study Part 1'
+    >>> browser.getControl(name='form.widgets.description').value = u'See the title.'
+    >>> browser.getControl(name='form.widgets.identifier').value = u'urn:biomarker:sticky:colon:colon-study:stat-1'
+    >>> browser.getControl(name='form.widgets.sensitivity').value = u'12.3'
+    >>> browser.getControl(name='form.widgets.specificity').value = u'3.45'
+    >>> browser.getControl(name='form.widgets.npv').value = u'5.67'
+    >>> browser.getControl(name='form.widgets.ppv').value = u'7.89'
+    >>> browser.getControl(name='form.widgets.prevalence').value = u'0.95'
+    >>> browser.getControl(name='form.widgets.details').value = u'Quite sticky results indeed.'
+    >>> browser.getControl(name='form.widgets.specificAssayType').value = u'The sticky type.'
+    >>> browser.getControl(name='form.buttons.save').click()
+    >>> 'statistics-for-the-colon-study-part-1' in bodySystemStudy.keys()
+    True
+    >>> stats = bodySystemStudy['statistics-for-the-colon-study-part-1']
+    >>> stats.title
+    u'Statistics for the Colon Study Part 1'
+    >>> stats.description
+    u'See the title.'
+    >>> stats.identifier
+    u'urn:biomarker:sticky:colon:colon-study:stat-1'
+    >>> stats.sensitivity
+    12.3
+    >>> stats.specificity
+    3.45
+    >>> stats.npv
+    5.67
+    >>> stats.ppv
+    7.89
+    >>> stats.prevalence
+    0.95
+    >>> stats.details
+    u'Quite sticky results indeed.'
+    >>> stats.specificAssayType
+    u'The sticky type.'
+
+OK that's enough. RDF is the order of the day::
+
+    >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'protocols', u'datasets', u'biomarkers']
+    >>> transaction.commit()
+    >>> browser.open(portalURL + '/@@ingestRDF')
+    >>> browser.contents
+    '...RDF Ingest Report...Objects Created (2)...'
+    >>> len(biomarkersFolder.keys())
+    2
+    >>> keys = biomarkersFolder.keys()
+    >>> keys.sort()
+    >>> keys
+    ['a', 'b']

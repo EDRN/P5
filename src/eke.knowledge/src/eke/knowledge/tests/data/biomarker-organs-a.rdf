@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bmdb="http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#">
+    <bmdb:BiomarkerOrganData rdf:about="http://edrn/bmdb/a1/o1">
+        <bmdb:URN>http://edrn/bmdb/a1/o1</bmdb:URN>
+        <bmdb:Biomarker rdf:resource='http://edrn/bmdb/a1'/>
+        <bmdb:Description>Action on the rectum is amazing.</bmdb:Description>
+        <bmdb:PerformanceComment>The biomarker failed to perform as expected.</bmdb:PerformanceComment>
+        <bmdb:Organ>Rectum</bmdb:Organ>
+        <bmdb:Phase>1</bmdb:Phase>
+        <bmdb:QAState>Accepted</bmdb:QAState>
+        <bmdb:AccessGrantedTo rdf:resource='ldap://edrn/groups/g1'/>
+        <bmdb:certification rdf:resource='http://www.cms.gov/Regulations-and-Guidance/Legislation/CLIA/index.html'/>
+        <bmdb:hasBiomarkerOrganStudyDatas>
+            <rdf:Bag>
+                <rdf:li rdf:resource='http://edrn/bmdb/a1/o1#s1'/>
+            </rdf:Bag>
+        </bmdb:hasBiomarkerOrganStudyDatas>
+        <bmdb:referencedInPublication rdf:resource='http://is.gd/q6mS'/>
+    </bmdb:BiomarkerOrganData>
+    <bmdb:BiomarkerOrganStudyData rdf:about='http://edrn/bmdb/a1/o1#s1'>
+        <bmdb:referencesStudy rdf:resource='http://swa.it/edrn/ps' />
+        <bmdb:DecisionRule>A sample decision rule</bmdb:DecisionRule>
+        <bmdb:SensitivityDatas>
+            <rdf:Bag>
+                <rdf:li rdf:resource='http://tumor.jpl.nasa.gov/bmdb/biomarkers/organs/19/40/sensitivity-data-0' />
+                <rdf:li rdf:resource='http://tumor.jpl.nasa.gov/bmdb/biomarkers/organs/19/40/sensitivity-data-1' />
+            </rdf:Bag>
+        </bmdb:SensitivityDatas>
+    </bmdb:BiomarkerOrganStudyData>
+    <bmdb:SensitivityData rdf:about='http://tumor.jpl.nasa.gov/bmdb/biomarkers/organs/19/40/sensitivity-data-0'>
+        <bmdb:SensSpecDetail>The first one</bmdb:SensSpecDetail>
+        <bmdb:Sensitivity>1.0</bmdb:Sensitivity>
+        <bmdb:Specificity>2.0</bmdb:Specificity>
+        <bmdb:Prevalence>3.0</bmdb:Prevalence>
+        <bmdb:NPV>4.0</bmdb:NPV>
+        <bmdb:PPV>5.0</bmdb:PPV>
+        <bmdb:SpecificAssayType>Sample specific assay type details</bmdb:SpecificAssayType>
+    </bmdb:SensitivityData>
+    <bmdb:SensitivityData rdf:about='http://tumor.jpl.nasa.gov/bmdb/biomarkers/organs/19/40/sensitivity-data-1'>
+        <bmdb:SensSpecDetail>The second two</bmdb:SensSpecDetail>
+        <bmdb:Sensitivity>6.0</bmdb:Sensitivity>
+        <bmdb:Specificity>7.0</bmdb:Specificity>
+        <bmdb:Prevalence>8.0</bmdb:Prevalence>
+        <bmdb:NPV>9.0</bmdb:NPV>
+        <bmdb:PPV>10.0</bmdb:PPV>
+        <bmdb:SpecificAssayType>Sample specific assay type details</bmdb:SpecificAssayType>
+    </bmdb:SensitivityData>
+</rdf:RDF>

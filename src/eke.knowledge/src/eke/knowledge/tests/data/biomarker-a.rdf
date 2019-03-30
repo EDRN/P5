@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bmdb="http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#">
+    <bmdb:Biomarker rdf:about='http://edrn/bmdb/a1'>
+        <bmdb:Title>Apogee 1</bmdb:Title>
+        <bmdb:HgncName>APG1</bmdb:HgncName>
+        <bmdb:ShortName>A1</bmdb:ShortName>
+        <bmdb:BiomarkerID>http://edrn/bmdb/a1</bmdb:BiomarkerID>
+        <bmdb:URN>urn:edrn:bmdb:bm1</bmdb:URN>
+        <bmdb:IsPanel>0</bmdb:IsPanel>
+        <bmdb:Description>A sticky bio-marker.</bmdb:Description>
+        <bmdb:QAState>Accepted</bmdb:QAState>
+        <bmdb:Phase>3</bmdb:Phase>
+        <bmdb:Security>Public</bmdb:Security>
+        <bmdb:Type>Colloidal</bmdb:Type>
+        <bmdb:Alias>Approach</bmdb:Alias>
+        <bmdb:Alias>Advent</bmdb:Alias>
+        <bmdb:Alias>Bigo</bmdb:Alias>
+        <bmdb:memberOfPanel rdf:resource='http://edrn/bmdb/p1'/>
+        <bmdb:AccessGrantedTo rdf:resource='ldap://edrn/groups/g1' />
+        <bmdb:AssociatedDataset rdf:resource='urn:edrn:top-secret-data'/>
+        <bmdb:indicatorForOrgan rdf:resource='http://edrn/bmdb/a1/o1' />
+        <bmdb:hasBiomarkerStudyDatas>
+            <rdf:Bag>
+                <rdf:li>
+                    <bmdb:BiomarkerStudyData rdf:about='http://edrn/bmdb/a1/s1'>
+                        <bmdb:referencesStudy rdf:resource='http://swa.it/edrn/ps' />
+                        <bmdb:SensitivityDatas>
+                            <rdf:Bag>
+                                <rdf:li>
+                                    <bmdb:SensitivityData rdf:about='http://edrn/bmdb/a1/s1/sd-0'>
+                                        <bmdb:SensSpecDetail>Full bodied</bmdb:SensSpecDetail>
+                                        <bmdb:Sensitivity>97</bmdb:Sensitivity>
+                                        <bmdb:Specificity>48</bmdb:Specificity>
+                                        <bmdb:Prevalence>43</bmdb:Prevalence>
+                                        <bmdb:NPV>12</bmdb:NPV>
+                                        <bmdb:PPV>14</bmdb:PPV>
+                                    </bmdb:SensitivityData>
+                                </rdf:li>
+                            </rdf:Bag>
+                        </bmdb:SensitivityDatas>
+                    </bmdb:BiomarkerStudyData>
+                </rdf:li>
+                <rdf:li>
+                    <bmdb:BiomarkerStudyData rdf:about='http://edrn/bmdb/a1/s1'>
+                        <bmdb:referencesStudy rdf:resource='http://swa.it/edrn/so' />
+                    </bmdb:BiomarkerStudyData>
+                </rdf:li>
+            </rdf:Bag>
+        </bmdb:hasBiomarkerStudyDatas>
+        <bmdb:referencedInPublication rdf:resource='http://is.gd/pVKq' />
+        <bmdb:referencesResource rdf:resource='http://yahoo.com/' />
+    </bmdb:Biomarker>
+    <bmdb:Biomarker rdf:about='http://edrn/bmdb/p1'>
+        <bmdb:Title>Panel 1</bmdb:Title>
+        <bmdb:ShortName>P1</bmdb:ShortName>
+        <bmdb:BiomarkerID>http://edrn/bmdb/p1</bmdb:BiomarkerID>
+        <bmdb:URN>urn:edrn:bmdb:p1</bmdb:URN>
+        <bmdb:IsPanel>1</bmdb:IsPanel>
+        <bmdb:Description>A very sticky panel.</bmdb:Description>
+        <bmdb:QAState>Accepted</bmdb:QAState>
+        <bmdb:Phase>4</bmdb:Phase>
+        <bmdb:Security>Public</bmdb:Security>
+        <bmdb:Type>Proteinesque</bmdb:Type>
+        <bmdb:Alias>Group 1</bmdb:Alias>
+        <bmdb:Alias>Composite 1</bmdb:Alias>
+        <bmdb:hasBiomarker rdf:resource='http://edrn/bmdb/a1' />
+    </bmdb:Biomarker>
+</rdf:RDF>

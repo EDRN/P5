@@ -30,7 +30,7 @@ class IBiomarkerFolder(IKnowledgeFolder):
         required=True
     )
     idDataSource = schema.TextLine(
-        title=_(u'biomarker id external resource API link'),
+        title=_(u'Biomarker ID External Resource API Link'),
         description=_(u'URL to a api that allows querying biomarker ids for links and alternative ids of external resources.'),
         required=True
     )
@@ -46,9 +46,7 @@ class IBiomarkerFolder(IKnowledgeFolder):
     )
 
 
-
 class BiomarkerIngestor(Ingestor):
     grok.context(IBiomarkerFolder)
     def getInterfaceForContainedObjects(self):
         return None
-
