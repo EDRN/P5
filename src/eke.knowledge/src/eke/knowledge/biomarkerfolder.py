@@ -4,38 +4,39 @@ u'''Biomarker folder'''
 
 from . import _
 from .base import Ingestor
+from .biomarker import IBiomarker, IElementalBiomarker, IBiomarkerPanel, IBiomarkerBodySystem, IBodySystemStudy, IStudyStatistics
 from .bodysystem import IBodySystem
-from .biomarker import IBiomarker, IElementalBiomarker, IBiomarkerPanel, IBiomarkerBodySystem
-from .knowledgefolder import IKnowledgeFolder, KnowledgeFolderView
+from .knowledgefolder import IKnowledgeFolder
 from .utils import IngestConsequences, publish
 from Acquisition import aq_inner
 from five import grok
 from plone.dexterity.utils import createContentInContainer
 from plone.i18n.normalizer.interfaces import IIDNormalizer
-from plone.memoize.view import memoize
 from z3c.relationfield import RelationValue
 from zope import schema
 from zope.component import getUtility, getMultiAdapter
 from zope.intid.interfaces import IIntIds
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
-import urlparse, logging, plone.api, rdflib, dublincore
+import logging, plone.api, rdflib, uuid
 
 _logger = logging.getLogger(__name__)
 
 # Specific URIs
-_organPredicateURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#Organ')
-_bmOrganDataTypeURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#BiomarkerOrganData')
-_accessPredicateURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#AccessGrantedTo')
-_biomarkerTypeURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#Biomarker')
-_isPanelPredicateURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#IsPanel')
-_bmTitlePredicateURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#Title')
-_hgncPredicateURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#HgncName')
-_hasBiomarkerStudyDatasPredicateURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#hasBiomarkerStudyDatas')
-_referencesStudyPredicateURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#referencesStudy')
-_memberOfPanelPredicateURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#memberOfPanel')
-_biomarkerPredicateURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#Biomarker')
-_certificationPredicateURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#certification')
+_accessPredicateURI                      = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#AccessGrantedTo')
+_biomarkerPredicateURI                   = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#Biomarker')
+_biomarkerTypeURI                        = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#Biomarker')
+_bmOrganDataTypeURI                      = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#BiomarkerOrganData')
+_bmTitlePredicateURI                     = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#Title')
+_certificationPredicateURI               = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#certification')
+_hasBiomarkerOrganStudyDatasPredicateURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#hasBiomarkerOrganStudyDatas')
+_hasBiomarkerStudyDatasPredicateURI      = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#hasBiomarkerStudyDatas')
+_hgncPredicateURI                        = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#HgncName')
+_isPanelPredicateURI                     = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#IsPanel')
+_memberOfPanelPredicateURI               = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#memberOfPanel')
+_organPredicateURI                       = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#Organ')
+_referencesStudyPredicateURI             = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#referencesStudy')
+_sensitivityDatasPredicateURI            = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#SensitivityDatas')
 
 # Certification URIs
 _cliaCertificationURI = rdflib.URIRef(u'http://www.cms.gov/Regulations-and-Guidance/Legislation/CLIA/index.html')
@@ -58,8 +59,15 @@ _biomarkerPredicates = {
     predicateURIBase + u'ShortName': ('shortName', False),
     predicateURIBase + u'Alias': ('bmAliases', False),
     predicateURIBase + u'PerformanceComment': ('performanceComment', False),
-    predicateURIBase + u'DecisionRule': ('decisionRule', False),
     predicateURIBase + u'Type': ('biomarkerType', False),
+
+    # For biomarker-body-systems
+    predicateURIBase + u'PerformanceComment': ('performanceComment', False),
+
+    # For body-system-studies
+    predicateURIBase + u'DecisionRule': ('decisionRule', False),
+
+    # For study-stats
     predicateURIBase + u'Sensitivity': ('sensitivity', False),
     predicateURIBase + u'Specificity': ('specificity', False),
     predicateURIBase + u'NPV': ('npv', False),
@@ -67,10 +75,17 @@ _biomarkerPredicates = {
     predicateURIBase + u'Prevalence': ('prevalence', False),
     predicateURIBase + u'SensSpecDetail': ('details', False),
     predicateURIBase + u'SpecificAssayType': ('specificAssayType', False),
-
-    # For biomarker-body-systems
-    predicateURIBase + u'PerformanceComment': ('performanceComment', False),
 }
+
+
+def flatten(l):
+    u'''Flatten a list.'''
+    for i in l:
+        if isinstance(i, list):
+            for j in flatten(i):
+                yield j
+        else:
+            yield i
 
 
 class IBiomarkerFolder(IKnowledgeFolder):
@@ -143,6 +158,88 @@ class BiomarkerIngestor(Ingestor):
                     for protocol in protocols:
                         self._addBiomarkerToProtocol(biomarkerObj, protocol)
             biomarkerObj.protocols = protocolRVs
+    def addStatistics(self, bodySystemStudy, bags, statements):
+        # Gather all the URIs
+        sensitivityURIs = []
+        for bag in bags:
+            preds = statements[bag]
+            del preds[rdflib.RDF.term('type')]
+            sensitivityURIs.extend(flatten(preds.values()))
+        # For each set of statistics...
+        for sensitivityURI in sensitivityURIs:
+            predicates = statements[sensitivityURI]
+            stats = createContentInContainer(
+                bodySystemStudy,
+                'eke.knowledge.studystatistics',
+                id=unicode(uuid.uuid1().hex),
+                title=sensitivityURI
+            )
+            # TODO: refactor here
+            for predicate, (fieldName, isReference) in _biomarkerPredicates.iteritems():
+                values = predicates.get(rdflib.URIRef(predicate))
+                if not values: continue
+                values = [i.toPython() for i in values]
+                try:
+                    self.setValue(stats, 'eke.knowledge.studystatistics',
+                        IStudyStatistics, predicate, _biomarkerPredicates, values)
+                except schema.ValidationError:
+                    _logger.exception(u'RDF data "%r" for studystatistics field "%s" invalid; skipping', values, predicate)
+                    continue
+    def addStudiesToOrgan(self, biomarkerBodySystem, bags, statements):
+        catalog = plone.api.portal.get_tool('portal_catalog')
+        normalize = getUtility(IIDNormalizer).normalize
+        idUtil = getUtility(IIntIds)
+        bmStudyDataURIs = []
+        # The RDF may contain an empty <hasBiomarkerStudyDatas/>, which means that
+        # there will be just an empty Literal '' in the bags list (which will be a
+        # one item list). In that case, don't bother adding studies.
+        if len(bags) == 1 and unicode(bags[0]) == u'': return
+        for bag in bags:
+            preds = statements[bag]
+            del preds[rdflib.RDF.term('type')]
+            bmStudyDataURIs.extend(flatten(preds.values()))
+        for studyURI in bmStudyDataURIs:
+            bmStudyDataPredicates = statements[studyURI]
+            if _referencesStudyPredicateURI not in bmStudyDataPredicates: continue
+            results = catalog(identifier=[unicode(i) for i in bmStudyDataPredicates[_referencesStudyPredicateURI]])
+            protocols = [i.getObject() for i in results]
+            if len(protocols) < 1:
+                _logger.warn(
+                    u'Protocol "%s" not found for biomarker body system "%r"',
+                    bmStudyDataPredicates[_referencesStudyPredicateURI][0],
+                    biomarkerBodySystem.identifier
+                )
+                continue
+            identifier = unicode(protocols[0].identifier.split(u'/')[-1]) + u'-' + unicode(normalize(protocols[0].title))
+            bodySystemStudy = None
+            if identifier not in biomarkerBodySystem.keys():
+                bodySystemStudy = createContentInContainer(
+                    biomarkerBodySystem,
+                    'eke.knowledge.bodysystemstudy',
+                    title=protocols[0].title,
+                    description=protocols[0].description,
+                    identifier=identifier
+                )
+            else:
+                bodySystemStudy = biomarkerBodySystem[identifier]
+            # TODO: REFACTOR HERE?
+            for predicate, (fieldName, isReference) in _biomarkerPredicates.iteritems():
+                values = bmStudyDataPredicates.get(rdflib.URIRef(predicate))
+                if not values: continue
+                values = [i.toPython() for i in values]
+                try:
+                    self.setValue(bodySystemStudy, 'eke.knowledge.bodysystemstudy',
+                        IBodySystemStudy, predicate, _biomarkerPredicates, values)
+                except schema.ValidationError:
+                    _logger.exception(u'RDF data "%r" for bodysystemstudy field "%s" invalid; skipping', values, predicate)
+                    continue
+            bodySystemStudy.protocol = RelationValue(idUtil.getId(protocols[0]))
+            # TODO:
+            # self._addBiomarkerToProtocol(aq_parent(aq_inner(aq_parent(aq_inner(bodySystemStudy)))), protocols[0])
+            # TODO:
+            if _sensitivityDatasPredicateURI in bmStudyDataPredicates:
+                bags = bmStudyDataPredicates[_sensitivityDatasPredicateURI]
+                self.addStatistics(bodySystemStudy, bags, statements)
     def addOrganSpecificInformation(self, biomarkers, statements):
         # biomarkers dict of uri to biomarker obj
         # statements = biomarker-organ statements s/p/o
@@ -178,7 +275,9 @@ class BiomarkerIngestor(Ingestor):
                     _logger.exception(u'RDF data "%r" for biomarker field "%s" invalid; skipping', values, predicate)
                     continue
             # TODO: addBiomarkerToOrganGroup
-            # TODO: _hasBiomarkerOrganStudyDatasPredicateURI
+            if _hasBiomarkerOrganStudyDatasPredicateURI in predicates:
+                bags = predicates[_hasBiomarkerOrganStudyDatasPredicateURI]
+                self.addStudiesToOrgan(biomarkerBodySystem, bags, statements)
             certificationURIs = predicates.get(_certificationPredicateURI, [])
             for certificationURI in certificationURIs:
                 if certificationURI == _cliaCertificationURI:

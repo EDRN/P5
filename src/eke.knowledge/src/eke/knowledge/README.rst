@@ -380,6 +380,43 @@ But an unprivileged user does get it (some day)::
     .. '...If you are a member of this group...log in...'
 
 
+Miscellaneous Resources
+=======================
+
+    >>> browser.open(portalURL)
+    >>> l = browser.getLink(id='eke-knowledge-resourcefolder')
+    >>> l.url.endswith('++add++eke.knowledge.resourcefolder')
+    True
+    >>> l.click()
+    >>> browser.getControl(name='form.widgets.title').value = u'Resources'
+    >>> browser.getControl(name='form.widgets.description').value = u'Some testing resources.'
+    >>> browser.getControl(name='form.widgets.ingestEnabled:list').value = True
+    >>> browser.getControl(name='form.buttons.save').click()
+    >>> 'resources' in portal.keys()
+    True
+    >>> resourcesFolder = portal['resources']
+    >>> resourcesFolder.rdfDataSources= [u'testscheme://localhost/rdf/resources']
+
+Ingesting::
+
+    >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'protocols', u'datasets', u'resources']
+    >>> transaction.commit()
+    >>> browser.open(portalURL + '/@@ingestRDF')
+    >>> browser.contents
+    '...RDF Ingest Report...Objects Created (2)...'
+    >>> len(resourcesFolder.keys())
+    2
+    >>> keys = resourcesFolder.keys()
+    >>> keys.sort()
+    >>> keys
+    ['http-google-com', 'http-yahoo-com']
+    >>> resource = resourcesFolder['http-google-com']
+    >>> resource.title
+    u'A search engine'
+    >>> resource.identifier
+    u'http://google.com/'
+
+
 Biomarkers
 ==========
 
@@ -582,15 +619,15 @@ Oh but we're not done::
     >>> stats.identifier
     u'urn:biomarker:sticky:colon:colon-study:stat-1'
     >>> stats.sensitivity
-    12.3
+    u'12.3'
     >>> stats.specificity
-    3.45
+    u'3.45'
     >>> stats.npv
-    5.67
+    u'5.67'
     >>> stats.ppv
-    7.89
+    u'7.89'
     >>> stats.prevalence
-    0.95
+    u'0.95'
     >>> stats.details
     u'Quite sticky results indeed.'
     >>> stats.specificAssayType
@@ -598,7 +635,7 @@ Oh but we're not done::
 
 OK that's enough. RDF is the order of the day::
 
-    >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'protocols', u'datasets', u'biomarkers']
+    >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'biomarkers']
     >>> transaction.commit()
     >>> browser.open(portalURL + '/@@ingestRDF')
     >>> browser.contents
@@ -608,4 +645,127 @@ OK that's enough. RDF is the order of the day::
     >>> keys = biomarkersFolder.keys()
     >>> keys.sort()
     >>> keys
-    ['a', 'b']
+    ['apg1', 'panel-1']
+    >>> a1 = biomarkersFolder['apg1']
+    >>> a1.title
+    u'Apogee 1'
+    >>> a1.hgncName
+    u'APG1'
+    >>> a1.description
+    u'A sticky bio-marker.'
+    >>> a1.shortName
+    u'A1'
+    >>> u'Approach' in a1.bmAliases, u'Advent' in a1.bmAliases, u'Bigo' in a1.bmAliases
+    (True, True, True)
+    >>> a1.biomarkerType
+    u'Colloidal'
+    >>> a1.identifier
+    u'http://edrn/bmdb/a1'
+    >>> a1.publications[0].to_object.title
+    u'A Combination of MUC5AC and CA19-9 Improves the Diagnosis of Pancreatic Cancer: A Multicenter Study.'
+    >>> a1.resources[0].to_object.title
+    u'A web index'
+    >>> a1.datasets[0].to_object.title
+    u'GSTP1 Methylation'
+    >>> a1.qaState
+    u'Accepted'
+    >>> o1 = a1['rectum']
+    >>> o1.title
+    u'Rectum'
+    >>> o1.description
+    u'Action on the rectum is amazing.'
+    >>> o1.performanceComment
+    u'The biomarker failed to perform as expected.'
+    >>> o1.bodySystem.to_object.title
+    u'Rectum'
+    >>> o1.cliaCertification
+    True
+    >>> o1.fdaCertification
+    False
+    >>> o1.phase
+    u'1'
+    >>> o1.qaState
+    u'Accepted'
+    >>> o1.identifier
+    u'http://edrn/bmdb/a1/o1'
+    >>> o1.publications[0].to_object.title
+    u'A Combination of MUC5AC and CA19-9 Improves the Diagnosis of Pancreatic Cancer: A Multicenter Study.'
+    >>> o1.keys()
+    ['lung-reference-set-a-application-edward-hirschowitz-university-of-kentucky-2009']
+    >>> s1 = o1['lung-reference-set-a-application-edward-hirschowitz-university-of-kentucky-2009']
+    >>> s1.protocol.to_object.title
+    u'Lung Reference Set A Application:  Edward Hirschowitz - University of Kentucky (2009)'
+    >>> s1.decisionRule
+    u'A sample decision rule'
+    >>> s1.phase
+    u'1'
+    >>> for i in s1.objectIds():
+    ...     stats = s1[i]
+    ...     stats.sensitivity in (u'1.0', u'6.0')
+    ...     True
+    ...     stats.specificity in (u'2.0', u'7.0')
+    ...     True
+    ...     stats.npv in (u'4.0', u'9.0')
+    ...     True
+    ...     stats.ppv in (u'5.0', u'10.0')
+    ...     True
+    ...     stats.prevalence in (u'3.0', u'8.0')
+    ...     True
+    ...     stats.details in ('The first one', 'The second two')
+    ...     True
+    ...     stats.specificAssayType == 'Sample specific assay type details'
+    True
+    True
+    True
+    True
+    True
+    True
+    True
+    True
+    True
+    True
+    True
+    True
+    True
+    True
+    True
+    True
+    True
+    True
+    True
+    True
+    True
+    True
+    True
+    True
+    True
+    True
+    >>> panel = biomarkersFolder['panel-1']
+    >>> panel.title
+    u'Panel 1'
+    >>> panel.shortName
+    u'P1'
+    >>> panel.identifier
+    u'http://edrn/bmdb/p1'
+    >>> panel.description
+    u'A very sticky panel.'
+    >>> panel.members[0].to_object.title
+    u'Apogee 1'
+
+
+
+
+.. These will come later
+    .. >>> a1.geneName
+    .. u'APG1'
+    .. >>> a1.uniProtAC
+    .. u'P18847'
+    .. >>> a1.mutCount
+    .. u'12'
+    .. >>> a1.pmidCount
+    .. u'8'
+    .. >>> a1.cancerDOCount
+    .. u'11'
+    .. >>> a1.affProtFuncSiteCount
+    .. '0'
+

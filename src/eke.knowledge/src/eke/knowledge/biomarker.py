@@ -224,27 +224,27 @@ class IBodySystemStudy(IKnowledgeObject, IResearchedObject):
 
 class IStudyStatistics(IKnowledgeObject):
     '''Statistician-friendly statistics.'''
-    sensitivity = schema.Float(
+    sensitivity = schema.TextLine(
         title=_(u'Sensitivity'),
         description=_(u'Proportion of actual positives that are correctly identified.'),
         required=False
     )
-    specificity = schema.Float(
+    specificity = schema.TextLine(
         title=_(u'Specificity'),
         description=_(u'Proportion of actual negatives that are correctly identified.'),
         required=False
     )
-    npv = schema.Float(
+    npv = schema.TextLine(
         title=_(u'NPV'),
         description=_(u'Ratio of true negatives to combined true and false negatives.'),
         required=False
     )
-    ppv = schema.Float(
+    ppv = schema.TextLine(
         title=_(u'PPV'),
         description=_(u'Ratio of true positives to combined true and false positives.'),
         required=False
     )
-    prevalence = schema.Float(
+    prevalence = schema.TextLine(
         title=_(u'Prevalence'),
         description=_(u'A percentage.'),
         required=False
