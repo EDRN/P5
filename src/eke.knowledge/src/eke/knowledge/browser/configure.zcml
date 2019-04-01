@@ -27,7 +27,7 @@
         permission='cmf.ManagePortal'
     />
 
-    <!--Reporting graphs for datasets -->
+    <!-- Reporting graphs for datasets -->
     <browser:page
         for='*'
         permission='zope2.Public'
@@ -35,13 +35,22 @@
         template='templates/dataset_summary_report.pt'
     />
 
-    <!--Reporting graphs for publications -->
+    <!-- Reporting graphs for publications -->
     <browser:page
         for='*'
         permission='zope2.Public'
         name='publication_timeline_report'
         template='templates/publication_timeline_report.pt'
     />
+
+    <!-- Reporting graphs for biomarkers -->
+    <browser:page
+        for='*'
+        permission='zope2.Public'
+        name='biomarker_summary_report'
+        template='templates/biomarker_summary_report.pt'
+    />
+
 
     <!-- Macros -->
     <browser:page

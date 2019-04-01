@@ -18,7 +18,7 @@ from zope.component import getUtility, getMultiAdapter
 from zope.intid.interfaces import IIntIds
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
-import logging, plone.api, rdflib, uuid
+import logging, plone.api, rdflib, uuid, contextlib, urllib2
 
 _logger = logging.getLogger(__name__)
 
@@ -105,11 +105,16 @@ class IBiomarkerFolder(IKnowledgeFolder):
         description=_(u'URL to a api that allows querying biomarker ids for links and alternative ids of external resources.'),
         required=True
     )
-    # dataSummary = schema.TextLine(
-    #     title=_(u'Biomarker Statistics'),
-    #     description=_(u'Biomarker statistics.'),
-    #     required=False
-    # )
+    bmSumDataSource = schema.TextLine(
+        title=_(u'Summary Data URL'),
+        description=_(u'URL to summary data in JSON format for biomarkers.'),
+        required=False,
+    )
+    dataSummary = schema.TextLine(
+        title=_(u'Biomarker Statistics'),
+        description=_(u'Data for biomarker statistical graphics.'),
+        required=False
+    )
     disclaimer = schema.Text(
         title=_(u'Disclaimer'),
         description=_(u'Legal disclaimer to display on Biomarker Folder pages.'),
@@ -284,6 +289,10 @@ class BiomarkerIngestor(Ingestor):
                     biomarkerBodySystem.cliaCertification = True
                 elif certificationURI == _fdaCeritificationURI:
                     biomarkerBodySystem.fdaCertification = True
+    def getSummaryData(self, source):
+        # This could be refactored with several other *folder.py files
+        with contextlib.closing(urllib2.urlopen(source)) as bytestring:
+            return bytestring.read()
     def ingest(self):
         request = plone.api.portal.get().REQUEST
         normalize = getUtility(IIDNormalizer).normalize
@@ -339,8 +348,21 @@ class BiomarkerIngestor(Ingestor):
         # Add organ-specific information
         organSpecificStatements = self.readRDF(context.bmoDataSource)
         self.addOrganSpecificInformation(newBiomarkers, organSpecificStatements)
+        if context.bmSumDataSource:
+            context.dataSummary = self.getSummaryData(context.bmSumDataSource)
         publish(context)
         return IngestConsequences(newBiomarkers.values(), [], [])
+
+
+class BiomarkerSummary(grok.View):
+    grok.context(IBiomarkerFolder)
+    grok.require('zope2.View')
+    grok.name('summary')
+    def render(self):
+        context = aq_inner(self.context)
+        self.request.response.setHeader('Content-type', 'application/json; charset=utf-8')
+        self.request.response.setHeader('Content-Transfer-Encoding', '8bit')
+        return context.dataSummary
 
 
 class BodySystemsVocabulary(object):
