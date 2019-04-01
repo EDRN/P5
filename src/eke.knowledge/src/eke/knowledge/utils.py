@@ -24,7 +24,7 @@ class IngestConsequences(object):
     def __repr__(self):
         return '{}(created={},updated={},deleted={},statements={})'.format(
             self.__class__.__name__,
-            len(self.updated),
+            len(self.created),
             len(self.updated),
             len(self.deleted),
             len(self.statements)

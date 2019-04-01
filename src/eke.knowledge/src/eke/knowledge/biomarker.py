@@ -4,6 +4,7 @@ u'''Biomarkers'''
 
 from . import _
 from .bodysystem import IBodySystem
+from .dataset import IDataset
 from .knowledgeobject import IKnowledgeObject
 from .protocol import IProtocol
 from .publication import IPublication
@@ -68,13 +69,14 @@ class IResearchedObject(Interface):
             source=CatalogSource(object_provides=IKnowledgeObject.__identifier__)
         )
     )
-    datasets = schema.List(
+    datasets = RelationList(
         title=_(u'Datasets'),
         description=_(u'Datasets providing measured scientific bases for this biomarker.'),
         required=False,
-        value_type=schema.TextLine(
+        value_type=RelationChoice(
             title=_(u'Dataset'),
-            description=_(u'Dataset providing a measured scientific basis for this biomarker.'),
+            description=_(u'A single dataset providing a measured scientific basis for this biomarker.'),
+            source=CatalogSource(object_provides=IDataset.__identifier__)
         )
     )
 
@@ -188,7 +190,7 @@ class IBiomarkerBodySystem(IKnowledgeObject, IResearchedObject, IPhasedObject, I
     bodySystem = RelationChoice(
         title=_(u'Organ'),
         description=_(u'The organ for which the biomarker indicates diseases.'),
-        required=True,
+        required=False,
         source=CatalogSource(object_provides=IBodySystem.__identifier__)
     )
     cliaCertification = schema.Bool(
@@ -210,7 +212,7 @@ class IBodySystemStudy(IKnowledgeObject, IResearchedObject):
     protocol = RelationChoice(
         title=_(u'Study'),
         description=_(u'The study or protocol referenced by specific organ with regard to a biomarker.'),
-        required=True,
+        required=False,
         source=CatalogSource(object_provides=IProtocol.__identifier__)
     )
     decisionRule = schema.Text(

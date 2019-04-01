@@ -50,6 +50,12 @@
     </index>
     <column value='bodySystemName'/>
 
+    <!-- Display of protocol in dataset facet table -->
+    <index name='protocolName' meta_type='FieldIndex'>
+        <indexed_attr value='protocolName' />
+    </index>
+    <column value='protocolName'/>
+
     <!-- Display of proposal text of ISite -->
     <index name='proposal' meta_type='ZCTextIndex'>
         <indexed_attr value='proposal' />

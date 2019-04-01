@@ -33,13 +33,16 @@ _argParser.add_argument('password', help=u"Zope admin password")
 _argParser.add_argument('ldapPassword', help=u"LDAP password")
 
 
+_DATASETS_SUMMARY_URL = u'https://edrn.jpl.nasa.gov/cancerdataexpo/summarizer-data/dataset/@@summary'
+_PUBLICATIONS_SUMMARY_URL = u'https://edrn.jpl.nasa.gov/cancerdataexpo/summarizer-data/publication/@@summary'
+
 _BIOMARKER_DISCLAIMER = u'''<p>The EDRN is involved in researching hundreds of biomarkers. The following is
 a partial list of biomarkers and associated results that are currently available for access and viewing.
 The bioinformatics team at EDRN is currently working with EDRN collaborative groups to capture, curate,
 review, and post the results as it is available. EDRN also provides secure access to additional biomarker
 information not available to the public that is currently under review by EDRN research groups. If you have
 access to this information, please ensure that you are logged in. If you are unsure or would like access,
-please <a href="contact-info">contact the operator</a> for more information.</p>
+please <a href="mailto:ic-portal@jpl.nasa.gov">contact the operator</a> for more information.</p>
 '''
 _QUICKLINKS_BODY = u'''<div class='edrnQuickLinks'>
     <ul id='edrn-quicklinks'>
@@ -102,11 +105,63 @@ _QUICKLINKS_BODY = u'''<div class='edrnQuickLinks'>
     </ul>
 </div>
 '''
+_BLANK_UIDS = {
+    u'advocates': u'Unknown',
+    u'docs': u'Unknown',
+    u'funding-opportunities': u'Unknown',
+    u'informatics': u'Unknown',
+    u'network-consulting-team': u'Unknown',
+    u'sites': u'Unknown',
+}
 
 
 def _null(context):
     u'''Do noting with the given context object. Must be defined before _RDF_FOLDERS below.'''
     pass
+
+
+def _applyFacetsToBiomarkers(context):
+    u'''Faceted navigation on biomarkers. Must be defined before _RDF_FOLDERS below.'''
+    portal = plone.api.portal.get()
+    request = portal.REQUEST
+    subtyper = getMultiAdapter((context, request), name=u'faceted_subtyper')
+    if subtyper.is_faceted or not subtyper.can_enable: return
+    subtyper.enable()
+    criteria = ICriteria(context)
+    for cid in criteria.keys():
+        criteria.delete(cid)
+    criteria.add('resultsperpage', 'bottom', 'default', title='Results per page', hidden=False, start=0, end=60, step=20,
+        default=20)
+    criteria.add(
+        'checkbox', 'left', 'default',
+        title='Organs',
+        hidden=False,
+        index='bodySystemName',
+        operator='or',
+        vocabulary=u'eke.knowledge.vocabularies.BodySystemsVocabulary',
+        default=[],
+        count=False,
+        maxitems=0,
+        sortreversed=False,
+        hidezerocount=False
+    )
+    criteria.add(
+        'checkbox', 'bottom', 'default',
+        title='Portal Type',
+        hidden=True,
+        index='portal_type',
+        operator='or',
+        vocabulary=u'eea.faceted.vocabularies.FacetedPortalTypes',
+        default=[u'eke.knowledge.elementalbiomarker', u'eke.knowledge.biomarkerpanel'],
+        count=False,
+        maxitems=0,
+        sortreversed=False,
+        hidezerocount=False
+    )
+    criteria.add('text', 'top', 'default', title=u'Search', hidden=False, index='SearchableText',
+        wildcard=True, count=False, onlyallelements=True)
+    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=False)
+    IFacetedLayout(context).update_layout('faceted_biomarkers_view')
 
 
 def _setupBiomarkers(context):
@@ -115,7 +170,7 @@ def _setupBiomarkers(context):
     context.bmuDataSource = u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/biomuta/@@rdf'
     context.idDataSource = u'https://edrn.jpl.nasa.gov/cancerdataexpo/idsearch'
     context.disclaimer = RichTextValue(_BIOMARKER_DISCLAIMER, 'text/html', 'text/x-html-safe')
-    # TODO: Do facets here too
+    _applyFacetsToBiomarkers(context)
 
 
 def _setupSites(context):
@@ -206,6 +261,16 @@ def _applyFacetsToDatasets(context):
     IFacetedLayout(context).update_layout('faceted_datasets_view')
 
 
+def _setupDatasets(context):
+    _applyFacetsToDatasets(context)
+    context.dsSumDataSource = _DATASETS_SUMMARY_URL
+
+
+def _setupPublications(context):
+    _applyFacetsToPublications(context)
+    context.pubSumDataSource = _PUBLICATIONS_SUMMARY_URL
+
+
 _EXTENSION_IDS = [
     'plonetheme.barceloneta:default', 'plone.app.caching:default', 'edrnsite.policy:default'
 ]
@@ -231,12 +296,12 @@ _PEOPLE_RDF = u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/registered-per
 _RDF_FOLDERS = (
     ('resources', 'eke.knowledge.bodysystemfolder', u'Body Systems', u'Body systems are organs of the body.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/body-systems/@@rdf'], _null),
     ('resources', 'eke.knowledge.diseasefolder', u'Diseases', u'Ailements affecting body systems.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/diseases/@@rdf'], _null),
-    (None, 'eke.knowledge.publicationfolder', u'Publications', u'Items published by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf', u'http://edrn.jpl.nasa.gov/bmdb/rdf/publications'], _applyFacetsToPublications),
+    ('resources', 'eke.knowledge.resourcefolder', u'Miscellaneous Resources', u'Various other web-accessible resources.', [u'https://edrn.jpl.nasa.gov/bmdb/rdf/resources'], _null),
+    (None, 'eke.knowledge.publicationfolder', u'Publications', u'Items published by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf', u'http://edrn.jpl.nasa.gov/bmdb/rdf/publications'], _setupPublications),
     (None, 'eke.knowledge.sitefolder', u'Sites', u'Institutions and PIs in EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/sites/@@rdf'], _setupSites),
     (None, 'eke.knowledge.protocolfolder', u'Protocols', u'Studies pursued by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/protocols/@@rdf'], _null),
-    (None, 'eke.knowledge.datasetfolder', u'Science Data', u'Data collected by EDRN.', [u'https://edrn.nci.nih.gov/miscellaneous-knowledge-system-artifacts/science-data-rdf/at_download/file'], _applyFacetsToDatasets),
-    # TODO: turned off while I debug other issues
-    # (None, 'eke.knowledge.biomarkerfolder', u'Biomarkers', u'Indicators for cancer.', [u'https://edrn.jpl.nasa.gov/bmdb/rdf/biomarkers?qastate=all'], _setupBiomarkers)
+    (None, 'eke.knowledge.datasetfolder', u'Science Data', u'Data collected by EDRN.', [u'https://edrn.nci.nih.gov/miscellaneous-knowledge-system-artifacts/science-data-rdf/at_download/file'], _setupDatasets),
+    (None, 'eke.knowledge.biomarkerfolder', u'Biomarkers', u'Indicators for cancer.', [u'https://edrn.jpl.nasa.gov/bmdb/rdf/biomarkers?qastate=all'], _setupBiomarkers),
 )
 
 
@@ -483,6 +548,16 @@ def _doStaticQuickLinksPortlet(portal, uids):
     mapping[chooser.chooseName(None, assignment)] = assignment
 
 
+def _setGlobalNavOrder(portal):
+    u'''Set the order of global navigation'''
+    portal = plone.api.portal.get()
+    items = ['biomarkers', 'resources', 'publications', 'protocols', 'science-data', 'about-edrn']
+    items.reverse()
+    for item in items:
+        if item in portal.keys():
+            portal.moveObjectsToTop([item])
+
+
 def _setupEDRN(app, username, password, ldapPassword):
     app = makerequest.makerequest(app)
     _setupZopeSecurity(app)
@@ -490,10 +565,12 @@ def _setupEDRN(app, username, password, ldapPassword):
     _installAdmin(app, username, password)
     portal = _createEDRNSite(app)
     setSite(portal)
-    uids = _loadZEXPFiles(portal)  # Stack traces; see https://community.plone.org/t/stack-trace-when-loading-zexp-from-a-script/8060
+    uids = _BLANK_UIDS
+    uids.update(_loadZEXPFiles(portal))  # Stack traces; see https://community.plone.org/t/stack-trace-when-loading-zexp-from-a-script/8060
     _setLDAPPassword(portal, ldapPassword)
     uids.update(_ingest(portal))
     _doStaticQuickLinksPortlet(portal, uids)
+    _setGlobalNavOrder(portal)
     _tuneUp(portal)  # this should be the last step always as it clears/rebuids the catalog and commits the txn
     noSecurityManager()
 

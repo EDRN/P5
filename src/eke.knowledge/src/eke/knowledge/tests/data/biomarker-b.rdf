@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bmdb="http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#">
+    <bmdb:Biomarker rdf:about='http://edrn/bmdb/b1'>
+        <bmdb:Title>Bile 1</bmdb:Title>
+        <bmdb:ShortName>B1</bmdb:ShortName>
+        <bmdb:HgncName> BB </bmdb:HgncName>
+        <bmdb:BiomarkerID>http://edrn/bmdb/b1</bmdb:BiomarkerID>
+        <bmdb:URN>urn:edrn:bmdb:bm2</bmdb:URN>
+        <bmdb:IsPanel>0</bmdb:IsPanel>
+        <bmdb:Description>A brown bio-marker.</bmdb:Description>
+        <bmdb:QAState>Under Review</bmdb:QAState>
+        <bmdb:Phase>3</bmdb:Phase>
+        <bmdb:Security>Public</bmdb:Security>
+        <bmdb:Alias>Ooze</bmdb:Alias>
+        <bmdb:Type>Colloidal</bmdb:Type>
+        <bmdb:AccessGrantedTo rdf:resource='ldap://edrn/groups/g1' />
+        <bmdb:indicatorForOrgan rdf:resource='http://edrn/bmdb/a1/o1' />
+        <bmdb:hasBiomarkerStudyDatas>
+            <rdf:Bag>
+                <rdf:li>
+                    <bmdb:BiomarkerStudyData rdf:about='http://edrn/bmdb/a1/s1'>
+                        <bmdb:referencesStudy rdf:resource='http://swa.it/edrn/ps' />
+                        <bmdb:DecisionRule>A sample decision rule</bmdb:DecisionRule>
+                    </bmdb:BiomarkerStudyData>
+                </rdf:li>
+            </rdf:Bag>
+        </bmdb:hasBiomarkerStudyDatas>
+        <bmdb:referencedInPublication rdf:resource='http://is.gd/pVKq' />
+        <bmdb:referencesResource rdf:resource='http://yahoo.com/' />
+    </bmdb:Biomarker>
+</rdf:RDF>

@@ -170,6 +170,8 @@
             <element>eke.knowledge.protocolfolder</element>
             <element>eke.knowledge.datasetfolder</element>
             <element>eke.knowledge.biomarkerfolder</element>
+            <element>eke.knowledge.resourcefolder</element>
+            <element>eke.knowledge.biomarkerfolder</element>
         </value>
     </record>
 
