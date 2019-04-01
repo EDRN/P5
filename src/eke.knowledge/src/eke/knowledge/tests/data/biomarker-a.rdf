@@ -17,13 +17,13 @@
         <bmdb:Alias>Bigo</bmdb:Alias>
         <bmdb:memberOfPanel rdf:resource='http://edrn/bmdb/p1'/>
         <bmdb:AccessGrantedTo rdf:resource='ldap://edrn/groups/g1' />
-        <bmdb:AssociatedDataset rdf:resource='urn:edrn:top-secret-data'/>
+        <bmdb:AssociatedDataset rdf:resource='http://edrn.jpl.nasa.gov/ecas/data/dataset/urn:edrn:GSTP1_Methylation'/>
         <bmdb:indicatorForOrgan rdf:resource='http://edrn/bmdb/a1/o1' />
         <bmdb:hasBiomarkerStudyDatas>
             <rdf:Bag>
                 <rdf:li>
                     <bmdb:BiomarkerStudyData rdf:about='http://edrn/bmdb/a1/s1'>
-                        <bmdb:referencesStudy rdf:resource='http://swa.it/edrn/ps' />
+                        <bmdb:referencesStudy rdf:resource='http://edrn.nci.nih.gov/data/protocols/279' />
                         <bmdb:SensitivityDatas>
                             <rdf:Bag>
                                 <rdf:li>
@@ -42,12 +42,12 @@
                 </rdf:li>
                 <rdf:li>
                     <bmdb:BiomarkerStudyData rdf:about='http://edrn/bmdb/a1/s1'>
-                        <bmdb:referencesStudy rdf:resource='http://swa.it/edrn/so' />
+                        <bmdb:referencesStudy rdf:resource='http://edrn.nci.nih.gov/data/protocols/316' />
                     </bmdb:BiomarkerStudyData>
                 </rdf:li>
             </rdf:Bag>
         </bmdb:hasBiomarkerStudyDatas>
-        <bmdb:referencedInPublication rdf:resource='http://is.gd/pVKq' />
+        <bmdb:referencedInPublication rdf:resource='http://edrn.jpl.nasa.gov/bmdb/publications/view/252' />
         <bmdb:referencesResource rdf:resource='http://yahoo.com/' />
     </bmdb:Biomarker>
     <bmdb:Biomarker rdf:about='http://edrn/bmdb/p1'>

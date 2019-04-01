@@ -4,6 +4,7 @@ u'''Biomarkers'''
 
 from . import _
 from .bodysystem import IBodySystem
+from .dataset import IDataset
 from .knowledgeobject import IKnowledgeObject
 from .protocol import IProtocol
 from .publication import IPublication
@@ -68,13 +69,14 @@ class IResearchedObject(Interface):
             source=CatalogSource(object_provides=IKnowledgeObject.__identifier__)
         )
     )
-    datasets = schema.List(
+    datasets = RelationList(
         title=_(u'Datasets'),
         description=_(u'Datasets providing measured scientific bases for this biomarker.'),
         required=False,
-        value_type=schema.TextLine(
+        value_type=RelationChoice(
             title=_(u'Dataset'),
-            description=_(u'Dataset providing a measured scientific basis for this biomarker.'),
+            description=_(u'A single dataset providing a measured scientific basis for this biomarker.'),
+            source=CatalogSource(object_provides=IDataset.__identifier__)
         )
     )
 

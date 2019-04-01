@@ -58,6 +58,12 @@
         title='Faceted Datasets View'
         permission='zope2.View'
     />
+    <faceted:view
+        name='faceted_biomarkers_view'
+        template='templates/faceted_biomarkers_view.pt'
+        title='Faceted Biomarkers View'
+        permission='zope2.View'
+    />
 
     <browser:resourceDirectory name='eke.knowledge' directory='static'/>
 

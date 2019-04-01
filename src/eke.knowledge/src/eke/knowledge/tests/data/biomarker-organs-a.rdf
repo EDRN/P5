@@ -15,7 +15,7 @@
                 <rdf:li rdf:resource='http://edrn/bmdb/a1/o1#s1'/>
             </rdf:Bag>
         </bmdb:hasBiomarkerOrganStudyDatas>
-        <bmdb:referencedInPublication rdf:resource='http://is.gd/q6mS'/>
+        <bmdb:referencedInPublication rdf:resource='http://edrn.jpl.nasa.gov/bmdb/publications/view/252'/>
     </bmdb:BiomarkerOrganData>
     <bmdb:BiomarkerOrganStudyData rdf:about='http://edrn/bmdb/a1/o1#s1'>
         <bmdb:referencesStudy rdf:resource='http://swa.it/edrn/ps' />
