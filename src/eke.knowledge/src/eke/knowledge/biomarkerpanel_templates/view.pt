@@ -15,7 +15,8 @@
             <tal:main-macro metal:define-macro='main' define='
                 portalURL context/portal_url
             '>
-                <h1>Biomarker Title → HGNC Name</h1>
+                <!-- <h1>Biomarker Title → HGNC Name</h1> -->
+                <h1>Biomaker Panel</h1>
             </tal:main-macro>
         </metal:main>
     </body>
