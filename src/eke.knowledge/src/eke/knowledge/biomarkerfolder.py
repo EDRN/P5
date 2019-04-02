@@ -4,8 +4,10 @@ u'''Biomarker folder'''
 
 from . import _
 from .base import Ingestor
-from .biomarker import IBiomarker, IElementalBiomarker, IBiomarkerPanel, IBiomarkerBodySystem, IBodySystemStudy, IStudyStatistics
+from .biomarker import IBiomarker, IBiomarkerBodySystem, IBodySystemStudy, IStudyStatistics
+from .biomarkerpanel import IBiomarkerPanel
 from .bodysystem import IBodySystem
+from .elementalbiomarker import IElementalBiomarker
 from .knowledgefolder import IKnowledgeFolder
 from .utils import IngestConsequences, publish
 from Acquisition import aq_inner
