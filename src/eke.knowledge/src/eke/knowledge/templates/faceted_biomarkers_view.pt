@@ -110,7 +110,7 @@
     </metal:listingmacro>
 
     <div class='discreet' tal:condition='disclaimer'>
-        <p tal:replace='structure disclaimer'>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+        <p tal:replace='structure disclaimer/output'>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
     </div>
 
 
