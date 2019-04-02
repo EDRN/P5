@@ -157,29 +157,6 @@ class IBiomarker(IKnowledgeObject, IResearchedObject, IQualityAssuredObject):
     )
 
 
-class IBiomarkerPanel(IBiomarker):
-    u'''A panel of biomarkers that itself behaves as a single (yet composite) biomarker.'''
-    members = RelationList(
-        title=_(u'Member Markers'),
-        description=_(u'Biomarkers that are a part of this panel'),
-        required=False,
-        value_type=RelationChoice(
-            title=_(u'Member Marker'),
-            description=_(u"A biomarker that's part of a panel."),
-            source=CatalogSource(IBiomarker.__identifier__)
-        )
-    )
-
-
-class IElementalBiomarker(IBiomarker):
-    u'''A single, actual biomarker.'''
-    biomarkerType = schema.TextLine(
-        title=_(u'Biomarker Type'),
-        description=_(u'The general category, kind, or class of this biomarker.'),
-        required=False
-    )
-
-
 class IBiomarkerBodySystem(IKnowledgeObject, IResearchedObject, IPhasedObject, IQualityAssuredObject):
     u'''Research into a biomarker's effects on a single body system.'''
     performanceComment = schema.Text(
@@ -259,3 +236,11 @@ class IStudyStatistics(IKnowledgeObject):
         description=_(u'Information about the specific assay type used'),
         required=False
     )
+
+
+class BiomarkerView(grok.View):
+    grok.baseclass()
+    grok.require('zope2.View')
+    def getType(self):
+        raise NotImplementedError('subclass must impl')
+

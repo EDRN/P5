@@ -1,0 +1,22 @@
+<html
+    i18n:domain='eke.knowledge'
+    lang='en'
+    metal:use-macro='context/main_template/macros/master'
+    xml:lang='en'
+    xmlns:i18n='http://xml.zope.org/namespaces/i18n'
+    xmlns:metal='http://xml.zope.org/namespaces/metal'
+    xmlns:tal='http://xml.zope.org/namespaces/tal'
+    xmlns='http://www.w3.org/1999/xhtml'>
+    <head>
+        <title>Elemental Biomarker View</title>
+    </head>
+    <body>
+        <metal:main fill-slot='main'>
+            <tal:main-macro metal:define-macro='main' define='
+                portalURL context/portal_url
+            '>
+                <h1>Biomarker Title → HGNC Name</h1>
+            </tal:main-macro>
+        </metal:main>
+    </body>
+</html>
