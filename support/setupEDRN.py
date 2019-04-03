@@ -160,7 +160,7 @@ def _applyFacetsToBiomarkers(context):
     )
     criteria.add('text', 'top', 'default', title=u'Search', hidden=False, index='SearchableText',
         wildcard=True, count=False, onlyallelements=True)
-    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=False)
+    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=False, default='sortable_title')
     IFacetedLayout(context).update_layout('faceted_biomarkers_view')
 
 
@@ -169,6 +169,7 @@ def _setupBiomarkers(context):
     context.bmoDataSource = u'https://edrn.jpl.nasa.gov/bmdb/rdf/biomarkerorgans?qastate=all'
     context.bmuDataSource = u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/biomuta/@@rdf'
     context.idDataSource = u'https://edrn.jpl.nasa.gov/cancerdataexpo/idsearch'
+    context.bmSumDataSource = u'https://edrn.jpl.nasa.gov/cancerdataexpo/summarizer-data/biomarker/@@summary'
     context.disclaimer = RichTextValue(_BIOMARKER_DISCLAIMER, 'text/html', 'text/x-html-safe')
     _applyFacetsToBiomarkers(context)
 
@@ -213,7 +214,7 @@ def _applyFacetsToPublications(context):
         wildcard=True, onlyallelements=True)
     criteria.add('text', 'top', 'advanced', title=u'Abstract', hidden=False, index='Description', count=False,
         wildcard=True, onlyallelements=True)
-    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=False)
+    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=False, default='sortable_title')
     IFacetedLayout(context).update_layout('faceted_publications_view')
 
 
@@ -257,7 +258,7 @@ def _applyFacetsToDatasets(context):
     )
     criteria.add('text', 'top', 'default', title=u'Search', hidden=False, index='SearchableText',
         wildcard=True, count=False, onlyallelements=True)
-    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=False)
+    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=False, default='sortable_title')
     IFacetedLayout(context).update_layout('faceted_datasets_view')
 
 

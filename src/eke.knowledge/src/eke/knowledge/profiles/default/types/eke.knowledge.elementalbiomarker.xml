@@ -9,7 +9,7 @@
     <property name='allowed_content_types'>
         <element value='eke.knowledge.biomarkerbodysystem'/>
     </property>
-    <property name='schema'>eke.knowledge.biomarker.IElementalBiomarker</property>
+    <property name='schema'>eke.knowledge.elementalbiomarker.IElementalBiomarker</property>
     <property name='klass'>plone.dexterity.content.Container</property>
     <property name='add_permission'>cmf.AddPortalContent</property>
     <property name='behaviors'>

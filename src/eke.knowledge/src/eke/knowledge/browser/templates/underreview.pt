@@ -1,0 +1,9 @@
+<div metal:define-macro='unacceptedBiomarker'>
+    <p class='unacceptedBiomarkerAdmonishment' tal:condition='not:approvedViewable' i18n:translate='bm_underReview'>
+        This biomarker is currently being annotated or is under review.
+        You must be <a href='#' tal:attributes='href string:${portalURL}/login_form'>logged in</a>
+        or do not have permission to view any additional information. Contact Heather Kincaid at
+        <a href='mailto:heather.kincaid@jpl.nasa.gov'>heather.kincaid@jpl.nasa.gov</a>
+        if you should have access to this biomarker.
+    </p>
+</div>
