@@ -80,5 +80,17 @@
     </index>
     <column value='piName'/>
 
+    <!-- Display of biomarkerType on biomarker listing -->
+    <index name='biomarkerType' meta_type='FieldIndex'>
+        <indexed_attr value='biomarkerType' />
+    </index>
+    <column value='biomarkerType'/>
+
+    <!-- Display of body systems on biomarker listing -->
+    <index name='indicatedBodySystems' meta_type='KeywordIndex'>
+        <indexed_attr value='indicatedBodySystems' />
+    </index>
+    <column value='indicatedBodySystems'/>
+
 
 </object>

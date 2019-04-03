@@ -65,7 +65,8 @@
           <thead>
             <tr>
               <th i18n:translate='ekeKnowledgeTableHeadingBiomarker'>Biomarker</th>
-              <th i18n:translate='ekeKnowledgeTableHeadingProtocol'>Associated Protocol</th>
+              <th i18n:translate='ekeKnowledgeTableHeadingType'>Type</th>
+              <th i18n:translate='ekeKnowledgeTableHeadingOrgans'>Organ(s)</th>
             </tr>
           </thead>
           <tbody metal:define-slot='entries'>
@@ -86,8 +87,11 @@
                       Advanced rhinoplasty biomarker
                     </a>
                   </td>
-                  <td tal:content='item/protocolName'>
-                    Protocol Name Here
+                  <td tal:content='item/biomarkerType'>
+                      Sticky
+                  </td>
+                  <td tal:content='python:u", ".join(item.indicatedBodySystems)'>
+                      Anus, Rectum
                   </td>
                 </tr>
               </metal:block>

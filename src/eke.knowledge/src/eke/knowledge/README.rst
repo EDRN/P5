@@ -468,7 +468,6 @@ These folders contain biomarkers (both elemental and panel)::
     >>> browser.getControl(name='form.widgets.bmAliases').value = u'ST-1\nST-2'
     >>> browser.getControl(name='form.widgets.indicatedBodySystems').value = u'Anus\nRectum'
     >>> browser.getControl(name='form.widgets.accessGroups').value = u'urn:group-1\nurn:group-2'
-    >>> browser.getControl(name='form.widgets.biomarkerKind').value = u'Elemental'
     >>> browser.getControl(name='form.widgets.geneName').value = u'Eugene'
     >>> browser.getControl(name='form.widgets.uniProtAC').value = u'Accession Two'
     >>> browser.getControl(name='form.widgets.mutCount').value = u'123'

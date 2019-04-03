@@ -16,6 +16,7 @@ from plone.memoize.view import memoize
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
 from zope.interface import Interface
+from zope.container.interfaces import IObjectAddedEvent
 import plone.api
 
 CURATED_SECTIONS = {
@@ -133,11 +134,6 @@ class IBiomarker(IKnowledgeObject, IResearchedObject, IQualityAssuredObject):
             description=_(u'A single URI identifying a group that may access a biomarker.')
         )
     )
-    biomarkerKind = schema.TextLine(
-        title=_(u'Kind'),
-        description=_(u'What kind of biomarker.'),
-        required=False,
-    )
     geneName = schema.TextLine(
         title=_(u'Gene Symbol/Name'),
         description=_(u'The biomarker annotation that indicates gene symbol or name.'),
@@ -249,6 +245,19 @@ class IStudyStatistics(IKnowledgeObject):
         description=_(u'Information about the specific assay type used'),
         required=False
     )
+
+
+@grok.subscribe(IBiomarkerBodySystem, IObjectAddedEvent)
+def updateIndicatedBodySystems(context, event):
+    if not IBiomarkerBodySystem.providedBy(context): return  # This should never happen but I'm defensive—er, paranoid.
+    organName = context.id.capitalize()
+    biomarker = context.aq_parent
+    organs = list(biomarker.indicatedBodySystems if biomarker.indicatedBodySystems else [])
+    if organName not in organs:
+        organs.append(organName)
+        organs.sort()
+        biomarker.indicatedBodySystems = organs
+        biomarker.reindexObject(idxs=['indicatedBodySystems'])
 
 
 class BiomarkerView(grok.View):
