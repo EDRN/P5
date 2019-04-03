@@ -7,7 +7,7 @@ from eke.knowledge.testing import EKE_KNOWLEDGE_INTEGRATION_TESTING  # noqa
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 
-import unittest
+import unittest, plone.api
 
 
 class TestSetup(unittest.TestCase):
@@ -44,6 +44,18 @@ class TestSetup(unittest.TestCase):
             )
         except KeyError:
             self.fail(u'jQueryUI tabs not set in registry.xml')
+
+    def test_indexes(self):
+        u'''Make sure catalog has expected fields indexed'''
+        indexes = plone.api.portal.get_tool('portal_catalog').indexes()
+        for field in ('biomarkerType', 'indicatedBodySystems'):
+            self.assertTrue(field in indexes, u'Expected "{}" to be indexed but is not'.format(field))
+
+    def test_metadata(self):
+        u'''Make sure catalog has expected metadata schema columns'''
+        metadata = plone.api.portal.get_tool('portal_catalog').schema()
+        for field in ('biomarkerType', 'indicatedBodySystems'):
+            self.assertTrue(field in metadata, u'Expected "{}" to be in catalog schema but is not'.format(field))
 
 
 class TestUninstall(unittest.TestCase):
