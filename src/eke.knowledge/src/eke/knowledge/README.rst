@@ -416,6 +416,12 @@ Ingesting::
     >>> resource.identifier
     u'http://google.com/'
 
+Note that it's properly hyperlinked too::
+
+    >>> browser.open(portalURL + '/resources/http-google-com')
+    >>> browser.contents
+    '...href="http://google.com/"...'
+
 
 Biomarkers
 ==========
