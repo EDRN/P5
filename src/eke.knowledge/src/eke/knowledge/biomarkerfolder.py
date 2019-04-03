@@ -367,16 +367,18 @@ class BiomarkerSummary(grok.View):
         return context.dataSummary
 
 
-class BodySystemsVocabulary(object):
-    u'''Vocabulary for body systems'''
+class BodySystemsInBiomarkersVocabulary(object):
+    u'''Vocabulary for body systems in biomarkers'''
     grok.implements(IVocabularyFactory)
     def __call__(self, context):
         catalog = plone.api.portal.get_tool('portal_catalog')
-        results = catalog(object_provides=IBodySystem.__identifier__)
+        results = catalog.uniqueValuesFor('indicatedBodySystems')
         vocabs = []
         for i in results:
-            vocabs.append((i.Title, i.Title))
+            if i:
+                vocabs.append((i, i))
+        vocabs.sort()
         return SimpleVocabulary.fromItems(vocabs)
 
 
-grok.global_utility(BodySystemsVocabulary, name=u'eke.knowledge.vocabularies.BodySystemsVocabulary')
+grok.global_utility(BodySystemsInBiomarkersVocabulary, name=u'eke.knowledge.vocabularies.BodySystemsInBiomarkers')

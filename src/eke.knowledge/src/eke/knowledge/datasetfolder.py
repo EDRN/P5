@@ -83,7 +83,7 @@ class DatasetIngestor(Ingestor):
         # Set bodySystemName, protocolName, piNames manually; bodySystemName done
 
 
-class IndicatedBodySystemsVocabulary(object):
+class BodySystemsInDatasetsVocabulary(object):
     u'''Vocabulary for body systems in datasets'''
     grok.implements(IVocabularyFactory)
     def __call__(self, context):
@@ -93,10 +93,11 @@ class IndicatedBodySystemsVocabulary(object):
         for i in results:
             if i:
                 vocabs.append((i, i))
+        vocabs.sort()
         return SimpleVocabulary.fromItems(vocabs)
 
 
-grok.global_utility(IndicatedBodySystemsVocabulary, name=u'eke.knowledge.vocabularies.IndicatedBodySystems')
+grok.global_utility(BodySystemsInDatasetsVocabulary, name=u'eke.knowledge.vocabularies.BodySystemsInDatasets')
 
 
 class DatasetSummary(grok.View):
