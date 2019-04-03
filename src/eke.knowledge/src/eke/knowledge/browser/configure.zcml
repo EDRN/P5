@@ -59,6 +59,17 @@
         name='siteByTypeSection'
         template='templates/sitebytypesection.pt'
     />
+    <browser:page
+        for='*'
+        permission='zope2.Public'
+        name='commonBiomarker'
+        template='templates/biomarkerfields.pt'
+    />
+    <browser:page
+        for='*'
+        permission='zope2.Public'
+        name='unacceptedBiomarker'
+        template='templates/underreview.pt'
+    />
     
-
 </configure>

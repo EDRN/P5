@@ -8,11 +8,24 @@ from .dataset import IDataset
 from .knowledgeobject import IKnowledgeObject
 from .protocol import IProtocol
 from .publication import IPublication
+from .resource import IResource
+from Acquisition import aq_inner
 from five import grok
 from plone.app.vocabularies.catalog import CatalogSource
+from plone.memoize.view import memoize
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
 from zope.interface import Interface
+import plone.api
+
+CURATED_SECTIONS = {
+    'Organs': True,
+    'Studies': False,
+    'Publications': True,
+    'Resources': True,
+    'Biomuta': True,
+    'Organs-Supplemental': False,
+}
 
 
 class IQualityAssuredObject(Interface):
@@ -66,7 +79,7 @@ class IResearchedObject(Interface):
         value_type=RelationChoice(
             title=_(u'Resource'),
             description=_(u'An additional resource about this object.'),
-            source=CatalogSource(object_provides=IKnowledgeObject.__identifier__)
+            source=CatalogSource(object_provides=IResource.__identifier__)
         )
     )
     datasets = RelationList(
@@ -243,4 +256,51 @@ class BiomarkerView(grok.View):
     grok.require('zope2.View')
     def getType(self):
         raise NotImplementedError('subclass must impl')
-
+    def viewable(self, section):
+        context = aq_inner(self.context)
+        # Accepted biomarkers are A-O-K no matter what section.
+        if context.qaState == u'Accepted': return True
+        # Certain sections are viewable for curated-but-not-yet-accepted biomarkers
+        if context.qaState == u'Curated':
+            canView = CURATED_SECTIONS.get(section, False)
+            if canView: return True
+        # Anonymous user?  Go away.
+        mtool = plone.api.portal.get_tool('portal_membership')
+        if mtool.isAnonymousUser(): return False
+        # Manager?  Welcome.
+        member = mtool.getAuthenticatedMember()
+        if 'Manager' in member.getRoles(): return True
+        # Not a manager?  Check groups.
+        gtool = plone.api.portal.get_tool('portal_groups')
+        memberGroups = set([i.getGroupId() for i in gtool.getGroupsByUserId(member.getMemberId())])
+        objectRoles = dict(context.get_local_roles())
+        for groupName, roles in objectRoles.items():
+            if u'Reader' in roles and groupName in memberGroups: return True
+        return False
+    def bodySystemsAvailable(self):
+        return len(self.bodySystems()) > 0
+    @memoize
+    def bodySystems(self):
+        context = aq_inner(self.context)
+        catalog = plone.api.portal.get_tool('portal_catalog')
+        results = catalog(
+            object_provides=IBiomarkerBodySystem.__identifier__,
+            path=dict(query='/'.join(context.getPhysicalPath()), depth=1),
+            sort_on='sortable_title'
+        )
+        results = [dict(
+            name=i.Title, obj=i.getObject(), resources=[j.to_object for j in i.getObject().resources]
+        ) for i in results]
+        for result in results:
+            resources = result['resources']
+            resources.sort(lambda a, b: cmp(a.title, b.title))
+        return results
+    @memoize
+    def studies(self, bodySystem):
+        catalog = plone.api.portal.get_tool('portal_catalog')
+        results = catalog(
+            object_provides=IBodySystemStudy.__identifier__,
+            path=dict(query='/'.join(bodySystem.getPhysicalPath()), depth=1),
+            sort_on='sortable_title'
+        )
+        return [dict(name=i.Title, obj=i.getObject()) for i in results]

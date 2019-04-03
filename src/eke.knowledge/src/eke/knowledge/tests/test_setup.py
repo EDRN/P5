@@ -4,6 +4,8 @@ from plone import api
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from eke.knowledge.testing import EKE_KNOWLEDGE_INTEGRATION_TESTING  # noqa
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 
 import unittest
 
@@ -31,6 +33,17 @@ class TestSetup(unittest.TestCase):
         self.assertIn(
             IEkeKnowledgeLayer,
             utils.registered_layers())
+
+    def test_jqueryui_tabs(self):
+        u'''Make sure jQueryUI tabs are enabled'''
+        registry = getUtility(IRegistry)
+        try:
+            self.assertTrue(
+                registry['collective.js.jqueryui.controlpanel.IJQueryUIPlugins.ui_tabs'],
+                u'jQueryUI tabs not enabled'
+            )
+        except KeyError:
+            self.fail(u'jQueryUI tabs not set in registry.xml')
 
 
 class TestUninstall(unittest.TestCase):
