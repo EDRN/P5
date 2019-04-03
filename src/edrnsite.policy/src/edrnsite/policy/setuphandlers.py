@@ -181,6 +181,14 @@ def _addHomePage(portal):
     return frontPage
 
 
+def _makeLoginNonModal(context):
+    actions = plone.api.portal.get_tool('portal_actions')
+    try:
+        actions.user.login.modal = unicode()
+    except KeyError:
+        pass
+
+
 def post_install(context):
     """Post install script"""
     # Do something at the end of the installation of this package.
@@ -195,6 +203,7 @@ def post_install(context):
     _removePortlets(portal)
     _addQuickLinks(portal)
     _addHomePage(portal)
+    _makeLoginNonModal(portal)
     transaction.commit()
 
 

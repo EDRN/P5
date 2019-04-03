@@ -80,7 +80,7 @@
               <metal:block define-slot='entry'>
                 <tr metal:define-macro='listeitem' class='odd' tal:attributes='class row_class'>
                   <td style='padding: 0 1em 1em 0;'>
-                    <a href='#' class='public' tal:attributes='href item_url; class string:$item_wf_state_class url'
+                    <a href='#' class='public' tal:attributes='href item/identifier; class string:$item_wf_state_class url'
                       tal:content='item_title_or_id'>
                       Advanced rhinoplasty dataset
                     </a>

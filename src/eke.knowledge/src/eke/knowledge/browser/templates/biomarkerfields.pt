@@ -100,16 +100,16 @@
                         <div class="studyBoxTop"><div></div></div>
                         <div class="studyBoxContent">
                             <h4 tal:content='study/name'>In Search of Lost Time</h4>
-                            <p tal:condition='not:study/obj/protocol/description'
+                            <p tal:condition='not:study/obj/protocol/to_object/description'
                                 i18n:translate='bm_noAbstractText' class='discreet'>
                                 No abstract available.
                             </p>
-                            <p tal:condition='study/obj/protocol/description'
-                                tal:content='study/obj/protocol/description'>
+                            <p tal:condition='study/obj/protocol/to_object/description'
+                                tal:content='study/obj/protocol/to_object/description'>
                                 You can lorem my ipsum any time, sit amet.
                             </p>
                             <a class='discreet' href='#' i18n:translate='bm_visitStudy'
-                                tal:attributes='href study/obj/protocol/absolute_url'>
+                                tal:attributes='href study/obj/protocol/to_object/absolute_url'>
                                 View more about this study
                             </a>
                             <h5 i18n:translate='bm_ssi'>Biomarker Characteristics Summary</h5>
@@ -158,8 +158,8 @@
                             <h5 i18n:translate='bm_ssProtocols'>Additional Study-Specific Protocols</h5>
                             <ul tal:condition='study/obj/protocols'>
                                 <li tal:repeat='pro study/obj/protocols'>
-                                    <a href='#' tal:attributes='href pro/absolute_url;
-                                        title pro/description|nothing' tal:content='pro/title'>
+                                    <a href='#' tal:attributes='href pro/to_object/absolute_url;
+                                        title pro/to_object/description|nothing' tal:content='pro/to_object/title'>
                                         Bonus Study-Specific Studies
                                     </a>
                                 </li>
@@ -171,8 +171,8 @@
                             <h5 i18n:translate='bm_ssPubs'>Study-Specific Publications</h5>
                             <ul tal:condition='study/obj/publications'>
                                 <li tal:repeat='pub study/obj/publications'>
-                                    <a href='#' tal:attributes='href pub/absolute_url;
-                                        title pub/description|nothing' tal:content='pub/title'>
+                                    <a href='#' tal:attributes='href pub/to_object/absolute_url;
+                                        title pub/to_object/description|nothing' tal:content='pub/to_object/title'>
                                         My Publication Had Improper Contact With My Protocol
                                     </a>
                                 </li>
@@ -184,8 +184,8 @@
                             <h5 i18n:translate='bm_ssResources'>Study-Specific Resources</h5>
                             <ul tal:condition='study/obj/resources'>
                                 <li tal:repeat='res study/obj/resources'>
-                                    <a href='#' tal:attributes='href res/absolute_url;
-                                        title res/description|nothing' tal:content='res/title'>
+                                    <a href='#' tal:attributes='href res/to_object/absolute_url;
+                                        title res/to_object/description|nothing' tal:content='res/to_object/title'>
                                         My Resource Was Lubricating For My Study
                                     </a>
                                 </li>

@@ -11,12 +11,189 @@
         <title>Biomarker Panel View</title>
     </head>
     <body>
+        <metal:css fill-slot='style_slot'>
+            <link type='text/css' rel='stylesheet' href='#'
+                tal:define='navroot context/@@plone_portal_state/navigation_root_url'
+                tal:attributes='href string:${navroot}/++resource++eke.knowledge/biomarker.css'
+            />
+        </metal:css>
         <metal:main fill-slot='main'>
             <tal:main-macro metal:define-macro='main' define='
                 portalURL context/portal_url
             '>
                 <!-- <h1>Biomarker Title → HGNC Name</h1> -->
-                <h1>Biomaker Panel</h1>
+                <h1 tal:content='context/title'>4 D ELFs</h1>
+
+                <div id='bmSectionTabs'>
+
+
+                    <ul>
+                        <li><a href='#basicsTab' i18n:translate='bm_BasicsTab'>Basics</a></li>
+                        <li><a href='#organsTab' i18n:translate='bm_OrgansTab'>Organs</a></li>
+                        <li><a href='#studiesTab' i18n:translate='bm_StudiesTab'>Studies</a></li>
+                        <li><a href='#publicationsTab' i18n:translate='bm_PublicationsTab'>Publications</a></li>
+                        <li><a href='#resourcesTab' i18n:translate='bm_ResourcesTab'>Resources</a></li>
+                    </ul>
+
+                    <!-- BASICS =================================================================================== -->
+                    <div id='basicsTab'>
+                        <div id='colLeftContent'>
+                            <div id="biomarker-aliases" tal:define='aliases context/bmAliases'>
+                                <h5>Aliases:</h5>
+                                <span class="hint">This biomarker is also known as:</span><br/> 
+                                <ul>
+                                    <li tal:repeat='alias aliases'><span tal:content='alias'>Sydney</span>,</li>
+                                </ul>
+                            </div>
+                            <h4 i18n:translate='bm_DescriptionHeading'>Description&#x2026;</h4>
+                            <p tal:content='context/description'>
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                            </p>
+                        </div><!-- end colLeftContent -->
+                        <div class='attributebox bmAttributes'>
+                            <div class='attributebox-content'>
+                                <h5 i18n:translate='bm_AttributesHdr'>Attributes</h5>
+                                <table>
+                                    <tr>
+                                        <th i18n:translate='label_qaState'>
+                                            QA State:
+                                        </th>
+                                        <td tal:content='context/qaState'>
+                                            Extremely high quality
+                                        </td>
+                                    </tr>
+                                    <tr tal:condition='context/biomarkerType|nothing'>
+                                        <th i18n:translate='label_biomarkerType'>
+                                            Type:
+                                        </th>
+                                        <td tal:content='context/biomarkerType'>
+                                            Sticky
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th i18n:translate='label_shortName'>
+                                            Short Name:
+                                        </th>
+                                        <td tal:content='context/shortName'>
+                                            ANX1
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th i18n:translate='label_hgncName'>
+                                            HGNC Name:
+                                        </th>
+                                        <td tal:content='context/hgncName'>
+                                            A1
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="clear"><!--clear--></div>
+
+                        <h3>Panel Details</h3>
+                        <p tal:condition='not:context/members' class='discreet'>
+                            No member markers defined for this panel.
+                        </p>
+                        <ul tal:condition='context/members'>
+                            <li tal:repeat='member context/members'>
+                                <a href='#' tal:content='member/to_object/title'
+                                    tal:attributes='href member/to_object/absolute_url'>
+                                    Some Marker
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div metal:use-macro='context/@@commonBiomarker/macros/datasets'>
+                            Datasets
+                        </div>
+                    </div><!-- basicsTab -->
+
+
+                    <!-- ORGANS =================================================================================== -->
+                    <div id='organsTab' tal:define='approvedViewable python:view.viewable("Organs");'>
+                        <div metal:use-macro='context/@@unacceptedBiomarker/macros/unacceptedBiomarker'>
+                            Log in to view this section, if necessary.
+                        </div>
+                        <div tal:condition='approvedViewable'>
+                            <p i18n:translate='bm_OrgansIntro' class='organsIntro'>
+                                The following organs have data associated with this biomarker&#x2026;
+                            </p>
+                            <div metal:use-macro='context/@@commonBiomarker/macros/biomarkerBodySystems'>
+                                Organs
+                            </div>
+                        </div>
+                    </div><!-- organsTab -->
+
+                    <!-- STUDIES ================================================================================== -->
+                    <div id='studiesTab' tal:define='protocols context/protocols; approvedViewable python:view.viewable("Studies");'>
+                        <div metal:use-macro='context/@@unacceptedBiomarker/macros/unacceptedBiomarker'>
+                            Log in to view this section, if necessary.
+                        </div>
+                        <div tal:condition='approvedViewable'>
+                            <p class='discreet' tal:condition='not:protocols' i18n:translate='bm_noProtocols'>
+                                No associated studies or protocols found.
+                            </p>
+                            <ul tal:condition='protocols'>
+                                <li tal:repeat='protocol protocols'>
+                                    <a href='#' tal:attributes='href protocol/to_object/absolute_url'
+                                        tal:content='protocol/to_object/title'>
+                                        Whatever Protocol
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- PUBLICATIONS ============================================================================= -->
+                    <div id='publicationsTab' tal:define='publications context/publications; approvedViewable python:view.viewable("Publications");'>
+                        <div metal:use-macro='context/@@unacceptedBiomarker/macros/unacceptedBiomarker'>
+                            Log in to view this section, if necessary.
+                        </div>
+                        <div tal:condition='approvedViewable'>
+                            <p class='discreet' tal:condition='not:publications' i18n:translate='bm_noPubs'>
+                                No associated publications found.
+                            </p>
+                            <ul tal:condition='publications'>
+                                <li tal:repeat='publication publications'>
+                                    <a href='#' tal:attributes='href publication/to_object/absolute_url'
+                                        tal:content='publication/to_object/title'>
+                                        Whateves Pubs
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- RESOURCES ================================================================================ -->
+                    <div id='resourcesTab' tal:define='resources context/resources|nothing; approvedViewable python:view.viewable("Resources");'>
+                        <div metal:use-macro='context/@@unacceptedBiomarker/macros/unacceptedBiomarker'>
+                            Log in to view this section, if necessary.
+                        </div>
+                        <div tal:condition='approvedViewable'>
+                            <p class='discreet' tal:condition='not:resources'>
+                                No other associated resources found.
+                            </p>
+                            <ul tal:condition='resources'>
+                                <li tal:repeat='resource resources'>
+                                    <a href='#' tal:content='resource/to_object/title' title='Chat Service'
+                                        tal:attributes='title resources/to_object/description|nothing; href resource/to_object/absolute_url'>
+                                        Yahoo Instant Messenger
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+                <script type='text/javascript'>
+                    $(function() {
+                        $("#bmSectionTabs").tabs();
+                    });
+                </script>
             </tal:main-macro>
         </metal:main>
     </body>

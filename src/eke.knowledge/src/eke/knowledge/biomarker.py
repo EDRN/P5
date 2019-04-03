@@ -276,6 +276,9 @@ class BiomarkerView(grok.View):
         # Anonymous user?  Go away.
         mtool = plone.api.portal.get_tool('portal_membership')
         if mtool.isAnonymousUser(): return False
+        # FIXME:
+        # For purposes of the 2019-04-03 demo, logging in is enough. FIXME: figure out group LDAP mappings
+        return True
         # Manager?  Welcome.
         member = mtool.getAuthenticatedMember()
         if 'Manager' in member.getRoles(): return True
@@ -313,3 +316,29 @@ class BiomarkerView(grok.View):
             sort_on='sortable_title'
         )
         return [dict(name=i.Title, obj=i.getObject()) for i in results]
+    @memoize
+    def statistics(self, protocol):
+        # TODO: implement this
+        # def massage(value, deterministic=True):
+        #     try:
+        #         numeric = float(value)
+        #     except (ValueError, TypeError):
+        #         return u'ND' if deterministic else u'N/A' # ND = Not determined
+        #     if numeric == 0.0:
+        #         return u'N/A' # Not applicable
+        #     return numeric
+        # catalog = getToolByName(protocol, 'portal_catalog')
+        # results = catalog(
+        #     object_provides=IStudyStatistics.__identifier__,
+        #     path=dict(query='/'.join(protocol.getPhysicalPath()), depth=1),
+        #     sort_on='getObjPositionInParent'
+        # )
+        # return [dict(
+        #     notes=i.getObject().details,
+        #     sens=massage(i.getObject().sensitivity),
+        #     spec=massage(i.getObject().specificity),
+        #     npv=massage(i.getObject().npv, deterministic=False),
+        #     ppv=massage(i.getObject().ppv, deterministic=False),
+        #     prev=massage(i.getObject().prevalence, deterministic=False),
+        # ) for i in results]
+        return []
