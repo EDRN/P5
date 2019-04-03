@@ -175,4 +175,14 @@
         </value>
     </record>
 
+    <record name='collective.js.jqueryui.controlpanel.IJQueryUIPlugins.ui_tabs'
+        interface='collective.js.jqueryui.controlpanel.IJQueryUIPlugins' field='ui_tabs'>
+        <field type='plone.registry.field.Bool'>
+            <default>False</default>
+            <required>False</required>
+            <title>Tabs</title>
+        </field>
+        <value>True</value>
+    </record>
+
 </registry>
