@@ -9,6 +9,7 @@ from plone.dexterity.utils import createContentInContainer
 from plone.supermodel import model
 from zope import schema
 from zope.container.interfaces import IObjectAddedEvent
+from Products.CMFPlone.interfaces.constrains import ISelectableConstrainTypes, ENABLED
 
 
 class IGroupSpaceFolder(model.Schema):
@@ -26,8 +27,9 @@ class IGroupSpaceFolder(model.Schema):
 
 
 @grok.subscribe(IGroupSpaceFolder, IObjectAddedEvent)
-def createIndex(folder, event):
+def setupGroupSpaceFolder(folder, event):
     if not IGroupSpaceFolder.providedBy(folder): return  # This should never happen but I'm defensive—er, paranoid.
+    # Add index page
     if 'index_html' not in folder.keys():
         index = createContentInContainer(
             folder,
@@ -38,3 +40,12 @@ def createIndex(folder, event):
         )
         index.reindexObject()
         folder.setDefaultPage('index_html')
+    # Make index page not easily addable
+    i = ISelectableConstrainTypes(folder)
+    i.setConstrainTypesMode(ENABLED)
+    addableTypes = i.getImmediatelyAddableTypes()
+    try:
+        addableTypes.remove('eke.knowledge.groupspaceindex')
+        i.setImmediatelyAddableTypes(addableTypes)
+    except ValueError:
+        pass
