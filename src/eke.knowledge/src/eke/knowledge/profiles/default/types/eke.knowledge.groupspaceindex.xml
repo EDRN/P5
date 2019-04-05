@@ -13,6 +13,7 @@
     <property name='behaviors'>
         <element value='plone.app.content.interfaces.INameFromTitle'/>
         <element value='plone.app.dexterity.behaviors.exclfromnav.IExcludeFromNavigation'/>
+        <element value='plone.app.dexterity.behaviors.discussion.IAllowDiscussion'/>
     </property>
     <property name='default_view'>view</property>
     <property name='default_view_fallback'>False</property>
