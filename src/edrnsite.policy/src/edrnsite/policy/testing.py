@@ -24,6 +24,7 @@ class EdrnsitePolicyLayer(PloneSandboxLayer):
         self.loadZCML(package=edrn.theme)
         self.loadZCML(package=eea.facetednavigation)
         self.loadZCML(package=eke.knowledge)
+        self.loadZCML(package=edrnsite.portlets)
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'edrnsite.policy:default')

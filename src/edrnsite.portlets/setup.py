@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Installer for the edrnsite.policy package."""
+"""Installer for the edrnsite.portlets package."""
 
 from setuptools import find_packages
 from setuptools import setup
@@ -13,9 +13,9 @@ long_description = '\n\n'.join([
 
 
 setup(
-    name='edrnsite.policy',
+    name='edrnsite.portlets',
     version='5.0.0',
-    description="EDRN site orchestration and policies",
+    description="EDRN site custom portlets",
     long_description=long_description,
     # Get more from https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
@@ -28,10 +28,10 @@ setup(
         "Operating System :: OS Independent",
         "License :: OSI Approved :: Apache Software License",
     ],
-    keywords='Early Detection cancer Python Plone',
+    keywords='Early Detection cancer Python Plone portlets',
     author='Sean Kelly',
     author_email='kelly@seankelly.biz',
-    url='https://pypi.python.org/pypi/edrnsite.policy',
+    url='https://pypi.python.org/pypi/edrnsite.portlets',
     license='ALv2',
     packages=find_packages('src', exclude=['ez_setup']),
     namespace_packages=['edrnsite'],
@@ -39,18 +39,44 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        # -*- Extra requirements: -*-
-        'Products.CMFPlone',
-        'edrn.theme',
-        'eke.knowledge',
-        'edrnsite.portlets',
-        'pas.plugins.ldap',
-        # == Provided by mr.bob: ==
-        'plone.api>=1.8.4',
-        'Products.GenericSetup>=1.8.2',
         'setuptools',
-        'z3c.jbot',
-        'eea.facetednavigation',
+        'Acquisition',
+        'DateTime',
+        'feedparser',
+        'five.customerize',
+        'plone.api >= 1.8.4',
+        'plone.app.i18n',
+        'plone.app.layout >= 1.2dev',
+        'plone.app.vocabularies >= 2.1.15.dev0',
+        'plone.app.z3cform',
+        'plone.autoform',
+        'plone.i18n',
+        'plone.memoize',
+        'plone.portlets >= 1.1',
+        'Products.CMFCore',
+        'Products.CMFDynamicViewFTI',
+        'Products.CMFPlone',
+        # 'Products.GenericSetup >= 2.0.dev0',  # FIXME? Why this
+        'Products.GenericSetup >= 1.8.2',
+        'Products.PluggableAuthService',
+        'six',
+        'transaction',
+        'ZODB3',
+        'zope.annotation',
+        'zope.browser',
+        'zope.component',
+        'zope.configuration',
+        'zope.container',
+        'zope.contentprovider',
+        'zope.event',
+        'zope.i18nmessageid',
+        'zope.interface',
+        'zope.lifecycleevent',
+        'zope.publisher',
+        'zope.schema',
+        'zope.site',
+        'zope.traversing',
+        'Zope2 >= 2.12.3',
     ],
     extras_require={
         'test': [
@@ -67,6 +93,6 @@ setup(
     [z3c.autoinclude.plugin]
     target = plone
     [console_scripts]
-    update_locale = edrnsite.policy.locales.update:update_locale
+    update_locale = edrnsite.portlets.locales.update:update_locale
     """,
 )
