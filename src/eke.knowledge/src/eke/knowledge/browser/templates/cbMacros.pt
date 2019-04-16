@@ -1,0 +1,59 @@
+<div metal:define-macro='columnOfCollaborativeGroupMembers'>
+    <tal:comment tal:replace='nothing'>A column of members goes here. Assumes "members" is the ReferenceList of Person objects.</tal:comment>
+    <table>
+        <tbody>
+            <tr tal:repeat='member members'>
+                <td tal:define='member member/to_object'>
+                    <a href='#' title='Dude of Awesomeness' tal:attributes='href member/absolute_url; title member/description;'
+                        tal:define='image member/getImage|nothing;'>
+                        <img
+                            src='#' alt='Photo'
+                            tal:condition='image'
+                            tal:replace='structure python:member.tag(scale="icon", css_class="cbShrinkidink")'
+                        />
+                        <img
+                            src='silhouette.png' alt='No photograph available.' i18n:attributes='alt'
+                            tal:condition='not:image'
+                            tal:attributes='src string:${context/++resource++no-photo.png};'
+                        />
+                    </a>
+                </td>
+                <td>
+                    <a href='#' title='Dude of Awesomeness' tal:attributes='href member/absolute_url; title member/description;'
+                        tal:content='member/title'>
+                        J. Q. Awesome
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<table class='listing' metal:define-macro='eventsTable' tal:define='toLocalizedTime nocall:context/@@plone/toLocalizedTime;'>
+    <tal:comment tal:replace='nothing'>A table of events. Assumes "events" contains a sequence of Event objects</tal:comment>
+    <thead>
+        <tr>
+            <th i18n:translate='edrnsiteCollaborationsCalendarTableHeadingEvent'>Event</th>
+            <th i18n:translate='edrnsiteCollaborationsCalendarTableHeadingWhen'>When</th>
+    </thead>
+    <tbody>
+        <tal:repeat repeat='event events'>
+            <tr class='odd' tal:define='oddrow repeat/event/odd' tal:attributes='class python:oddrow and "odd" or "even"'>
+                <td>
+                    <a href='#' title='A really fun event.' tal:attributes='href event/url; title event/description;'
+                        tal:content='event/title'>
+                        Fun Event
+                    </a>
+                </td>
+                <td tal:content='python:toLocalizedTime(event["start"])'>2011-06-21</td>
+            </tr>
+        </tal:repeat>
+    </tbody>
+</table>
+<ul metal:define-macro='datasetList' class='collabDetailList'>
+    <tal:comment tal:replace='nothing'>Renders a "ul" of datasets, assumes "datasets" is iterable of Dataset objects</tal:comment>
+    <li tal:repeat='dataset datasets'>
+        <a href='#' tal:attributes='href dataset/identifier' tal:content='dataset/title'>
+            A Massive Dataset Capturing Some Fecal Biomarker Residue
+        </a>
+    </li>
+</ul>

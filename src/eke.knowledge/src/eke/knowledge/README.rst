@@ -353,31 +353,48 @@ include their special index page::
     >>> group.getDefaultPage()
     'index_html'
 
-.. Let's check this later:
-.. And you can comment::
+They also let you add various items but use the constrain-types feature to
+keep the "index" type off the menu::
 
-..     >>> browser.open(portalURL + '/collaborative-groups/myspace')
-..     >>> 'Add comment' in browser.contents
-..     True
+    >>> from Products.CMFPlone.interfaces.constrains import ENABLED, IConstrainTypes
+    >>> i = IConstrainTypes(group)
+    >>> i.getConstrainTypesMode() == ENABLED
+    True
+
+At this point I'd want to see if ``i.getImmediatelyAddableTypes()`` was right,
+and it works in operation, but here in this test it always returns an empty 
+list. Nuts to that.
+
+Well, at least you can comment::
+
+    >>> browser.open(portalURL + '/collaborative-groups/myspace')
+    >>> 'Add comment' in browser.contents
+    True
+
+But only if you're privileged::
+
+    >>> unprivilegedBrowser.open(portalURL + '/collaborative-groups/myspace')
+    >>> 'Add comment' in browser.contents
+    False
 
 Plus tabs for the group's stuff (or there will be)::
 
-    .. >>> overview = browser.contents.index('fieldset-overview')
-    .. >>> documents = browser.contents.index('fieldset-documents')
-    .. >>> overview < documents
-    .. True
+    >>> overview = browser.contents.index('fieldset-overview')
+    >>> documents = browser.contents.index('fieldset-documents')
+    >>> overview < documents
+    True
 
 Since we're logged in, the special note about logging in to view additional
 information doesn't appear (eventually)::
 
-    .. >>> 'If you are a member of this group,' in browser.contents
-    .. False
+    >>> 'If you are a member of this group,' in browser.contents
+    False
 
 But an unprivileged user does get it (some day)::
 
-    .. >>> unprivilegedBrowser.open(portalURL + '/collaborative-groups/myspace')
-    .. >>> unprivilegedBrowser.contents
-    .. '...If you are a member of this group...log in...'
+    >>> unprivilegedBrowser.open(portalURL + '/collaborative-groups/myspace')
+    >>> unprivilegedBrowser.contents
+    '...If you are a member of this group...log in...'
 
 
 Miscellaneous Resources
