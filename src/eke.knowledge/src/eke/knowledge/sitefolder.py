@@ -14,7 +14,7 @@ from five import grok
 from plone.dexterity.utils import createContentInContainer
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize.view import memoize
-from z3c.relationfield import RelationValue
+from z3c.relationfield import RelationValue, RelationList
 from zope import schema
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
@@ -22,11 +22,15 @@ import urlparse, logging, plone.api, rdflib
 
 
 _logger = logging.getLogger(__name__)
-_piURI = u'http://edrn.nci.nih.gov/rdf/schema.rdf#pi'
+_piURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#pi')
+_coPIURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#copi')
+_coIURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#coi')
+_iURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#investigator')
 _memberTypeURI = u'http://edrn.nci.nih.gov/rdf/schema.rdf#memberType'
-_surnamePredicateURI = rdflib.URIRef('http://xmlns.com/foaf/0.1/surname')
-_middleNamePredicateURI = rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#middleName')
-_givenNamePredicateURI = rdflib.URIRef('http://xmlns.com/foaf/0.1/givenname')
+_surnamePredicateURI = rdflib.URIRef(u'http://xmlns.com/foaf/0.1/surname')
+_middleNamePredicateURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#middleName')
+_givenNamePredicateURI = rdflib.URIRef(u'http://xmlns.com/foaf/0.1/givenname')
+_siteURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#site')
 _edrnSiteTypes = frozenset((
     u'Biomarker Reference Laboratories',
     u'Biomarker Developmental Laboratories',
@@ -127,10 +131,15 @@ class SiteIngestor(Ingestor):
         else:
             return u'{}, {}'.format(last, given)
     def createPerson(self, context, identifier, predicates):
+        personTitle = self.createPersonTitle(predicates)
+        personID = getUtility(IIDNormalizer).normalize(personTitle)
+        if personID in context:
+            context.manage_delObjects([personID])
         person = createContentInContainer(
             context,
             'eke.knowledge.person',
-            title=self.createPersonTitle(predicates),
+            id=personID,
+            title=personTitle,
             identifier=identifier,
         )
         for predicate, fieldName in _personPredicates:
@@ -141,47 +150,62 @@ class SiteIngestor(Ingestor):
                     if value:
                         setattr(person, fieldName, value)
         return person
+    def _ingestPeople(self, statements, sites):
+        u'''The ``statements`` are the "spo" dict: ``{rdflib.term.URIRef subj: {rdflib.term.URIRef pred: [values]}}``
+        where subj is a subject URI and pred is a predicate URI, while values may be either rdflib.term.Literal
+        for literal objects or rdflib.term.URIRef for reference objects, while ``sites`` is a dict from unicode
+        site URI to siteObj. Return a mapping of uri to people objects.'''
+        createdPeople = {}
+        for uri, predicates in statements.iteritems():
+            if _siteURI not in predicates:
+                _logger.info(u"Person %s doesn't have a site; skipping", unicode(uri))
+                continue
+            siteURI = [unicode(i) for i in predicates[_siteURI]][0]
+            if siteURI not in sites:
+                _logger.info(u"Person %s has a site %s that is unknown; skipping", unicode(uri), siteURI)
+                continue
+            site = sites[unicode(siteURI)]
+            person = self.createPerson(site, uri, predicates)
+            createdPeople[unicode(uri)] = person
+        return createdPeople
+    def addInvestigators(self, siteURI, sites, personPredicate, people, sitePredicates, fieldName, multiValued):
+        siteURI = unicode(siteURI)
+        if siteURI not in sites: return
+        site = sites[siteURI]
+        if personPredicate not in sitePredicates: return
+        personURIs = [unicode(i) for i in sitePredicates[personPredicate]]
+        personIDs = [getUtility(IIntIds).getId(people[personURI]) for personURI in personURIs]
+        if multiValued:
+            setattr(site, fieldName, [RelationValue(personID) for personID in personIDs])
+        else:
+            setattr(site, fieldName, RelationValue(personIDs[0]))
     def ingest(self):
         u'''Override Ingestor.ingest so we can handle people'''
         context = aq_inner(self.context)
         catalog, portal = plone.api.portal.get_tool('portal_catalog'), plone.api.portal.get()
-        idUtility = getUtility(IIntIds)
         consequences = super(SiteIngestor, self).ingest()
-        siteStatments = consequences.statements
+        sites = {}
+        for siteObj in consequences.created + consequences.updated:
+            sites[siteObj.identifier] = siteObj
+        siteStatements = consequences.statements
         _logger.info('At this point, we got %r', consequences)
         catalog.reindexIndex('identifier', portal.REQUEST)
         peopleStatements = {}
         peopleDataSources = context.peopleDataSources if context.peopleDataSources is not None else []
         for personURL in peopleDataSources:
             peopleStatements.update(self.readRDF(personURL))
-        for siteIdentifier, predicates in siteStatments.iteritems():
-            # Set up principal inveestigators
-            piPredicateURI = rdflib.URIRef(_piURI)
-            if piPredicateURI in predicates:
-                pis = predicates[piPredicateURI]
-                if len(pis) > 0 and pis[0]:
-                    piIdentifier = pis[0]
-                    if piIdentifier in peopleStatements:
-                        results = catalog(identifier=unicode(siteIdentifier))
-                        if len(results) > 1:
-                            _logger.critical('Got multiple matches for %s', unicode(siteIdentifier))
-                        elif len(results) == 0:
-                            _logger.critical('Just created site %s not found in catalog', unicode(siteIdentifier))
-                        else:
-                            siteBrain = results[0]
-                            results = catalog(identifier=unicode(piIdentifier))
-                            if len(results) == 0:
-                                site = siteBrain.getObject()
-                                person = self.createPerson(site, piIdentifier, peopleStatements[piIdentifier])
-                                if person is not None:
-                                    site.principalInvestigator = RelationValue(idUtility.getId(person))
-                                    site.piObjectID = person.id
-                                    site.piName = person.title
-                                    consequences.created.append(person)
-                                # While we're here, set the siteID
-                                site.siteID = urlparse.urlparse(siteIdentifier)[2].split('/')[-1]
+        people = self._ingestPeople(peopleStatements, sites)
+        consequences.created.extend(people.values())
+        for siteURI, predicates in siteStatements.iteritems():
+            # Set up investigators
+            self.addInvestigators(siteURI, sites, _piURI, people, predicates, 'principalInvestigator', False)
+            self.addInvestigators(siteURI, sites, _coPIURI, people, predicates, 'coPrincipalInvestigators', True)
+            self.addInvestigators(siteURI, sites, _coIURI, people, predicates, 'coInvestigators', True)
+            self.addInvestigators(siteURI, sites, _iURI, people, predicates, 'investigators', True)
+            # While we're here, set the siteID
+            sites[unicode(siteURI)].siteID = urlparse.urlparse(siteURI)[2].split(u'/')[-1]
         catalog.reindexIndex('siteID', portal.REQUEST)
-        _logger.warn('Got %d site statements, %d people statements', len(siteStatments), len(peopleStatements))
+        _logger.warn('Got %d site statements, %d people statements', len(siteStatements), len(peopleStatements))
         publish(context)
         return consequences
 

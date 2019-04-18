@@ -201,7 +201,7 @@ Ingesting::
     >>> transaction.commit()
     >>> browser.open(portalURL + '/@@ingestRDF')
     >>> browser.contents
-    '...RDF Ingest Report...Objects Created (4)...Objects Updated (2)...'
+    '...RDF Ingest Report...Objects Created (19)...Objects Updated (2)...'
     >>> len(sitesFolder.keys())
     2
     >>> keys = sitesFolder.keys()
@@ -213,8 +213,6 @@ Ingesting::
     u'http://edrn.nci.nih.gov/data/sites/240'
     >>> site.siteID
     u'240'
-    >>> site.keys()
-    ['massion-pierre']
     >>> person = site['massion-pierre']
     >>> person.title
     u'Massion, Pierre'
@@ -232,6 +230,28 @@ Ingesting::
     u'mailto:pierre.massion@vanderbilt.edu'
     >>> person.accountName
     u'pmassion'
+
+There's not just a PI, there are other people too::
+
+    >>> len(site.keys())
+    12
+    >>> peopleObjects = list(site.keys())
+    >>> peopleObjects.sort()
+    >>> peopleObjects
+    ['antic-sanja', 'banerjee-priyanka', 'chambliss-katelyn', 'cleary-jaclyn', 'davis-harriet-stratton', 'massion-pierre', 'muterspaugh-anel-w', 'owens-janiqua', 'shah-chirayu', 'spencer-brady', 'sullivan-amy', 'walker-ronald-clark']
+
+And some of those people have positions of (lesser) power::
+
+    >>> len(site.coPrincipalInvestigators)
+    2
+    >>> coPIs = [i.to_object.title for i in site.coPrincipalInvestigators]
+    >>> coPIs.sort()
+    >>> coPIs
+    [u'Schabath, Matthew', u'Thompson, Zachary']
+    >>> site.coInvestigators[0].to_object.title
+    u'Shah, Chirayu'
+    >>> site.investigators[0].to_object.title
+    u'Shah, Chirayu'
 
 
 Protocols
@@ -376,6 +396,10 @@ But only if you're privileged::
     >>> unprivilegedBrowser.open(portalURL + '/collaborative-groups/myspace')
     >>> 'Add comment' in browser.contents
     False
+
+Let's put some members into the group::
+
+    >>> group.chair = RelationValue geeba ><
 
 Plus tabs for the group's stuff (or there will be)::
 
