@@ -18,6 +18,8 @@ from z3c.relationfield import RelationValue, RelationList
 from zope import schema
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
+from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent, ObjectAddedEvent
 import urlparse, logging, plone.api, rdflib
 
 
@@ -142,6 +144,7 @@ class SiteIngestor(Ingestor):
             title=personTitle,
             identifier=identifier,
         )
+        getUtility(IIntIds).register(person)  # WHY IS THIS NEEDED?
         for predicate, fieldName in _personPredicates:
             if predicate in predicates:
                 values = predicates.get(predicate)
@@ -149,6 +152,7 @@ class SiteIngestor(Ingestor):
                     value = unicode(values[0])
                     if value:
                         setattr(person, fieldName, value)
+        notify(ObjectAddedEvent(person))
         return person
     def _ingestPeople(self, statements, sites):
         u'''The ``statements`` are the "spo" dict: ``{rdflib.term.URIRef subj: {rdflib.term.URIRef pred: [values]}}``
@@ -174,11 +178,32 @@ class SiteIngestor(Ingestor):
         site = sites[siteURI]
         if personPredicate not in sitePredicates: return
         personURIs = [unicode(i) for i in sitePredicates[personPredicate]]
-        personIDs = [getUtility(IIntIds).getId(people[personURI]) for personURI in personURIs]
+        # Normally I'd do this:
+        #
+        #     personIDs = [getUtility(IIntIds).getId(people[personURI]) for personURI in personURIs]
+        #
+        # But five.intid is sometimes giving this:
+        #
+        #       File "Documents/Clients/JPL/Cancer/Portal/Development/P5/src/eke.knowledge/src/eke/knowledge/sitefolder.py", line 181, in addInvestigators
+        #         personIDs = [getUtility(IIntIds).getId(people[personURI]) for personURI in personURIs]
+        #       File ".buildout/eggs/five.intid-1.1.2-py2.7.egg/five/intid/intid.py", line 41, in getId
+        #         return z3IntIds.getId(self, ob)
+        #       File ".buildout/eggs/zope.intid-3.7.2-py2.7.egg/zope/intid/__init__.py", line 89, in getId
+        #         raise KeyError(ob)
+        #     KeyError: <Item at /edrn/sites/202-fox-chase-cancer-center/engstrom-paul>
+        #
+        # So we'll do a "best effort":
+        personIDs = []
+        for personURI in personURIs:
+            try:
+                personIDs.append(getUtility(IIntIds).getId(people[personURI]))
+            except KeyError:
+                pass
         if multiValued:
             setattr(site, fieldName, [RelationValue(personID) for personID in personIDs])
         else:
             setattr(site, fieldName, RelationValue(personIDs[0]))
+        notify(ObjectModifiedEvent(site))
     def ingest(self):
         u'''Override Ingestor.ingest so we can handle people'''
         context = aq_inner(self.context)
@@ -202,6 +227,12 @@ class SiteIngestor(Ingestor):
             self.addInvestigators(siteURI, sites, _coPIURI, people, predicates, 'coPrincipalInvestigators', True)
             self.addInvestigators(siteURI, sites, _coIURI, people, predicates, 'coInvestigators', True)
             self.addInvestigators(siteURI, sites, _iURI, people, predicates, 'investigators', True)
+            # While we're here, set the piName
+            try:
+                sites[unicode(siteURI)].piName = people[unicode(predicates[_piURI][0])].title
+            except (KeyError, IndexError):
+                # We tried
+                pass
             # While we're here, set the siteID
             sites[unicode(siteURI)].siteID = urlparse.urlparse(siteURI)[2].split(u'/')[-1]
         catalog.reindexIndex('siteID', portal.REQUEST)
