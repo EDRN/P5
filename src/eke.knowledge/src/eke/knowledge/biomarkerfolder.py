@@ -17,7 +17,9 @@ from plone.i18n.normalizer.interfaces import IIDNormalizer
 from z3c.relationfield import RelationValue
 from zope import schema
 from zope.component import getUtility, getMultiAdapter
+from zope.event import notify
 from zope.intid.interfaces import IIntIds
+from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
 import logging, plone.api, rdflib, uuid, contextlib, urllib2
@@ -165,6 +167,7 @@ class BiomarkerIngestor(Ingestor):
                     for protocol in protocols:
                         self._addBiomarkerToProtocol(biomarkerObj, protocol)
             biomarkerObj.protocols = protocolRVs
+            notify(ObjectModifiedEvent(biomarkerObj))
     def addStatistics(self, bodySystemStudy, bags, statements):
         # Gather all the URIs
         sensitivityURIs = []
@@ -241,6 +244,7 @@ class BiomarkerIngestor(Ingestor):
                     _logger.exception(u'RDF data "%r" for bodysystemstudy field "%s" invalid; skipping', values, predicate)
                     continue
             bodySystemStudy.protocol = RelationValue(idUtil.getId(protocols[0]))
+            notify(ObjectModifiedEvent(bodySystemStudy))
             # TODO:
             # self._addBiomarkerToProtocol(aq_parent(aq_inner(aq_parent(aq_inner(bodySystemStudy)))), protocols[0])
             # TODO:
@@ -344,6 +348,7 @@ class BiomarkerIngestor(Ingestor):
                 for panelURI in panelURIs:
                     panel = panels[panelURI]
                     panel.members.append(RelationValue(idUtil.getId(biomarker)))
+                    notify(ObjectModifiedEvent(panel))
             except KeyError:
                 # No _memberOfPanelPredicateURI, so skip
                 pass

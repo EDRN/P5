@@ -10,6 +10,8 @@ from z3c.relationfield import RelationValue
 from zope import schema
 from zope.component import getUtility
 from zope.interface import Invalid
+from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
 import plone.api, logging
 
 _logger = logging.getLogger(__name__)
@@ -75,6 +77,7 @@ def setValue(obj, fti, iface, predicate, predicateMap, values):
             fieldBinding.set(obj, rvs)
         elif len(items) > 0:
             fieldBinding.set(obj, rvs[0])
+        notify(ObjectModifiedEvent(obj))
     else:  # Non-reference field
         try:
             values = [textString.strip() for textString in values]
