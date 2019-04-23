@@ -11,8 +11,10 @@ from Acquisition import aq_inner
 from five import grok
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize.view import memoize
+from z3c.relationfield import RelationValue
 from zope.component import getUtility
-import urlparse, logging, plone.api, rdflib, dublincore
+from zope.intid.interfaces import IIntIds
+import urlparse, logging, plone.api, rdflib, dublincore, os.path
 
 
 _logger = logging.getLogger(__name__)
@@ -25,6 +27,7 @@ _descriptionPredicates = (
     rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#aims'),
     rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#outcome')
 )
+_siteURIPrefix = u'http://edrn.nci.nih.gov/data/sites/'
 
 
 class IProtocolFolder(IKnowledgeFolder):
@@ -50,11 +53,34 @@ class ProtocolIngestor(Ingestor):
             if typeURI != _siteSpecificTypeURI:
                 filtered[subjectURI] = predicates
         return filtered
+    def gatherProtocolToInvolvedInvestigatorSites(self):
+        context = aq_inner(self.context)
+        statements = {}
+        for url in context.rdfDataSources:
+            statements.update(super(ProtocolIngestor, self).readRDF(url))
+        protocolToInvolvedSites = {}
+        for uri, predicates in statements.iteritems():
+            typeURI = predicates[rdflib.RDF.type][0]
+            if typeURI == _siteSpecificTypeURI:
+                protocolID, siteID = os.path.basename(urlparse.urlparse(unicode(uri)).path).split(u'-')
+                siteIDs = protocolToInvolvedSites.get(protocolID, set())
+                siteIDs.add(siteID)
+                protocolToInvolvedSites[protocolID] = siteIDs
+        return protocolToInvolvedSites
+    def setInvolvedInvestigatorSites(self, protocol, protocolToInvolvedSites):
+        catalog, idUtil = plone.api.portal.get_tool('portal_catalog'), getUtility(IIntIds)
+        protocolID = os.path.basename(urlparse.urlparse(protocol.identifier).path).split(u'-')[0]
+        siteNumbers = protocolToInvolvedSites.get(protocolID, [])
+        siteIDs = [_siteURIPrefix + i for i in siteNumbers]
+        brains = catalog(identifier=siteIDs, sort_on='sortable_title')
+        protocol.involvedInvestigatorSites = [RelationValue(idUtil.getId(b.getObject())) for b in brains]
     def ingest(self):
         context = aq_inner(self.context)
         catalog, portal = plone.api.portal.get_tool('portal_catalog'), plone.api.portal.get()
         consequences = super(ProtocolIngestor, self).ingest()
+
         catalog.reindexIndex('identifier', portal.REQUEST)
+        protocolToInvolvedSites = self.gatherProtocolToInvolvedInvestigatorSites()
         for uri, predicates in consequences.statements.iteritems():
             if unicode(uri) == u'http://edrn.nci.nih.gov/data/protocols/0':
                 # Bad data from DMCC
@@ -86,6 +112,8 @@ class ProtocolIngestor(Ingestor):
                         if value:
                             p.description = value
                             break
+                # And the involved sites
+                self.setInvolvedInvestigatorSites(p, protocolToInvolvedSites)
         return consequences
 
 
