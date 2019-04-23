@@ -38,13 +38,16 @@ class RDFIngestor(grok.View):
                 portal = plone.api.portal.get()
                 for path in paths:
                     folder = portal.unrestrictedTraverse(path.encode('utf-8'))
-                    ingestor = IIngestor(folder)
                     try:
+                        ingestor = IIngestor(folder)
                         results = ingestor.ingest()
                         transaction.commit()
                         self.completeResults.created.extend(results.created)
                         self.completeResults.updated.extend(results.updated)
                         self.completeResults.deleted.extend(results.deleted)
+                    except TypeError:
+                        _logger.exception(u"Can't adapt IIngestor to folder at path %s; skipping", path)
+                        self.skipped.append(folder)
                     except IngestDisabled:
                         self.skipped.append(folder)
             finally:
