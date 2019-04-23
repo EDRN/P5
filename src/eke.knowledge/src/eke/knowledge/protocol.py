@@ -126,14 +126,10 @@ class IProtocol(IKnowledgeObject):
         description=_(u'The design type of this protocol.'),
         required=False,
     )
-    fieldOfResearch = schema.List(
+    fieldOfResearch = schema.Text(
         title=_(u'Fields of Research'),
-        description=_(u'A list of numeric codes identifying what fields of research the protocol is pursuing.'),
+        description=_(u'No one knows what is really supposed to go here.'),
         required=False,
-        value_type=schema.TextLine(
-            title=_(u'Field of Research Code'),
-            description=_(u'A code identifying a single field of research.')
-        )
     )
     abbrevName = schema.Text(
         title=_(u'Abbreviated Name'),
@@ -308,7 +304,7 @@ class IProtocol(IKnowledgeObject):
             title=_(u'Biomarker'),
             description=_(u'A single biomarker being studied by this protocol.'),
             required=False,
-            source=CatalogSource()  # TODO: Constrain to IBiomarker?
+            source=CatalogSource(object_provides='eke.knowledge.biomarker.IBiomarker')
         )
     )
     datasets = RelationList(
@@ -338,7 +334,6 @@ class IProtocol(IKnowledgeObject):
 IProtocol.setTaggedValue('predicates', {
     TITLE_URI: ('title', False),
     DESCRIPTION_URI: ('description', False),
-    u'http://edrn.nci.nih.gov/rdf/schema.rdf#involvedInvestigatorSite': ('involvedInvestigatorSite', True),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#coordinatingInvestigatorSite': ('coordinatingInvestigatorSite', True),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#leadInvestigatorSite': ('leadInvestigatorSite', True),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#bmName': ('bmName', False),
@@ -347,15 +342,15 @@ IProtocol.setTaggedValue('predicates', {
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#aims': ('aims', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#analyticMethod': ('analyticMethod', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#blinding': ('blinding', False),
-    u'http://edrn.nci.nih.gov/rdf/schema.rdf#cancerType': ('cancerTypes', True),
+    # Need to somehow map from simple numeric like "174" to an RDF URI for an IDisease
+    # u'http://edrn.nci.nih.gov/rdf/schema.rdf#cancerType': ('cancerTypes', True),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#comments': ('comments', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#dataSharingPlan': ('inSituDataSharingPlan', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#startDate': ('startDate', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#estimatedFinishDate': ('estimatedFinishDate', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#finishDate': ('finishDate', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#design': ('design', False),
-    # Need to investigate data typing issues:
-    # u'http://edrn.nci.nih.gov/rdf/schema.rdf#fieldOfResearch': ('fieldOfResearch', False),
+    u'http://edrn.nci.nih.gov/rdf/schema.rdf#fieldOfResearch': ('fieldOfResearch', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#abbreviatedName': ('abbrevName', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#objective': ('objective', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#protocolType': ('protocolType', False),
