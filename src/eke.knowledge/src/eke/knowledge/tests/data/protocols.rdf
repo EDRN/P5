@@ -15,7 +15,7 @@
     <ns1:coordinatingInvestigatorSite rdf:resource="http://edrn.nci.nih.gov/data/sites/5"/>
     <ns1:cancerType>162                                                                                                 </ns1:cancerType>
     <ns1:collaborativeGroupText>Lung and Upper Aerodigestive Cancers Research Group                  </ns1:collaborativeGroupText>
-    <ns1:leadInvestigatorSite rdf:resource="http://edrn.nci.nih.gov/data/sites/515"/>
+    <ns1:leadInvestigatorSite rdf:resource="http://edrn.nci.nih.gov/data/sites/240"/>
     <ns1:analyticMethod>Assay. The diagnostic chip includes capture proteins for the most predictive markers and empty T7 phage controls in replicates of eight, randomly distributed across the chip. The methodology for all studies will be identical to that described in published manuscripts and preliminary results section.</ns1:analyticMethod>
     <ns1:fieldOfResearch>Proteomics</ns1:fieldOfResearch>
     <ns1:phasedStatus>1</ns1:phasedStatus>
@@ -31,7 +31,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://edrn.nci.nih.gov/data/protocols/316">
     <ns1:protocolType>Validation</ns1:protocolType>
-    <ns1:leadInvestigatorSite rdf:resource="http://edrn.nci.nih.gov/data/sites/726"/>
+    <ns1:leadInvestigatorSite rdf:resource="http://edrn.nci.nih.gov/data/sites/240"/>
     <ns1:analyticMethod>TBD</ns1:analyticMethod>
     <ns1:bmName>Biomarkers that pass the test on the HCC Phase 2 Validation Set will be included in the Phase 3 study. These makers, along with DCP, will not be measured in real time, but will be assayed retrospectively in a blinded fashion either from samples collected from the entire prospective cohort or from a nested case-control sample embedded in the whole cohort.</ns1:bmName>
     <ns1:fieldOfResearch>Proteomics</ns1:fieldOfResearch>
