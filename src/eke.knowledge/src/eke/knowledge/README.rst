@@ -213,6 +213,8 @@ Ingesting::
     u'http://edrn.nci.nih.gov/data/sites/240'
     >>> site.siteID
     u'240'
+    >>> site.piName
+    u'Massion, Pierre'
     >>> person = site['massion-pierre']
     >>> person.title
     u'Massion, Pierre'
@@ -273,11 +275,11 @@ Protocols
 
 Ingesting::
 
-    >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'protocols']
+    >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'sites', u'protocols']
     >>> transaction.commit()
     >>> browser.open(portalURL + '/@@ingestRDF')
     >>> browser.contents
-    '...RDF Ingest Report...Objects Created (2)...'
+    '...RDF Ingest Report...Objects Created (19)...'
     >>> len(protocolsFolder.keys())
     2
     >>> keys = protocolsFolder.keys()
@@ -308,11 +310,11 @@ Science Data
 
 Ingesting::
 
-    >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'protocols', u'datasets']
+    >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'sites', u'protocols', u'datasets']
     >>> transaction.commit()
     >>> browser.open(portalURL + '/@@ingestRDF')
     >>> browser.contents
-    '...RDF Ingest Report...Objects Created (2)...'
+    '...RDF Ingest Report...Objects Created (19)...'
     >>> len(dataFolder.keys())
     2
     >>> keys = dataFolder.keys()
@@ -394,31 +396,31 @@ Well, at least you can comment::
 But only if you're privileged::
 
     >>> unprivilegedBrowser.open(portalURL + '/collaborative-groups/myspace')
-    >>> 'Add comment' in browser.contents
+    >>> 'Add comment' in unprivilegedBrowser.contents
     False
 
-Let's put some members into the group::
+.. Let's put some members into the group::
 
-    >>> group.chair = RelationValue geeba ><
+..     >>> group.chair = RelationValue geeba ><
 
-Plus tabs for the group's stuff (or there will be)::
+.. Plus tabs for the group's stuff (or there will be)::
 
-    >>> overview = browser.contents.index('fieldset-overview')
-    >>> documents = browser.contents.index('fieldset-documents')
-    >>> overview < documents
-    True
+..     >>> overview = browser.contents.index('fieldset-overview')
+..     >>> documents = browser.contents.index('fieldset-documents')
+..     >>> overview < documents
+..     True
 
-Since we're logged in, the special note about logging in to view additional
-information doesn't appear (eventually)::
+.. Since we're logged in, the special note about logging in to view additional
+.. information doesn't appear (eventually)::
 
-    >>> 'If you are a member of this group,' in browser.contents
-    False
+..     >>> 'If you are a member of this group,' in browser.contents
+..     False
 
-But an unprivileged user does get it (some day)::
+.. But an unprivileged user does get it (some day)::
 
-    >>> unprivilegedBrowser.open(portalURL + '/collaborative-groups/myspace')
-    >>> unprivilegedBrowser.contents
-    '...If you are a member of this group...log in...'
+..     >>> unprivilegedBrowser.open(portalURL + '/collaborative-groups/myspace')
+..     >>> unprivilegedBrowser.contents
+..     '...If you are a member of this group...log in...'
 
 
 Miscellaneous Resources
@@ -440,11 +442,11 @@ Miscellaneous Resources
 
 Ingesting::
 
-    >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'protocols', u'datasets', u'resources']
+    >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'sites', u'protocols', u'datasets', u'resources']
     >>> transaction.commit()
     >>> browser.open(portalURL + '/@@ingestRDF')
     >>> browser.contents
-    '...RDF Ingest Report...Objects Created (2)...'
+    '...RDF Ingest Report...Objects Created (19)...'
     >>> len(resourcesFolder.keys())
     2
     >>> keys = resourcesFolder.keys()
@@ -798,8 +800,11 @@ OK that's enough. RDF is the order of the day::
     >>> panel.members[0].to_object.title
     u'Apogee 1'
 
+Ingesting also links protocols to biomarkers::
 
-
+    >>> browser.open(portalURL + '/protocols/279-lung-reference-set-a-application-edward')
+    >>> browser.contents
+    '...Biomarkers:...Apogee 1...'
 
 
 .. These will come later
