@@ -130,8 +130,6 @@ class BiomarkerIngestor(Ingestor):
     grok.context(IBiomarkerFolder)
     def getInterfaceForContainedObjects(self):
         raise NotImplementedError(u'{} handles its ingest specially'.format(self.__class__.__name__))
-    def _addBiomarkerToProtocol(self, biomarkerObj, protocolObj):
-        pass
     def updateBiomarker(self, biomarkerObj, fti, iface, predicates, context, biomarkerStatements, request):
         # Set biomarker fields; TODO: REFACTOR HERE?
         for predicate, (fieldName, isReference) in _biomarkerPredicates.iteritems():
@@ -245,9 +243,7 @@ class BiomarkerIngestor(Ingestor):
                     continue
             bodySystemStudy.protocol = RelationValue(idUtil.getId(protocols[0]))
             notify(ObjectModifiedEvent(bodySystemStudy))
-            # TODO:
-            # self._addBiomarkerToProtocol(aq_parent(aq_inner(aq_parent(aq_inner(bodySystemStudy)))), protocols[0])
-            # TODO:
+            self._addBiomarkerToProtocol(bodySystemStudy.aq_parent.aq_parent, protocols[0])
             if _sensitivityDatasPredicateURI in bmStudyDataPredicates:
                 bags = bmStudyDataPredicates[_sensitivityDatasPredicateURI]
                 self.addStatistics(bodySystemStudy, bags, statements)
@@ -299,6 +295,12 @@ class BiomarkerIngestor(Ingestor):
         # This could be refactored with several other *folder.py files
         with contextlib.closing(urllib2.urlopen(source)) as bytestring:
             return bytestring.read()
+    def _addBiomarkerToProtocol(self, biomarker, protocol):
+        if protocol.biomarkers is None: protocol.biomarkers = []
+        currentIDs = [i.to_id for i in protocol.biomarkers]
+        biomarkerID = getUtility(IIntIds).getId(biomarker)
+        if biomarkerID not in currentIDs:
+            protocol.biomarkers.append(RelationValue(biomarkerID))
     def ingest(self):
         request = plone.api.portal.get().REQUEST
         normalize = getUtility(IIDNormalizer).normalize
