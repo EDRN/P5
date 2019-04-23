@@ -15,26 +15,26 @@
             <metal:content-core define-macro='content-core'>
 
                 <div id="site-abbreviation">
-                    <label for='parent-fieldname-abbreviation' i18n:translate='label_abbreviation'>Abbreviation:</label>
-                    <span id='parent-fieldname-abbreviation' tal:content='structure context/abbreviation'>XQY</span>
+                    <label for='field-abbreviation' i18n:translate='label_abbreviation'>Abbreviation:</label>
+                    <span id='field-abbreviation' tal:content='structure context/abbreviation'>XQY</span>
                 </div>
 
                 <div id="site-column-container">
                     <div id="site-main-column">
                         <div>
-                            <label for='parent-fieldname-memberType' i18n:translate='label_memberType'>Member Type:</label>
-                            <span id='parent-fieldname-memberType' tal:content='structure context/memberType'>Adults Only</span>
+                            <label for='field-memberType' i18n:translate='label_memberType'>Member Type:</label>
+                            <span id='field-memberType' tal:content='structure context/memberType'>Adults Only</span>
                         </div>
                         <div tal:condition='context/homePage'>
-                            <label for='parent-fieldname-homePage' i18n:translate='label_homePage'>Home Page:</label>
+                            <label for='field-homePage' i18n:translate='label_homePage'>Home Page:</label>
                             <a href='#' tal:attributes='href context/homePage' 
                                 tal:content='context/homePage'>http://superclubs.com/</a>
                         </div>
 
                         <div tal:condition='view/showSponsor'>
-                            <label for='parent-fieldname-sponsor' i18n:translate='label_sponsor'>Sponsor:</label>
+                            <label for='field-sponsor' i18n:translate='label_sponsor'>Sponsor:</label>
                             <a href='#' tal:attributes='href context/sponsor/to_object/absolute_url'
-                                id='parent-fieldname-sponsor'
+                                id='field-sponsor'
                                 tal:content='context/sponsor/to_object/Title'>
                                 Sponsor
                             </a>
@@ -52,12 +52,63 @@
                                 Joe PI
                             </a>
                         </div>
+
+                        <div>
+                            <label for='coPrincipalInvestigators' i18n:translate='label_coPrincipalInvestigators'>
+                                Co-Principal Investigators:
+                            </label>
+                            <span id='coPrincipalInvestigators' tal:condition='not:context/coPrincipalInvestigators'>
+                                No co-principal investigators found
+                            </span>
+                            <ul id='coPrincipalInvestigators'>
+                                <li tal:repeat='investigator context/coPrincipalInvestigators'>
+                                    <a href='#' tal:attributes='href investigator/to_object/absolute_url'
+                                        tal:content='investigator/to_object/Title'>
+                                        Joe Blow
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <label for='coInvestigators' i18n:translate='label_coInvestigators'>
+                                Co-Investigators:
+                            </label>
+                            <span id='coInvestigators' tal:condition='not:context/coInvestigators'>
+                                No co-investigators found
+                            </span>
+                            <ul id='coInvestigators'>
+                                <li tal:repeat='investigator context/coInvestigators'>
+                                    <a href='#' tal:attributes='href investigator/to_object/absolute_url'
+                                        tal:content='investigator/to_object/Title'>
+                                        Joe Blow
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <label for='investigators' i18n:translate='label_investigators'>
+                                Investigators:
+                            </label>
+                            <span id='investigators' tal:condition='not:context/investigators'>
+                                No investigators found
+                            </span>
+                            <ul id='investigators'>
+                                <li tal:repeat='investigator context/investigators'>
+                                    <a href='#' tal:attributes='href investigator/to_object/absolute_url'
+                                        tal:content='investigator/to_object/Title'>
+                                        Joe Blow
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
 
 <!--
                         <div tal:condition='view/showOrgans'>
-                            <label for='parent-fieldname-organ' i18n:translate='label_organ'>Organs:</label>
-                            <ul id='parent-fieldname-organ'>
+                            <label for='field-organ' i18n:translate='label_organ'>Organs:</label>
+                            <ul id='field-organ'>
                                 <li tal:repeat='organ context/organs'>
                                     <span tal:replace='organ'>Anus</span>
                                 </li>

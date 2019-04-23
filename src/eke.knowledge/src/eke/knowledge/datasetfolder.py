@@ -10,7 +10,10 @@ from .dublincore import TITLE_URI
 from .knowledgefolder import IKnowledgeFolder
 from Acquisition import aq_inner
 from five import grok
+from z3c.relationfield import RelationValue
 from zope import schema
+from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
 import urlparse, logging, plone.api, rdflib, urllib2, contextlib
@@ -54,6 +57,7 @@ class DatasetIngestor(Ingestor):
         with contextlib.closing(urllib2.urlopen(source)) as bytestring:
             return bytestring.read()
     def ingest(self):
+        idUtil = getUtility(IIntIds)
         context = aq_inner(self.context)
         consequences = super(DatasetIngestor, self).ingest()
         catalog = plone.api.portal.get_tool('portal_catalog')
@@ -65,13 +69,15 @@ class DatasetIngestor(Ingestor):
                     # eCAS doesn't use valid URIs to body systems so we manually extract them
                     organ = urlparse.urlparse(unicode(predicates[_bodySystemPredicateURI][0]))[2].split('/')[-1]
                     dataset.bodySystemName = organ
-        # Set protocol names
+        # Set protocol names & links
         objs = list(consequences.created)
         objs.extend(consequences.updated)
-        for obj in objs:
-            rv = obj.protocol
+        for datasetObj in objs:
+            rv = datasetObj.protocol
             if rv is None or rv.to_object is None: continue
-            obj.protocolName = rv.to_object.title
+            datasetObj.protocolName = rv.to_object.title
+            if rv.to_object.datasets is None: rv.to_object.datasets = []
+            rv.to_object.datasets.append(RelationValue(idUtil.getId(datasetObj)))
         portal = plone.api.portal.get()
         # Add summary data
         if context.dsSumDataSource:

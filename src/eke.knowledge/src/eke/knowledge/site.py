@@ -70,36 +70,36 @@ class ISite(IKnowledgeObject):
         required=False,
         source=CatalogSource(object_provides=IPerson.__identifier__)
     )
-    # coPrincipalInvestigators = schema.List(
-    #     title=_(u'Co-Principal Investigators'),
-    #     description=_(u'Additional leading principal investigators.'),
-    #     required=False,
-    #     value_type=schema.Object(
-    #         title=_(u'Co-Principal Investigator'),
-    #         description=_(u'Additional leading principal investigator.'),
-    #         schema=IPerson
-    #     )
-    # )
-    # coInvestigators = schema.List(
-    #     title=_(u'Co-Investigators'),
-    #     description=_(u'Assistant or associate investigators helping out with EDRN research at the site.'),
-    #     required=False,
-    #     value_type=schema.Object(
-    #         title=_(u'Co-Investigator'),
-    #         description=_(u'Assistant or associate investigator helping out.'),
-    #         schema=IPerson
-    #     )
-    # )
-    # investigators = schema.List(
-    #     title=_(u'Investigators'),
-    #     description=_(u'Investigators at the site conducting other research.'),
-    #     required=False,
-    #     value_type=schema.Object(
-    #         title=_(u'Investigator'),
-    #         description=_(u'Investigator at the site conducting other research.'),
-    #         schema=IPerson
-    #     )
-    # )
+    coPrincipalInvestigators = RelationList(
+        title=_(u'Co-Principal Investigators'),
+        description=_(u'Additional leading principal investigators.'),
+        required=False,
+        value_type=RelationChoice(
+            title=_(u'Co-Principal Investigator'),
+            description=_(u'Additional leading principal investigator.'),
+            source=CatalogSource(object_provides=IPerson.__identifier__)
+        )
+    )
+    coInvestigators = RelationList(
+        title=_(u'Co-Investigators'),
+        description=_(u'Assistant or associate investigators helping out with EDRN research at the site.'),
+        required=False,
+        value_type=RelationChoice(
+            title=_(u'Co-Investigator'),
+            description=_(u'Assistant or associate investigator helping out.'),
+            source=CatalogSource(object_provides=IPerson.__identifier__)
+        )
+    )
+    investigators = RelationList(
+        title=_(u'Investigators'),
+        description=_(u'Investigators at the site conducting other research.'),
+        required=False,
+        value_type=RelationChoice(
+            title=_(u'Investigator'),
+            description=_(u'Investigator at the site conducting other research.'),
+            source=CatalogSource(object_provides=IPerson.__identifier__)
+        )
+    )
 
     # No longer neeed:
     # piUID = schema.TextLine(
@@ -113,7 +113,7 @@ class ISite(IKnowledgeObject):
         description=_(u'DMCC-assigned identifier of the site.'),
         required=False,
     )
-    organs = schema.List(
+    organs = RelationList(
         title=_(u'Organs'),
         description=_(u'Names of the organs on which this site focuses.'),
         required=False,

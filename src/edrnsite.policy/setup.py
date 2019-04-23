@@ -43,6 +43,7 @@ setup(
         'Products.CMFPlone',
         'edrn.theme',
         'eke.knowledge',
+        'edrnsite.portlets',
         'pas.plugins.ldap',
         # == Provided by mr.bob: ==
         'plone.api>=1.8.4',

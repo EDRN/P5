@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<portlets xmlns:i18n='http://xml.zope.org/namespaces/i18n' i18n:domain='edrnsite.policy' purge='False'>
+    <portlet
+        addview='portlets.dmccrss'
+        description="A portlet that shows RSS from the DMCC's weird feed"
+        i18n:attributes='title; description'
+        title='DMCC RSS Feed'>
+        <for interface='plone.app.portlets.interfaces.IColumn'/>
+        <for interface='plone.app.portlets.interfaces.IDashboard'/>
+    </portlet>
+</portlets>

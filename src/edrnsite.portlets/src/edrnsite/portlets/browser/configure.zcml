@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="edrnsite.portlets">
+
+  <!-- Publish static files -->
+  <plone:static
+      name="edrnsite.portlets"
+      type="plone"
+      directory="static"
+      />
+
+</configure>

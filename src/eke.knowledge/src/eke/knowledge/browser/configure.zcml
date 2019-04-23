@@ -71,5 +71,11 @@
         name='unacceptedBiomarker'
         template='templates/underreview.pt'
     />
+    <browser:page
+        for='*'
+        permission='zope2.Public'
+        name='collaborativeGroupMacros'
+        template='templates/cbMacros.pt'
+    />
     
 </configure>

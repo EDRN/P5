@@ -17,7 +17,9 @@ from plone.i18n.normalizer.interfaces import IIDNormalizer
 from z3c.relationfield import RelationValue
 from zope import schema
 from zope.component import getUtility, getMultiAdapter
+from zope.event import notify
 from zope.intid.interfaces import IIntIds
+from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
 import logging, plone.api, rdflib, uuid, contextlib, urllib2
@@ -128,8 +130,6 @@ class BiomarkerIngestor(Ingestor):
     grok.context(IBiomarkerFolder)
     def getInterfaceForContainedObjects(self):
         raise NotImplementedError(u'{} handles its ingest specially'.format(self.__class__.__name__))
-    def _addBiomarkerToProtocol(self, biomarkerObj, protocolObj):
-        pass
     def updateBiomarker(self, biomarkerObj, fti, iface, predicates, context, biomarkerStatements, request):
         # Set biomarker fields; TODO: REFACTOR HERE?
         for predicate, (fieldName, isReference) in _biomarkerPredicates.iteritems():
@@ -165,6 +165,7 @@ class BiomarkerIngestor(Ingestor):
                     for protocol in protocols:
                         self._addBiomarkerToProtocol(biomarkerObj, protocol)
             biomarkerObj.protocols = protocolRVs
+            notify(ObjectModifiedEvent(biomarkerObj))
     def addStatistics(self, bodySystemStudy, bags, statements):
         # Gather all the URIs
         sensitivityURIs = []
@@ -241,9 +242,8 @@ class BiomarkerIngestor(Ingestor):
                     _logger.exception(u'RDF data "%r" for bodysystemstudy field "%s" invalid; skipping', values, predicate)
                     continue
             bodySystemStudy.protocol = RelationValue(idUtil.getId(protocols[0]))
-            # TODO:
-            # self._addBiomarkerToProtocol(aq_parent(aq_inner(aq_parent(aq_inner(bodySystemStudy)))), protocols[0])
-            # TODO:
+            notify(ObjectModifiedEvent(bodySystemStudy))
+            self._addBiomarkerToProtocol(bodySystemStudy.aq_parent.aq_parent, protocols[0])
             if _sensitivityDatasPredicateURI in bmStudyDataPredicates:
                 bags = bmStudyDataPredicates[_sensitivityDatasPredicateURI]
                 self.addStatistics(bodySystemStudy, bags, statements)
@@ -295,6 +295,12 @@ class BiomarkerIngestor(Ingestor):
         # This could be refactored with several other *folder.py files
         with contextlib.closing(urllib2.urlopen(source)) as bytestring:
             return bytestring.read()
+    def _addBiomarkerToProtocol(self, biomarker, protocol):
+        if protocol.biomarkers is None: protocol.biomarkers = []
+        currentIDs = [i.to_id for i in protocol.biomarkers]
+        biomarkerID = getUtility(IIntIds).getId(biomarker)
+        if biomarkerID not in currentIDs:
+            protocol.biomarkers.append(RelationValue(biomarkerID))
     def ingest(self):
         request = plone.api.portal.get().REQUEST
         normalize = getUtility(IIDNormalizer).normalize
@@ -344,6 +350,7 @@ class BiomarkerIngestor(Ingestor):
                 for panelURI in panelURIs:
                     panel = panels[panelURI]
                     panel.members.append(RelationValue(idUtil.getId(biomarker)))
+                    notify(ObjectModifiedEvent(panel))
             except KeyError:
                 # No _memberOfPanelPredicateURI, so skip
                 pass

@@ -11,19 +11,79 @@
         <title>Group Space Index View</title>
     </head>
     <body>
-        <metal:content-core fill-slot='content-core'>
-            <metal:content-core define-macro='content-core' tal:define='
-                isAnon context/@@plone_portal_state/anonymous;
-            '>
-            <pre tal:condition='isAnon'>You are anonymous. You are legion.</pre>
-            <pre tal:condition='not:isAnon'>Hiya, friend.</pre>
-            </metal:content-core>
-        </metal:content-core>
         <metal:css fill-slot='style_slot'>
-            <style type='text/css' rel='stylesheet' href='#'
+            <link type='text/css' rel='stylesheet' href='#'
                 tal:define='navroot context/@@plone_portal_state/navigation_root_url'
                 tal:attributes='href string:${navroot}/++resource++eke.knowledge/collaborations.css'
             />
         </metal:css>
+
+        <metal:main fill-slot='main'>
+            <tal:main-macro metal:define-macro='main' define='
+                isAnon context/@@plone_portal_state/anonymous;
+                plone_view nocall:context/@@plone;
+                registry context/portal_registry;
+                desc_length python:registry["plone.search_results_description_length"];
+            '>
+                <pre class='legion' tal:condition='isAnon'>You are anonymous. You are legion.</pre>
+                <pre class='legion' tal:condition='not:isAnon'>Hiya, friend.</pre>
+                <pre tal:content='desc_length'/>
+
+                <div class='collaborativeGroupContainer'>
+                    <div class='cbInfoBox'>
+                        <div tal:replace='structure provider:plone.abovecontenttitle' />
+                        <h1 class='documentFirstHeading' tal:content='context/title'>
+                            Mega Awesome Group
+                        </h1>
+                        <!-- Hide byline: <div tal:replace='structure provider:plone.belowcontenttitle' /> -->
+                        <p class='documentDescription' tal:content='context/description'>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                        <div tal:replace='structure provider:plone.abovecontentbody' />
+                    </div>
+
+                    <div tal:define='chair context/chair|nothing'>
+                        <label for='field-chair' i18n:translate='label_chair'>Chair:</label>
+                        <span id='field-chair' tal:condition='chair' tal:content='chair/to_object/title'>
+                            Chairface Chippendale
+                        </span>
+                        <span id='field-chair' tal:condition='not:chair' i18n:translate='noChair'>
+                            No chair found
+                        </span>
+                    </div>
+                    <div tal:define='coChair context/coChair|nothing'>
+                        <label for='field-coChair' i18n:translate='label_coChair'>Co-Chair:</label>
+                        <span id='field-coChair' tal:condition='coChair' tal:content='coChair/to_objet/title'>
+                            Cochairface Chippendale
+                        </span>
+                        <span id='field-coChair' tal:condition='not:coChair' i18n:translate='noCoChair'>
+                            No co-chair found
+                        </span>
+                    </div>
+                    
+                    <div class='cbMemberBox' tal:define='membersColumns view/membersColumns'>
+                        <dl class='collapsible collapsedOnLoad'>
+                            <dt class='collapsibleHeader' i18n:translate='edrnsiteCollaborationsHeadingMembers'>Members</dt>
+                            <dd class='collapsibleContent'>
+                                <div class='membersColumn' tal:repeat='members membersColumns'>
+                                    <div 
+                                    metal:use-macro='context/@@collaborativeGroupMacros/macros/columnOfCollaborativeGroupMembers'>
+                                        A column of members appears here.
+                                    </div>
+                                </div>
+                                <div class='visualClear'><!-- --></div>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+
+            </tal:main-macro>
+        </metal:main>
+
     </body>
 </html>

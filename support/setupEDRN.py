@@ -5,6 +5,7 @@
 
 from AccessControl.SecurityManagement import newSecurityManager, noSecurityManager
 from AccessControl.SecurityManager import setSecurityPolicy
+from edrnsite.portlets.portlets.dmccrss import Assignment as DMCCRSSPortletAssignment
 from eea.facetednavigation.interfaces import ICriteria
 from eea.facetednavigation.layout.interfaces import IFacetedLayout
 from node.ext.ldap.interfaces import ILDAPProps
@@ -549,6 +550,14 @@ def _doStaticQuickLinksPortlet(portal, uids):
     mapping[chooser.chooseName(None, assignment)] = assignment
 
 
+def _doDMCCRSSPortlet(portal):
+    assignment = DMCCRSSPortletAssignment()
+    manager = getUtility(IPortletManager, u'plone.rightcolumn')
+    mapping = getMultiAdapter((portal, manager), IPortletAssignmentMapping)
+    chooser = INameChooser(mapping)
+    mapping[chooser.chooseName(None, assignment)] = assignment
+
+
 def _setGlobalNavOrder(portal):
     u'''Set the order of global navigation'''
     portal = plone.api.portal.get()
@@ -571,6 +580,7 @@ def _setupEDRN(app, username, password, ldapPassword):
     _setLDAPPassword(portal, ldapPassword)
     uids.update(_ingest(portal))
     _doStaticQuickLinksPortlet(portal, uids)
+    _doDMCCRSSPortlet(portal)
     _setGlobalNavOrder(portal)
     _tuneUp(portal)  # this should be the last step always as it clears/rebuids the catalog and commits the txn
     noSecurityManager()
