@@ -11,6 +11,12 @@
         <title>Protocol View</title>
     </head>
     <body>
+        <metal:css fill-slot='style_slot'>
+            <link type='text/css' rel='stylesheet' href='#'
+                tal:define='navroot context/@@plone_portal_state/navigation_root_url'
+                tal:attributes='href string:${navroot}/++resource++eke.knowledge/protocol.css'
+            />
+        </metal:css>
         <metal:main fill-slot='main'>
             <tal:main-macro metal:define-macro='main' define='
                 portalURL context/portal_url
@@ -51,9 +57,9 @@
 
 
                 <div id="protocolMetadataContainer">
-<!--
                     <div id="protocolShortTextMetadata">
-                        <div tal:define='site context/getLeadInvestigatorSite'>
+
+                        <div tal:define='site nocall:context/leadInvestigatorSite/to_object|nothing'>
                             <label for='leadInvestigatorSite' i18n:translate='label_leadInvestigator'>
                                 Lead Investigator:
                             </label>
@@ -61,8 +67,8 @@
                                 No lead investigator defined.
                             </p>
                             <tal:if condition='site'>
-                                <a href='#' tal:attributes='href site/principalInvestigator/absolute_url|nothing'
-                                    tal:content='site/principalInvestigator/title|nothing'>
+                                <a href='#' tal:attributes='href site/principalInvestigator/to_object/absolute_url|nothing'
+                                    tal:content='site/principalInvestigator/to_object/title|nothing'>
                                     Dad Cop 2
                                 </a>
                                 &#x2014;
@@ -70,8 +76,11 @@
                                     Filmcow.com
                                 </a>
                             </tal:if>
+
                         </div>
-                        <div tal:define='site context/getCoordinatingInvestigatorSite'>
+
+
+                        <div style='margin-top: 1em;' tal:define='site nocall:context/coordinatingInvestigatorSite/to_object|nothing'>
                             <label for='coordinatingInvestigator'
                                 i18n:translate='label_coordinatingInvestigatorSite'>
                                 Coordinating Investigator:
@@ -80,17 +89,19 @@
                                 No coordinating investigator defined.
                             </p>
                             <tal:if condition='site'>
-                                <a href='#' tal:attributes='href site/principalInvestigator/absolute_url|nothing'
-                                    tal:content='site/principalInvestigator/title|nothing'>
+                                <a href='#' tal:attributes='href site/principalInvestigator/to_object/absolute_url|nothing'
+                                    tal:content='site/principalInvestigator/to_object/title|nothing'>
                                     Dude Man
                                 </a>
                                 &#x2014;
-                                <a href='#' tal:attributes='href site/absolute_url|nothing' tal:content='site/title'>
+                                <a href='#' tal:attributes='href site/absolute_url|nothing' tal:content='site/title|nothing'>
                                     Dude Man's site
                                 </a>
                             </tal:if>
                         </div>
-                        <div tal:define='sites context/involvedInvestigatorSites'>
+
+
+                        <div style='margin-top: 1em;' tal:define='sites context/involvedInvestigatorSites'>
                             <label for='involvedInvestigatorSite' 
                                 i18n:translate='label_involvedInvestigatorSite'>
                                 Involved Investigator Sites:
@@ -100,9 +111,9 @@
                             </p>
                             <ul tal:condition='sites'>
                                 <li tal:repeat='site sites'>
-                                    <tal:define define='piName site/principalInvestigator/title|nothing'>
+                                    <tal:define define='piName site/to_object/principalInvestigator/to_object/title|nothing'>
                                         <tal:if condition='piName'>
-                                            <a href='#' tal:attributes='href site/principalInvestigator/absolute_url'
+                                            <a href='#' tal:attributes='href site/to_object/principalInvestigator/to_object/absolute_url'
                                                 tal:content='piName'>
                                                 Dude Woman
                                             </a>
@@ -110,30 +121,37 @@
                                         </tal:if>
                                     </tal:define>
                                     <a href='#' title='Some site.'
-                                        tal:attributes='href site/absolute_url; title site/description|nothing'
-                                        tal:content='site/title'>
+                                        tal:attributes='href site/to_object/absolute_url; title site/to_object/description|nothing'
+                                        tal:content='site/to_object/title'>
                                         Dude Woman's Site
                                     </a>
                                 </li>
                             </ul>
                         </div>
+
                         <div>
                             <label for='bmName' i18n:translate='label_bmName'>Biomarker Name:</label>
                             <span id='bmName' tal:content='structure context/bmName'>
                                 That's one huge BM.
                             </span>
                         </div>
-                        <div>
+
+
+                        <div style='margin-top: 1em;'>
                             <label for='design' i18n:translate='label_design'>Design:</label>
-                            <span id='design' tal:content='structure context/design'>With style</span>
+                            <span id='design' tal:condition='context/design' tal:content='structure context/design'>With style</span>
+                            <span id='design' class='discreet' tal:condition='not:context/design' i18n:translate='noDesign'>No design specified.</span>
                         </div>
-                        <div>
+
+                        <div style='margin-top: 1em;' tal:define='field context/fieldOfResearch'>
                             <label for='fieldOfResearch' i18n:translate='label_fieldOfResearch'>
                                 Field(s) of Research:
                             </label>
-                            <metal:field use-macro='python:context.widget("fieldOfResearch", mode="view")'>Gynecology</metal:field>
+                            <span tal:condition='not:field' i18n:translate='noFields' class='discreet'>None specified.</span>
+                            <span tal:condition='field' tal:content='field'>Oh you know, something-ology</span>
                         </div>
-                        <div>
+
+                        <div style='margin-top: 1em;'>
                             <label for='collaborativeGroupText' 
                                 i18n:translate='label_collaborativeGroupText'>
                                 Collaborative Group Text:
@@ -144,15 +162,18 @@
                                 We designed Taboo Villas as a custom built "all-inclusive' vacation
                             </span>
                         </div>
-                        <div>
+
+                        <div style='margin-top: 1em;'>
                             <label for='phasedStatus' i18n:translate='label_phasedStatus'>Phased Status:</label>
                             <span id='phasedStatus' tal:content='structure context/phasedStatus'>Stun</span>
                         </div>
+
                     </div>
--->                    
+
+
                     <div id="protocolLongTextMetadata">
                         <label for='description' i18n:translate='label_abstract'>Abstract:</label>
-                        <p class='documentDescription' tal:content='context/description'>
+                        <p tal:content='context/description'>
                             Subjective scientific research has been conducted in the United States since the late 1960s.
                         </p>
                         <div>
@@ -162,7 +183,7 @@
                                 everyone's needs/desires.
                             </span>
                         </div>
-                        <div>
+                        <div style='margin-top: 1em;'>
                             <label for='analyticMethod' i18n:translate='label_analyticMethod'>
                                 Analytic Method:
                             </label>
@@ -174,32 +195,32 @@
                                 system to eradicate fakes/timewasters.
                             </span>
                         </div>
-                        <div>
+                        <div style='margin-top: 1em;'>
                             <label for='comments' i18n:translate='label_comments'>Comments:</label>
                             <span id='comments' tal:content='structure context/comments'>
                                 Art-Deco Bar with dance floor, entrance hall, big hall with fireplace, first class restaurant,
                                 sauna, solarium.
                             </span>
                         </div>
-                        <div>
+                        <div style='margin-top: 1em;'>
                             <label for='biomarkers' i18n:translate='label_biomarkers'>
-                                <a name='biomarkers'>Biomarkers:</a>
+                                Biomarkers:
                             </label>
                             <p class='discreet' i18n:translate='proto_noBiomarkers' tal:condition='not:context/biomarkers'>
                                 There are currently no biomarkers annotated for this protocol.
                             </p>
                             <ul tal:condition='context/biomarkers'>
                                 <li tal:repeat='biomarker context/biomarkers'>
-                                    <a href='#' title='Wow, a biomarker. Cool.' tal:content='biomarker/title'
-                                        tal:attributes='href biomarker/absolute_url; title biomarker/description;'>
+                                    <a href='#' title='Wow, a biomarker. Cool.' tal:content='biomarker/to_object/title'
+                                        tal:attributes='href biomarker/to_object/absolute_url; title biomarker/to_object/description;'>
                                         Biosmelly-14-3-3-thetacrap
                                     </a>
                                 </li>
                             </ul>
                         </div>
-                        <div>
+                        <div style='margin-top: 1em;'>
                             <label for='datasets' i18n:translate='label_datasets'>
-                                <a name='datasets'>Datasets:</a>
+                                Datasets:
                             </label>
                             <p class='discreet' i18n:translate='proto_noDatasets' tal:condition='not:context/datasets'>
                                 No datasets are currently associated with this protocol.
@@ -219,11 +240,5 @@
 
             </tal:main-macro>
         </metal:main>
-        <metal:css fill-slot='style_slot'>
-            <style type='text/css' rel='stylesheet' href='#'
-                tal:define='navroot context/@@plone_portal_state/navigation_root_url'
-                tal:attributes='href string:${navroot}/++resource++eke.knowledge/protocol.css'
-            />
-        </metal:css>
     </body>
 </html>
