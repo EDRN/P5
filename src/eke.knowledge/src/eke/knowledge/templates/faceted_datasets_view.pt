@@ -64,7 +64,10 @@
           <thead>
             <tr>
               <th i18n:translate='ekeKnowledgeTableHeadingDataset'>Dataset</th>
+              <th i18n:translate='ekeKnowledgeTableHeadingPIs'>PI</th>
+              <th i18n:translate='ekeKnowledgeTableHeadingOrgan'>Organ</th>
               <th i18n:translate='ekeKnowledgeTableHeadingProtocol'>Associated Protocol</th>
+              <th i18n:translate='ekeKnowledgeTableHeadingCollaborativeGroup'>Collaborative Group</th>
             </tr>
           </thead>
           <tbody metal:define-slot='entries'>
@@ -79,14 +82,28 @@
               '>
               <metal:block define-slot='entry'>
                 <tr metal:define-macro='listeitem' class='odd' tal:attributes='class row_class'>
-                  <td style='padding: 0 1em 1em 0;'>
+                  <td style=''>
                     <a href='#' class='public' tal:attributes='href item/identifier; class string:$item_wf_state_class url'
                       tal:content='item_title_or_id'>
                       Advanced rhinoplasty dataset
                     </a>
                   </td>
-                  <td tal:content='item/protocolName'>
-                    Booga booga!
+                  <td tal:define='piRV python:item.getObject().investigator'>
+                    <a href='#' tal:condition='piRV' tal:attributes='href python:piRV.to_object.absolute_url()'
+                      tal:content='python:piRV.to_object.title'>
+                      Joe Bloe
+                    </a>
+                  </td>
+                  <td tal:content='item/bodySystemName'>
+                    Anus
+                  </td>
+                  <td tal:define='pRV python:item.getObject().protocol'>
+                    <a href='#' tal:condition='pRV' tal:attributes='href python:pRV.to_object.absolute_url()'
+                      tal:content='python:pRV.to_object.title'>
+                      Joe's Protocol
+                    </a>
+                  </td>
+                  <td>
                   </td>
                 </tr>
               </metal:block>

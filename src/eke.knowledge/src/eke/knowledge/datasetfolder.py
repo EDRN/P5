@@ -76,6 +76,7 @@ class DatasetIngestor(Ingestor):
             rv = datasetObj.protocol
             if rv is None or rv.to_object is None: continue
             datasetObj.protocolName = rv.to_object.title
+            datasetObj.investigator = rv.to_object.principalInvestigator
             if rv.to_object.datasets is None: rv.to_object.datasets = []
             rv.to_object.datasets.append(RelationValue(idUtil.getId(datasetObj)))
         portal = plone.api.portal.get()
