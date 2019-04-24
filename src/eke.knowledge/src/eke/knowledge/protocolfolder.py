@@ -103,7 +103,7 @@ class ProtocolIngestor(Ingestor):
                     if len(results) == 1:
                         site = results[0].getObject()
                         p.piName = site.piName
-                        # p.
+                        p.principalInvestigator = site.principalInvestigator
                 # Compute description
                 for predicateName in _descriptionPredicates:
                     values = predicates.get(predicateName, [])
