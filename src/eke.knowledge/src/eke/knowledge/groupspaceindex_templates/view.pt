@@ -58,7 +58,7 @@
                     </div>
                     <div tal:define='coChair context/coChair|nothing'>
                         <label for='field-coChair' i18n:translate='label_coChair'>Co-Chair:</label>
-                        <span id='field-coChair' tal:condition='coChair' tal:content='coChair/to_objet/title'>
+                        <span id='field-coChair' tal:condition='coChair' tal:content='coChair/to_object/title'>
                             Cochairface Chippendale
                         </span>
                         <span id='field-coChair' tal:condition='not:coChair' i18n:translate='noCoChair'>
