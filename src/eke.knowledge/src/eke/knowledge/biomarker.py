@@ -235,7 +235,7 @@ class IStudyStatistics(IKnowledgeObject):
         description=_(u'A percentage.'),
         required=False
     )
-    details = schema.TextLine(
+    details = schema.Text(
         title=_(u'Details'),
         description=_(u'Detailed notes about this set of statistics.'),
         required=False
