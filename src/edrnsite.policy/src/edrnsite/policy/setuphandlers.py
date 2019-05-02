@@ -24,14 +24,14 @@ _logger = logging.getLogger(__name__)
 _ITEMS_TO_DELETE = ('news', 'events', 'Members')
 _HOME_PAGE_DESC = u'''The Early Detection Research Network (EDRN), an initiative of the National Cancer Institute (NCI), brings together dozens of institutions to help accelerate the translation of biomarker information into clinical applications and to evaluate new ways of testing cancer in its earliest stages and for cancer risk.'''
 _HOME_PAGE_BODY = u'''<h2>Getting started…</h2><p>
-<img
+<p><img
     src='resolveuid/{collage}/@@images/image/preview'
-    class='image-right'
+    class='image-inline'
     data-linktype='image'
     data-scale='preview'
     data-val='{collage}'
-/>
-<strong>Check out the <a class="internal-link" href="resources/highlights">EDRN Highlights</a> — a listing of our accomplishments and milestones.</strong>
+/></p>
+<p><strong>Check out the <a class="internal-link" href="resources/highlights">EDRN Highlights</a> — a listing of our accomplishments and milestones.</strong>
 <br/><br/>
 <a href="about-edrn/scicomponents">► Scientific Components</a><br/>
 <a href="advocates">► For Public, Patients, Advocates</a><br/>

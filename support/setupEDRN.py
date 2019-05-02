@@ -282,6 +282,7 @@ _TO_IMPORT = (
     'beta',
     'cancer-bioinformatics-workshop',
     'c-edrn',
+    'colops',
     'docs',
     'EDRN RFA guidelines-v4.pdf',
     'FOA-guidelines',
@@ -302,7 +303,7 @@ _RDF_FOLDERS = (
     (None, 'eke.knowledge.publicationfolder', u'Publications', u'Items published by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf', u'http://edrn.jpl.nasa.gov/bmdb/rdf/publications'], _setupPublications),
     (None, 'eke.knowledge.sitefolder', u'Sites', u'Institutions and PIs in EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/sites/@@rdf'], _setupSites),
     (None, 'eke.knowledge.protocolfolder', u'Protocols', u'Studies pursued by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/protocols/@@rdf'], _null),
-    (None, 'eke.knowledge.datasetfolder', u'Science Data', u'Data collected by EDRN.', [u'https://edrn.nci.nih.gov/miscellaneous-knowledge-system-artifacts/science-data-rdf/at_download/file'], _setupDatasets),
+    (None, 'eke.knowledge.datasetfolder', u'Data', u'Data collected by EDRN.', [u'https://edrn.nci.nih.gov/miscellaneous-knowledge-system-artifacts/science-data-rdf/at_download/file'], _setupDatasets),
     (None, 'eke.knowledge.biomarkerfolder', u'Biomarkers', u'Indicators for cancer.', [u'https://edrn.jpl.nasa.gov/bmdb/rdf/biomarkers?qastate=all'], _setupBiomarkers),
 )
 
@@ -551,9 +552,11 @@ def _doStaticQuickLinksPortlet(portal, uids):
 
 
 def _doDMCCRSSPortlet(portal):
+    frontPage = portal.get('front-page')
+    if frontPage is None: return
     assignment = DMCCRSSPortletAssignment()
     manager = getUtility(IPortletManager, u'plone.rightcolumn')
-    mapping = getMultiAdapter((portal, manager), IPortletAssignmentMapping)
+    mapping = getMultiAdapter((frontPage, manager), IPortletAssignmentMapping)
     chooser = INameChooser(mapping)
     mapping[chooser.chooseName(None, assignment)] = assignment
 
@@ -561,7 +564,14 @@ def _doDMCCRSSPortlet(portal):
 def _setGlobalNavOrder(portal):
     u'''Set the order of global navigation'''
     portal = plone.api.portal.get()
-    items = ['biomarkers', 'resources', 'publications', 'protocols', 'science-data', 'about-edrn']
+    # Drop about-edrn per HK email 3F252A07-9FC1-47AB-A29A-DAF3A6A1B141@jpl.nasa.gov
+    aboutEDRN = portal.get('about-edrn')
+    if aboutEDRN is not None:
+        adapter = IExcludeFromNavigation(aboutEDRN, None)
+        if adapter is not None:
+            adapter.exclude_from_nav = True
+    # Change order per  HK email 3F252A07-9FC1-47AB-A29A-DAF3A6A1B141@jpl.nasa.gov:
+    items = ['biomarkers', 'protocols', 'data', 'publications', 'resources']
     items.reverse()
     for item in items:
         if item in portal.keys():

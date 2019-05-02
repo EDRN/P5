@@ -13,17 +13,19 @@
     </div>
 </div>
 <div metal:define-macro='datasets' tal:define='datasets context/datasets|nothing'>
-    <h4 i18n:translate='bm_DatasetsHeading'>Datasets</h4>
-    <p class='discreet' tal:condition='not:datasets' i18n:translate='bmAdmonitionNoDatasets'>
-        There are no datasets associated with this biomarker.
-    </p>
-    <ul tal:condition='datasets'>
-        <li tal:repeat='dataset datasets'>
-            <a href='#' title='Cool data.' tal:attributes='href dataset/to_object/identifier|nothing; title dataset/to_object/description|nothing' tal:content='dataset/to_object/title'>
-                Cool
-            </a>
-        </li>
-    </ul>
+    <div id='bm-datasets'>
+        <h4 i18n:translate='bm_DatasetsHeading'>Datasets</h4>
+        <p class='discreet' tal:condition='not:datasets' i18n:translate='bmAdmonitionNoDatasets'>
+            There are no datasets associated with this biomarker.
+        </p>
+        <ul tal:condition='datasets'>
+            <li tal:repeat='dataset datasets'>
+                <a href='#' title='Cool data.' tal:attributes='href dataset/to_object/identifier|nothing; title dataset/to_object/description|nothing' tal:content='dataset/to_object/title'>
+                    Cool
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>
 <div metal:define-macro='biomarkerBodySystems'>
     <p class='discreet' i18n:translate='bm_noBodySystems'

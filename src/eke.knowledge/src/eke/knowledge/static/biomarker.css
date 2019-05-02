@@ -116,15 +116,20 @@ div#biomarker-aliases ul li {
     margin-right:5px;
 }
 
+#biomarker-description {
+    padding-right: 20px;
+}
+
 .attributebox {
     border:solid 1px #ccc;
     background:0;
     background-color:#eee;
     color:#333;
-    width:20%;
+    width:23%;
     padding-top:5px;
     margin-right:5px;
     overflow:hidden;
+    font-size: 10px;
 }
 div.attributebox-content h3 {
     color:#555;

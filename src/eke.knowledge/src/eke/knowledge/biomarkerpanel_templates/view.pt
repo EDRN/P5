@@ -46,11 +46,14 @@
                                 </ul>
                             </div>
                             <h4 i18n:translate='bm_DescriptionHeading'>Description&#x2026;</h4>
-                            <p tal:content='context/description'>
+                            <p tal:content='context/description' id='biomarker-description'>
                                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
                                 incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
                                 exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                             </p>
+                            <div metal:use-macro='context/@@commonBiomarker/macros/datasets'>
+                                Datasets
+                            </div>
                         </div><!-- end colLeftContent -->
                         <div class='attributebox bmAttributes'>
                             <div class='attributebox-content'>
@@ -91,9 +94,9 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="clear"><!--clear--></div>
+                        <div class="visualClear"><!--clear--></div>
 
-                        <h3>Panel Details</h3>
+                        <h4>Panel Details</h4>
                         <p tal:condition='not:context/members' class='discreet'>
                             No member markers defined for this panel.
                         </p>
@@ -106,9 +109,6 @@
                             </li>
                         </ul>
 
-                        <div metal:use-macro='context/@@commonBiomarker/macros/datasets'>
-                            Datasets
-                        </div>
                     </div><!-- basicsTab -->
 
 
