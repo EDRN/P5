@@ -564,14 +564,8 @@ def _doDMCCRSSPortlet(portal):
 def _setGlobalNavOrder(portal):
     u'''Set the order of global navigation'''
     portal = plone.api.portal.get()
-    # Drop about-edrn per HK email 3F252A07-9FC1-47AB-A29A-DAF3A6A1B141@jpl.nasa.gov
-    aboutEDRN = portal.get('about-edrn')
-    if aboutEDRN is not None:
-        adapter = IExcludeFromNavigation(aboutEDRN, None)
-        if adapter is not None:
-            adapter.exclude_from_nav = True
     # Change order per  HK email 3F252A07-9FC1-47AB-A29A-DAF3A6A1B141@jpl.nasa.gov:
-    items = ['biomarkers', 'protocols', 'data', 'publications', 'resources']
+    items = ['biomarkers', 'protocols', 'data', 'publications', 'resources', 'about-edrn']
     items.reverse()
     for item in items:
         if item in portal.keys():
