@@ -362,14 +362,36 @@ Now let's try group workspaces::
     >>> browser.getControl(name='form.widgets.title').value = u'MySpace'
     >>> browser.getControl(name='form.widgets.description').value = u'A defunct workspace.'
     >>> browser.getControl(name='form.buttons.save').click()
+    >>> group = collaborationsFolder['myspace']
+
+The index page is automatically created::
+
+    >>> groupIndex = group['index_html']
+    >>> from z3c.relationfield import RelationValue
+    >>> from zope.intid.interfaces import IIntIds
+    >>> from z3c.relationfield import RelationValue
+    >>> intIDUtil = getUtility(IIntIds)
+    >>> groupIndex.chair = RelationValue(intIDUtil.getId(site['antic-sanja']))
+    >>> groupIndex.coChair = RelationValue(intIDUtil.getId(site['banerjee-priyanka']))
+    >>> groupIndex.members = [RelationValue(intIDUtil.getId(site[i])) for i in ('spencer-brady', 'sullivan-amy')]
+    >>> from zope.lifecycleevent import ObjectModifiedEvent
+    >>> from zope.event import notify
+    >>> notify(ObjectModifiedEvent(groupIndex))
+    >>> transaction.commit()
+    >>> groupIndex.chair.to_object.title
+    u'Antic, Sanja'
+    >>> groupIndex.coChair.to_object.title
+    u'Banerjee, Priyanka'
+    >>> members = [i.to_object.title for i in groupIndex.members]
+    >>> members.sort()
+    >>> members
+    [u'Spencer, Brady', u'Sullivan, Amy']
 
 Group workspaces—which are folders—should automatically create an index page
-that's the default view of the folder, turn off the right-side portlets, and
-include their special index page::
+that's the default view of the folder, and turn off the right-side portlets::
 
     >>> 'portal-column-two' in browser.contents
     False
-    >>> group = collaborationsFolder['myspace']
     >>> 'index_html' in group.keys()
     True
     >>> group.getDefaultPage()
@@ -399,28 +421,29 @@ But only if you're privileged::
     >>> 'Add comment' in unprivilegedBrowser.contents
     False
 
-.. Let's put some members into the group::
+Check out these members::
 
-..     >>> group.chair = RelationValue geeba ><
+    >>> browser.contents
+    '...Chair...Antic, Sanja...Co-Chair...Banerjee, Priyanka...Members...Spencer, Brady...Sullivan, Amy...'
 
-.. Plus tabs for the group's stuff (or there will be)::
+Plus tabs for the group's stuff (or there will be)::
 
-..     >>> overview = browser.contents.index('fieldset-overview')
-..     >>> documents = browser.contents.index('fieldset-documents')
-..     >>> overview < documents
-..     True
+    >>> overview = browser.contents.index('fieldset-overview')
+    >>> documents = browser.contents.index('fieldset-documents')
+    >>> overview < documents
+    True
 
-.. Since we're logged in, the special note about logging in to view additional
-.. information doesn't appear (eventually)::
+Since we're logged in, the special note about logging in to view additional
+information doesn't appear (eventually)::
 
-..     >>> 'If you are a member of this group,' in browser.contents
-..     False
+    >>> 'If you are a member of this group,' in browser.contents
+    False
 
-.. But an unprivileged user does get it (some day)::
+But an unprivileged user does get it (some day)::
 
-..     >>> unprivilegedBrowser.open(portalURL + '/collaborative-groups/myspace')
-..     >>> unprivilegedBrowser.contents
-..     '...If you are a member of this group...log in...'
+    >>> unprivilegedBrowser.open(portalURL + '/collaborative-groups/myspace')
+    >>> unprivilegedBrowser.contents
+    '...If you are a member of this group...log in...'
 
 
 Miscellaneous Resources

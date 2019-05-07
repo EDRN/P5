@@ -116,7 +116,7 @@ class View(grok.View):
     @memoize
     def membersColumns(self):
         members = aq_inner(self.context).members
-        members.sort(lambda a, b: cmp(a.title, b.title))
+        members.sort(lambda a, b: cmp(a.to_object.title, b.to_object.title))
         half = len(members)/2 + 1
         left, right = members[:half], members[half:]
         return left, right
