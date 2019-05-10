@@ -7,7 +7,7 @@ from Acquisition import aq_inner
 from five import grok
 from knowledgeobject import IKnowledgeObject
 from zope import schema
-import plone.api
+import plone.api, urlparse
 
 
 class IPerson(IKnowledgeObject):
@@ -133,3 +133,7 @@ class View(grok.View):
         for i in results:
             publications.append(i.getObject())  # Any reason we're waking up objects here?
         return publications
+    def staffID(self):
+        context = aq_inner(self.context)
+        i = urlparse.urlparse(context.identifier).path.split(u'/')[-1]
+        return i if i else u'?'

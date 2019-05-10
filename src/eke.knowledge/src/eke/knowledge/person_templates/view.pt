@@ -38,6 +38,10 @@
                 <label for='edrnTitle' i18n:translate='label_edrnTitle'>EDRN Title:</label>
                 <span id='edrnTitle' tal:content='context/edrnTitle'>Grand Poobah</span>
             </div>
+            <div>
+                <label for='staffID' i18n:translate='label_staffID'>Staff ID:</label>
+                <span id='staffID' tal:content='view/staffID'>123</span>
+            </div>
             <div tal:define='specialty context/specialty'>
                 <label for='specialty' i18n:translate='label_specialty'>Specialty:</label>
                 <span id='specialty' tal:condition='specialty' tal:content='specialty'>Poobahing.</span>
