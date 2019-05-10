@@ -57,8 +57,8 @@ class IProtocol(IKnowledgeObject):
         required=False
     )
     collaborativeGroupText = schema.Text(
-        title=_(u'Collaborative Group Text'),
-        description=_(u'Text explaining the collaborative nature of this protocol.'),
+        title=_(u'Collaborative Group'),
+        description=_(u'Text field explaining the collaborative nature of this protocol.'),
         required=False
     )
     phasedStatus = schema.Text(

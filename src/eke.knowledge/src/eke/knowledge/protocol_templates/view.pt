@@ -154,7 +154,7 @@
                         <div style='margin-top: 1em;'>
                             <label for='collaborativeGroupText' 
                                 i18n:translate='label_collaborativeGroupText'>
-                                Collaborative Group Text:
+                                Collaborative Group:
                             </label>
                             <span id='collaborativeGroupText'
                                 tal:content='structure context/collaborativeGroupText'>
