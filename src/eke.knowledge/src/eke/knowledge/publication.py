@@ -52,6 +52,10 @@ class IPublication(IKnowledgeObject):
         description=_(u'Location of the publication.'),
         required=False,
     )
+    # Note we're treating ``siteID`` as a plain literal field even though in RDF
+    # it's a reference to another object (a Site object).  This lets the person.py
+    # view find publications by looking up its containing Site's Identifier on
+    # the siteID index.
     siteID = schema.TextLine(
         title=_(u'Site ID'),
         description=_(u'DMCC-assigned identifier for the site that wrote this publication.'),

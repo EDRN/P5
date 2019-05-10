@@ -168,7 +168,24 @@ Ingesting::
     >>> keys = publicationsFolder.keys()
     >>> keys.sort()
     >>> keys
-    ['a-combination-of-muc5ac-and-ca19-9-improves-the-diagnosis-of-pancreatic-cancer-a-multicenter-study', 'association-between-combined-tmprss2-erg-and-pca3-rna-urinary-testing-and-detection-of-aggressive-prostate-cancer', 'early-detection-of-nsclc-with-scfv-selected-against-igm-autoantibody', 'evaluation-of-serum-protein-profiling-by-surface-enhanced-laser-desorption-ionization-time-of-flight-mass-spectrometry-for-the-detection-of-prostate-cancer-i-assessment-of-platform-reproducibility']
+    ['15613711-evaluation-of-serum-protein-profiling-by', '23585862-early-detection-of-nsclc-with-scfv', '27845339-a-combination-of-muc5ac-and-ca19-9', '28520829-association-between-combined-tmprss2-erg']
+    >>> publication = publicationsFolder['15613711-evaluation-of-serum-protein-profiling-by']
+    >>> publication.title
+    u'Evaluation of serum protein profiling by surface-enhanced laser desorption/ionization time-of-flight mass spectrometry for the detection of prostate cancer: I. Assessment of platform reproducibility.'
+    >>> authors = list(publication.authors)
+    >>> authors.sort()
+    >>> authors
+    [u'Adam BL', u'Banez LL', u'Bigbee WL', u'Campos D', u'Cazares LH', u'Chan DW', u'Feng Z', u'Grizzle WE', u'Izbicka E', u'Kagan J', u'Malik G', u'McLerran D', u'Moul JW', u'Partin A', u'Prasanna P', u'Rosenzweig J', u'Semmes OJ', u'Sokoll LJ', u'Srivastava S', u'Srivastava S', u'Thompson I', u'Welsh MJ', u'White N', u'Winget M', u'Yasui Y', u'Zhang Z', u'Zhu L']
+    >>> publication.volume
+    u'51'
+    >>> publication.journal
+    u'Clin. Chem.'
+    >>> publication.pubMedID
+    u'15613711'
+    >>> publication.year
+    u'2005'
+    >>> publication.siteID
+    u'http://edrn.nci.nih.gov/data/sites/815'
 
 The statistical graphics made a comeback::
 
@@ -201,7 +218,7 @@ Ingesting::
     >>> transaction.commit()
     >>> browser.open(portalURL + '/@@ingestRDF')
     >>> browser.contents
-    '...RDF Ingest Report...Objects Created (19)...Objects Updated (2)...'
+    '...RDF Ingest Report...Objects Created (19)...'
     >>> len(sitesFolder.keys())
     2
     >>> keys = sitesFolder.keys()

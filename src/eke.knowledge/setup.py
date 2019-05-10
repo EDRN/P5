@@ -40,6 +40,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
+        'biopython',
         'collective.dexteritytextindexer',
         'eea.facetednavigation',
         'plone.api>=1.8.4',

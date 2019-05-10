@@ -47,5 +47,6 @@
     <ns2:author>White N</ns2:author>
     <ns2:author>Banez LL</ns2:author>
     <ns2:author>Srivastava S</ns2:author>
+    <ns1:site rdf:resource='http://edrn.nci.nih.gov/data/sites/815'/>
   </rdf:Description>
 </rdf:RDF>
