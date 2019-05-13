@@ -40,17 +40,16 @@ setup(
     zip_safe=False,
     install_requires=[
         # -*- Extra requirements: -*-
-        'Products.CMFPlone',
-        'edrn.theme',
-        'eke.knowledge',
-        'edrnsite.portlets',
-        'pas.plugins.ldap',
-        # == Provided by mr.bob: ==
-        'plone.api>=1.8.4',
-        'Products.GenericSetup>=1.8.2',
         'setuptools',
-        'z3c.jbot',
+        'edrn.theme',
+        'edrnsite.portlets',
         'eea.facetednavigation',
+        'eke.knowledge',
+        'pas.plugins.ldap',
+        'plone.api>=1.8.4',
+        'Products.CMFPlone',
+        'Products.GenericSetup>=1.8.2',
+        'z3c.jbot',
     ],
     extras_require={
         'test': [
