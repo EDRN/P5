@@ -41,6 +41,7 @@ setup(
     install_requires=[
         # -*- Extra requirements: -*-
         'setuptools',
+        'collective.captchacontactinfo',
         'edrn.theme',
         'edrnsite.portlets',
         'eea.facetednavigation',
