@@ -8,7 +8,7 @@ from .base import Ingestor
 from .knowledgefolder import IKnowledgeFolder
 from .publication import IPublication
 from Acquisition import aq_inner
-from .utils import IngestConsequences
+from .utils import IngestConsequences, publish
 from Bio import Entrez
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from zope.component import getUtility
@@ -166,6 +166,7 @@ class PublicationIngestor(Ingestor):
             context.dataSummary = self.getSummaryData(context.pubSumDataSource)
         else:
             context.dataSummary = u'{}'
+        publish(context)
         return IngestConsequences(created=created, updated=[], deleted=[])
 
 
