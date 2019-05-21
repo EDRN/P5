@@ -226,7 +226,7 @@ class BiomarkerIngestor(Ingestor):
                     'eke.knowledge.bodysystemstudy',
                     title=protocols[0].title,
                     description=protocols[0].description,
-                    identifier=identifier
+                    identifier=unicode(identifier)
                 )
             else:
                 bodySystemStudy = biomarkerBodySystem[identifier]

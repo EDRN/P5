@@ -142,7 +142,7 @@ class SiteIngestor(Ingestor):
             'eke.knowledge.person',
             id=personID,
             title=personTitle,
-            identifier=identifier,
+            identifier=unicode(identifier),
         )
         getUtility(IIntIds).register(person)  # WHY IS THIS NEEDED?
         for predicate, fieldName in _personPredicates:
