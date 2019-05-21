@@ -32,6 +32,11 @@
     </index>
     <column value='organs' />
 
+    <!-- Display of protocols on people -->
+    <index name='investigatorIdentifiers' meta_type='KeywordIndex'>
+        <indexed_attr value='investigatorIdentifiers'/>
+    </index>
+
     <!-- Display of member type of ISite -->
     <index name='memberType' meta_type='KeywordIndex'>
         <indexed_attr value='memberType' />

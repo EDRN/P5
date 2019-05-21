@@ -2,6 +2,7 @@
 # encoding: utf-8
 
 from . import _
+# from .protocol import IProtocol  # We can't import this because of a circular dependency
 from .publication import IPublication
 from Acquisition import aq_inner
 from five import grok
@@ -120,7 +121,24 @@ class View(grok.View):
     grok.context(IPerson)
     grok.require('zope2.View')
     def protocols(self):
-        return ([], [])
+        context = aq_inner(self.context)
+        catalog = plone.api.portal.get_tool('portal_catalog')
+        results = catalog(
+            object_provides='eke.knowledge.protocol.IProtocol',  # Would use IProtocol.__identifier__ but circular dep
+            investigatorIdentifiers=context.identifier,
+            sort_on='sortable_title'
+        )
+        actives, inactives, found = [], [], set()
+        for i in results:
+            protocol = i.getObject()
+            url = protocol.absolute_url()
+            if url in found: continue
+            else: found.add(url)
+            if protocol.finishDate:
+                inactives.append(protocol)
+            else:
+                actives.append(protocol)
+        return actives, inactives
     def publications(self):
         context = aq_inner(self.context)
         catalog = plone.api.portal.get_tool('portal_catalog')

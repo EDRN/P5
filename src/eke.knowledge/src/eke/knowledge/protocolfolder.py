@@ -73,7 +73,17 @@ class ProtocolIngestor(Ingestor):
         siteNumbers = protocolToInvolvedSites.get(protocolID, [])
         siteIDs = [_siteURIPrefix + i for i in siteNumbers]
         brains = catalog(identifier=siteIDs, sort_on='sortable_title')
-        protocol.involvedInvestigatorSites = [RelationValue(idUtil.getId(b.getObject())) for b in brains]
+        for b in brains:
+            site = b.getObject()
+            siteIntID = idUtil.getId(b.getObject())
+            if protocol.involvedInvestigatorSites is None: protocol.involvedInvestigatorSites = []
+            protocol.involvedInvestigatorSites.append(RelationValue(siteIntID))
+            piIdentifier = site.principalInvestigator.to_object.identifier if site.principalInvestigator else None
+            if piIdentifier:
+                currentIDs = set(protocol.investigatorIdentifiers if protocol.investigatorIdentifiers else [])
+                if piIdentifier not in currentIDs:
+                    currentIDs.add(piIdentifier)
+                    protocol.investigatorIdentifiers = list(currentIDs)
     def ingest(self):
         context = aq_inner(self.context)
         catalog, portal = plone.api.portal.get_tool('portal_catalog'), plone.api.portal.get()

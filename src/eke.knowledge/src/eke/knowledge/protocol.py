@@ -329,6 +329,16 @@ class IProtocol(IKnowledgeObject):
         required=False,
         source=CatalogSource(object_provides=IPerson.__identifier__)
     )
+    investigatorIdentifiers = schema.List(
+        title=_(u'Investigator Identifiers'),
+        description=_(u'RDF subject URIs of investigators who participate in this protocol'),
+        required=False,
+        default=[],
+        value_type=schema.TextLine(
+            title=_(u'Investigator Identifier'),
+            description=_(u'RDF subject URI of a single investigator who participates in this protocol')
+        )
+    )
 
 
 IProtocol.setTaggedValue('predicates', {

@@ -78,14 +78,18 @@
                                     A Methylation Protocol Again
                                 </a>
                             </td>
-                            <td style='text-align: right;' tal:define='numBio python:len(protocol.biomarkers)'>
+                            <td style='text-align: right;' tal:define='
+                                numBio python:len(protocol.biomarkers) if protocol.biomarkers else 0
+                            '>
                                 <span tal:condition='not:numBio' tal:omit-tag=''>0</span>
                                 <a href='#' tal:condition='numBio' tal:content='numBio'
                                     tal:attributes='href string:${protocol/absolute_url}#biomarkers'>
                                     123
                                 </a>
                             </td>
-                            <td style='text-align: right;' tal:define='numData python:len(protocol.datasets)'>
+                            <td style='text-align: right;' tal:define='
+                                numData python:len(protocol.datasets) if protocol.datasets else 0
+                            '>
                                 <span tal:condition='not:numData' tal:omit-tag=''>0</span>
                                 <a href='#' tal:condition='numData' tal:content='numData'
                                     tal:attributes='href string:${protocol/absolute_url}#datasets'>
@@ -123,14 +127,18 @@
                                     A Methylation Protocol Again
                                 </a>
                             </td>
-                            <td style='text-align: right;' tal:define='numBio python:len(protocol.biomarkers)'>
+                            <td style='text-align: right;' tal:define='
+                                numBio python:len(protocol.biomarkers) if protocol.biomarkers else 0
+                            '>
                                 <span tal:condition='not:numBio' tal:omit-tag=''>0</span>
                                 <a href='#' tal:condition='numBio' tal:content='numBio'
                                     tal:attributes='href string:${protocol/absolute_url}#biomarkers'>
                                     123
                                 </a>
                             </td>
-                            <td style='text-align: right;' tal:define='numData python:len(protocol.datasets)'>
+                            <td style='text-align: right;' tal:define='
+                                numData python:len(protocol.datasets) if protocol.datasets else 0
+                            '>
                                 <span tal:condition='not:numData' tal:omit-tag=''>0</span>
                                 <a href='#' tal:condition='numData' tal:content='numData'
                                     tal:attributes='href string:${protocol/absolute_url}#datasets'>
