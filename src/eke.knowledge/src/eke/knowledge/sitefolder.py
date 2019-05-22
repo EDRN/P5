@@ -152,6 +152,8 @@ class SiteIngestor(Ingestor):
                     value = unicode(values[0])
                     if value:
                         setattr(person, fieldName, value)
+        # Enable display of pubs on a person later on:
+        person.siteID = person.aq_parent.identifier
         notify(ObjectAddedEvent(person))
         return person
     def _ingestPeople(self, statements, sites):

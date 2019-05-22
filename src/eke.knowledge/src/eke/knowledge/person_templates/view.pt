@@ -170,7 +170,7 @@
                                 <a href='#' title='Super awesome publication.' tal:content='publication/title'
                                     tal:attributes='
                                     href publication/absolute_url;
-                                    title publication/abstract;
+                                    title publication/description;
                                 '>
                                     A Methylation Publication
                                 </a>
