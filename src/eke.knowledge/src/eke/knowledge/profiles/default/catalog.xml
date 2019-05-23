@@ -69,7 +69,7 @@
     </index>
     <column value='proposal' />
 
-    <!-- Search for and display of publications for a person -->
+    <!-- Search for and display of publications for a person; this contains RDF subject URIs -->
     <index name='siteID' meta_type='FieldIndex'>
         <indexed_attr value='siteID'/>
     </index>
