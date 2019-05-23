@@ -228,7 +228,7 @@ Ingesting::
     >>> site = sitesFolder['240-vanderbilt-ingram-cancer-center']
     >>> site.identifier
     u'http://edrn.nci.nih.gov/data/sites/240'
-    >>> site.siteID
+    >>> site.dmccSiteID
     u'240'
     >>> site.piName
     u'Massion, Pierre'

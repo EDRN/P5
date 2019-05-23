@@ -236,8 +236,8 @@ class SiteIngestor(Ingestor):
                 # We tried
                 pass
             # While we're here, set the siteID
-            sites[unicode(siteURI)].siteID = urlparse.urlparse(siteURI)[2].split(u'/')[-1]
-        catalog.reindexIndex('siteID', portal.REQUEST)
+            sites[unicode(siteURI)].dmccSiteID = urlparse.urlparse(siteURI)[2].split(u'/')[-1]
+        # XXX WHY? catalog.reindexIndex('siteID', portal.REQUEST)
         _logger.warn('Got %d site statements, %d people statements', len(siteStatements), len(peopleStatements))
         publish(context)
         return consequences

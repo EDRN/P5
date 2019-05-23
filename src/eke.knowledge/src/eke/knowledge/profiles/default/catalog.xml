@@ -73,7 +73,6 @@
     <index name='siteID' meta_type='FieldIndex'>
         <indexed_attr value='siteID'/>
     </index>
-    <!-- TODO: do we need a column for siteID too? -->
 
     <!-- Display of PI in ISite, IProtocolFolder -->
     <index name='piObjectID' meta_type='FieldIndex'>
