@@ -7,6 +7,7 @@ from Acquisition import aq_inner, aq_parent
 from eke.knowledge import _
 from five import grok
 from plone.app.contenttypes.permissions import AddDocument, AddEvent, AddFile, AddFolder, AddImage
+from plone.app.contenttypes.interfaces import IDocument, IEvent, IFile, IFolder, IImage
 from plone.memoize.view import memoize
 from plone.supermodel import model
 from zope import schema
@@ -41,7 +42,7 @@ class IGroupSpaceIndex(model.Schema):
     )
     coChair = RelationChoice(
         title=_(u'Co-Chair'),
-        description=_(u'The assistant to the person in charge of this grou.'),
+        description=_(u'The assistant to the person in charge of this group.'),
         required=False,
         source=CatalogSource(object_provides=IPerson.__identifier__)
     )
@@ -70,7 +71,6 @@ class View(grok.View):
         # * A flag indicating if such a type is confusing. Dan believes that users will find find adding
         #   plain old wiki-style HTML pages and images upsetting. So we automatically hide such confusing
         #   buttons. The tyranny of closed Micro$oft formats continues.
-        # BTW: Why aren't these permission names defined as constants somewhere in ATContentTypes?
         return {
             # Add type  Permission    Type name   Confusing?
             'event':    (AddEvent,    'Event',    False),
@@ -81,12 +81,6 @@ class View(grok.View):
         }
     def numTops(self):
         return _top
-    def facebookURL(self):
-        context = aq_parent(aq_inner(self.context))
-        return u'https://facebook.com/sharer.php?' + urllib.urlencode(dict(t=context.title, u=context.absolute_url()))
-    def twitterURL(self):
-        context = aq_parent(aq_inner(self.context))
-        return u'https://twitter.com/intent/tweet?url=' + urllib.urlencode(dict(text=context.title, url=context.absolute_url()))
     @memoize
     def topEvents(self):
         return self.currentEvents()[0:self.numTops()]
@@ -105,9 +99,9 @@ class View(grok.View):
         return self._getEvents(end={'query': datetime.utcnow(), 'range': 'max'})
     def _getEvents(self, **criteria):
         context = aq_parent(aq_inner(self.context))
-        catalog = getToolByName(context, 'portal_catalog')
+        catalog = plone.api.portal.get_tool('portal_catalog')
         results = catalog(
-            object_provides=IATEvent.__identifier__,
+            object_provides=IEvent.__identifier__,
             path=dict(query='/'.join(context.getPhysicalPath()), depth=1),
             sort_on='start',
             sort_order='reverse',
@@ -117,30 +111,29 @@ class View(grok.View):
     def membersColumns(self):
         members = aq_inner(self.context).members
         members.sort(lambda a, b: cmp(a.to_object.title, b.to_object.title))
-        half = len(members)/2 + 1
+        half = len(members) / 2 + 1
         left, right = members[:half], members[half:]
         return left, right
     def showNewButton(self, buttonType):
         addableContent = self.getAddableContent()
         if buttonType not in addableContent: return False
         context = aq_parent(aq_inner(self.context))
-        mtool = getToolByName(context, 'portal_membership')
+        mtool = plone.api.portal.get_tool('portal_membership')
         perm = mtool.checkPermission(addableContent[buttonType][0], context)
         return perm and not addableContent[buttonType][2]
     def newButtonLink(self, buttonType):
         addableContent = self.getAddableContent()
-        return aq_parent(aq_inner(self.context)).absolute_url() + '/createObject?type_name=' + addableContent[buttonType][1]
+        return aq_parent(aq_inner(self.context)).absolute_url() + '/++add++' + addableContent[buttonType][1]
     def haveDocument(self):
         return len(self.documents()) > 0
     @memoize
     def documents(self):
         context = aq_parent(aq_inner(self.context))
-        contentFilter = dict(
-            object_provides=[i.__identifier__ for i in (IATDocument, IATImage, IATFile, IATFolder)],
+        results = context.restrictedTraverse('@@contentlisting')(
+            object_provides=[i.__identifier__ for i in (IDocument, IImage, IFile, IFolder)],
             sort_on='modified',
             sort_order='reverse'
         )
-        results = context.getFolderContents(contentFilter=contentFilter)
         # For some reason Highlights are being returned in the results, even though they don't provide any of the interfaces.
         # CA-1431: also events
         results = [i for i in results if i.portal_type not in ('Highlight', 'Group Event')]

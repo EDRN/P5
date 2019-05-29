@@ -362,6 +362,7 @@ First, a folder to hold them all, and in the darkness bind them::
     >>> browser.getControl(name='form.widgets.title').value = u'Collaborative Groups'
     >>> browser.getControl(name='form.widgets.description').value = u'Some testing collaborative groups.'
     >>> browser.getControl(name='form.buttons.save').click()
+    >>> browser.open(portalURL + '/collaborative-groups/content_status_modify?workflow_action=publish')
     >>> 'collaborative-groups' in portal.keys()
     True
     >>> collaborationsFolder = portal['collaborative-groups']
@@ -372,6 +373,7 @@ First, a folder to hold them all, and in the darkness bind them::
 
 Now let's try group workspaces::
 
+    >>> browser.open(portalURL + '/collaborative-groups')
     >>> l = browser.getLink(id='eke-knowledge-groupspacefolder')
     >>> l.url.endswith('++add++eke.knowledge.groupspacefolder')
     True
@@ -379,6 +381,8 @@ Now let's try group workspaces::
     >>> browser.getControl(name='form.widgets.title').value = u'MySpace'
     >>> browser.getControl(name='form.widgets.description').value = u'A defunct workspace.'
     >>> browser.getControl(name='form.buttons.save').click()
+    >>> browser.open(portalURL + '/collaborative-groups/myspace/content_status_modify?workflow_action=publish')
+    >>> browser.open(portalURL + '/collaborative-groups/myspace/index_html/content_status_modify?workflow_action=publish')
     >>> group = collaborationsFolder['myspace']
 
 The index page is automatically created::
@@ -445,9 +449,10 @@ Check out these members::
 
 Plus tabs for the group's stuff (or there will be)::
 
-    >>> overview = browser.contents.index('fieldset-overview')
-    >>> documents = browser.contents.index('fieldset-documents')
-    >>> overview < documents
+    >>> overview = browser.contents.index('overviewTab')
+    >>> calendar = browser.contents.index('calendarTab')
+    >>> documents = browser.contents.index('documentsTab')
+    >>> overview < calendar < documents
     True
 
 Since we're logged in, the special note about logging in to view additional
@@ -455,12 +460,6 @@ information doesn't appear (eventually)::
 
     >>> 'If you are a member of this group,' in browser.contents
     False
-
-But an unprivileged user does get it (some day)::
-
-    >>> unprivilegedBrowser.open(portalURL + '/collaborative-groups/myspace')
-    >>> unprivilegedBrowser.contents
-    '...If you are a member of this group...log in...'
 
 
 Miscellaneous Resources
@@ -601,7 +600,8 @@ And check it out::
     >>> linkedPubs = [i.to_path for i in biomarker.publications]
     >>> linkedPubs.sort()
     >>> linkedPubs
-    ['/plone/publications/a-combination-of-muc5ac-and-ca19-9-improves-the-diagnosis-of-pancreatic-cancer-a-multicenter-study', '/plone/publications/association-between-combined-tmprss2-erg-and-pca3-rna-urinary-testing-and-detection-of-aggressive-prostate-cancer', '/plone/publications/early-detection-of-nsclc-with-scfv-selected-against-igm-autoantibody', '/plone/publications/evaluation-of-serum-protein-profiling-by-surface-enhanced-laser-desorption-ionization-time-of-flight-mass-spectrometry-for-the-detection-of-prostate-cancer-i-assessment-of-platform-reproducibility']
+    ['/plone/publications/15613711-evaluation-of-serum-protein-profiling-by', '/plone/publications/23585862-early-detection-of-nsclc-with-scfv', '/plone/publications/27845339-a-combination-of-muc5ac-and-ca19-9', '/plone/publications/28520829-association-between-combined-tmprss2-erg']
+
 
 Child objects work too::
 
@@ -639,7 +639,7 @@ Did it work?
     >>> linkedPubs = [i.to_path for i in biomarkerBodySystem.publications]
     >>> linkedPubs.sort()
     >>> linkedPubs
-    ['/plone/publications/a-combination-of-muc5ac-and-ca19-9-improves-the-diagnosis-of-pancreatic-cancer-a-multicenter-study', '/plone/publications/association-between-combined-tmprss2-erg-and-pca3-rna-urinary-testing-and-detection-of-aggressive-prostate-cancer', '/plone/publications/early-detection-of-nsclc-with-scfv-selected-against-igm-autoantibody', '/plone/publications/evaluation-of-serum-protein-profiling-by-surface-enhanced-laser-desorption-ionization-time-of-flight-mass-spectrometry-for-the-detection-of-prostate-cancer-i-assessment-of-platform-reproducibility']
+    ['/plone/publications/15613711-evaluation-of-serum-protein-profiling-by', '/plone/publications/23585862-early-detection-of-nsclc-with-scfv', '/plone/publications/27845339-a-combination-of-muc5ac-and-ca19-9', '/plone/publications/28520829-association-between-combined-tmprss2-erg']
 
 But it can have child objects too::
 
@@ -677,7 +677,7 @@ Working? Yes::
     >>> linkedPubs = [i.to_path for i in bodySystemStudy.publications]
     >>> linkedPubs.sort()
     >>> linkedPubs
-    ['/plone/publications/a-combination-of-muc5ac-and-ca19-9-improves-the-diagnosis-of-pancreatic-cancer-a-multicenter-study', '/plone/publications/association-between-combined-tmprss2-erg-and-pca3-rna-urinary-testing-and-detection-of-aggressive-prostate-cancer', '/plone/publications/early-detection-of-nsclc-with-scfv-selected-against-igm-autoantibody', '/plone/publications/evaluation-of-serum-protein-profiling-by-surface-enhanced-laser-desorption-ionization-time-of-flight-mass-spectrometry-for-the-detection-of-prostate-cancer-i-assessment-of-platform-reproducibility']
+    ['/plone/publications/15613711-evaluation-of-serum-protein-profiling-by', '/plone/publications/23585862-early-detection-of-nsclc-with-scfv', '/plone/publications/27845339-a-combination-of-muc5ac-and-ca19-9', '/plone/publications/28520829-association-between-combined-tmprss2-erg']
 
 Oh but we're not done::
 
@@ -750,7 +750,7 @@ OK that's enough. RDF is the order of the day::
     >>> a1.identifier
     u'http://edrn/bmdb/a1'
     >>> a1.publications[0].to_object.title
-    u'A Combination of MUC5AC and CA19-9 Improves the Diagnosis of Pancreatic Cancer: A Multicenter Study.'
+    u'Evaluation of serum protein profiling by surface-enhanced laser desorption/ionization time-of-flight mass spectrometry for the detection of prostate cancer: I. Assessment of platform reproducibility.'
     >>> a1.resources[0].to_object.title
     u'A web index'
     >>> a1.datasets[0].to_object.title
@@ -777,7 +777,7 @@ OK that's enough. RDF is the order of the day::
     >>> o1.identifier
     u'http://edrn/bmdb/a1/o1'
     >>> o1.publications[0].to_object.title
-    u'A Combination of MUC5AC and CA19-9 Improves the Diagnosis of Pancreatic Cancer: A Multicenter Study.'
+    u'Evaluation of serum protein profiling by surface-enhanced laser desorption/ionization time-of-flight mass spectrometry for the detection of prostate cancer: I. Assessment of platform reproducibility.'
     >>> o1.keys()
     ['lung-reference-set-a-application-edward-hirschowitz-university-of-kentucky-2009']
     >>> s1 = o1['lung-reference-set-a-application-edward-hirschowitz-university-of-kentucky-2009']

@@ -29,6 +29,7 @@
                 <pre class='legion' tal:condition='not:isAnon'>Hiya, friend.</pre>
                 <pre tal:content='desc_length'/>
 
+                <!-- Members of the group -->
                 <div class='collaborativeGroupContainer'>
                     <div class='cbInfoBox'>
                         <div tal:replace='structure provider:plone.abovecontenttitle' />
@@ -66,22 +67,187 @@
                         </span>
                     </div>
                     
-                    <div class='cbMemberBox' tal:define='membersColumns view/membersColumns'>
-                        <dl class='collapsible collapsedOnLoad'>
-                            <dt class='collapsibleHeader' i18n:translate='edrnsiteCollaborationsHeadingMembers'>Members</dt>
-                            <dd class='collapsibleContent'>
+                    <div tal:define='membersColumns view/membersColumns'>
+                        <div class='collapse'>
+                            <h3 i18n:translate='headingMembers'>Members</h3>
+                            <div>
                                 <div class='membersColumn' tal:repeat='members membersColumns'>
-                                    <div 
-                                    metal:use-macro='context/@@collaborativeGroupMacros/macros/columnOfCollaborativeGroupMembers'>
-                                        A column of members appears here.
+                                    <div metal:use-macro='context/@@collaborativeGroupMacros/macros/columnOfCollaborativeGroupMembers'>
+                                        A column of members appears hear.
                                     </div>
                                 </div>
                                 <div class='visualClear'><!-- --></div>
-                            </dd>
-                        </dl>
+                            </div>
+                        </div>
                     </div>
-
                 </div>
+                <!-- End members of the group -->
+
+                <!-- Group details -->
+                <div class='collaborativeGroupContainer' tal:define='numTops view/numTops;'>
+                    <div id='groupDetailTabs'>
+                        <ul>
+                            <li><a href='#overviewTab' i18n:translate='overviewTab'>Overview</a></li>
+                            <li><a href='#calendarTab' i18n:translate='calendarTab'>Calendar</a></li>
+                            <li><a href='#documentsTab' i18n:translate='documentsTab'>Documents</a></li>
+                        </ul>
+                        <!-- TAB: Overview -->
+                        <div id='overviewTab'>
+                            <p class='arg' i18n:translate='groupLoginAdmonition' tal:condition='isAnon'
+                                tal:define='loginURL string:${context/aq_parent/absolute_url}/login'>
+                                If you are a member of this group,
+                                <a href='#' i18n:name='loginURL' tal:attributes='href loginURL'>log in</a>
+                                to gain full access.
+                            </p>
+                            <div class='topCollabGroupItems' tal:define='
+                                topEvents view/topEvents;
+                                numEvents view/numEvents;
+                            '>
+                                <p class='topCollabGroupItemDescription' i18n:translate='descEvents'>
+                                    Events coming up for the
+                                    <span i18n:name='groupName' tal:content='context/title'>Mega Awesome Group</span>.
+                                </p>
+                                <p class='discreet' i18n:translate='noTopEvents' tal:condition='not:topEvents'>
+                                    No upcoming events.
+                                </p>                                
+                                <dl tal:condition='topEvents' class='topCGEvents'>
+                                    <tal:repeat repeat='topEvent topEvents'>
+                                        <dt>
+                                            <a href='#' title='A way interesting event.' tal:content='topEvent/title'
+                                                tal:attributes='href topEvent/url; title topEvent/description;'>
+                                                Top Event of Fairly Interestingness
+                                            </a>
+                                        </dt>
+                                        <dd tal:content='topEvent/start'>
+                                            2019-07-07
+                                        </dd>
+                                    </tal:repeat>
+                                </dl>
+                                <a href='#' tal:condition='python:numEvents &gt; numTops' class='viewMoreEDRNStuffLink'
+                                    tal:attributes='href string:${hereURL}/#fieldsetlegend-calendar'
+                                    i18n:translate='edrnsiteCollaborationsTabEvents'>
+                                    View all <span tal:replace='numEvents' i18n:name='numEvents'>42</span> upcoming events
+                                </a>
+                            </div>
+                        </div>
+                        <!-- END TAB: Overview -->
+                        <!-- TAB: Calendar -->
+                        <div id='calendarTab' tal:define='
+                            showEventButton python:view.showNewButton("event");
+                            haveEvents      view/haveEvents;
+                            havePastEvents  view/havePastEvents;
+                        '>
+                            <button class='btn btn-primary' tal:condition='showEventButton'>
+                                <a href='#' title='Creates a new event (meeting, telecon, conference,…) for the group.'
+                                    i18n:attributes='title' tal:attributes='href python:view.newButtonLink("event");'>
+                                    New Event
+                                </a>
+                            </button>
+                            <p class='discreet' tal:condition='not:haveEvents' i18n:translate='admonitionNoEvents'>
+                                There are no current events.
+                            </p>
+                            <div tal:condition='haveEvents' tal:define='events view/currentEvents'>
+                                <table metal:use-macro='context/@@collaborativeGroupMacros/macros/eventsTable'>
+                                    Table of current events.
+                                </table>
+                            </div>
+                            <div class='collapse'>
+                                <h3 i18n:translate='headingPastEvents'>Past Events</h3>
+                                <div>
+                                    <p class='discreet' tal:condition='not:havePastEvents'
+                                        i18n:translate='admonitionNoPastEvents'>
+                                        There are no past events.
+                                    </p>
+                                    <div tal:condition='havePastEvents' tal:define='events view/pastEvents'>
+                                        <table use-macro='context/@@collaborativeGroupMacros/macros/eventsTable'>
+                                            Table of past events.
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END TAB: Calendar -->
+                        <!-- TAB: Documents -->
+                        <div id='documentsTab' tal:define='
+                            showFolderButton    python:view.showNewButton("folder");
+                            showFileButton      python:view.showNewButton("file");
+                            showImageButton     python:view.showNewButton("image");
+                            showPageButton      python:view.showNewButton("page");
+                            showButtons         python:showFolderButton or showFileButton or showImageButton or showPageButton;
+                            normalizeString     nocall:context/plone_utils/normalizeString;
+                            pas_member          context/@@pas_member;
+                            navigation_root_url context/@@plone_portal_state/navigation_root_url;
+                            toLocalizedTime     nocall:context/@@plone/toLocalizedTime;
+                            documents           view/documents;                            
+                        '>
+                            <table class='listing' sumamry="Group's shared wiki pages, files, etc."
+                                i18n:attributes='summary docTableSumamry'>
+                                <thead>
+                                    <tr>
+                                        <th class='nosort'>Title</th>
+                                        <th class='nosort'>Author</th>
+                                        <th class='nosort'>Type</th>
+                                        <th class='nosort'>Modified</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tal:repeat repeat='item documents'>
+                                    </tal:repeat>
+                                </tbody>
+                            </table>
+                            <ul tal:condition='showButtons' class='collaborationsNewContentButtons'>
+                                <li tal:condition='showFolderButton'>
+                                    <button class='btn btn-primary btn-small'>
+                                        <a href='#' title='Creates a folder to organize items shared by the group.'
+                                           i18n:attributes='title'
+                                           tal:attributes='href python:view.newButtonLink("folder");'>
+                                            New Folder
+                                        </a>
+                                    </button>
+                                </li>
+                                <li tal:condition='showPageButton'>
+                                    <button class='btn btn-primary btn-small'>
+                                        <a href='#' title='Creates a new wiki page shared by the group.'
+                                           i18n:attributes='title'
+                                           tal:attributes='href python:view.newButtonLink("page");'>
+                                            New Page
+                                        </a>
+                                    </button>
+                                </li>
+                                <li tal:condition='showFileButton'>
+                                    <button class='btn btn-primary btn-small'>
+                                        <a href='#' title='Uploads a new file (PDF, spreadsheet, etc.).'
+                                           i18n:attributes='title'
+                                           tal:attributes='href python:view.newButtonLink("file");'>
+                                            New File
+                                        </a>
+                                    </button>
+                                </li>
+                                <li tal:condition='showImageButton'>
+                                    <button class='btn btn-primary btn-small'>
+                                        <a href='#' title='Uploads a new image (photograph, JPEG, PNG, GIF, etc.).'
+                                           i18n:attributes='title'
+                                           tal:attributes='href python:view.newButtonLink("image");'>
+                                            New Image
+                                        </a>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- END TAB: Documents -->
+                    </div>
+                </div>
+                <!-- End group details -->
+
+                <script type='text/javascript'>
+                    $(function() {
+                        $("#groupDetailTabs").tabs();
+                    });
+                    $('.collapse').accordion({
+                        collapsible: true,
+                        active: false
+                    });
+                </script>
 
             </tal:main-macro>
         </metal:main>
