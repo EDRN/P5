@@ -29,23 +29,26 @@ class IGroupSpaceFolder(model.Schema):
 @grok.subscribe(IGroupSpaceFolder, IObjectAddedEvent)
 def setupGroupSpaceFolder(folder, event):
     if not IGroupSpaceFolder.providedBy(folder): return  # This should never happen but I'm defensive—er, paranoid.
-    # Add index page
-    if 'index_html' not in folder.keys():
-        index = createContentInContainer(
-            folder,
-            'eke.knowledge.groupspaceindex',
-            id='index_html',
-            title=folder.title,
-            description=folder.description
-        )
-        index.reindexObject()
-        folder.setDefaultPage('index_html')
-    # Make index page not easily addable
-    i = ISelectableConstrainTypes(folder)
-    i.setConstrainTypesMode(ENABLED)
-    addableTypes = i.getImmediatelyAddableTypes()
     try:
+        # Add index page
+        if 'index_html' not in folder.keys():
+            index = createContentInContainer(
+                folder,
+                'eke.knowledge.groupspaceindex',
+                id='index_html',
+                title=folder.title,
+                description=folder.description
+            )
+            index.reindexObject()
+            folder.setDefaultPage('index_html')
+        # Make index page not easily addable
+        i = ISelectableConstrainTypes(folder)
+        i.setConstrainTypesMode(ENABLED)
+        addableTypes = i.getImmediatelyAddableTypes()
         addableTypes.remove('eke.knowledge.groupspaceindex')
         i.setImmediatelyAddableTypes(addableTypes)
     except ValueError:
+        # A cleaner way would be to use a tagged value on the interface class
+        # to determine what the index page type should be, but there's only one
+        # subclass
         pass

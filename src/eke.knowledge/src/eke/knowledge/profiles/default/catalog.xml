@@ -96,5 +96,9 @@
     </index>
     <column value='indicatedBodySystems'/>
 
+    <!-- Selection of projects versus protocols in collaborative groups -->
+    <index name='project' meta_type='FieldIndex'>
+        <indexed_attr value='project' />
+    </index>
 
 </object>

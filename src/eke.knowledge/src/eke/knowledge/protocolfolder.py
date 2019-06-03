@@ -10,7 +10,6 @@ from .site import ISite
 from Acquisition import aq_inner
 from five import grok
 from plone.i18n.normalizer.interfaces import IIDNormalizer
-from plone.memoize.view import memoize
 from z3c.relationfield import RelationValue
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds

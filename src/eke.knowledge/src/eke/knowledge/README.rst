@@ -349,8 +349,8 @@ And the statistical graphics are back::
     '...<style>...<script>...datasetColor...'
 
 
-Collaborative Groups
-====================
+Groups
+======
 
 First, a folder to hold them all, and in the darkness bind them::
 
@@ -370,6 +370,10 @@ First, a folder to hold them all, and in the darkness bind them::
     u'Collaborative Groups'
     >>> collaborationsFolder.description
     u'Some testing collaborative groups.'
+
+
+Group Spaces
+------------
 
 Now let's try group workspaces::
 
@@ -447,7 +451,7 @@ Check out these members::
     >>> browser.contents
     '...Chair...Antic, Sanja...Co-Chair...Banerjee, Priyanka...Members...Spencer, Brady...Sullivan, Amy...'
 
-Plus tabs for the group's stuff (or there will be)::
+Plus tabs for the group's stuff::
 
     >>> overview = browser.contents.index('overviewTab')
     >>> calendar = browser.contents.index('calendarTab')
@@ -460,6 +464,113 @@ information doesn't appear (eventually)::
 
     >>> 'If you are a member of this group,' in browser.contents
     False
+
+
+Collaborative Groups
+--------------------
+
+These are group workspaces but linked data::
+
+    >>> browser.open(portalURL + '/collaborative-groups')
+    >>> l = browser.getLink(id='eke-knowledge-collaborativegroupfolder')
+    >>> l.url.endswith('++add++eke.knowledge.collaborativegroupfolder')
+    True
+    >>> l.click()
+    >>> browser.getControl(name='form.widgets.title').value = u'Guts'
+    >>> browser.getControl(name='form.widgets.description').value = u'The guts collaborative group.'
+    >>> browser.getControl(name='form.buttons.save').click()
+    >>> browser.open(portalURL + '/collaborative-groups/guts/content_status_modify?workflow_action=publish')
+    >>> browser.open(portalURL + '/collaborative-groups/guts/index_html/content_status_modify?workflow_action=publish')
+    >>> group = collaborationsFolder['guts']    
+
+Just like group spaces, the index page is automatically created::
+
+    >>> groupIndex = group['index_html']
+    >>> from z3c.relationfield import RelationValue
+    >>> from zope.intid.interfaces import IIntIds
+    >>> from z3c.relationfield import RelationValue
+    >>> intIDUtil = getUtility(IIntIds)
+    >>> groupIndex.chair = RelationValue(intIDUtil.getId(site['antic-sanja']))
+    >>> groupIndex.coChair = RelationValue(intIDUtil.getId(site['banerjee-priyanka']))
+    >>> groupIndex.members = [RelationValue(intIDUtil.getId(site[i])) for i in ('spencer-brady', 'sullivan-amy')]
+    >>> groupIndex.biomarkers = []
+    >>> groupIndex.protocols = [RelationValue(intIDUtil.getId(protocolsFolder[i])) for i in protocolsFolder.keys()]
+    >>> groupIndex.datasets = [RelationValue(intIDUtil.getId(dataFolder[i])) for i in dataFolder.keys()]
+    >>> from zope.lifecycleevent import ObjectModifiedEvent
+    >>> from zope.event import notify
+    >>> notify(ObjectModifiedEvent(groupIndex))
+    >>> transaction.commit()
+    >>> groupIndex.chair.to_object.title
+    u'Antic, Sanja'
+    >>> groupIndex.coChair.to_object.title
+    u'Banerjee, Priyanka'
+    >>> members = [i.to_object.title for i in groupIndex.members]
+    >>> members.sort()
+    >>> members
+    [u'Spencer, Brady', u'Sullivan, Amy']
+    >>> groupIndex.biomarkers
+    []
+    >>> groupProtocols = [i.to_object.title for i in groupIndex.protocols]
+    >>> groupProtocols.sort()
+    >>> groupProtocols
+    [u'Hepatocellular carcinoma Early Detection Strategy study', u'Lung Reference Set A Application:  Edward Hirschowitz - University of Kentucky (2009)']
+    >>> groupDatasets = [i.to_object.title for i in groupIndex.datasets]
+    >>> groupDatasets.sort()
+    >>> groupDatasets
+    [u'GSTP1 Methylation', u'University of Pittsburg Ovarian Data']
+
+It's also set as the display for the collaborative group::
+
+    >>> 'index_html' in group.keys()
+    True
+    >>> group.getDefaultPage()
+    'index_html'
+
+And we also make room::
+
+    >>> 'portal-column-two' in browser.contents
+    False
+
+Also like plain group spaces, it uses the constrain-types feature to keep the
+"index" type off the menu::
+
+    >>> from Products.CMFPlone.interfaces.constrains import ENABLED, IConstrainTypes
+    >>> i = IConstrainTypes(group)
+    >>> i.getConstrainTypesMode() == ENABLED
+    True
+
+And you can comment::
+
+    >>> browser.open(portalURL + '/collaborative-groups/guts')
+    >>> 'Add comment' in browser.contents
+    True
+
+But only if you're privileged::
+
+    >>> unprivilegedBrowser.open(portalURL + '/collaborative-groups/guts')
+    >>> 'Add comment' in unprivilegedBrowser.contents
+    False
+
+And there are members::
+
+    >>> browser.contents
+    '...Chair...Antic, Sanja...Co-Chair...Banerjee, Priyanka...Members...Spencer, Brady...Sullivan, Amy...'
+
+And space for stuff:
+
+    >>> overview = browser.contents.index('overviewTab')
+    >>> biomarkers = browser.contents.index('biomarkersTab')
+    >>> protocols = browser.contents.index('protocolsTab')
+    >>> data = browser.contents.index('dataTab')
+    >>> calendar = browser.contents.index('calendarTab')
+    >>> documents = browser.contents.index('documentsTab')
+    >>> overview < biomarkers < protocols < data < calendar < documents
+    True
+
+Note also that, due to lack of room, we've combined Projects and Protocols::
+
+    >>> browser.contents
+    '...Projects/Protocols...'
 
 
 Miscellaneous Resources

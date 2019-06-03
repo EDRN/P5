@@ -11,7 +11,6 @@ from five import grok
 from knowledgeobject import IKnowledgeObject
 from plone.memoize.view import memoize
 from zope import schema
-from zope.interface import Interface
 from z3c.relationfield.schema import RelationChoice, RelationList
 from plone.app.vocabularies.catalog import CatalogSource
 import plone.api

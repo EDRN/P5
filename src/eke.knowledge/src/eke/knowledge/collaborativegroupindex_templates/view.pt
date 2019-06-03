@@ -8,7 +8,7 @@
     xmlns:tal='http://xml.zope.org/namespaces/tal'
     xmlns='http://www.w3.org/1999/xhtml'>
     <head>
-        <title>Group Space Index View</title>
+        <title>Collaborative Group Index View</title>
     </head>
     <body>
         <metal:css fill-slot='style_slot'>
@@ -84,6 +84,9 @@
                     <div id='groupDetailTabs'>
                         <ul>
                             <li><a href='#overviewTab' i18n:translate='overviewTab'>Overview</a></li>
+                            <li><a href='#biomarkersTab' i18n:translate='biomarkersTab'>Biomarkers</a></li>
+                            <li><a href='#protocolsTab' i18n:translate='protocolsTab'>Projects/Protocols</a></li>
+                            <li><a href='#dataTab' i18n:translate='dataTab'>Data</a></li>
                             <li><a href='#calendarTab' i18n:translate='calendarTab'>Calendar</a></li>
                             <li><a href='#documentsTab' i18n:translate='documentsTab'>Documents</a></li>
                         </ul>
@@ -127,6 +130,85 @@
                             </div>
                         </div>
                         <!-- END TAB: Overview -->
+                        <!-- TAB: Biomarkers -->
+                        <div id='biomarkersTab' tal:define='biomarkers context/biomarkers'>
+                            <p tal:condition='not:biomarkers' class='discreet'>
+                                There are no biomarkers defined for this collaborative group.
+                            </p>
+                            <dl tal:condition='biomarkers' class='collabDetailList'>
+                                <tal:loop repeat='item biomarkers'>
+                                    <dt>
+                                        <a href='#' tal:attributes='href item/to_object/absolute_url'
+                                            tal:content='item/to_object/title'>
+                                            Some object
+                                        </a>
+                                    <dd tal:content='python:plone_view.cropText(item.to_object.description,
+                                        desc_length, u"…")'>
+                                        Lorem ipsum…
+                                    </dd>
+                                </tal:loop>
+                            </dl>
+                        </div>
+                        <!-- END TAB: Biomarkers -->
+                        <!-- TAB: Protocols -->
+                        <div id='protocolsTab' tal:define='protocols context/protocols; projects context/projects'>
+                            <h3>Projects</h3>
+                            <p tal:condition='not:projects' class='discreet'>
+                                There are no projects defined for this collaborative group.
+                            </p>
+                            <dl tal:condition='projects' class='collabDetailList'>
+                                <tal:loop repeat='item projects'>
+                                    <dt>
+                                        <a href='#' tal:attributes='href item/to_object/absolute_url'
+                                            tal:content='item/to_object/title'>
+                                            Some object
+                                        </a>
+                                    <dd tal:content='python:plone_view.cropText(item.to_object.description,
+                                        desc_length, u"…")'>
+                                        Lorem ipsum…
+                                    </dd>
+                                </tal:loop>
+                            </dl>
+
+                            <h3>Protocols</h3>
+                            <p tal:condition='not:protocols' class='discreet'>
+                                There are no protocols defined for this collaborative group.
+                            </p>
+                            <dl tal:condition='protocols' class='collabDetailList'>
+                                <tal:loop repeat='item protocols'>
+                                    <dt>
+                                        <a href='#' tal:attributes='href item/to_object/absolute_url'
+                                            tal:content='item/to_object/title'>
+                                            Some object
+                                        </a>
+                                    <dd tal:content='python:plone_view.cropText(item.to_object.description,
+                                        desc_length, u"…")'>
+                                        Lorem ipsum…
+                                    </dd>
+                                </tal:loop>
+                            </dl>
+                        </div>
+                        <!-- END TAB: Protocols -->
+                        <!-- TAB: Data -->
+                        <div id='dataTab' tal:define='datasets context/datasets'>
+                            <p tal:condition='not:datasets' class='discreet'>
+                                There are no data defined for this collaborative group.
+                            </p>
+                            <dl tal:condition='datasets' class='collabDetailList'>
+                                <tal:loop repeat='item datasets'>
+                                    <dt>
+                                        <a href='#' tal:attributes='href item/to_object/absolute_url'
+                                            tal:content='item/to_object/title'>
+                                            Some object
+                                        </a>
+                                    <dd tal:content='python:plone_view.cropText(item.to_object.description,
+                                        desc_length, u"…")'>
+                                        Lorem ipsum…
+                                    </dd>
+                                </tal:loop>
+                            </dl>
+                        </div>
+                        <!-- END TAB: Data -->
                         <!-- TAB: Calendar -->
                         <div id='calendarTab' tal:define='
                             showEventButton python:view.showNewButton("event");
