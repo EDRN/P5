@@ -355,21 +355,14 @@ Groups
 First, a folder to hold them all, and in the darkness bind them::
 
     >>> browser.open(portalURL)
-    >>> l = browser.getLink(id='eke-knowledge-collaborationsfolder')
-    >>> l.url.endswith('++add++eke.knowledge.collaborationsfolder')
-    True
-    >>> l.click()
-    >>> browser.getControl(name='form.widgets.title').value = u'Collaborative Groups'
-    >>> browser.getControl(name='form.widgets.description').value = u'Some testing collaborative groups.'
+    >>> browser.getLink(id='folder').click()
+    >>> browser.getControl(name='form.widgets.IDublinCore.title').value = u'Collaborative Groups'
+    >>> browser.getControl(name='form.widgets.IDublinCore.description').value = u'Some testing collaborative groups.'
     >>> browser.getControl(name='form.buttons.save').click()
     >>> browser.open(portalURL + '/collaborative-groups/content_status_modify?workflow_action=publish')
     >>> 'collaborative-groups' in portal.keys()
     True
     >>> collaborationsFolder = portal['collaborative-groups']
-    >>> collaborationsFolder.title
-    u'Collaborative Groups'
-    >>> collaborationsFolder.description
-    u'Some testing collaborative groups.'
 
 
 Group Spaces
