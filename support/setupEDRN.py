@@ -45,6 +45,15 @@ information not available to the public that is currently under review by EDRN r
 access to this information, please ensure that you are logged in. If you are unsure or would like access,
 please <a href="mailto:ic-portal@jpl.nasa.gov">contact the operator</a> for more information.</p>
 '''
+_COLLAB_GROUPS_BODY = u'''<h2>Group Work Spaces</h2>
+<ul><li><a href='resolveuid/{brl}'>Biomarker Reference Laboratories</a></li></ul>
+<h2>Organ Collaborative Groups</h2>
+<ul>
+<li><a href='resolveuid/{breast}'>Breast and Gynecologic Cancers Research Group</a></li>
+<li><a href='resolveuid/{gi}'>G.I. and Other Associated Cancers Research Group</a></li>
+<li><a href='resolveuid/{lung}'>Lung and Upper Aerodigestive Cancers Research Group</a></li>
+<li><a href='resolveuid/{prostate}'>Prostate and Urologic Cancers Research Group</a></li>
+'''
 _QUICKLINKS_BODY = u'''<div class='edrnQuickLinks'>
     <ul id='edrn-quicklinks'>
         <li id='q-nct'>
@@ -306,7 +315,7 @@ _RDF_FOLDERS = (
     (None, 'eke.knowledge.datasetfolder', u'Data', u'Data collected by EDRN.', [u'https://edrn.nci.nih.gov/miscellaneous-knowledge-system-artifacts/science-data-rdf/at_download/file'], _setupDatasets),
     (None, 'eke.knowledge.biomarkerfolder', u'Biomarkers', u'Indicators for cancer.', [u'https://edrn.jpl.nasa.gov/bmdb/rdf/biomarkers?qastate=all'], _setupBiomarkers),
 )
-
+# _RDF_FOLDERS = tuple()
 
 # From https://docs.python.org/2/library/csv.html
 class UTF8Recoder(object):
@@ -572,6 +581,130 @@ def _setGlobalNavOrder(portal):
             portal.moveObjectsToTop([item])
 
 
+def _addCollaborativeGroups(portal):
+    if 'collaborative-groups' in portal.keys():
+        portal.manage_delObjects(['collaborative-groups'])
+    folder = createContentInContainer(
+        portal, 'Folder', id='collaborative-groups', title=u'Collaborative Groups',
+        description=u'Groups that work (and, in fact, collaborate) together.'
+    )
+    brl = createContentInContainer(
+        folder, 'eke.knowledge.groupspacefolder', title=u'Biomarker Reference Laboratories',
+        description=u'Biomarker Reference Laboratories Group Pages.'
+    )
+    breast = createContentInContainer(
+        folder, 'eke.knowledge.collaborativegroupfolder', title=u'Breast and Gynecologic Cancers Research Group',
+        description=u'Collaborative group for those working on breast and gynecologic cancers.'
+    )
+    gi = createContentInContainer(
+        folder, 'eke.knowledge.collaborativegroupfolder', title=u'G.I. and Other Associated Cancers Research Group',
+        description=u'Collaborative group for those working on GI and other associated cancers.'
+    )
+    lung = createContentInContainer(
+        folder, 'eke.knowledge.collaborativegroupfolder', title=u'Lung and Upper Aerodigestive Cancers Research Group',
+        description=u'Collaborative group for those working on lung and upper aerodigestive associated cancers.'
+    )
+    prostate = createContentInContainer(
+        folder, 'eke.knowledge.collaborativegroupfolder', title=u'Prostate and Urologic Cancers Research Group',
+        description=u'Collaborative group for those working on prostate and urologic cancers.'
+    )
+    body = _COLLAB_GROUPS_BODY.format(
+        brl=brl.UID(), breast=breast.UID(), gi=gi.UID(), lung=lung.UID(), prostate=prostate.UID()
+    )
+    createContentInContainer(
+        folder, 'Document', id='index_html', title=u'Collaborative Groups',
+        description=u'Groups that work (and, in fact, collaborate) together.',
+        text=RichTextValue(body, 'text/html', 'text/x-html-safe')
+    )
+    folder.setDefaultPage('index_html')
+    _publish(folder)
+
+
+def _addCommittees(portal):
+    if 'committees' in portal.keys():
+        portal.manage_delObjects(['committees'])
+    folder = createContentInContainer(
+        portal, 'Folder', id='committees', title=u'Committees',
+        description=u'The following describes the committees, subcommittees, and other components of EDRN.'
+    )
+    for name in (
+        u'Associate Member',
+        u'Biomarker Developmental Laboratories',
+        u'Biomarker Reference Laboratories',
+        u'Clinical Epidemiology and Validation Center',
+        u'Collaboration and Publication Subcommittee',
+        u'Communication and Workshop Subcommittee',
+        u'Data Management and Coordinating Center',
+        u'Data Sharing and Informatics Subcommittee',
+        u'ERNE Working Group',
+        u'Executive Committee',
+        u'Jet Propulsion Laboratory',
+        u'National Cancer Institute',
+        u'Network Consulting Team',
+        u'Prioritization Subcommittee',
+        u'Steering Committee',
+        u'Technology and Resource Sharing Subcommittee'
+    ):
+        createContentInContainer(folder, 'eke.knowledge.groupspacefolder', title=name)
+    _publish(folder)
+
+
+def _addGroupSpaces(portal):
+    u'''Add group workspaces, collaborative groups, committees'''
+    _addCollaborativeGroups(portal)
+    _addCommittees(portal)
+
+
+def _addMembersList(portal):
+    u'''Add the faceted members list'''
+    if 'members-list' in portal.keys():
+        portal.manage_delObjects(['members-list'])
+    folder = createContentInContainer(
+        portal, 'Folder', id='members-list', title=u'Members List',
+        description=u'A directory of the people that comprise EDRN.'
+    )
+    adapter = IExcludeFromNavigation(folder, None)
+    if adapter is not None:
+        adapter.exclude_from_nav = True
+    subtyper = getMultiAdapter((folder, portal.REQUEST), name=u'faceted_subtyper')
+    if subtyper.is_faceted or not subtyper.can_enable: return
+    subtyper.enable()
+    criteria = ICriteria(folder)
+    for cid in criteria.keys():
+        criteria.delete(cid)
+    criteria.add('resultsperpage', 'bottom', 'default', title='Results per page', hidden=False, start=0, end=60, step=20,
+        default=20)
+    # criteria.add(
+    #     'checkbox', 'left', 'default',
+    #     title='Organs',
+    #     hidden=False,
+    #     index='indicatedBodySystems',
+    #     operator='or',
+    #     vocabulary=u'eke.knowledge.vocabularies.BodySystemsInBiomarkers',
+    #     default=[],
+    #     count=False,
+    #     maxitems=0,
+    #     sortreversed=False,
+    #     hidezerocount=False
+    # )
+    criteria.add(
+        'checkbox', 'bottom', 'default',
+        title='Portal Type',
+        hidden=True,
+        index='portal_type',
+        operator='or',
+        vocabulary=u'eea.faceted.vocabularies.FacetedPortalTypes',
+        default=[u'eke.knowledge.person'],
+        count=False,
+        maxitems=0,
+        sortreversed=False,
+        hidezerocount=False
+    )
+    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=False, default='sortable_title')
+    IFacetedLayout(folder).update_layout('listing_view')
+    _publish(folder)
+
+
 def _setupEDRN(app, username, password, ldapPassword):
     app = makerequest.makerequest(app)
     _setupZopeSecurity(app)
@@ -586,6 +719,8 @@ def _setupEDRN(app, username, password, ldapPassword):
     _doStaticQuickLinksPortlet(portal, uids)
     _doDMCCRSSPortlet(portal)
     _setGlobalNavOrder(portal)
+    _addGroupSpaces(portal)
+    _addMembersList(portal)
     _tuneUp(portal)  # this should be the last step always as it clears/rebuids the catalog and commits the txn
     noSecurityManager()
 
