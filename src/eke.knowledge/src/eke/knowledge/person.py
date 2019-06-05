@@ -12,6 +12,7 @@ from zope import schema
 from zope.component import getUtility
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
+from .utils import generateVocabularyFromIndex
 import plone.api, urlparse
 
 
@@ -170,15 +171,21 @@ class PrincipalInvestigatorsVocabulary(object):
     u'''Vocabulary for PIs'''
     grok.implements(IVocabularyFactory)
     def __call__(self, context):
-        normalizer = getUtility(IIDNormalizer)
-        catalog = plone.api.portal.get_tool('portal_catalog')
-        results = list(catalog.uniqueValuesFor('piName'))
-        results.sort()
-        terms = []
-        for i in results:
-            if i:
-                terms.append(SimpleVocabulary.createTerm(i, normalizer.normalize(i), i))
-        return SimpleVocabulary(terms)
+        return generateVocabularyFromIndex('piName', context)
+
+
+class SiteNamesVocabulary(object):
+    grok.implements(IVocabularyFactory)
+    def __call__(self, context):
+        return generateVocabularyFromIndex('siteName', context)
+
+
+class MemberTypesVocabulary(object):
+    grok.implements(IVocabularyFactory)
+    def __call__(self, context):
+        return generateVocabularyFromIndex('memberType', context)
 
 
 grok.global_utility(PrincipalInvestigatorsVocabulary, name=u'eke.knowledge.vocabularies.PrincipalInvestigators')
+grok.global_utility(SiteNamesVocabulary, name=u'eke.knowledge.vocabularies.SiteNames')
+grok.global_utility(MemberTypesVocabulary, name=u'eke.knowledge.vocabularies.MemberTypes')

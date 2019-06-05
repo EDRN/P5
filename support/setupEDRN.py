@@ -693,6 +693,30 @@ def _addMembersList(portal):
         hidezerocount=False
     )
     criteria.add(
+        'checkbox', 'left', 'default',
+        title=u'Institution',
+        hidden=False,
+        index='siteName',
+        operator='or',
+        vocabulary=u'eke.knowledge.vocabularies.SiteNames',
+        count=False,
+        maxitems=4,
+        sortreversed=False,
+        hidezerocount=False
+    )
+    criteria.add(
+        'checkbox', 'left', 'default',
+        title=u'Member Type',
+        hidden=False,
+        index='memberType',
+        operator='or',
+        vocabulary=u'eke.knowledge.vocabularies.MemberTypes',
+        count=False,
+        maxitems=4,
+        sortreversed=False,
+        hidezerocount=False
+    )
+    criteria.add(
         'checkbox', 'bottom', 'default',
         title='Portal Type',
         hidden=True,
