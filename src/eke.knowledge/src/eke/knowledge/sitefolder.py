@@ -230,13 +230,20 @@ class SiteIngestor(Ingestor):
             self.addInvestigators(siteURI, sites, _coIURI, people, predicates, 'coInvestigators', True)
             self.addInvestigators(siteURI, sites, _iURI, people, predicates, 'investigators', True)
             # While we're here, set the piName
+            site = sites[unicode(siteURI)]
             try:
-                sites[unicode(siteURI)].piName = people[unicode(predicates[_piURI][0])].title
+                site.piName = people[unicode(predicates[_piURI][0])].title
             except (KeyError, IndexError):
                 # We tried
                 pass
             # While we're here, set the siteID
-            sites[unicode(siteURI)].dmccSiteID = urlparse.urlparse(siteURI)[2].split(u'/')[-1]
+            site.dmccSiteID = urlparse.urlparse(siteURI)[2].split(u'/')[-1]
+            # While we're here, set the de-normalized people fields
+            for person in [site[p] for p in site.keys()]:
+                person.siteName = site.title
+                person.piName = site.piName
+                person.memberType = site.memberType
+            # TODO: DO THIS!
         # XXX WHY? catalog.reindexIndex('siteID', portal.REQUEST)
         _logger.warn('Got %d site statements, %d people statements', len(siteStatements), len(peopleStatements))
         publish(context)

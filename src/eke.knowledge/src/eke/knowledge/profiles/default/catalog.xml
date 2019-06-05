@@ -74,7 +74,7 @@
         <indexed_attr value='siteID'/>
     </index>
 
-    <!-- Display of PI in ISite, IProtocolFolder -->
+    <!-- Display of PI in ISite, IProtocolFolder, and members-list -->
     <index name='piObjectID' meta_type='FieldIndex'>
         <indexed_attr value='piObjectID' />
     </index>
@@ -99,6 +99,14 @@
     <!-- Selection of projects versus protocols in collaborative groups -->
     <index name='project' meta_type='FieldIndex'>
         <indexed_attr value='project' />
+    </index>
+
+    <!-- Support the members-list faceted selector -->
+    <index name='siteName' meta_type='FieldIndex'>
+        <indexed_attr value='siteName' />
+    </index>
+    <index name='memberType' meta_type='FieldIndex'>
+        <indexed_attr value='memberType' />
     </index>
 
 </object>

@@ -588,6 +588,9 @@ def _addCollaborativeGroups(portal):
         portal, 'Folder', id='collaborative-groups', title=u'Collaborative Groups',
         description=u'Groups that work (and, in fact, collaborate) together.'
     )
+    adapter = IExcludeFromNavigation(folder, None)
+    if adapter is not None:
+        adapter.exclude_from_nav = True
     brl = createContentInContainer(
         folder, 'eke.knowledge.groupspacefolder', title=u'Biomarker Reference Laboratories',
         description=u'Biomarker Reference Laboratories Group Pages.'
@@ -627,6 +630,9 @@ def _addCommittees(portal):
         portal, 'Folder', id='committees', title=u'Committees',
         description=u'The following describes the committees, subcommittees, and other components of EDRN.'
     )
+    adapter = IExcludeFromNavigation(folder, None)
+    if adapter is not None:
+        adapter.exclude_from_nav = True
     for name in (
         u'Associate Member',
         u'Biomarker Developmental Laboratories',
@@ -674,19 +680,18 @@ def _addMembersList(portal):
         criteria.delete(cid)
     criteria.add('resultsperpage', 'bottom', 'default', title='Results per page', hidden=False, start=0, end=60, step=20,
         default=20)
-    # criteria.add(
-    #     'checkbox', 'left', 'default',
-    #     title='Organs',
-    #     hidden=False,
-    #     index='indicatedBodySystems',
-    #     operator='or',
-    #     vocabulary=u'eke.knowledge.vocabularies.BodySystemsInBiomarkers',
-    #     default=[],
-    #     count=False,
-    #     maxitems=0,
-    #     sortreversed=False,
-    #     hidezerocount=False
-    # )
+    criteria.add(
+        'checkbox', 'left', 'default',
+        title=u'Investigator',
+        hidden=False,
+        index='piName',
+        operator='or',
+        vocabulary=u'eke.knowledge.vocabularies.PrincipalInvestigators',
+        count=False,
+        maxitems=4,
+        sortreversed=False,
+        hidezerocount=False
+    )
     criteria.add(
         'checkbox', 'bottom', 'default',
         title='Portal Type',

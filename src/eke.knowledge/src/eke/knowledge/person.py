@@ -1,13 +1,17 @@
 
 # encoding: utf-8
 
-from . import _
 # from .protocol import IProtocol  # We can't import this because of a circular dependency
+from . import _
 from .publication import IPublication
 from Acquisition import aq_inner
 from five import grok
 from knowledgeobject import IKnowledgeObject
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from zope import schema
+from zope.component import getUtility
+from zope.schema.interfaces import IVocabularyFactory
+from zope.schema.vocabulary import SimpleVocabulary
 import plone.api, urlparse
 
 
@@ -88,9 +92,14 @@ class IPerson(IKnowledgeObject):
         description=_(u'Name of the site where this member works.'),
         required=False,
     )
-    piUID = schema.TextLine(
-        title=_(u'PI UID'),
-        description=_(u'Unique identifier of the principal investigator of the site where this person works.'),
+    piName = schema.TextLine(
+        title=_(u'PI Name'),
+        description=_(u"Name of the PI where this member works; if this IS the PI, then it's his/her own name."),
+        required=False,
+    )
+    memberType = schema.TextLine(
+        title=_(u'Member Type'),
+        description=_(u'Type of site to which this person belongs.'),
         required=False,
     )
     accountName = schema.TextLine(
@@ -155,3 +164,21 @@ class View(grok.View):
         context = aq_inner(self.context)
         i = urlparse.urlparse(context.identifier).path.split(u'/')[-1]
         return i if i else u'?'
+
+
+class PrincipalInvestigatorsVocabulary(object):
+    u'''Vocabulary for PIs'''
+    grok.implements(IVocabularyFactory)
+    def __call__(self, context):
+        normalizer = getUtility(IIDNormalizer)
+        catalog = plone.api.portal.get_tool('portal_catalog')
+        results = list(catalog.uniqueValuesFor('piName'))
+        results.sort()
+        terms = []
+        for i in results:
+            if i:
+                terms.append(SimpleVocabulary.createTerm(i, normalizer.normalize(i), i))
+        return SimpleVocabulary(terms)
+
+
+grok.global_utility(PrincipalInvestigatorsVocabulary, name=u'eke.knowledge.vocabularies.PrincipalInvestigators')
