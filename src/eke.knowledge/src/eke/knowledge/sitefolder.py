@@ -80,7 +80,7 @@ class ISiteFolder(IKnowledgeFolder):
 
 class SiteIngestor(Ingestor):
     grok.context(ISiteFolder)
-    def getInterfaceForContainedObjects(self):
+    def getInterfaceForContainedObjects(self, predicates):
         return ISite
     def getObjID(self, subjectURI, titles, predicates):
         if not titles: return None

@@ -3,6 +3,7 @@
 
 u'''EKE Knowledge: Collaborative Group Folder'''
 
+from .dublincore import TITLE_URI, DESCRIPTION_URI
 from .groupspacefolder import IGroupSpaceFolder
 from five import grok
 from plone.dexterity.utils import createContentInContainer
@@ -40,3 +41,14 @@ def setupCollaborativeGroupFolder(folder, event):
         i.setImmediatelyAddableTypes(addableTypes)
     except ValueError:
         pass
+
+
+ICollaborativeGroupFolder.setTaggedValue('predicates', {
+    TITLE_URI: ('title', False),
+    DESCRIPTION_URI: ('description', False),
+    u'http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#chair': ('chair', True),
+    u'http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#coChair': ('coChair', True),
+    u'http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#member': ('members', True),
+})
+ICollaborativeGroupFolder.setTaggedValue('fti', 'eke.knowledge.collaborativegroupfolder')
+ICollaborativeGroupFolder.setTaggedValue('typeURI', u'http://edrn.nci.nih.gov/rdf/types.rdf#Committee')

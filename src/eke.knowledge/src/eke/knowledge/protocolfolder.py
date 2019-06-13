@@ -35,7 +35,7 @@ class IProtocolFolder(IKnowledgeFolder):
 
 class ProtocolIngestor(Ingestor):
     grok.context(IProtocolFolder)
-    def getInterfaceForContainedObjects(self):
+    def getInterfaceForContainedObjects(self, predicates):
         return IProtocol
     def getObjID(self, subjectURI, titles, predicates):
         if not titles: return None

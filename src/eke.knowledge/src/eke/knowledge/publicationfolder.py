@@ -47,7 +47,7 @@ class IPublicationFolder(IKnowledgeFolder):
 
 class PublicationIngestor(Ingestor):
     grok.context(IPublicationFolder)
-    def getInterfaceForContainedObjects(self):
+    def getInterfaceForContainedObjects(self, predicates):
         return IPublication
     def getSummaryData(self, source):
         with contextlib.closing(urllib2.urlopen(source)) as bytestring:

@@ -355,14 +355,30 @@ Groups
 First, a folder to hold them all, and in the darkness bind them::
 
     >>> browser.open(portalURL)
-    >>> browser.getLink(id='folder').click()
-    >>> browser.getControl(name='form.widgets.IDublinCore.title').value = u'Collaborative Groups'
-    >>> browser.getControl(name='form.widgets.IDublinCore.description').value = u'Some testing collaborative groups.'
+    >>> l = browser.getLink(id='eke-knowledge-collaborationsfolder')
+    >>> l.url.endswith('++add++eke.knowledge.collaborationsfolder')
+    True
+    >>> l.click()
+    >>> browser.getControl(name='form.widgets.title').value = u'Collaborative Groups'
+    >>> browser.getControl(name='form.widgets.description').value = u'Some testing collaborative groups.'
+    >>> browser.getControl(name='form.widgets.ingestEnabled:list').value = True
     >>> browser.getControl(name='form.buttons.save').click()
     >>> browser.open(portalURL + '/collaborative-groups/content_status_modify?workflow_action=publish')
     >>> 'collaborative-groups' in portal.keys()
     True
     >>> collaborationsFolder = portal['collaborative-groups']
+    >>> collaborationsFolder.title
+    u'Collaborative Groups'
+    >>> collaborationsFolder.description
+    u'Some testing collaborative groups.'
+    >>> collaborationsFolder.ingestEnabled
+    True
+    >>> collaborationsFolder.rdfDataSources = [u'testscheme://localhost/rdf/committees']
+    >>> len(collaborationsFolder.rdfDataSources)
+    1
+    >>> collaborationsFolder.rdfDataSources[0]
+    u'testscheme://localhost/rdf/committees'
+    >>> transaction.commit()    
 
 
 Group Spaces
@@ -566,6 +582,18 @@ Note also that, due to lack of room, we've combined Projects and Protocols::
     '...Projects/Protocols...'
 
 
+Committees RDF
+--------------
+
+Note that there's RDF ingest for the ``eke.knowledge.collaborationsfolder``::
+
+    >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'sites', u'protocols', u'datasets', u'collaborative-groups']
+    >>> transaction.commit()
+    >>> browser.open(portalURL + '/@@ingestRDF')
+    >>> browser.contents
+    '...Objects Created (37)...'
+
+
 Miscellaneous Resources
 =======================
 
@@ -585,11 +613,11 @@ Miscellaneous Resources
 
 Ingesting::
 
-    >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'sites', u'protocols', u'datasets', u'resources']
+    >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'sites', u'protocols', u'datasets', u'collaborative-groups', u'resources']
     >>> transaction.commit()
     >>> browser.open(portalURL + '/@@ingestRDF')
     >>> browser.contents
-    '...RDF Ingest Report...Objects Created (19)...'
+    '...RDF Ingest Report...Objects Created (39)...'
     >>> len(resourcesFolder.keys())
     2
     >>> keys = resourcesFolder.keys()

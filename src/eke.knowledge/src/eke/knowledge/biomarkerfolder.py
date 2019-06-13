@@ -128,7 +128,7 @@ class IBiomarkerFolder(IKnowledgeFolder):
 
 class BiomarkerIngestor(Ingestor):
     grok.context(IBiomarkerFolder)
-    def getInterfaceForContainedObjects(self):
+    def getInterfaceForContainedObjects(self, predicates):
         raise NotImplementedError(u'{} handles its ingest specially'.format(self.__class__.__name__))
     def updateBiomarker(self, biomarkerObj, fti, iface, predicates, context, biomarkerStatements, request):
         # Set biomarker fields; TODO: REFACTOR HERE?

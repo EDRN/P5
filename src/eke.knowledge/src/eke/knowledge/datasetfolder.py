@@ -41,7 +41,7 @@ class IDatasetFolder(IKnowledgeFolder):
 
 class DatasetIngestor(Ingestor):
     grok.context(IDatasetFolder)
-    def getInterfaceForContainedObjects(self):
+    def getInterfaceForContainedObjects(self, predicates):
         return IDataset
     def readRDF(self, url):
         u'''Read the RDF statements and return s/p/o dict'''

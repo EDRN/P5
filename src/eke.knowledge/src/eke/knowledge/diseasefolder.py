@@ -15,5 +15,5 @@ class IDiseaseFolder(IKnowledgeFolder):
 
 class DiseaseIngestor(Ingestor):
     grok.context(IDiseaseFolder)
-    def getInterfaceForContainedObjects(self):
+    def getInterfaceForContainedObjects(self, predicates):
         return IDisease

@@ -25,5 +25,5 @@ class ResourceIngestor(Ingestor):
     def getObjID(self, subjectURI, titles, predicates):
         normalize = getUtility(IIDNormalizer).normalize
         return normalize(subjectURI)
-    def getInterfaceForContainedObjects(self):
+    def getInterfaceForContainedObjects(self, predicates):
         return IResource

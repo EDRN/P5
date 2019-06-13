@@ -34,29 +34,6 @@ class IGroupSpaceIndex(model.Schema):
         description=_(u'A short summary of this index page.'),
         required=False,
     )
-    chair = RelationChoice(
-        title=_(u'Chair'),
-        description=_(u'The person in charge of this group.'),
-        required=False,
-        source=CatalogSource(object_provides=IPerson.__identifier__)
-    )
-    coChair = RelationChoice(
-        title=_(u'Co-Chair'),
-        description=_(u'The assistant to the person in charge of this group.'),
-        required=False,
-        source=CatalogSource(object_provides=IPerson.__identifier__)
-    )
-    members = RelationList(
-        title=_(u'Members'),
-        description=_(u'Members of this group.'),
-        default=[],
-        required=False,
-        value_type=RelationChoice(
-            title=_(u'Member'),
-            description=_(u'A member of this group.'),
-            source=CatalogSource(object_provides=IPerson.__identifier__)
-        )
-    )
 
 
 class View(grok.View):
