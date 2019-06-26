@@ -12,6 +12,7 @@ from node.ext.ldap.interfaces import ILDAPProps
 from plone.app.dexterity.behaviors.exclfromnav import IExcludeFromNavigation
 from plone.app.textfield.value import RichTextValue
 from plone.dexterity.utils import createContentInContainer
+from plone.namedfile.file import NamedBlobFile
 from plone.portlet.static.static import Assignment as StaticPortletAssignment
 from plone.portlets.interfaces import IPortletManager, IPortletAssignmentMapping
 from plone.registry.interfaces import IRegistry
@@ -23,7 +24,7 @@ from Testing import makerequest
 from zope.component import getUtility, getMultiAdapter
 from zope.component.hooks import setSite
 from zope.container.interfaces import INameChooser
-import sys, logging, transaction, argparse, os, os.path, plone.api, csv, codecs
+import sys, logging, transaction, argparse, os, os.path, plone.api, csv, codecs, json
 
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)-8s %(message)s')
@@ -311,6 +312,7 @@ _RDF_FOLDERS = (
     (None, 'eke.knowledge.biomarkerfolder', u'Biomarkers', u'Indicators for cancer.', [u'https://edrn.jpl.nasa.gov/bmdb/rdf/biomarkers?qastate=all'], _setupBiomarkers),
     (None, 'eke.knowledge.collaborationsfolder', u'Groups', u'Collaborive Groups and Committees.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/committees/@@rdf'], _null),
 )
+# Use this to turn off all RDF during development; really speeds things up:
 # _RDF_FOLDERS = tuple()
 
 
@@ -731,6 +733,92 @@ def _addMembersList(portal):
     _publish(folder)
 
 
+def _getEntryType(fromFolder):
+    typeIndicator = os.path.join(fromFolder, 'TYPE.txt')
+    if not os.path.isfile(typeIndicator): return None
+    with open(typeIndicator, 'r') as f:
+        return f.read()
+
+
+def _getMetadata(fromFolder, filename='metadata.json'):
+    metadataFile = os.path.join(fromFolder, filename)
+    if not os.path.isfile(metadataFile): return None
+    with open(metadataFile, 'rb') as f:
+        return json.load(f)
+
+
+def _doFolderImport(parent, fsFolder):
+    metadata = _getMetadata(fsFolder)
+    assert metadata is not None, u'No metadata found for %s' % fsFolder
+    folder = createContentInContainer(parent, 'Folder', title=metadata['title'], description=metadata['description'])
+    _doGroupImport(folder, fsFolder)
+
+
+def _doGroupEventImport(parent, fsFolder):
+    metadata = _getMetadata(fsFolder, 'EVENT.json')
+    folder = createContentInContainer(parent, 'Folder', title=metadata['title'], description=metadata['description'])
+    event = createContentInContainer(
+        folder,
+        'Event',
+        attendees=metadata['attendees'],
+        contact_email=metadata['contactEmail'],
+        contact_name=metadata['contactName'],
+        contact_phone=metadata['contactPhone'],
+        description=metadata['description'],
+        event_url=metadata['eventUrl'],
+        location=metadata['location'],
+        text=RichTextValue(metadata['text'], 'text/html', 'text/x-html-safe'),
+        title=metadata['title']
+    )
+    folder.setDefaultPage(event.id)
+    _doGroupImport(folder, fsFolder)
+
+
+def _doFileImport(folder, fsFolder):
+    metadata = _getMetadata(fsFolder)
+    with open(os.path.join(fsFolder, 'file.dat'), 'rb') as f:
+        createContentInContainer(
+            folder,
+            'File',
+            title=metadata['title'],
+            description=metadata['description'],
+            file=NamedBlobFile(f.read(), filename=metadata['filename'], contentType=metadata['contentType'])
+        )
+
+
+def _doGroupImport(folder, fsFolder):
+    for entryName in os.listdir(fsFolder):
+        entry = os.path.join(fsFolder, entryName)
+        if os.path.isdir(entry):
+            entryType = _getEntryType(entry)
+            assert entryType is not None and len(entryType) > 0
+            if entryType == 'Folder':
+                _doFolderImport(folder, entry)
+            elif entryType == 'Group Event':
+                _doGroupEventImport(folder, entry)
+            elif entryType == 'File':
+                _doFileImport(folder, entry)
+            else:
+                assert False, u'Bad entry type {}'.format(entryType)
+
+
+def _importGroupContent(portal):
+    groupContent = os.path.abspath(os.environ.get('GROUP_EXPORTS', u''))
+    if not os.path.isdir(groupContent):
+        logging.warn(u'Group content "%s" not present, skipping import', groupContent)
+        return
+    logging.debug(u'Importing group content from "%s"', groupContent)
+    groups = portal.unrestrictedTraverse('groups')
+    for groupID in groups.keys():
+        fsFolder = os.path.join(groupContent, groupID)
+        if not os.path.isdir(fsFolder):
+            logging.debug(u'No FS export for %s; skipping', groupID)
+            continue
+        logging.debug(u'Importing %s from FS path %s', groupID, fsFolder)
+        groupFolder = groups[groupID]
+        _doGroupImport(groupFolder, fsFolder)
+
+
 def _setupEDRN(app, username, password, ldapPassword):
     app = makerequest.makerequest(app)
     _setupZopeSecurity(app)
@@ -748,6 +836,7 @@ def _setupEDRN(app, username, password, ldapPassword):
     # Replaced with RDF folder:
     # _addGroupSpaces(portal)
     _addMembersList(portal)
+    _importGroupContent(portal)
     _tuneUp(portal)  # this should be the last step always as it clears/rebuids the catalog and commits the txn
     noSecurityManager()
 
