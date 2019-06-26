@@ -181,13 +181,26 @@
                                 <thead>
                                     <tr>
                                         <th class='nosort'>Title</th>
-                                        <th class='nosort'>Author</th>
                                         <th class='nosort'>Type</th>
-                                        <th class='nosort'>Modified</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tal:repeat repeat='item documents'>
+                                        <tr tal:attributes='class python:"odd" if oddrow else "even"'
+                                            class='odd' tal:define='
+                                            oddrow repeat/item/odd;
+                                            item_url item/getURL|item/absolute_url;
+                                            item_title item/Title|item/title/item/id;
+                                            item_type item/portal_type;
+                                        '>
+                                            <td>
+                                                <a href='#' tal:attributes='href item_url' tal:content='item_title'
+                                                    style='text-decoration: underline;'>
+                                                    title
+                                                </a>
+                                            </td>
+                                            <td tal:content='item_type'>type</td>
+                                        </tr>
                                     </tal:repeat>
                                 </tbody>
                             </table>
