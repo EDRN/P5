@@ -87,12 +87,12 @@ function dashboard(id, fData){
 }
 </script>
 <script type="text/javascript" src="++resource++plone.app.jquery.js"></script>
-<script type="text/javascript" src="portal_javascripts/EDRN%20Theme/jquery-integration.js"></script>
-<script type="text/javascript" src="portal_javascripts/EDRN%20Theme/++resource++plone.app.jquerytools.js"></script>
+<script type="text/javascript" src="jquery-integration.js"></script>
+<script type="text/javascript" src="++resource++plone.app.jquerytools.js"></script>
 <script>
 
 document.addEventListener( 'DOMContentLoaded', function () {
-    $.getJSON( "science-data/@@summary", function( data ) {
+    $.getJSON( "data/@@summary", function( data ) {
         var items = [];
         var datakeys = Object.keys(data);
         datakeys.sort()
