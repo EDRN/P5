@@ -229,10 +229,11 @@ class SiteIngestor(Ingestor):
             self.addInvestigators(siteURI, sites, _coPIURI, people, predicates, 'coPrincipalInvestigators', True)
             self.addInvestigators(siteURI, sites, _coIURI, people, predicates, 'coInvestigators', True)
             self.addInvestigators(siteURI, sites, _iURI, people, predicates, 'investigators', True)
-            # While we're here, set the piName
+            # While we're here, set the piName, piObjectID
             site = sites[unicode(siteURI)]
             try:
                 site.piName = people[unicode(predicates[_piURI][0])].title
+                site.piObjectID = people[unicode(predicates[_piURI][0])].id
             except (KeyError, IndexError):
                 # We tried
                 pass
@@ -416,6 +417,7 @@ class View(KnowledgeFolderView):
                 title=i.Title,
                 description=i.Description,
                 investigator=i.piName,
+                piObjectID=i.piObjectID,
                 organs=i.organs,
                 proposal=i.proposal,
                 url=i.getURL(),
