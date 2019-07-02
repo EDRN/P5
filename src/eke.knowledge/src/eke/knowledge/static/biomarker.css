@@ -17,7 +17,6 @@
 
 
 .bmAttributes, .bodySysAttributes {
-    float: right;
 }
 .organsIntro, .studyIntro {
     font-style: italic;
@@ -85,9 +84,6 @@
 
 
 /** ADDED **/
-div#content {
-    position:relative;
-}
 div#biomarker-aliases {
     border:1px solid #9c9;
     color:#444;
@@ -138,7 +134,6 @@ div.attributebox-content h3 {
 
 div#colLeftContent {
     position:relative;
-    float:left;
     width:76%;
 }
 div#colLeftContent p {
