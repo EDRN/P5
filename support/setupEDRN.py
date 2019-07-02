@@ -118,6 +118,7 @@ _BLANK_UIDS = {
     u'informatics': u'Unknown',
     u'network-consulting-team': u'Unknown',
     u'sites': u'Unknown',
+    u'groups': u'Unknown',
 }
 
 
@@ -808,15 +809,18 @@ def _importGroupContent(portal):
         logging.warn(u'Group content "%s" not present, skipping import', groupContent)
         return
     logging.debug(u'Importing group content from "%s"', groupContent)
-    groups = portal.unrestrictedTraverse('groups')
-    for groupID in groups.keys():
-        fsFolder = os.path.join(groupContent, groupID)
-        if not os.path.isdir(fsFolder):
-            logging.debug(u'No FS export for %s; skipping', groupID)
-            continue
-        logging.debug(u'Importing %s from FS path %s', groupID, fsFolder)
-        groupFolder = groups[groupID]
-        _doGroupImport(groupFolder, fsFolder)
+    try:
+        groups = portal.unrestrictedTraverse('groups')
+        for groupID in groups.keys():
+            fsFolder = os.path.join(groupContent, groupID)
+            if not os.path.isdir(fsFolder):
+                logging.debug(u'No FS export for %s; skipping', groupID)
+                continue
+            logging.debug(u'Importing %s from FS path %s', groupID, fsFolder)
+            groupFolder = groups[groupID]
+            _doGroupImport(groupFolder, fsFolder)
+    except KeyError:
+        logging.warn(u'No "groups" in portal, skipping')
 
 
 def _setupEDRN(app, username, password, ldapPassword):
