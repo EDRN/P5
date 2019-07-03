@@ -64,6 +64,7 @@ _biomarkerPredicates = {
     predicateURIBase + u'Alias': ('bmAliases', False),
     predicateURIBase + u'PerformanceComment': ('performanceComment', False),
     predicateURIBase + u'Type': ('biomarkerType', False),
+    predicateURIBase + u'AssociatedDataset': ('datasets', True),
 
     # For biomarker-body-systems
     predicateURIBase + u'PerformanceComment': ('performanceComment', False),
