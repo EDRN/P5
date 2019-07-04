@@ -147,24 +147,6 @@ IDataset.setTaggedValue('fti', 'eke.knowledge.dataset')
 IDataset.setTaggedValue('typeURI', u'http://edrn.nci.nih.gov/rdf/types.rdf#Dataset')
 
 
-# class View(grok.View):
-#     grok.context(IDataset)
-#     grok.require('zope2.View')
-#     @memoize
-#     def documentation(self):
-#         context = aq_inner(self.context)
-#         catalog = plone.api.portal.get_tool('portal_catalog')
-#         items = catalog(path=dict(query='/'.join(context.getPhysicalPath()), depth=1), sort_on='sortable_title')
-#         return [dict(title=i.Title, description=i.Description, url=i.getURL()) for i in items]
-#     def protocolID(self):
-#         context = aq_inner(self.context)
-#         if not context.identifier:
-#             return u'?'
-#         return context.identifier.split('/')[-1]
-#     def isEDRNProtocol(self):
-#         protocolID = self.protocolID()
-#         try:
-#             protocolID = int(protocolID)
-#             return protocolID < EDRN_PROTOCOL_ID_LIMIT
-#         except ValueError:
-#             return False
+class View(grok.View):
+    grok.context(IDataset)
+    grok.require('zope2.View')

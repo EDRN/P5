@@ -6,15 +6,14 @@ u'''EKE Knowledge: Site Folder'''
 from . import _
 from .base import Ingestor
 from .knowledgefolder import IKnowledgeFolder, KnowledgeFolderView
-from .person import IPerson
 from .site import ISite
-from .utils import publish, setValue
+from .utils import publish
 from Acquisition import aq_inner
 from five import grok
 from plone.dexterity.utils import createContentInContainer
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize.view import memoize
-from z3c.relationfield import RelationValue, RelationList
+from z3c.relationfield import RelationValue
 from zope import schema
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
@@ -208,9 +207,9 @@ class SiteIngestor(Ingestor):
         notify(ObjectModifiedEvent(site))
     def ingest(self):
         u'''Override Ingestor.ingest so we can handle people'''
+        consequences = super(SiteIngestor, self).ingest()
         context = aq_inner(self.context)
         catalog, portal = plone.api.portal.get_tool('portal_catalog'), plone.api.portal.get()
-        consequences = super(SiteIngestor, self).ingest()
         sites = {}
         for siteObj in consequences.created + consequences.updated:
             sites[siteObj.identifier] = siteObj
@@ -230,7 +229,11 @@ class SiteIngestor(Ingestor):
             self.addInvestigators(siteURI, sites, _coIURI, people, predicates, 'coInvestigators', True)
             self.addInvestigators(siteURI, sites, _iURI, people, predicates, 'investigators', True)
             # While we're here, set the piName, piObjectID
-            site = sites[unicode(siteURI)]
+            try:
+                site = sites[unicode(siteURI)]
+            except KeyError:
+                # Subsequent ingest and no updated needed
+                continue
             try:
                 site.piName = people[unicode(predicates[_piURI][0])].title
                 site.piObjectID = people[unicode(predicates[_piURI][0])].id

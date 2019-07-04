@@ -88,11 +88,21 @@
                       Advanced rhinoplasty dataset
                     </a>
                   </td>
-                  <td tal:define='piRV python:item.getObject().investigator'>
-                    <a href='#' tal:condition='piRV' tal:attributes='href python:piRV.to_object.absolute_url()'
-                      tal:content='python:piRV.to_object.title'>
-                      Joe Bloe
-                    </a>
+                  <td tal:define='
+                    piRV python:item.getObject().investigator if item.getObject().investigator else None;
+                    investigator nocall:piRV/to_object|nothing;
+                    investigatorName investigator/piName|nothing;
+                    investigatorURL investigator/absolute_url|nothing;
+                  '>
+                    <tal:if condition='investigatorName'>
+                      <a tal:condition='investigatorURL' href='#' tal:attributes='href investigatorURL'
+                        tal:content='investigatorName'>
+                        Joe Blow
+                      </a>
+                      <span tal:condition='not:investigatorURL' tal:replace='investigatorName'>
+                        Joe Blow
+                      </span>
+                    </tal:if>
                   </td>
                   <td tal:content='item/bodySystemName'>
                     Anus
