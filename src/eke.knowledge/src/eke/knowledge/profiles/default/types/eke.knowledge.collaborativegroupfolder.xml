@@ -13,6 +13,7 @@
         <element value='Folder'/>
         <element value='Image'/>
         <element value='Event'/>
+        <element value='News Item'/>
     </property>
     <property name='schema'>eke.knowledge.collaborativegroupfolder.ICollaborativeGroupFolder</property>
     <property name='klass'>plone.dexterity.content.Container</property>

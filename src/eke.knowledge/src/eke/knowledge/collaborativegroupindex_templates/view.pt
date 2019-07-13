@@ -24,6 +24,7 @@
                 plone_view nocall:context/@@plone;
                 registry context/portal_registry;
                 desc_length python:registry["plone.search_results_description_length"];
+                hereURL context/@@plone_context_state/object_url;
             '>
                 <!-- Members of the group -->
                 <div class='collaborativeGroupContainer'>
@@ -99,13 +100,39 @@
                                 to gain full access.
                             </p>
                             <div class='topCollabGroupItems' tal:define='
+                                topHighs view/topHighlights;
+                                numHighs view/numHighlights;
+                            '>
+                                <h2 class='topCollabGroupItemDescription'>
+                                    Highlights
+                                </h2>
+                                <p class='discreet' tal:condition='not:topHighs'>
+                                    This group has not yet published any highlights.
+                                </p>
+                                <div tal:condition='topHighs'>
+                                    <tal:repeat repeat='item topHighs'>
+                                        <h4 class='tileHeadline'>
+                                            <a href='#' class='summary url' tal:attributes='href item/getURL'
+                                                tal:content='item/Title'>
+                                                High Light!
+                                            </a>
+                                        </h4>
+                                    </tal:repeat>
+                                </div>
+                                <p tal:condition='python:numHighs &gt; numTops'>
+                                    <a href='#' class='viewMoreEDRNStuffLink'
+                                        tal:attributes='href string:${hereURL}/@@highlightsview'>
+                                        View all <span tal:replace='numHighs'>42</span> highlights
+                                    </a>
+                                </p>
+                            </div>
+                            <div class='topCollabGroupItems' tal:define='
                                 topEvents view/topEvents;
                                 numEvents view/numEvents;
                             '>
-                                <p class='topCollabGroupItemDescription' i18n:translate='descEvents'>
-                                    Events coming up for the
-                                    <span i18n:name='groupName' tal:content='context/title'>Mega Awesome Group</span>.
-                                </p>
+                                <h2 class='topCollabGroupItemDescription' i18n:translate='descEvents'>
+                                    Events
+                                </h2>
                                 <p class='discreet' i18n:translate='noTopEvents' tal:condition='not:topEvents'>
                                     No upcoming events.
                                 </p>                                

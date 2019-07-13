@@ -787,6 +787,18 @@ def _doFileImport(folder, fsFolder):
         )
 
 
+def _doHighlightImport(folder, fsFolder):
+    metadata = _getMetadata(fsFolder, 'HIGHLIGHT.json')
+    highlight = createContentInContainer(
+        folder,
+        'News Item',
+        title=metadata['title'],
+        description=metadata['description'],
+        text=RichTextValue(metadata['text'], 'text/html', 'text/x-html-safe')
+    )
+    _publish(highlight)
+
+
 def _doGroupImport(folder, fsFolder):
     for entryName in os.listdir(fsFolder):
         entry = os.path.join(fsFolder, entryName)
@@ -799,6 +811,8 @@ def _doGroupImport(folder, fsFolder):
                 _doGroupEventImport(folder, entry)
             elif entryType == 'File':
                 _doFileImport(folder, entry)
+            elif entryType == 'Highlight':
+                _doHighlightImport(folder, entry)
             else:
                 assert False, u'Bad entry type {}'.format(entryType)
 

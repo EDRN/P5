@@ -4,7 +4,6 @@
 u'''EKE Knowledge: Collaborative Group Index'''
 
 # from .person import IPerson
-# from plone.memoize.view import memoize
 # import plone.api
 from . import _
 from .biomarker import IBiomarker
@@ -15,6 +14,13 @@ from .protocol import IProtocol
 from five import grok
 from plone.app.vocabularies.catalog import CatalogSource
 from z3c.relationfield.schema import RelationChoice, RelationList
+from plone.memoize.view import memoize
+from plone.app.contenttypes.interfaces import INewsItem
+from Acquisition import aq_inner, aq_parent
+
+
+# How many top items to show
+_top = 3
 
 
 class ICollaborativeGroupIndex(IGroupSpaceIndex):
@@ -68,3 +74,25 @@ class ICollaborativeGroupIndex(IGroupSpaceIndex):
 class View(BaseView):
     u'''View for a collaborative group index'''
     grok.context(ICollaborativeGroupIndex)
+    @memoize
+    def _getHighlights(self, review_state=None):
+        context = aq_parent(aq_inner(self.context))
+        criteria = {
+            'object_provides': INewsItem.__identifier__,
+            'sort_on': 'modified',
+            'sort_order': 'reverse',
+        }
+        if review_state:
+            criteria['review_state'] = review_state
+        return context.restrictedTraverse('@@contentlisting')(**criteria)
+    def numTops(self):
+        return _top
+    def topHighlights(self):
+        return self._getHighlights('published')[0:self.numTops()]
+    def numHighlights(self):
+        return len(self._getHighlights())
+
+
+class HighlightsView(View):
+    def allHighlights(self):
+        return self._getHighlights('published')
