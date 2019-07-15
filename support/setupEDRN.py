@@ -311,7 +311,7 @@ _RDF_FOLDERS = (
     (None, 'eke.knowledge.protocolfolder', u'Protocols', u'Studies pursued by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/protocols/@@rdf'], _null),
     (None, 'eke.knowledge.datasetfolder', u'Data', u'Data collected by EDRN.', [u'https://edrn.nci.nih.gov/miscellaneous-knowledge-system-artifacts/science-data-rdf-1/at_download/file'], _setupDatasets),
     (None, 'eke.knowledge.biomarkerfolder', u'Biomarkers', u'Indicators for cancer.', [u'https://edrn.jpl.nasa.gov/bmdb/rdf/biomarkers?qastate=all'], _setupBiomarkers),
-    (None, 'eke.knowledge.collaborationsfolder', u'Groups', u'Collaborive Groups and Committees.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/committees/@@rdf'], _null),
+    (None, 'eke.knowledge.collaborationsfolder', u'Groups', u'Collaborative Groups and Committees.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/committees/@@rdf'], _null),
 )
 # Use this to turn off all RDF during development; really speeds things up:
 # _RDF_FOLDERS = tuple()
