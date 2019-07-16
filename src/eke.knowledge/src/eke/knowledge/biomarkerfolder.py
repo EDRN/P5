@@ -29,7 +29,6 @@ _logger = logging.getLogger(__name__)
 # Specific URIs
 _accessPredicateURI                      = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#AccessGrantedTo')
 _biomarkerPredicateURI                   = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#Biomarker')
-_biomarkerTypeURI                        = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#Biomarker')
 _bmOrganDataTypeURI                      = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#BiomarkerOrganData')
 _bmTitlePredicateURI                     = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#Title')
 _certificationPredicateURI               = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#certification')
@@ -321,7 +320,7 @@ class BiomarkerIngestor(Ingestor):
         for uri, predicates in biomarkerStatements.iteritems():
             try:
                 typeURI = predicates[rdflib.RDF.type][0]
-                if typeURI != _biomarkerTypeURI: continue
+                if typeURI != _biomarkerPredicateURI: continue
                 isPanel = bool(int(predicates[_isPanelPredicateURI][0]))
                 title = unicode(predicates[_bmTitlePredicateURI][0])
                 hgnc = predicates[_hgncPredicateURI][0] if _hgncPredicateURI in predicates else None
@@ -345,7 +344,7 @@ class BiomarkerIngestor(Ingestor):
         for uri, predicates in biomarkerStatements.iteritems():
             try:
                 typeURI = predicates[rdflib.RDF.type][0]
-                if typeURI != _biomarkerTypeURI: continue
+                if typeURI != _biomarkerPredicateURI: continue
                 panelURIs = predicates[_memberOfPanelPredicateURI]
                 biomarker = newBiomarkers[uri]
                 for panelURI in panelURIs:
