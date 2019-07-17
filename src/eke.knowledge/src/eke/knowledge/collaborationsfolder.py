@@ -82,11 +82,6 @@ class CollaborationsFolderIngestor(Ingestor):
             self.setBiomarkers(index)
             self.setProtocols(index)
             self.setProjects(index)
-            # import pdb;pdb.set_trace()
-        # Go through created and updated and build a dict of URI to obj
-        # use consequnces.statements?
-        # for each group in created + updated:
-        #    find stuff???
         return consequences
 
 
