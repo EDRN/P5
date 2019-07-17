@@ -188,6 +188,24 @@
         <value>6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI</value>
     </record>
 
+    <record name="plone.many_groups" interface="Products.CMFPlone.interfaces.controlpanel.IUserGroupsSettingsSchema" field="many_groups">
+        <field type="plone.registry.field.Bool">
+            <default>False</default>
+            <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Determines if your Plone is optimized for small or large sites. In environments with a lot of groups it can be very slow or impossible to build a list all groups. This option tunes the user interface and behaviour of Plone for this case by allowing you to search for groups instead of listing all of them.</description>
+            <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Many groups?</title>
+        </field>
+        <value>True</value>
+    </record>
+
+    <record name="plone.many_users" interface="Products.CMFPlone.interfaces.controlpanel.IUserGroupsSettingsSchema" field="many_users">
+        <field type="plone.registry.field.Bool">
+            <default>False</default>
+            <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Determines if your Plone is optimized for small or large sites. In environments with a lot of users it can be very slow or impossible to build a list all users. This option tunes the user interface and behaviour of Plone for this case by allowing you to search for users instead of listing all of them.</description>
+            <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Many users?</title>
+        </field>
+        <value>True</value>
+    </record>
+
     <record name="plone.displayed_types" interface="Products.CMFPlone.interfaces.controlpanel.INavigationSchema"
         field="displayed_types">
         <field type="plone.registry.field.Tuple">
