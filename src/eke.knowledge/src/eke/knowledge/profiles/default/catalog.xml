@@ -32,6 +32,12 @@
     </index>
     <column value='organs' />
 
+    <!-- Linking of collaborative groups to biomarkers, protocols, and datasets -->
+    <index name='collaborativeGroup' meta_type='KeywordIndex'>
+        <indexed_attr value='collaborativeGroup' />
+    </index>
+    <column value='collaborativeGroup' />
+
     <!-- Display of protocols on people -->
     <index name='investigatorIdentifiers' meta_type='KeywordIndex'>
         <indexed_attr value='investigatorIdentifiers'/>

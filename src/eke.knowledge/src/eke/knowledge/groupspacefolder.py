@@ -4,30 +4,20 @@
 u'''EKE Knowledge: Group Space Folder'''
 
 from .dublincore import TITLE_URI, DESCRIPTION_URI
+from .knowledgeobject import IKnowledgeObject
 from .person import IPerson
 from eke.knowledge import _
 from five import grok
 from plone.app.vocabularies.catalog import CatalogSource
 from plone.dexterity.utils import createContentInContainer
-from plone.supermodel import model
 from Products.CMFPlone.interfaces.constrains import ISelectableConstrainTypes, ENABLED
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
 from zope.container.interfaces import IObjectAddedEvent
 
 
-class IGroupSpaceFolder(model.Schema):
+class IGroupSpaceFolder(IKnowledgeObject):
     u'''Group space folder.'''
-    title = schema.TextLine(
-        title=_(u'Title'),
-        description=_(u'Descriptive name of this folder.'),
-        required=True,
-    )
-    description = schema.Text(
-        title=_(u'Description'),
-        description=_(u'A short summary of this folder.'),
-        required=False,
-    )
     chair = RelationChoice(
         title=_(u'Chair'),
         description=_(u'The person in charge of this group.'),

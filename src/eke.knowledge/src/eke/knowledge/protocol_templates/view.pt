@@ -152,12 +152,12 @@
                         </div>
 
                         <div style='margin-top: 1em;'>
-                            <label for='collaborativeGroupText' 
-                                i18n:translate='label_collaborativeGroupText'>
+                            <label for='collaborativeGroup' 
+                                i18n:translate='label_collaborativeGroup'>
                                 Collaborative Group:
                             </label>
-                            <span id='collaborativeGroupText'
-                                tal:content='structure context/collaborativeGroupText'>
+                            <span id='collaborativeGroup'
+                                tal:content='structure context/collaborativeGroup'>
                                 Taboo Villas is a vacation experience unlike any vacation you have ever had or ever will.
                                 We designed Taboo Villas as a custom built "all-inclusive' vacation
                             </span>

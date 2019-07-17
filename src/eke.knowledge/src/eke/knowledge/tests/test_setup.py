@@ -48,13 +48,13 @@ class TestSetup(unittest.TestCase):
     def test_indexes(self):
         u'''Make sure catalog has expected fields indexed'''
         indexes = plone.api.portal.get_tool('portal_catalog').indexes()
-        for field in ('biomarkerType', 'indicatedBodySystems'):
+        for field in ('biomarkerType', 'indicatedBodySystems', 'collaborativeGroup'):
             self.assertTrue(field in indexes, u'Expected "{}" to be indexed but is not'.format(field))
 
     def test_metadata(self):
         u'''Make sure catalog has expected metadata schema columns'''
         metadata = plone.api.portal.get_tool('portal_catalog').schema()
-        for field in ('biomarkerType', 'indicatedBodySystems'):
+        for field in ('biomarkerType', 'indicatedBodySystems', 'collaborativeGroup'):
             self.assertTrue(field in metadata, u'Expected "{}" to be in catalog schema but is not'.format(field))
 
 

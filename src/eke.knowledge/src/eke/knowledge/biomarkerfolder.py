@@ -81,6 +81,21 @@ _biomarkerPredicates = {
     predicateURIBase + u'SpecificAssayType': ('specificAssayType', False),
 }
 
+_organNameToCollaborativeGroupName = {
+    u'Breast': u'Breast and Gynecologic Cancers Research Group',
+    u'Ovary': u'Breast and Gynecologic Cancers Research Group',
+    u'Colon': u'G.I. and Other Associated Cancers Research Group',
+    u'Esophagus': u'G.I. and Other Associated Cancers Research Group',
+    u'Liver': u'G.I. and Other Associated Cancers Research Group',
+    u'Pancreas': u'G.I. and Other Associated Cancers Research Group',
+    u'Lung': u'Lung and Upper Aerodigestive Cancers Research Group',
+    u'Prostate': u'Prostate and Urologic Cancers Research Group',
+    u'Bladder': u'Prostate and Urologic Cancers Research Group',
+    u'Head & neck, NOS': u'Lung and Upper Aerodigestive Cancers Research Group',
+    # Used only in testing:
+    u'Rectum': u'G.I. and Other Associated Cancers Research Group'
+}
+
 
 def flatten(l):
     u'''Flatten a list.'''
@@ -281,7 +296,13 @@ class BiomarkerIngestor(Ingestor):
                 except schema.ValidationError:
                     _logger.exception(u'RDF data "%r" for biomarker field "%s" invalid; skipping', values, predicate)
                     continue
-            # TODO: addBiomarkerToOrganGroup
+            # Make a note of the collaborative group based on the organ
+            collaborativeGroupName = _organNameToCollaborativeGroupName.get(organName)
+            if collaborativeGroupName:
+                currentGroups = biomarker.collaborativeGroup if biomarker.collaborativeGroup else []
+                if collaborativeGroupName not in currentGroups:
+                    currentGroups.append(collaborativeGroupName)
+                    biomarker.collaborativeGroup = currentGroups
             if _hasBiomarkerOrganStudyDatasPredicateURI in predicates:
                 bags = predicates[_hasBiomarkerOrganStudyDatasPredicateURI]
                 self.addStudiesToOrgan(biomarkerBodySystem, bags, statements)

@@ -1,10 +1,13 @@
 Knowledge objects and RDF ingest for the EDRN Knowledge Environment.
 
+TODO: check the numbers on all these ingest checks. Were 19 objects created
+correct? 6 updated correct?
+
 
 Functional Tests
 ================
 
-First, we shall require a test browser::
+First, we shall require a test browser:: 
 
     >>> app = layer['app']
     >>> from plone.testing.z2 import Browser
@@ -393,6 +396,7 @@ Now let's try group workspaces::
     >>> l.click()
     >>> browser.getControl(name='form.widgets.title').value = u'MySpace'
     >>> browser.getControl(name='form.widgets.description').value = u'A defunct workspace.'
+    >>> browser.getControl(name='form.widgets.identifier').value = u'urn:group:myspace'
     >>> browser.getControl(name='form.buttons.save').click()
     >>> browser.open(portalURL + '/collaborative-groups/myspace/content_status_modify?workflow_action=publish')
     >>> browser.open(portalURL + '/collaborative-groups/myspace/index_html/content_status_modify?workflow_action=publish')
@@ -487,6 +491,7 @@ These are group workspaces but linked data::
     >>> l.click()
     >>> browser.getControl(name='form.widgets.title').value = u'Guts'
     >>> browser.getControl(name='form.widgets.description').value = u'The guts collaborative group.'
+    >>> browser.getControl(name='form.widgets.identifier').value = u'urn:group:guts'
     >>> browser.getControl(name='form.buttons.save').click()
     >>> browser.open(portalURL + '/collaborative-groups/guts/content_status_modify?workflow_action=publish')
     >>> browser.open(portalURL + '/collaborative-groups/guts/index_html/content_status_modify?workflow_action=publish')
@@ -617,7 +622,7 @@ Ingesting::
     >>> transaction.commit()
     >>> browser.open(portalURL + '/@@ingestRDF')
     >>> browser.contents
-    '...RDF Ingest Report...Objects Created (39)...'
+    '...RDF Ingest Report...Objects Created (19)...Objects Updated (6)...'
     >>> len(resourcesFolder.keys())
     2
     >>> keys = resourcesFolder.keys()
@@ -875,6 +880,8 @@ OK that's enough. RDF is the order of the day::
     u'A sticky bio-marker.'
     >>> a1.shortName
     u'A1'
+    >>> a1.collaborativeGroup
+    [u'G.I. and Other Associated Cancers Research Group']
     >>> u'Approach' in a1.bmAliases, u'Advent' in a1.bmAliases, u'Bigo' in a1.bmAliases
     (True, True, True)
     >>> a1.biomarkerType
@@ -993,3 +1000,13 @@ Ingesting also links protocols to biomarkers::
     .. >>> a1.affProtFuncSiteCount
     .. '0'
 
+
+After all this testing, the ``collaborativeGroup`` index should hae quite a
+few values by now::
+
+    >>> import plone.api
+    >>> catalog = plone.api.portal.get_tool('portal_catalog')
+    >>> groupValues = list(catalog.uniqueValuesFor('collaborativeGroup'))
+    >>> groupValues.sort()
+    >>> groupValues
+    [u'Breast/GYN', u'G.I. and Other Associated Cancers Research Group', u'Lung and Upper Aerodigestive Cancers Research Group', u'Prostate and Urologic']

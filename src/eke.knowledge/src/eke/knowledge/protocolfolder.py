@@ -27,6 +27,12 @@ _descriptionPredicates = (
     rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#outcome')
 )
 _siteURIPrefix = u'http://edrn.nci.nih.gov/data/sites/'
+_canonicalGroupNames = {
+    u'Breast and Gynecologic Cancers Research': u'Breast and Gynecologic Cancers Research Group',
+    u'G.I. and Other Associated Cancers Research Group': u'G.I. and Other Associated Cancers Research Group',
+    u'Lung and Upper Aerodigestive Cancers Research Group': u'Lung and Upper Aerodigestive Cancers Research Group',
+    u'Prostate and Urologic Cancers Research Group': u'Prostate and Urologic Cancers Research Group',
+}
 
 
 class IProtocolFolder(IKnowledgeFolder):
@@ -103,6 +109,14 @@ class ProtocolIngestor(Ingestor):
                     p = context[objectID]
                 else:
                     p = results[0].getObject()
+                # Fix the collaborative groups. The RDF from the DMCC contains comma-separated
+                # collab group names which have all gone into item 0 of the group. We need
+                # to split those into an actual list of ``n`` items and also fix the group names.
+                cbs = p.collaborativeGroup
+                if cbs is not None and len(cbs) == 1:
+                    p.collaborativeGroup = [_canonicalGroupNames.get(i.strip(), u'Unknown') for i in cbs[0].split(u',')]
+                elif cbs is None:
+                    p.collaborativeGroup = []
                 # Set project flag
                 p.project = True if isProject else False
                 # Set PI
