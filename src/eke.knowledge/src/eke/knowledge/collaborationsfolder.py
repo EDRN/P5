@@ -56,7 +56,12 @@ class CollaborationsFolderIngestor(Ingestor):
         return ICollaborativeGroupFolder if committeeType == u'Collaborative Group' else IGroupSpaceFolder
     def _setRelations(self, groupIndex, attributeName, interface, correspondingNames, **criteria):
         catalog, idUtil = plone.api.portal.get_tool('portal_catalog'), getUtility(IIntIds)
-        results = catalog(object_provides=interface.__identifier__, collaborativeGroup=correspondingNames, **criteria)
+        results = catalog(
+            object_provides=interface.__identifier__,
+            collaborativeGroup=correspondingNames,
+            sort_on='sortable_title',
+            **criteria
+        )
         setattr(groupIndex, attributeName, [RelationValue(idUtil.getId(i.getObject())) for i in results])
     def setDatasets(self, groupIndex):
         correspondingDatasetGroupName = _datasetGroupNameMapping.get(groupIndex.title.strip())
