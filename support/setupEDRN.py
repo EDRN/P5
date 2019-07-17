@@ -837,6 +837,12 @@ def _importGroupContent(portal):
         logging.warn(u'No "groups" in portal, skipping')
 
 
+def _empowerSuperUsers(portal):
+    groupsTool = plone.api.portal.get_tool('portal_groups')
+    groupsTool.editGroup('Super User', roles=['Manager'], groups=())
+    groupsTool.editGroup('Portal Content Custodian', roles=['Site Administrator'], groups=())
+
+
 def _setupEDRN(app, username, password, ldapPassword):
     app = makerequest.makerequest(app)
     _setupZopeSecurity(app)
@@ -855,6 +861,7 @@ def _setupEDRN(app, username, password, ldapPassword):
     # _addGroupSpaces(portal)
     _addMembersList(portal)
     _importGroupContent(portal)
+    _empowerSuperUsers(portal)
     _tuneUp(portal)  # this should be the last step always as it clears/rebuids the catalog and commits the txn
     noSecurityManager()
 
