@@ -24,15 +24,15 @@ from Testing import makerequest
 from zope.component import getUtility, getMultiAdapter
 from zope.component.hooks import setSite
 from zope.container.interfaces import INameChooser
-import sys, logging, transaction, argparse, os, os.path, plone.api, csv, codecs, json
+import sys, logging, transaction, argparse, os, os.path, plone.api, csv, codecs, json, getpass
 
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)-8s %(message)s')
 app = globals().get('app', None)  # ``app`` comes from ``instance run`` magic.
 _argParser = argparse.ArgumentParser(prog='admin.py', description=u'Adds a Manager user')
-_argParser.add_argument('username', help=u'Zope admin user')
-_argParser.add_argument('password', help=u"Zope admin password")
-_argParser.add_argument('ldapPassword', help=u"LDAP password")
+_argParser.add_argument('--username', default='zope', help=u'Zope admin user, defaults to %(default)s')
+_argParser.add_argument('--password', default=None, help=u"Zope admin password, prompted if not given")
+_argParser.add_argument('--ldapPassword', default=None, help=u"LDAP password, prompted if not given")
 
 
 _DATASETS_SUMMARY_URL = u'https://edrn.jpl.nasa.gov/cancerdataexpo/summarizer-data/dataset/@@summary'
@@ -458,8 +458,8 @@ def _setSiteProposals(portal):
                 logging.info('No sites matching %s found; skipping', identifier)
                 continue
             elif len(results) > 1:
-                logging.critical('Multiple sites matching %s found (%d); should not happen', results, len(results))
-                raise Exception('Multiple sites matching %s found (%d); should not happen' % (results, len(results)))
+                logging.critical('Multiple sites matching %s found (%d); should not happen', identifier, len(results))
+                raise Exception('Multiple sites matching %s found (%d); should not happen' % (identifier, len(results)))
             else:
                 site = results[0].getObject()
                 site.organs = organs.split(u',')
@@ -875,7 +875,10 @@ def main(argv):
         os.chdir(installDir)
         global app
         args = _argParser.parse_args(argv[1:])
-        _setupEDRN(app, args.username, args.password, args.ldapPassword)
+        username = args.username
+        password = args.password if args.password else getpass.getpass(u'Password for Zope user "{}": '.format(username))
+        ldapPassword = args.ldapPassword if args.ldapPassword else getpass.getpass(u'LDAP password: ')
+        _setupEDRN(app, username, password, ldapPassword)
     except Exception as ex:
         logging.exception(u'This is most unfortunate: %s', unicode(ex))
         return False
