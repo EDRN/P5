@@ -29,7 +29,7 @@ import sys, logging, transaction, argparse, os, os.path, plone.api, csv, codecs,
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)-8s %(message)s')
 app = globals().get('app', None)  # ``app`` comes from ``instance run`` magic.
-_argParser = argparse.ArgumentParser(prog='admin.py', description=u'Adds a Manager user')
+_argParser = argparse.ArgumentParser(prog='setupEDRN.py', description=u'Adds a Manager user')
 _argParser.add_argument('--username', default='zope', help=u'Zope admin user, defaults to %(default)s')
 _argParser.add_argument('--password', default=None, help=u"Zope admin password, prompted if not given")
 _argParser.add_argument('--ldapPassword', default=None, help=u"LDAP password, prompted if not given")
