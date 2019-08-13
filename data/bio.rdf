@@ -1,0 +1,1305 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bmdb="http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#">
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=11">
+    <bmdb:Title>Des-gamma carboxyprothrombin</bmdb:Title>
+    <bmdb:ShortName>DCP</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>DCP, also known as Prothrombin Induced by Vitamin K Absence II (PIVKA II), arises from an acquired defect in the post-translational carboxylation of the pro-thrombin precursor in malignant hepatocytes.</bmdb:Description>
+    <bmdb:QAState>Under Review</bmdb:QAState>
+    <bmdb:Phase>Three (3)</bmdb:Phase>
+    <bmdb:Security>Private</bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=20"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies>
+      <bmdb:Study rdf:about="http://bmdb.jpl.nasa.gov/edit/study/?id=7"/>
+    </bmdb:Studies>
+    <bmdb:Publications/>
+    <bmdb:Resources>
+      <bmdb:Resource rdf:about="http://www.pubmedcentral.nih.gov/articlerender.fcgi?artid=1141443"/>
+    </bmdb:Resources>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=28">
+    <bmdb:Title>Microsatellite Instability Assay</bmdb:Title>
+    <bmdb:ShortName>MSA</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>Microsatellite analysis (MSA) is a promising new technique for the surveillance of bladder cancer.  The technology, which permits the separation by electrophoresis of polymerase chain reaction (PCR)-amplified sequences from non-malignant and malignant sources, has been applied to the diagnosis of solid tumors arising in colon, lung, oropharynx, kidney and bladder. 
+MSA can detect genetic changes indicative of carcinoma from urothelial cells obtained in voided urine specimens.  The genetic profile of DNA purified from urine is compared to that of DNA purified from peripheral lymphocytes that are considered “normal.”  Once the DNA from uroepithelial cells has been obtained, PCR is performed with specific oligonucleotide primers for each chromosomal locus.  The PCR products are then examined for evidence of microsatellite instability (MSI) and loss of heterozygosity (LOH), which are genetic characteristics of epithelial tumors.  Preliminary work shows that MSA detects 95% of cancers.
+</bmdb:Description>
+    <bmdb:QAState>Under Review</bmdb:QAState>
+    <bmdb:Phase>Three (3)</bmdb:Phase>
+    <bmdb:Security>Private</bmdb:Security>
+    <bmdb:Type>Genetic</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=21"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies>
+      <bmdb:Study rdf:about="http://bmdb.jpl.nasa.gov/edit/study/?id=6"/>
+    </bmdb:Studies>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=29">
+    <bmdb:Title>Prolactin</bmdb:Title>
+    <bmdb:ShortName>Prl</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>Cytokine secreted by the pituitary gland and other secretory tissues, including the ovary, the placenta, etc; it regulates mammary gland lobular development and differentiation and also modulates immune responses.</bmdb:Description>
+    <bmdb:QAState>Under Review</bmdb:QAState>
+    <bmdb:Phase>Two (2)</bmdb:Phase>
+    <bmdb:Security>Public</bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=13"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=30">
+    <bmdb:Title>Cancer Antigen 125</bmdb:Title>
+    <bmdb:ShortName>CA 125</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description></bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase>Two (2)</bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=14"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=31">
+    <bmdb:Title>Macrophage Inhibitory Factor</bmdb:Title>
+    <bmdb:ShortName>MIF</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description></bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase>Two (2)</bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=17"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=32">
+    <bmdb:Title>Insulin-like Growth Factor II</bmdb:Title>
+    <bmdb:ShortName>IGF-II</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>Insulin-like growth factor-II (IGF-II) is a peptide hormone that regulates cellular proliferation and differentiation via autocrine and paracrine mechanisms, and has been shown to have potent mitogenic and anti-apoptotic effects. While it is crucial for normal development, IGF-II is also implicated in the development and progression of a variety of cancers. High levels of IGF-II have been found in tumors of the breast, prostate, bladder, stomach, colon, prostate, and ovary. Analyzing expression profiles of 516 genes in ovarian cancer revealed that IGF-II had the highest degree of up-regulation (Sawiris et al, 2002). High levels of IGF-II expression were found to be associated with advanced stage diseases, high grade tumors, and suboptimal debulking results (Sayer et al, 2005). Recent studies also showed that high IGF-II expression was associated with poor prognosis of the disease (Lu et al, 2006).</bmdb:Description>
+    <bmdb:QAState>New</bmdb:QAState>
+    <bmdb:Phase>Two (2)</bmdb:Phase>
+    <bmdb:Security>Public</bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=12"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies>
+      <bmdb:Study rdf:about="http://bmdb.jpl.nasa.gov/edit/study/?id=5"/>
+    </bmdb:Studies>
+    <bmdb:Publications>
+      <bmdb:Publication rdf:about="http://bmdb.jpl.nasa.gov/goto/publication/?id=7"/>
+<!--      <bmdb:Publication rdf:about="http://bmdb.jpl.nasa.gov/goto/publication/?id=8"/> -->
+    </bmdb:Publications>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=33">
+    <bmdb:Title>Osteopontin</bmdb:Title>
+    <bmdb:ShortName>OPN</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description></bmdb:Description>
+    <bmdb:QAState>Under Review</bmdb:QAState>
+    <bmdb:Phase>Two (2)</bmdb:Phase>
+    <bmdb:Security>Private</bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=32"/>
+<!--      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=34"/> -->
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=34">
+    <bmdb:Title>Leptin</bmdb:Title>
+    <bmdb:ShortName>Lpn</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>click to edit</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase>Two (2)</bmdb:Phase>
+    <bmdb:Security>Public</bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=16"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=36">
+    <bmdb:Title>RASSF1A</bmdb:Title>
+    <bmdb:ShortName>RASSF1A</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>Ras signalling regulator</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=35"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=37">
+    <bmdb:Title>TCF21</bmdb:Title>
+    <bmdb:ShortName>TCF21</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>transcriptional control</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=36"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=38">
+    <bmdb:Title>cytoglobin</bmdb:Title>
+    <bmdb:ShortName>cytoglobin</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>tumor suppresor (HIF1 pathway)</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=37"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=39">
+    <bmdb:Title>p16</bmdb:Title>
+    <bmdb:ShortName>p16</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>regulation of DNA synthesis</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=38"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=40">
+    <bmdb:Title>MGMT</bmdb:Title>
+    <bmdb:ShortName>MGMT</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>O-6-Methylguanine DNA methyltransferase (DNA methylation)</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=39"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=41">
+    <bmdb:Title>DAPK</bmdb:Title>
+    <bmdb:ShortName>DAPK</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>Death-associated protein kinase (cell growth control pathways)</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=40"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=42">
+    <bmdb:Title>APC</bmdb:Title>
+    <bmdb:ShortName>APC</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>adenomatous polyposis coli (microtubule extension/organixzation)</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=41"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=43">
+    <bmdb:Title>CDH1</bmdb:Title>
+    <bmdb:ShortName>CDH1</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>cell adhesion</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=42"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=44">
+    <bmdb:Title>Mitochondrial mutations</bmdb:Title>
+    <bmdb:ShortName>Mitochondrial mutations</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>mitochondrial function</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=43"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=45">
+    <bmdb:Title>MAGE</bmdb:Title>
+    <bmdb:ShortName>MAGE</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>undefined function (Cancer/testes antigen)</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=44"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=46">
+    <bmdb:Title>XAGE</bmdb:Title>
+    <bmdb:ShortName>XAGE</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>undefined function (Cancer/testes antigen)</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=45"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=47">
+    <bmdb:Title>NYESO</bmdb:Title>
+    <bmdb:ShortName>NYESO</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>undefined function (Cancer/testes antigen)</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=46"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=48">
+    <bmdb:Title>TEX15</bmdb:Title>
+    <bmdb:ShortName>TEX15</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>repair of double-strand DNA breaks</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=47"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=49">
+    <bmdb:Title>EEF1A2</bmdb:Title>
+    <bmdb:ShortName>EEF1A2</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>translational elongation factor</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=48"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=50">
+    <bmdb:Title>Mir-128b</bmdb:Title>
+    <bmdb:ShortName>Mir-128b</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>EGFR transcript regulator</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=49"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=51">
+    <bmdb:Title>5p15</bmdb:Title>
+    <bmdb:ShortName>5p15</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>FISH probes</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=50"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=52">
+    <bmdb:Title>7q12</bmdb:Title>
+    <bmdb:ShortName>7q12</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>FISH probes</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=51"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=53">
+    <bmdb:Title>8q24</bmdb:Title>
+    <bmdb:ShortName>8q24</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>FISH probes</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=52"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=54">
+    <bmdb:Title>Annexins I &amp; II (autoantibody)</bmdb:Title>
+    <bmdb:ShortName>Annexins I &amp; II (autoantibody)</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>cell membrane regulator</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=53"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=55">
+    <bmdb:Title>PGP9.5 (autoantibody)</bmdb:Title>
+    <bmdb:ShortName>PGP9.5 (autoantibody)</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>ubiquitination</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=54"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=56">
+    <bmdb:Title>14-3-3 theta (autoantibody)</bmdb:Title>
+    <bmdb:ShortName>14-3-3 theta (autoantibody)</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>multiple processes</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=55"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=57">
+    <bmdb:Title>ubiquilin (autoantibody)</bmdb:Title>
+    <bmdb:ShortName>ubiquilin (autoantibody)</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>ubiquitination</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=56"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=58">
+    <bmdb:Title>OGG1 activity</bmdb:Title>
+    <bmdb:ShortName>OGG1 activity</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>8-oxoguanine removal</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=57"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=59">
+    <bmdb:Title>APE1 activity</bmdb:Title>
+    <bmdb:ShortName>APE1 activity</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>endonuclease excision repair of abasic sites</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=58"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=60">
+    <bmdb:Title>ANPG activity</bmdb:Title>
+    <bmdb:ShortName>ANPG activity</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>1 N6-ethenoadenine removal</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=59"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=61">
+    <bmdb:Title>SMRP</bmdb:Title>
+    <bmdb:ShortName>SMRP</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>undefined extracellular function</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=60"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=62">
+    <bmdb:Title>MMP9</bmdb:Title>
+    <bmdb:ShortName>MMP9</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>metalloproteinase-9</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=61"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=63">
+    <bmdb:Title>CRTL1</bmdb:Title>
+    <bmdb:ShortName>CRTL1</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>hyaluronic acid binding protein</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=62"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=64">
+    <bmdb:Title>Yale</bmdb:Title>
+    <bmdb:ShortName></bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>1</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description></bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas/>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=65">
+    <bmdb:Title>Dan&apos;s Panel</bmdb:Title>
+    <bmdb:ShortName></bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>1</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description></bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas/>
+    <bmdb:Studies/>
+    <bmdb:Publications>
+      <bmdb:Publication rdf:about="http://bmdb.jpl.nasa.gov/goto/publication/?id=15"/>
+    </bmdb:Publications>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=66">
+    <bmdb:Title>Colon-cancer-specific antigen-2</bmdb:Title>
+    <bmdb:ShortName>CCSA-2</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>2D gels of isolated nuclear matrix</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=63"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=67">
+    <bmdb:Title>Colon-cancer-specific antigen-3</bmdb:Title>
+    <bmdb:ShortName>CCSA-3</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>2D gels of isolated nuclear matrix</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=64"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=68">
+    <bmdb:Title>Colon-cancer-specific antigen-4</bmdb:Title>
+    <bmdb:ShortName>CCSA-4</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>2D gels of isolated nuclear matrix</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=65"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=69">
+    <bmdb:Title>Haptoglobin-related glycoprotein</bmdb:Title>
+    <bmdb:ShortName>Haptoglobin-related glycoprote</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>affinity chromatography &amp;amp; MS</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=66"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=70">
+    <bmdb:Title>4-dimensional elastic light-scattering fingerprinting
+  (4D-ELF)</bmdb:Title>
+    <bmdb:ShortName>4DELF: elastically scattering </bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>measurements on mucosal biopsies</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=67"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=71">
+    <bmdb:Title>low coherence enhanced backscattering spectroscopy</bmdb:Title>
+    <bmdb:ShortName>LEBS: low coherence enhanced b</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>measurements on mucosal biopsies</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type></bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=68"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=72">
+    <bmdb:Title>HPP1-methylation; Transmembrane protein with EGF-like
+  and two Folstatin-like d</bmdb:Title>
+    <bmdb:ShortName>HPP1-methylation</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>methylation-specific PCR</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Epigenetic</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=69"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=73">
+    <bmdb:Title>P16- methylation</bmdb:Title>
+    <bmdb:ShortName>P16- methylation</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>methylation-specific PCR</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Epigenetic</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=70"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=74">
+    <bmdb:Title>Runt-related transcription factor 3</bmdb:Title>
+    <bmdb:ShortName>RUNX3- methylation</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>methylation-specific PCR</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Epigenetic</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=71"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=75">
+    <bmdb:Title>Des-gamma carboxyprothrombin; Prothrombin Induced by
+  Vitamin D Absence II</bmdb:Title>
+    <bmdb:ShortName>DCP</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description></bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=72"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=76">
+    <bmdb:Title>Alpha-fetoprotein</bmdb:Title>
+    <bmdb:ShortName>AFP</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description></bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=73"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=77">
+    <bmdb:Title>lens culinaris agglutinin-reactive AFP</bmdb:Title>
+    <bmdb:ShortName>AFP-L3</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description></bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=74"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=78">
+    <bmdb:Title>Golgi Protein 73 (GP73)</bmdb:Title>
+    <bmdb:ShortName>GP73</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>lectin affinity, 2D gels, MS</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=75"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=79">
+    <bmdb:Title>fucosylated hemopexin (Fc-hemopexin)</bmdb:Title>
+    <bmdb:ShortName>Fucosylated-hemopexin</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>lectin affinity, 2D gels, MS</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=76"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=80">
+    <bmdb:Title>Fucosylated-kinnogen</bmdb:Title>
+    <bmdb:ShortName>Fucosylated-kinnogen</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>lectin affinity, 2D gels, MS</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=77"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=81">
+    <bmdb:Title>Intercellular adhesion molecule-1</bmdb:Title>
+    <bmdb:ShortName>ICAM 1</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>ELISA detection of soluble protein</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=78"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=82">
+    <bmdb:Title>Regenerating Islet-derived 3 alpha; Islet Neogenesis
+  Associated Protein</bmdb:Title>
+    <bmdb:ShortName>REG 3</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>Proteomic analysis of mouse plasma and ELISA
+  detection</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=79"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=83">
+    <bmdb:Title>Tissue Inhibitor of Metalloproteinase 1</bmdb:Title>
+    <bmdb:ShortName>TIMP 1</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>Proteomic analysis of mouse plasma and ELISA
+  detection</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=80"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=84">
+    <bmdb:Title>Insulin-like Growth Factor Binding Protein 4</bmdb:Title>
+    <bmdb:ShortName>IGFBP 4</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>Proteomic analysis of mouse plasma and ELISA
+  detection</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=81"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=85">
+    <bmdb:Title>Cancer Antigen 19.9</bmdb:Title>
+    <bmdb:ShortName>CA-19.9</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description></bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=82"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=86">
+    <bmdb:Title>Cancer Antigen 125; Mucin 16</bmdb:Title>
+    <bmdb:ShortName>CA125</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>The best known marker for late stage and to a lesser
+  degree early stage ovarian carcinomas - especially of serous and endometrioid
+  histology</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=83"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=87">
+    <bmdb:Title>Cancer Antigen 72-4</bmdb:Title>
+    <bmdb:ShortName>CA72-4</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>Overexpression (protein) studies in ovarian cancer</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=84"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=88">
+    <bmdb:Title>Kallikrein-6</bmdb:Title>
+    <bmdb:ShortName>KLK-6</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>Amplification of a chromosome 19q region with the
+  entire kallikrein family associated with ovarian cancer</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=85"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=89">
+    <bmdb:Title>Transthyretin</bmdb:Title>
+    <bmdb:ShortName>TTR</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>SELDI-TOF-MS serum proteome profiling of OC
+  patients, followed by micro-LC-MS/MS peak-identification</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=86"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=90">
+    <bmdb:Title>Insulin-like Growth Factor-II</bmdb:Title>
+    <bmdb:ShortName>IGF-II</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>Upregulation/overexpression studies in ovarian
+  cancer</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=87"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=91">
+    <bmdb:Title>Insulin-like Growth Factor Binding Protein-2</bmdb:Title>
+    <bmdb:ShortName>IGFBP-2</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>IGFBP2 has been shown to be overexpressed in many
+  cancers, including ovarian.  Several studies using ELISA have shown that the
+  serological levels of IGFBP2 are increased in OC patients at diagnosis</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=88"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=92">
+    <bmdb:Title>Apolipoprotein A1</bmdb:Title>
+    <bmdb:ShortName>Apo A1</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>SELDI-TOF-MS serum proteome profiling of OC
+  patients, followed by micro-LC-MS/MS peak-identification</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=89"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=93">
+    <bmdb:Title>soluble Vascular Cell Adhesion Molecule-1</bmdb:Title>
+    <bmdb:ShortName>sVCAM-1</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>Protein quantitation studies (ELISA or Luminex)
+  showing increased serological levels of VCAM-1 in OC patients at diagnosis</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=90"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+  <bmdb:Biomarker rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarker/?id=94">
+    <bmdb:Title>Epidermal Growth Factor Receptor</bmdb:Title>
+    <bmdb:ShortName>EGF-R</bmdb:ShortName>
+    <bmdb:BiomarkerID>urn:edrn:bmdb:biomarker:</bmdb:BiomarkerID>
+    <bmdb:URN>urn:edrn:bmdb:biomarker:</bmdb:URN>
+    <bmdb:IsPanel>0</bmdb:IsPanel>
+    <bmdb:PanelID></bmdb:PanelID>
+    <bmdb:Description>Protein overexpression studies by IHC in OC tissue
+  specimens and by flow cytometric analysis</bmdb:Description>
+    <bmdb:QAState></bmdb:QAState>
+    <bmdb:Phase></bmdb:Phase>
+    <bmdb:Security></bmdb:Security>
+    <bmdb:Type>Protein</bmdb:Type>
+    <bmdb:BiomarkerOrganDatas>
+      <bmdb:BiomarkerOrganData rdf:about="http://bmdb.jpl.nasa.gov/edit/biomarkerorgan/?id=91"/>
+    </bmdb:BiomarkerOrganDatas>
+    <bmdb:Studies/>
+    <bmdb:Publications/>
+    <bmdb:Resources/>
+  </bmdb:Biomarker>
+</rdf:RDF>
