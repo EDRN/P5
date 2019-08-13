@@ -75,11 +75,15 @@ class CollaborationsFolderIngestor(Ingestor):
         self._setRelations(groupIndex, 'projects', IProtocol, [groupIndex.title.strip()], project=True)
     def ingest(self):
         consequences = super(CollaborationsFolderIngestor, self).ingest()
+        # See if this helps with initial ingest from setupEDRN.py
+        catalog = plone.api.portal.get_tool('portal_catalog')
+        catalog.manage_reindexIndex(['object_provides', 'collaborativeGroup', 'project'])
+        # Now do things normally
         context = aq_inner(self.context)
         for i in context.restrictedTraverse('@@contentlisting')():
             groupFolder = i.getObject()
             if 'index_html' not in groupFolder.keys():
-                _logger.info(u'Collaborative group at %s has no index object named "index_hmtl"; skipping', i.getPath())
+                _logger.info(u'Collaborative group at %s has no index object named "index_html"; skipping', i.getPath())
                 continue
             index = groupFolder['index_html']
             if not ICollaborativeGroupIndex.providedBy(index): continue

@@ -88,11 +88,6 @@ _QUICKLINKS_BODY = u'''<div class='edrnQuickLinks'>
         <li id='q-members'>
             <a href='members-list'>Member Directory</a>
         </li>
-        <li id='q-standards'>
-            <a href='https://edrn.jpl.nasa.gov/standards/'>
-                Biomarker Informatics Standards
-            </a>
-        </li>
         <li id='q-dcp'>
             <a class='link-plain' href='https://prevention.cancer.gov/'>
                 Division of Cancer Prevention
@@ -167,13 +162,16 @@ def _applyFacetsToBiomarkers(context):
     )
     criteria.add('text', 'top', 'default', title=u'Search', hidden=False, index='SearchableText',
         wildcard=True, count=False, onlyallelements=True)
-    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=False, default='sortable_title')
+    # Shouldn't be hidden but we want better sorting first
+    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=True, default='sortable_title')
     IFacetedLayout(context).update_layout('faceted_biomarkers_view')
 
 
 def _setupBiomarkers(context):
     u'''Do extra stuff for biomarkers. Must be defined before _RDF_FOLDERS below.'''
-    context.bmoDataSource = u'https://edrn.jpl.nasa.gov/bmdb/rdf/biomarkerorgans?qastate=all'
+    # Disable while BMDB is down:
+    # context.bmoDataSource = u'https://edrn.jpl.nasa.gov/bmdb/rdf/biomarkerorgans?qastate=all'
+    context.bmoDataSource = u'file:' + os.path.join(os.environ['EDRN_PORTAL_HOME'], u'data', u'bio-organ.rdf')
     context.bmuDataSource = u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/biomuta/@@rdf'
     context.idDataSource = u'https://edrn.jpl.nasa.gov/cancerdataexpo/idsearch'
     context.bmSumDataSource = u'https://edrn.jpl.nasa.gov/cancerdataexpo/summarizer-data/biomarker/@@summary'
@@ -221,7 +219,8 @@ def _applyFacetsToPublications(context):
         wildcard=True, onlyallelements=True)
     criteria.add('text', 'top', 'advanced', title=u'Abstract', hidden=False, index='Description', count=False,
         wildcard=True, onlyallelements=True)
-    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=False, default='sortable_title')
+    # Shouldn't be hidden but we want better sorting first
+    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=True, default='sortable_title')
     IFacetedLayout(context).update_layout('faceted_publications_view')
 
 
@@ -265,7 +264,8 @@ def _applyFacetsToDatasets(context):
     )
     criteria.add('text', 'top', 'default', title=u'Search', hidden=False, index='SearchableText',
         wildcard=True, count=False, onlyallelements=True)
-    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=False, default='sortable_title')
+    # Shouldn't be hidden but we want better sorting first
+    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=True, default='sortable_title')
     IFacetedLayout(context).update_layout('faceted_datasets_view')
 
 
@@ -310,7 +310,9 @@ _RDF_FOLDERS = (
     (None, 'eke.knowledge.sitefolder', u'Sites', u'Institutions and PIs in EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/sites/@@rdf'], _setupSites),
     (None, 'eke.knowledge.protocolfolder', u'Protocols', u'Studies pursued by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/protocols/@@rdf'], _null),
     (None, 'eke.knowledge.datasetfolder', u'Data', u'Data collected by EDRN.', [u'https://edrn.nci.nih.gov/miscellaneous-knowledge-system-artifacts/science-data-rdf-1/at_download/file'], _setupDatasets),
-    (None, 'eke.knowledge.biomarkerfolder', u'Biomarkers', u'Indicators for cancer.', [u'https://edrn.jpl.nasa.gov/bmdb/rdf/biomarkers?qastate=all'], _setupBiomarkers),
+# Disable while BMDB is down:
+#    (None, 'eke.knowledge.biomarkerfolder', u'Biomarkers', u'Indicators for cancer.', [u'https://edrn.jpl.nasa.gov/bmdb/rdf/biomarkers?qastate=all'], _setupBiomarkers),
+    (None, 'eke.knowledge.biomarkerfolder', u'Biomarkers', u'Indicators for cancer.', [u'file:' + os.path.join(os.environ['EDRN_PORTAL_HOME'], u'data', u'bio.rdf')], _setupBiomarkers),
     (None, 'eke.knowledge.collaborationsfolder', u'Groups', u'Collaborative Groups and Committees.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/committees/@@rdf'], _null),
 )
 # Use this to turn off all RDF during development; really speeds things up:
@@ -729,7 +731,8 @@ def _addMembersList(portal):
         sortreversed=False,
         hidezerocount=False
     )
-    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=False, default='sortable_title')
+    # Shouldn't be hidden but we want better sorting first
+    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=True, default='sortable_title')
     IFacetedLayout(folder).update_layout('listing_view')
     _publish(folder)
 

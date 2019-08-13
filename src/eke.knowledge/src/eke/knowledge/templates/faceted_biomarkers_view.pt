@@ -87,11 +87,23 @@
                       Advanced rhinoplasty biomarker
                     </a>
                   </td>
-                  <td tal:content='item/biomarkerType'>
+                  <td tal:define='
+                    bt item/biomarkerType;
+                    pt item/portal_type;
+                    panel python:pt == "eke.knowledge.biomarkerpanel";
+                  '>
+                    <span tal:condition='panel' tal:omit-tag=''>
+                      Panel
+                    </span>
+                    <span tal:condition='not:panel' tal:replace='bt'>
                       Sticky
+                    </span>
+                    <span 
                   </td>
-                  <td tal:content='python:u", ".join(item.indicatedBodySystems)'>
-                      Anus, Rectum
+                  <td tal:define='organs item/indicatedBodySystems'>
+                      <span tal:condition='organs' tal:replace='python:u", ".join(organs)'>
+                        Anus, Rectum
+                      </span>
                   </td>
                 </tr>
               </metal:block>
