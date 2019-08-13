@@ -309,7 +309,9 @@ _RDF_FOLDERS = (
     ('resources', 'eke.knowledge.resourcefolder', u'Miscellaneous Resources', u'Various other web-accessible resources.', [u'file:' + os.path.join(os.environ['EDRN_PORTAL_HOME'], u'data', u'bio-organ.rdf')], _null),
 # Disable while BMDB is down:
 #    ('resources', 'eke.knowledge.resourcefolder', u'Miscellaneous Resources', u'Various other web-accessible resources.', [u'https://edrn.jpl.nasa.gov/bmdb/rdf/resources'], _null),
-    (None, 'eke.knowledge.publicationfolder', u'Publications', u'Items published by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf', u'http://edrn.jpl.nasa.gov/bmdb/rdf/publications'], _setupPublications),
+    (None, 'eke.knowledge.publicationfolder', u'Publications', u'Items published by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf'], _setupPublications),
+# Disable while BMDB is down:
+#    (None, 'eke.knowledge.publicationfolder', u'Publications', u'Items published by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf', u'http://edrn.jpl.nasa.gov/bmdb/rdf/publications'], _setupPublications),
     (None, 'eke.knowledge.sitefolder', u'Sites', u'Institutions and PIs in EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/sites/@@rdf'], _setupSites),
     (None, 'eke.knowledge.protocolfolder', u'Protocols', u'Studies pursued by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/protocols/@@rdf'], _null),
     (None, 'eke.knowledge.datasetfolder', u'Data', u'Data collected by EDRN.', [u'https://edrn.nci.nih.gov/miscellaneous-knowledge-system-artifacts/science-data-rdf-1/at_download/file'], _setupDatasets),
