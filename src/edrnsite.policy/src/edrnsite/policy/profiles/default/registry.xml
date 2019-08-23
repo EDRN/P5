@@ -223,7 +223,7 @@
             <required>False</required>
             <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Displayed content types</title>
             <value_type type="plone.registry.field.Choice">
-            <vocabulary>plone.app.vocabularies.ReallyUserFriendlyTypes</vocabulary>
+                <vocabulary>plone.app.vocabularies.ReallyUserFriendlyTypes</vocabulary>
             </value_type>
         </field>
         <value purge='False'>
@@ -239,4 +239,42 @@
         </value>
     </record>
 
+    <record name="plone.types_not_searched" interface="Products.CMFPlone.interfaces.controlpanel.ISearchSchema" field="types_not_searched">
+        <field type="plone.registry.field.Tuple">
+            <default>
+                <element>Discussion Item</element>
+                <element>Plone Site</element>
+                <element>TempFolder</element>
+            </default>
+            <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Define the types that should be searched and be available in the user facing part of the site. Note that if new content types are installed, they will be enabled by default unless explicitly turned off here or by the relevant installer.</description>
+            <missing_value/>
+            <required>False</required>
+            <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Define the types to be shown in the site and searched</title>
+            <value_type type="plone.registry.field.Choice">
+                <vocabulary>plone.app.vocabularies.PortalTypes</vocabulary>
+            </value_type>
+        </field>
+        <value purge='False'>
+            <element>eke.knowledge.biomarkerbodysystem</element>
+            <element>eke.knowledge.bodysystemfolder</element>
+            <element>eke.knowledge.bodysystem</element>
+            <element>eke.knowledge.biomarkerfolder</element>
+            <element>eke.knowledge.bodysystemstudy</element>
+            <element>eke.knowledge.collaborationsfolder</element>
+            <element>eke.knowledge.collaborativegroupindex</element>
+            <element>eke.knowledge.datasetfolder</element>
+            <element>eke.knowledge.diseasefolder</element>
+            <element>eke.knowledge.disease</element>
+            <element>eke.knowledge.groupspaceindex</element>
+            <element>eke.knowledge.protocolfolder</element>
+            <element>eke.knowledge.publicationfolder</element>
+            <element>eke.knowledge.publication</element>
+            <element>eke.knowledge.resource</element>
+            <element>eke.knowledge.resourcefolder</element>
+            <element>eke.knowledge.sitefolder</element>
+            <element>eke.knowledge.studystatistics</element>
+            </value>
+    </record>
+
 </registry>
+
