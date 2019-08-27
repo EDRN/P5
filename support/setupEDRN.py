@@ -174,7 +174,9 @@ def _setupBiomarkers(context):
     context.bmoDataSource = u'file:' + os.path.join(os.environ['EDRN_PORTAL_HOME'], u'data', u'bio-organ.rdf')
     context.bmuDataSource = u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/biomuta/@@rdf'
     context.idDataSource = u'https://edrn.jpl.nasa.gov/cancerdataexpo/idsearch'
-    context.bmSumDataSource = u'https://edrn.jpl.nasa.gov/cancerdataexpo/summarizer-data/biomarker/@@summary'
+    # Disable while BMDB is down:
+    # context.bmSumDataSource = u'https://edrn.jpl.nasa.gov/cancerdataexpo/summarizer-data/biomarker/@@summary'
+    context.bmSumDataSource = u'file:' + os.path.join(os.environ['EDRN_PORTAL_HOME'], u'data', u'bio-summary.json')
     context.disclaimer = RichTextValue(_BIOMARKER_DISCLAIMER, 'text/html', 'text/x-html-safe')
     _applyFacetsToBiomarkers(context)
 

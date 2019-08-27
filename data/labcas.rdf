@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+  xmlns:x="http://edrn.nci.nih.gov/rdf/schema.rdf#"
+  xmlns:edrn="urn:edrn:"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+>
+<edrn:FHCRC_Tewari_Controls rdf:about="https://mcl-labcas.jpl.nasa.gov/ui/c/FHCRC_Tewari_Controls">
+    <x:protocol rdf:resource="http://edrn.nci.nih.gov/data/protocols/282"/>
+    <edrn:MethodDetails>microRNA PCR</edrn:MethodDetails>
+    <edrn:DateDatasetFrozen>N/A</edrn:DateDatasetFrozen>
+    <x:organ>Lung</x:organ>
+    <edrn:DatasetId>FHCRC_Tewari_Controls</edrn:DatasetId>
+    <edrn:PubMedID>http://www.ncbi.nlm.nih.gov/pubmed/N/A</edrn:PubMedID>
+    <edrn:ResultsAndConclusionSummary>TBD</edrn:ResultsAndConclusionSummary>
+    <edrn:DataDisclaimer>Data and information released from the National Cancer Institute (NCI) are provided on an "AS IS" basis, without warranty of any kind, including without limitation the warranties of merchantability, fitness for a particular purpose and non-infringement. Availability of this data and information does not constitute scientific publication. Data and/or information may contain errors or be incomplete. NCI and its employees make no representation or warranty, express or implied, including without limitation any warranties of merchantability or fitness for a particular purpose or warranties as to the identity or ownership of data or information, the quality, accuracy or completeness of data or information, or that the use of such data or information will not infringe any patent, intellectual property or proprietary rights of any party. NCI shall not be liable for any claim for any loss, harm, illness or other damage or injury arising from access to or use of data or information, including without limitation any direct, indirect, incidental, exemplary, special or consequential damages, even if advised of the possibility of such damages. In accordance with scientific standards, appropriate acknowledgment of NCI should be made in any publications or other disclosures concerning data or information made available by NCI.</edrn:DataDisclaimer>
+    <edrn:CollaborativeGroup>Lung and Upper Aerodigestive</edrn:CollaborativeGroup>
+    <edrn:LeadPI>Canary</edrn:LeadPI>
+    <edrn:DatasetURL>https://mcl-labcas.jpl.nasa.gov/ui/c/FHCRC_Tewari_Controls</edrn:DatasetURL>
+    <x:QAState>Under Review</x:QAState>
+    <edrn:Species></edrn:Species>
+    <edrn:ProtocolID>282</edrn:ProtocolID>
+    <edrn:DataCustodian>None</edrn:DataCustodian>
+    <edrn:DataSetName>FHCRC Tewari Controls</edrn:DataSetName>
+    <edrn:DatasetDescription>FHCRC Tewari Controls</edrn:DatasetDescription>
+    <edrn:ConsortiumPredicateURI>EDRN</edrn:ConsortiumPredicateURI>
+    <x:site rdf:resource="http://edrn.nci.nih.gov/data/sites/420"/>
+    <edrn:Discipline></edrn:Discipline>
+    <x:organ rdf:resource="http://edrn.nci.nih.gov/data/body-systems/Lung"/>
+    <edrn:SiteID>420</edrn:SiteID>
+    <edrn:Date>2010-12-15T15:59:00.000Z</edrn:Date>
+    <edrn:DataCustodianEmail>TBD</edrn:DataCustodianEmail>
+  </edrn:FHCRC_Tewari_Controls>
+  <edrn:Lung_Carcinoma_-_Stage_I_Squamous_Cell_Carcinoma__pool_of_20_tumors_ rdf:about="https://mcl-labcas.jpl.nasa.gov/ui/c/Lung_Carcinoma_-_Stage_I_Squamous_Cell_Carcinoma_(pool_of_20_tumors)">
+    <edrn:PubMedID></edrn:PubMedID>
+    <edrn:DataCustodianEmail>kent.shaddox@vanderbilt.edu</edrn:DataCustodianEmail>
+    <edrn:DatasetDescription>Lung Carcinoma - Stage I Squamous Cell Carcinoma (pool of 20 tumors)</edrn:DatasetDescription>
+    <edrn:DatasetId>Lung_Carcinoma_-_Stage_I_Squamous_Cell_Carcinoma_(pool_of_20_tumors)</edrn:DatasetId>
+    <edrn:SiteID>240</edrn:SiteID>
+    <edrn:DataCustodian>Kent Shaddox</edrn:DataCustodian>
+    <edrn:DatasetURL>https://mcl-labcas.jpl.nasa.gov/ui/c/Lung_Carcinoma_-_Stage_I_Squamous_Cell_Carcinoma_(pool_of_20_tumors)</edrn:DatasetURL>
+    <edrn:Date>2012-09-27T15:05:00.000Z</edrn:Date>
+    <edrn:Discipline></edrn:Discipline>
+    <edrn:LeadPI>Daniel Liebler</edrn:LeadPI>
+    <x:organ rdf:resource="http://edrn.nci.nih.gov/data/body-systems/Lung"/>
+    <edrn:ProtocolID>1001</edrn:ProtocolID>
+    <edrn:CollaborativeGroup>Lung and Upper Aerodigestive</edrn:CollaborativeGroup>
+    <x:QAState>Accepted</x:QAState>
+    <edrn:Species></edrn:Species>
+    <edrn:DataSetName>Lung Carcinoma - Stage I Squamous Cell Carcinoma (pool of 20 tumors)</edrn:DataSetName>
+    <edrn:ConsortiumPredicateURI>EDRN</edrn:ConsortiumPredicateURI>
+    <edrn:ResultsAndConclusionSummary>TBD</edrn:ResultsAndConclusionSummary>
+    <edrn:DateDatasetFrozen>Unknown</edrn:DateDatasetFrozen>
+    <edrn:DataDisclaimer>Data and information released from the National Cancer Institute (NCI) are provided on an "AS IS" basis, without warranty of any kind, including without limitation the warranties of merchantability, fitness for a particular purpose and non-infringement. Availability of this data and information does not constitute scientific publication. Data and/or information may contain errors or be incomplete. NCI and its employees make no representation or warranty, express or implied, including without limitation any warranties of merchantability or fitness for a particular purpose or warranties as to the identity or ownership of data or information, the quality, accuracy or completeness of data or information, or that the use of such data or information will not infringe any patent, intellectual property or proprietary rights of any party. NCI shall not be liable for any claim for any loss, harm, illness or other damage or injury arising from access to or use of data or information, including without limitation any direct, indirect, incidental, exemplary, special or consequential damages, even if advised of the possibility of such damages. In accordance with scientific standards, appropriate acknowledgment of NCI should be made in any publications or other disclosures concerning data or information made available by NCI.</edrn:DataDisclaimer>
+    <edrn:MethodDetails>See MCP PMID 22761400</edrn:MethodDetails>
+    <x:protocol rdf:resource="http://edrn.nci.nih.gov/data/protocols/1001"/>
+    <x:organ>Lung</x:organ>
+    <x:site rdf:resource="http://edrn.nci.nih.gov/data/sites/240"/>
+  </edrn:Lung_Carcinoma_-_Stage_I_Squamous_Cell_Carcinoma__pool_of_20_tumors_>
+<edrn:Analysis_of_pancreatic_cancer_biomarkers_in_PLCO_set2 rdf:about="https://mcl-labcas.jpl.nasa.gov/ui/c/Analysis_of_pancreatic_cancer_biomarkers_in_PLCO_set10">
+    <dc:title>Analysis_of_pancreatic_cancer_biomarkers_in_PLCO_set10</dc:title>
+    <edrn:DataSetName>Analysis_of_pancreatic_cancer_biomarkers_in_PLCO_set10</edrn:DataSetName>
+    <edrn:PubMedID>123456</edrn:PubMedID>
+    <edrn:DateDatasetFrozen>None</edrn:DateDatasetFrozen>
+    <edrn:DataCustodian>Anna Lokshin</edrn:DataCustodian>
+    <edrn:ConsortiumPredicateURI>EDRN</edrn:ConsortiumPredicateURI>
+    <edrn:DataCustodianEmail>lokshina@pitt.edu</edrn:DataCustodianEmail>
+    <edrn:MethodDetails>Biomarkers were measured using Luminex. Bioinformatics analysis was performed in Dr. Lokshin lab using the MMC algorithm, and by DMMC</edrn:MethodDetails>
+    <edrn:Discipline>Biology</edrn:Discipline>
+    <edrn:ProtocolID>384</edrn:ProtocolID>
+    <edrn:CollaborativeGroup>GI</edrn:CollaborativeGroup>
+    <x:protocol rdf:resource="http://edrn.nci.nih.gov/data/protocols/384"/>
+    <x:QAState>Accepted</x:QAState>
+    <edrn:ResultsAndConclusionSummary>Greater GSTP1 promoter methylation in cancer tissue was independently associated with the risk of recurrence in patients with early prostate cancer. This suggests that GSTP1 promoter methylation may be a potential tissue based recurrence marker.</edrn:ResultsAndConclusionSummary>
+    <edrn:Species>Human</edrn:Species>
+    <edrn:Date>01/22/2014</edrn:Date>
+    <edrn:DataDisclaimer>Data and information released from the National Cancer Institute (NCI) are provided on an "AS IS" basis, without warranty of any kind, including without limitation the warranties of merchantability, fitness for a particular purpose and non-infringement. Availability of this data and information does not constitute scientific publication. For information may contain errors or be incomplete.NCI and its employees make no representation or warranty, express or implied, including without limitation any warranties of merchantability or fitness for a particular purpose or warranties as to the identity or ownership of data or information, the quality, accuracy or completeness of data or information, or that the use of such data or information will not infringe any patent, intellectual property or proprietary rights of any party.NCI shall not be liable for any claim for any loss, harm, illness or other damage or injury arising from access to or use of data or information, including without limitation any direct, indirect, incidental, exemplary, special or consequential damages, even if advised of the possibility of such damages.In accordance withscientific standards, appropriate acknowledgment of NCI should be made in any publications or other disclosures concerning data or information made available by NCI.</edrn:DataDisclaimer>
+    <edrn:LeadPI>Anna Lokshin</edrn:LeadPI>
+    <edrn:DatasetId>urn:edrn:Analysis_of_pancreatic_cancer_biomarkers_in_PLCO_set4</edrn:DatasetId>
+    <x:site rdf:resource="http://edrn.nci.nih.gov/data/sites/86"/>
+    <edrn:GrantSupport>1R03 CA098642-01A1/CA/NCI</edrn:GrantSupport>
+    <edrn:ResearchSupport>N N.I.H., Extramural</edrn:ResearchSupport>
+    <edrn:StudyBackground>
+Early1 detection of ovarian cancer might improve clinical outcome. Some studies have shown the role of cytokines as a new group of tumor markers for ovarian cancer. We hypothesized that a panel comprised of multiple cytokines, which individually may not show strong correlation with the disease, might provide higher diagnostic power.
+</edrn:StudyBackground>
+    <edrn:StudyMethods>
+To evaluate the diagnostic utility of cytokine panel, we used a novel multianalyte LabMAP profiling technology that allows simultaneous measurement of multiple markers.
+</edrn:StudyMethods>
+  <edrn:StudyResults>
+Concentrations of 24 cytokines (cytokines/chemokines, growth, and angiogenic factors) in combination with cancer antigen-125 (CA-125), were measured in sera of 44 patients with early-stage ovarian cancer, 45 healthy women, and 37 patients with benign pelvic tumors. Six markers, i.e., interleukin (IL)-6, IL-8, epidermal growth factor (EGF), vascular endothelial growth factor (VEGF), monocyte chemoattractant protein-1 (MCP-1), and CA-125, showed significant differences in serum concentrations between ovarian cancer and control groups. Out of this group, IL-6, IL-8, VEGF, EGF, and CA-125, were used in a classification tree analysis that resulted in 84 percent sensitivity at 95 percent specificity. The receiver operator characteristic curve created using the combination of markers produced sensitivities between 90 percent and 100 percent in the area of 80 percent to 90 percent specificity, whereas the receiver operator characteristic curve for CA-125 alone resulted in sensitivities of 70 percent to 80 percent. The classification tree analysis for discrimination of benign condition from ovarian cancer used CA-125, granulocyte colony-stimulating factor (G-CSF), IL-6, EGF, and VEGF resulting in 86.5 percent sensitivity and 93.0 percent specificity.
+</edrn:StudyResults>
+   <edrn:StudyConclusion>
+The presented data show that simultaneous testing of a panel of serum cytokines and CA-125 using LabMAP technology may present a promising approach for ovarian cancer detection.
+</edrn:StudyConclusion>
+   <x:organ rdf:resource="http://edrn.nci.nih.gov/data/body-systems/Prostate"/>
+  </edrn:Analysis_of_pancreatic_cancer_biomarkers_in_PLCO_set2>
+</rdf:RDF>
