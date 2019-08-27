@@ -11,7 +11,6 @@ from five import grok
 from knowledgeobject import IKnowledgeObject
 from plone.memoize.view import memoize
 from zope import schema
-from zope.interface import Interface
 from z3c.relationfield.schema import RelationChoice, RelationList
 from plone.app.vocabularies.catalog import CatalogSource
 import plone.api
@@ -56,10 +55,15 @@ class IProtocol(IKnowledgeObject):
         description=_(u'A protocol may have associated with it a biomarker name, which turns out to be free text for anything.'),
         required=False
     )
-    collaborativeGroupText = schema.Text(
-        title=_(u'Collaborative Group Text'),
-        description=_(u'Text explaining the collaborative nature of this protocol.'),
-        required=False
+    collaborativeGroup = schema.List(
+        title=_(u'Collaborative Groups'),
+        description=_(u'Groups researching this protocol.'),
+        required=False,
+        default=[],
+        value_type=schema.TextLine(
+            title=_(u'Collaborative Group'),
+            description=_(u'Group researching this protocol.')
+        )
     )
     phasedStatus = schema.Text(
         title=_(u'Phased Status'),
@@ -329,6 +333,16 @@ class IProtocol(IKnowledgeObject):
         required=False,
         source=CatalogSource(object_provides=IPerson.__identifier__)
     )
+    investigatorIdentifiers = schema.List(
+        title=_(u'Investigator Identifiers'),
+        description=_(u'RDF subject URIs of investigators who participate in this protocol'),
+        required=False,
+        default=[],
+        value_type=schema.TextLine(
+            title=_(u'Investigator Identifier'),
+            description=_(u'RDF subject URI of a single investigator who participates in this protocol')
+        )
+    )
 
 
 IProtocol.setTaggedValue('predicates', {
@@ -337,7 +351,7 @@ IProtocol.setTaggedValue('predicates', {
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#coordinatingInvestigatorSite': ('coordinatingInvestigatorSite', True),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#leadInvestigatorSite': ('leadInvestigatorSite', True),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#bmName': ('bmName', False),
-    u'http://edrn.nci.nih.gov/rdf/schema.rdf#collaborativeGroupText': ('collaborativeGroupText', False),
+    u'http://edrn.nci.nih.gov/rdf/schema.rdf#collaborativeGroupText': ('collaborativeGroup', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#phasedStatus': ('phasedStatus', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#aims': ('aims', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#analyticMethod': ('analyticMethod', False),

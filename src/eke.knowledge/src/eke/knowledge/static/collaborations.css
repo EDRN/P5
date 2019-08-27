@@ -10,6 +10,9 @@
     float: left;
     padding-right: 0.5em;
 }
+.collaborativeGroupContainer p a {
+    color: #004665;
+}
 .collaborativeGroupContainer h1 {
     font: 20pt "Georgia", Times, "Times New Roman", serif;
     color: rgb(166, 0, 0);
@@ -66,14 +69,14 @@
     padding-top: 0 !important;
     padding-left: 1em;
 }
-.topCollabGroupItems {
+/*.topCollabGroupItems {
     border: 1px solid #bbb;
     padding: 0.5em;
     width: 194px;
     margin: 0.5em 0;
     float: left;
     margin-right: 0.5em;
-}
+}*/
 .cbProjectsHeading {
     background: transparent url(++resource++h2-projects.png) no-repeat top left;
     margin-top: 0;
@@ -98,7 +101,7 @@
     padding-left: 1em;
 }
 .topCollabGroupItemDescription {
-    color: rgb(170, 170, 170);
+    color: rgb(60, 60, 60);
     font-size: 8pt;
     line-height: 9pt;
 }
@@ -116,35 +119,3 @@
     display: inline;
     padding: 0 1em;
 }
-.collaborationsNewContentButtons a {
-    -moz-border-radius: 8px;
-    -moz-box-shadow: rgba(0,0,0,1) 0 1px 0;
-    -webkit-border-radius: 8px;
-    -webkit-box-shadow: rgba(0,0,0,1) 0 1px 0;
-    background: #d66581;
-    background: -moz-linear-gradient(top, #a82b1b, #d66581);
-    background: -webkit-gradient(linear, left top, left bottom, from(#a82b1b), to(#d66581));
-    border-radius: 8px;
-    border-top: 1px solid #fa0f36;
-    box-shadow: rgba(0,0,0,1) 0 1px 0;
-    color: white;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 14px;
-    padding: 5px 10px;
-    text-decoration: none;
-    text-shadow: rgba(0,0,0,.4) 0 1px 0;
-    vertical-align: middle;
-}
-.collaborationsNewContentButtons a:visited {
-    color: white !important;
-}
-.collaborationsNewContentButtons a:hover {
-    border-top-color: #b8a064;
-    background: #b8a064 !important;
-    color: white;
-}
-.collaborationsNewContentButtons a:active {
-    border-top-color: #7992a3;
-    background: #7992a3;
-}
-

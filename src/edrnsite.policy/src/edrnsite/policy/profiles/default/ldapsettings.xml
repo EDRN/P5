@@ -19,7 +19,7 @@
     <element key="groups.queryFilter" type="string">(objectClass=groupOfUniqueNames)</element>
     <element key="groups.scope" type="int">1</element>
     <element key="server.ignore_cert" type="bool">True</element>
-    <element key="server.page_size" type="int">1000</element>
+    <element key="server.page_size" type="int">2000</element>
     <element key="server.uri" type="string">ldaps://edrn.jpl.nasa.gov</element>
     <element key="server.user" type="string">uid=admin,ou=system</element>
     <element key="users.account_expiration" type="bool">False</element>

@@ -6,15 +6,14 @@ u'''EKE Knowledge: Site Folder'''
 from . import _
 from .base import Ingestor
 from .knowledgefolder import IKnowledgeFolder, KnowledgeFolderView
-from .person import IPerson
 from .site import ISite
-from .utils import publish, setValue
+from .utils import publish
 from Acquisition import aq_inner
 from five import grok
 from plone.dexterity.utils import createContentInContainer
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize.view import memoize
-from z3c.relationfield import RelationValue, RelationList
+from z3c.relationfield import RelationValue
 from zope import schema
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
@@ -80,7 +79,7 @@ class ISiteFolder(IKnowledgeFolder):
 
 class SiteIngestor(Ingestor):
     grok.context(ISiteFolder)
-    def getInterfaceForContainedObjects(self):
+    def getInterfaceForContainedObjects(self, predicates):
         return ISite
     def getObjID(self, subjectURI, titles, predicates):
         if not titles: return None
@@ -142,7 +141,7 @@ class SiteIngestor(Ingestor):
             'eke.knowledge.person',
             id=personID,
             title=personTitle,
-            identifier=identifier,
+            identifier=unicode(identifier),
         )
         getUtility(IIntIds).register(person)  # WHY IS THIS NEEDED?
         for predicate, fieldName in _personPredicates:
@@ -152,6 +151,8 @@ class SiteIngestor(Ingestor):
                     value = unicode(values[0])
                     if value:
                         setattr(person, fieldName, value)
+        # Enable display of pubs on a person later on:
+        person.siteID = person.aq_parent.identifier
         notify(ObjectAddedEvent(person))
         return person
     def _ingestPeople(self, statements, sites):
@@ -206,9 +207,9 @@ class SiteIngestor(Ingestor):
         notify(ObjectModifiedEvent(site))
     def ingest(self):
         u'''Override Ingestor.ingest so we can handle people'''
+        consequences = super(SiteIngestor, self).ingest()
         context = aq_inner(self.context)
         catalog, portal = plone.api.portal.get_tool('portal_catalog'), plone.api.portal.get()
-        consequences = super(SiteIngestor, self).ingest()
         sites = {}
         for siteObj in consequences.created + consequences.updated:
             sites[siteObj.identifier] = siteObj
@@ -227,15 +228,27 @@ class SiteIngestor(Ingestor):
             self.addInvestigators(siteURI, sites, _coPIURI, people, predicates, 'coPrincipalInvestigators', True)
             self.addInvestigators(siteURI, sites, _coIURI, people, predicates, 'coInvestigators', True)
             self.addInvestigators(siteURI, sites, _iURI, people, predicates, 'investigators', True)
-            # While we're here, set the piName
+            # While we're here, set the piName, piObjectID
             try:
-                sites[unicode(siteURI)].piName = people[unicode(predicates[_piURI][0])].title
+                site = sites[unicode(siteURI)]
+            except KeyError:
+                # Subsequent ingest and no updated needed
+                continue
+            try:
+                site.piName = people[unicode(predicates[_piURI][0])].title
+                site.piObjectID = people[unicode(predicates[_piURI][0])].id
             except (KeyError, IndexError):
                 # We tried
                 pass
             # While we're here, set the siteID
-            sites[unicode(siteURI)].siteID = urlparse.urlparse(siteURI)[2].split(u'/')[-1]
-        catalog.reindexIndex('siteID', portal.REQUEST)
+            site.dmccSiteID = urlparse.urlparse(siteURI)[2].split(u'/')[-1]
+            # While we're here, set the de-normalized people fields
+            for person in [site[p] for p in site.keys()]:
+                person.siteName = site.title
+                person.piName = site.piName
+                person.memberType = site.memberType
+            # TODO: DO THIS!
+        # XXX WHY? catalog.reindexIndex('siteID', portal.REQUEST)
         _logger.warn('Got %d site statements, %d people statements', len(siteStatements), len(peopleStatements))
         publish(context)
         return consequences
@@ -407,6 +420,7 @@ class View(KnowledgeFolderView):
                 title=i.Title,
                 description=i.Description,
                 investigator=i.piName,
+                piObjectID=i.piObjectID,
                 organs=i.organs,
                 proposal=i.proposal,
                 url=i.getURL(),

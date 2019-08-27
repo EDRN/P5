@@ -57,4 +57,3 @@ parts =
     logrotate
     init
     python
-    ${buildout:crontab-parts}

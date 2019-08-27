@@ -3,15 +3,17 @@
 u'''EKE Utilities'''
 
 
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from Products.CMFCore.interfaces import IFolderish
 from Products.CMFCore.WorkflowCore import WorkflowException
-from zope.intid.interfaces import IIntIds
 from z3c.relationfield import RelationValue
 from zope import schema
 from zope.component import getUtility
-from zope.interface import Invalid
 from zope.event import notify
+from zope.interface import Invalid
+from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectModifiedEvent
+from zope.schema.vocabulary import SimpleVocabulary
 import plone.api, logging
 
 _logger = logging.getLogger(__name__)
@@ -35,6 +37,25 @@ class IngestConsequences(object):
 
 # Functions
 # ---------
+
+def generateVocabularyFromIndex(indexName, context=None):
+    u'''Generate a simple vocabulary for the unique values of the given index named ``indexName``.'''
+    normalizer = getUtility(IIDNormalizer)
+    catalog = plone.api.portal.get_tool('portal_catalog')
+    results = list(catalog.uniqueValuesFor(indexName))
+    results.sort()
+    items, terms = {}, []
+    for i in results:
+        if i:
+            token, title = normalizer.normalize(i), i
+            items[token] = title
+    tokens = items.keys()
+    tokens.sort()
+    for token in tokens:
+        title = items[token]
+        terms.append(SimpleVocabulary.createTerm(title, token, title))
+    return SimpleVocabulary(terms)
+
 
 def publish(context, workflowTool=None):
     u'''Publish ``context`` item and all of its children with the ``workflowTool``, unless the ``workflowTool``

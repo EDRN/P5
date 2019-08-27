@@ -50,6 +50,8 @@ class RDFIngestor(grok.View):
                         self.skipped.append(folder)
                     except IngestDisabled:
                         self.skipped.append(folder)
+                    # TODO except what else? We need a more graceful way to handle other exceptions
+                    # like network outages
             finally:
                 self.ingestRunning = False
                 registry['eke.knowledge.interfaces.IPanel.ingestStart'] = DAWN_OF_TIME

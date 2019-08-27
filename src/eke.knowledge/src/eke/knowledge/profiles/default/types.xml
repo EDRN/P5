@@ -3,6 +3,8 @@
     <object name='eke.knowledge.bodysystem' meta_type='Dexterity FTI'/>
     <object name='eke.knowledge.bodysystemfolder' meta_type='Dexterity FTI'/>
     <object name='eke.knowledge.collaborationsfolder' meta_type='Dexterity FTI'/>
+    <object name='eke.knowledge.collaborativegroupfolder' meta_type='Dexterity FTI'/>
+    <object name='eke.knowledge.collaborativegroupindex' meta_type='Dexterity FTI'/>
     <object name='eke.knowledge.dataset' meta_type='Dexterity FTI'/>
     <object name='eke.knowledge.datasetfolder' meta_type='Dexterity FTI'/>
     <object name='eke.knowledge.disease' meta_type='Dexterity FTI'/>

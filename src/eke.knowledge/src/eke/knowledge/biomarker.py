@@ -125,6 +125,16 @@ class IBiomarker(IKnowledgeObject, IResearchedObject, IQualityAssuredObject):
             description=_(u'Organ for which this biomarker is an indicator.')
         )
     )
+    collaborativeGroup = schema.List(
+        title=_(u'Collaborative Groups'),
+        description=_(u'Groups researching this biomarker.'),
+        required=False,
+        default=[],
+        value_type=schema.TextLine(
+            title=_(u'Collaborative Group'),
+            description=_(u'Group researching this biomarker.')
+        )
+    )
     accessGroups = schema.List(
         title=_(u'Access Groups'),
         description=_(u'Groups that are allowed access to this biomarker.'),
@@ -235,7 +245,7 @@ class IStudyStatistics(IKnowledgeObject):
         description=_(u'A percentage.'),
         required=False
     )
-    details = schema.TextLine(
+    details = schema.Text(
         title=_(u'Details'),
         description=_(u'Detailed notes about this set of statistics.'),
         required=False

@@ -10,7 +10,6 @@ from .site import ISite
 from Acquisition import aq_inner
 from five import grok
 from plone.i18n.normalizer.interfaces import IIDNormalizer
-from plone.memoize.view import memoize
 from z3c.relationfield import RelationValue
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
@@ -28,6 +27,12 @@ _descriptionPredicates = (
     rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#outcome')
 )
 _siteURIPrefix = u'http://edrn.nci.nih.gov/data/sites/'
+_canonicalGroupNames = {
+    u'Breast and Gynecologic Cancers Research': u'Breast and Gynecologic Cancers Research Group',
+    u'G.I. and Other Associated Cancers Research Group': u'G.I. and Other Associated Cancers Research Group',
+    u'Lung and Upper Aerodigestive Cancers Research Group': u'Lung and Upper Aerodigestive Cancers Research Group',
+    u'Prostate and Urologic Cancers Research Group': u'Prostate and Urologic Cancers Research Group',
+}
 
 
 class IProtocolFolder(IKnowledgeFolder):
@@ -36,7 +41,7 @@ class IProtocolFolder(IKnowledgeFolder):
 
 class ProtocolIngestor(Ingestor):
     grok.context(IProtocolFolder)
-    def getInterfaceForContainedObjects(self):
+    def getInterfaceForContainedObjects(self, predicates):
         return IProtocol
     def getObjID(self, subjectURI, titles, predicates):
         if not titles: return None
@@ -73,7 +78,17 @@ class ProtocolIngestor(Ingestor):
         siteNumbers = protocolToInvolvedSites.get(protocolID, [])
         siteIDs = [_siteURIPrefix + i for i in siteNumbers]
         brains = catalog(identifier=siteIDs, sort_on='sortable_title')
-        protocol.involvedInvestigatorSites = [RelationValue(idUtil.getId(b.getObject())) for b in brains]
+        for b in brains:
+            site = b.getObject()
+            siteIntID = idUtil.getId(b.getObject())
+            if protocol.involvedInvestigatorSites is None: protocol.involvedInvestigatorSites = []
+            protocol.involvedInvestigatorSites.append(RelationValue(siteIntID))
+            piIdentifier = site.principalInvestigator.to_object.identifier if site.principalInvestigator else None
+            if piIdentifier:
+                currentIDs = set(protocol.investigatorIdentifiers if protocol.investigatorIdentifiers else [])
+                if piIdentifier not in currentIDs:
+                    currentIDs.add(piIdentifier)
+                    protocol.investigatorIdentifiers = list(currentIDs)
     def ingest(self):
         context = aq_inner(self.context)
         catalog, portal = plone.api.portal.get_tool('portal_catalog'), plone.api.portal.get()
@@ -94,6 +109,14 @@ class ProtocolIngestor(Ingestor):
                     p = context[objectID]
                 else:
                     p = results[0].getObject()
+                # Fix the collaborative groups. The RDF from the DMCC contains comma-separated
+                # collab group names which have all gone into item 0 of the group. We need
+                # to split those into an actual list of ``n`` items and also fix the group names.
+                cbs = p.collaborativeGroup
+                if cbs is not None and len(cbs) == 1:
+                    p.collaborativeGroup = [_canonicalGroupNames.get(i.strip(), u'Unknown') for i in cbs[0].split(u',')]
+                elif cbs is None:
+                    p.collaborativeGroup = []
                 # Set project flag
                 p.project = True if isProject else False
                 # Set PI
@@ -103,7 +126,7 @@ class ProtocolIngestor(Ingestor):
                     if len(results) == 1:
                         site = results[0].getObject()
                         p.piName = site.piName
-                        # p.
+                        p.principalInvestigator = site.principalInvestigator
                 # Compute description
                 for predicateName in _descriptionPredicates:
                     values = predicates.get(predicateName, [])

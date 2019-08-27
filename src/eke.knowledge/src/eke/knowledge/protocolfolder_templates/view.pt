@@ -82,8 +82,16 @@
                                                 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                                             </span>
                                         </td>
-                                        <td tal:content='item/piName'>
-                                            Joe Blow
+                                        <td tal:define='
+                                            pi python:item.getObject().principalInvestigator;
+                                            pi python:None if not pi else pi.to_object;
+                                        '>
+                                            <tal:if condition='pi'>
+                                                <a href='#' tal:attributes='href pi/absolute_url'
+                                                    tal:content='pi/title'>
+                                                    Joe Blow
+                                                </a>
+                                            </tal:if>
                                         </td>
                                     </tr>
                                 </tal:define>

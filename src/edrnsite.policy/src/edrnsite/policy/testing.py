@@ -8,6 +8,7 @@ from plone.app.testing import PloneSandboxLayer
 from plone.testing import z2
 
 import edrnsite.policy, edrn.theme, pas.plugins.ldap, yafowil.plone, eke.knowledge, eea.facetednavigation
+import edrnsite.portlets, collective.captchacontactinfo
 
 
 class EdrnsitePolicyLayer(PloneSandboxLayer):
@@ -25,6 +26,7 @@ class EdrnsitePolicyLayer(PloneSandboxLayer):
         self.loadZCML(package=eea.facetednavigation)
         self.loadZCML(package=eke.knowledge)
         self.loadZCML(package=edrnsite.portlets)
+        self.loadZCML(package=collective.captchacontactinfo)
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'edrnsite.policy:default')

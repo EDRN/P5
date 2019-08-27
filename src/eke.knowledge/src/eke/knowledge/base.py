@@ -29,7 +29,7 @@ _logger = logging.getLogger(__name__)
 class Ingestor(grok.Adapter):
     grok.context(IKnowledgeFolder)
     grok.provides(IIngestor)
-    def getInterfaceForContainedObjects(self):
+    def getInterfaceForContainedObjects(self, predicates):
         u'''Return the interface for objects contained'''
         raise NotImplementedError(u'Subclasses need to implement getInterfaceForContainedObjects')
     def getTitles(self, predicates):
@@ -43,7 +43,7 @@ class Ingestor(grok.Adapter):
         u'''Check the given ``predicates`` to see if they're appropriate for the interfaces of the objects
         to be created. If so, return the type's interface, the FTI, the predicate map, and the object's title,
         and a possible object ID for it to use.  If not, raise an error.'''
-        iface = self.getInterfaceForContainedObjects()
+        iface = self.getInterfaceForContainedObjects(predicates)
         fti = iface.getTaggedValue('fti')
         predicateMap = iface.getTaggedValue('predicates')
         neededTypeURI = rdflib.URIRef(iface.getTaggedValue('typeURI'))

@@ -1,0 +1,83 @@
+<html
+    i18n:domain='eke.knowledge'
+    lang='en'
+    metal:use-macro='context/main_template/macros/master'
+    xml:lang='en'
+    xmlns:i18n='http://xml.zope.org/namespaces/i18n'
+    xmlns:metal='http://xml.zope.org/namespaces/metal'
+    xmlns:tal='http://xml.zope.org/namespaces/tal'
+    xmlns='http://www.w3.org/1999/xhtml'>
+    <head>
+        <title>Collaborations Folder View</title>
+    </head>
+    <body>
+        <metal:content-core fill-slot='content-core'>
+            <metal:content-core define-macro='content-core' tal:define='
+                isManager view/isManager;
+                plone_view nocall:context/@@plone;
+            '>
+                <p tal:condition='isManager' class='discreet callout'>
+                    <label for='form-widgets-url' class='horizontal' i18n:translate='rdfDataURL'>
+                        RDF Data URL(s):
+                    </label>
+                    <ul>
+                        <li tal:repeat='url context/rdfDataSources'>
+                            <span id='form-widgets-url' class='uri-widget uri-field'>
+                                <a href='#' tal:attributes='href url' tal:content='url'>
+                                    http://rdf.org/rdf/source
+                                </a>
+                            </span>
+                        </li>
+                    </ul>
+                    <label for='form-widgets-ingestEnabled' class='horizontal'>
+                        Ingest Enabled:
+                    </label>
+                    <span id='form-widgets-ingestEnabled'>
+                        <span tal:omit-tag='' tal:condition='context/ingestEnabled' i18n:translate='ingestYes'>
+                            &#x2705;
+                        </span>
+                        <span tal:omit-tag='' tal:condition='not:context/ingestEnabled' i18n:translate='ingestNo'>
+                            &#x1f6ab; This folder will <em>not</em> be updated
+                        </span>
+                    </span>
+                    <br/>
+                    <span i18n:translate='youHaveThePower'>
+                        You're seeing the above because you're logged in with management permissions.
+                    </span>
+                </p>
+
+                <div tal:define='
+                    committees view/committees;
+                    collaborativeGroups view/collaborativeGroups;
+                    haveCommittees python:len(committees) &gt; 0;
+                    haveCollaborativeGroups python:len(collaborativeGroups) &gt; 0;
+                '>
+                    <h2>Collaborative Groups</h2>
+                    <p class='discreet' tal:condition='not:haveCollaborativeGroups'>
+                        This folder does not contain any collaborative groups.
+                    </p>
+                    <ul tal:condition='haveCollaborativeGroups'>
+                        <li tal:repeat='group collaborativeGroups'>
+                            <a href='#' tal:attributes='href group/getURL' tal:content='group/Title'>
+                                Some group
+                            </a>
+                        </li>
+                    </ul>
+
+                    <h2>Committees</h2>
+                    <p class='discreet' tal:condition='not:haveCommittees'>
+                        This folder does not contain any committees.
+                    </p>
+                    <ul tal:condition='haveCommittees'>
+                        <li tal:repeat='committee committees'>
+                            <a href='#' tal:attributes='href committee/getURL' tal:content='committee/Title'>
+                                Some committee
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </metal:content-core>
+        </metal:content-core>
+    </body>
+</html>

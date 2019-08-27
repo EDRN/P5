@@ -20,3 +20,4 @@ MASTER-PACKAGE
 robot_output.xml
 zexp-exports
 typescript
+_build

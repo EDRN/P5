@@ -15,6 +15,7 @@ from plone.memoize.view import memoize
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
 from zope.interface import Interface
+from .person import IPerson
 import plone.api
 
 
@@ -113,25 +114,10 @@ class IDataset(IKnowledgeObject):
         description=_(u'The name of the protocol or study that produced this data.'),
         required=False,
     )
-    # piUIDs = schema.List(
-    #     title=_(u'PI UIDs'),
-    #     description=_(u'UIDs of the PIs who produced this data.'),
-    #     required=False,
-    #     value_type=schema.TextLine(
-    #         title=_(u'PI UID'),
-    #         description=_(u'UID of a single PI who produced this data.'),
-    #         required=False
-    #     )
-    # )
-    piNames = schema.List(
-        title=_(u'PI Names'),
-        description=_(u'Names of the PIs who produced this data.'),
-        required=False,
-        value_type=schema.TextLine(
-            title=_(u'PI Name'),
-            description=_(u'Name of a single PI who produced this data.'),
-            required=False
-        )
+    investigator = RelationChoice(
+        title=_(u'Investigator'),
+        description=_(u'Principal investigator investigating this data.'),
+        source=CatalogSource(object_provides=IPerson.__identifier__)
     )
     # collaborativeGroupUID = schema.TextLine(
     #     title=_(u'Collaborative Group UID'),
@@ -161,24 +147,6 @@ IDataset.setTaggedValue('fti', 'eke.knowledge.dataset')
 IDataset.setTaggedValue('typeURI', u'http://edrn.nci.nih.gov/rdf/types.rdf#Dataset')
 
 
-# class View(grok.View):
-#     grok.context(IDataset)
-#     grok.require('zope2.View')
-#     @memoize
-#     def documentation(self):
-#         context = aq_inner(self.context)
-#         catalog = plone.api.portal.get_tool('portal_catalog')
-#         items = catalog(path=dict(query='/'.join(context.getPhysicalPath()), depth=1), sort_on='sortable_title')
-#         return [dict(title=i.Title, description=i.Description, url=i.getURL()) for i in items]
-#     def protocolID(self):
-#         context = aq_inner(self.context)
-#         if not context.identifier:
-#             return u'?'
-#         return context.identifier.split('/')[-1]
-#     def isEDRNProtocol(self):
-#         protocolID = self.protocolID()
-#         try:
-#             protocolID = int(protocolID)
-#             return protocolID < EDRN_PROTOCOL_ID_LIMIT
-#         except ValueError:
-#             return False
+class View(grok.View):
+    grok.context(IDataset)
+    grok.require('zope2.View')

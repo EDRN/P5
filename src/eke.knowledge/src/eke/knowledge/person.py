@@ -1,13 +1,19 @@
 
 # encoding: utf-8
 
+# from .protocol import IProtocol  # We can't import this because of a circular dependency
 from . import _
 from .publication import IPublication
 from Acquisition import aq_inner
 from five import grok
 from knowledgeobject import IKnowledgeObject
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from zope import schema
-import plone.api
+from zope.component import getUtility
+from zope.schema.interfaces import IVocabularyFactory
+from zope.schema.vocabulary import SimpleVocabulary
+from .utils import generateVocabularyFromIndex
+import plone.api, urlparse
 
 
 class IPerson(IKnowledgeObject):
@@ -87,9 +93,14 @@ class IPerson(IKnowledgeObject):
         description=_(u'Name of the site where this member works.'),
         required=False,
     )
-    piUID = schema.TextLine(
-        title=_(u'PI UID'),
-        description=_(u'Unique identifier of the principal investigator of the site where this person works.'),
+    piName = schema.TextLine(
+        title=_(u'PI Name'),
+        description=_(u"Name of the PI where this member works; if this IS the PI, then it's his/her own name."),
+        required=False,
+    )
+    memberType = schema.TextLine(
+        title=_(u'Member Type'),
+        description=_(u'Type of site to which this person belongs.'),
         required=False,
     )
     accountName = schema.TextLine(
@@ -120,7 +131,24 @@ class View(grok.View):
     grok.context(IPerson)
     grok.require('zope2.View')
     def protocols(self):
-        return ([], [])
+        context = aq_inner(self.context)
+        catalog = plone.api.portal.get_tool('portal_catalog')
+        results = catalog(
+            object_provides='eke.knowledge.protocol.IProtocol',  # Would use IProtocol.__identifier__ but circular dep
+            investigatorIdentifiers=context.identifier,
+            sort_on='sortable_title'
+        )
+        actives, inactives, found = [], [], set()
+        for i in results:
+            protocol = i.getObject()
+            url = protocol.absolute_url()
+            if url in found: continue
+            else: found.add(url)
+            if protocol.finishDate:
+                inactives.append(protocol)
+            else:
+                actives.append(protocol)
+        return actives, inactives
     def publications(self):
         context = aq_inner(self.context)
         catalog = plone.api.portal.get_tool('portal_catalog')
@@ -133,3 +161,31 @@ class View(grok.View):
         for i in results:
             publications.append(i.getObject())  # Any reason we're waking up objects here?
         return publications
+    def staffID(self):
+        context = aq_inner(self.context)
+        i = urlparse.urlparse(context.identifier).path.split(u'/')[-1]
+        return i if i else u'?'
+
+
+class PrincipalInvestigatorsVocabulary(object):
+    u'''Vocabulary for PIs'''
+    grok.implements(IVocabularyFactory)
+    def __call__(self, context):
+        return generateVocabularyFromIndex('piName', context)
+
+
+class SiteNamesVocabulary(object):
+    grok.implements(IVocabularyFactory)
+    def __call__(self, context):
+        return generateVocabularyFromIndex('siteName', context)
+
+
+class MemberTypesVocabulary(object):
+    grok.implements(IVocabularyFactory)
+    def __call__(self, context):
+        return generateVocabularyFromIndex('memberType', context)
+
+
+grok.global_utility(PrincipalInvestigatorsVocabulary, name=u'eke.knowledge.vocabularies.PrincipalInvestigators')
+grok.global_utility(SiteNamesVocabulary, name=u'eke.knowledge.vocabularies.SiteNames')
+grok.global_utility(MemberTypesVocabulary, name=u'eke.knowledge.vocabularies.MemberTypes')

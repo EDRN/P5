@@ -1,29 +1,35 @@
 <div metal:define-macro='columnOfCollaborativeGroupMembers'>
-    <tal:comment tal:replace='nothing'>A column of members goes here. Assumes "members" is the ReferenceList of Person objects.</tal:comment>
-    <table>
+    <tal:comment tal:replace='nothing'>A column of members goes here. Assumes "members" is the list of RelationValue objects.</tal:comment>
+    <table tal:define='portalURL context/portal_url'>
         <tbody>
             <tr tal:repeat='member members'>
-                <td tal:define='member member/to_object'>
-                    <a href='#' title='Dude of Awesomeness' tal:attributes='href member/absolute_url; title member/description;'
-                        tal:define='image member/getImage|nothing;'>
+                <td tal:define='deref nocall:member/to_object'>
+                    <a href='#' title='Dude of Awesomeness'
+                        tal:attributes='href deref/absolute_url; title deref/description;'
+                        tal:define='image nocall:deref/image|nothing;'>
                         <img
-                            src='#' alt='Photo'
-                            tal:condition='image'
-                            tal:replace='structure python:member.tag(scale="icon", css_class="cbShrinkidink")'
+                            tal:condition='nocall:image'
+                            src='#' width='100' height='100' alt='Photo' class='cbShrinkidink'
+                            tal:attributes='
+                                src string:${deref/absolute_url}/@@download/image/${image/filename};
+                                height image/_height|nothing;
+                                width image/_width|nothing;
+                            '
                         />
                         <img
                             src='silhouette.png' alt='No photograph available.' i18n:attributes='alt'
                             tal:condition='not:image'
-                            tal:attributes='src string:${context/++resource++no-photo.png};'
+                            tal:attributes='src string:${portalURL}/++resource++eke.knowledge/silhouette.png;'
                         />
                     </a>
                 </td>
-                <td>
-                    <a href='#' title='Dude of Awesomeness' tal:attributes='href member/absolute_url; title member/description;'
-                        tal:content='member/title'>
+                <td tal:define='deref nocall:member/to_object'>
+                    <a href='#' title='Dude of Awesomeness'
+                        tal:attributes='href deref/absolute_url; title deref/description;'
+                        tal:content='deref/title'>
                         J. Q. Awesome
                     </a>
-                </td>
+                 </td>
             </tr>
         </tbody>
     </table>

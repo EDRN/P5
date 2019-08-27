@@ -12,6 +12,7 @@
         <element value='File'/>
         <element value='Folder'/>
         <element value='Image'/>
+        <element value='Event'/>
     </property>
     <property name='schema'>eke.knowledge.groupspacefolder.IGroupSpaceFolder</property>
     <property name='klass'>plone.dexterity.content.Container</property>

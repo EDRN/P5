@@ -32,6 +32,17 @@
     </index>
     <column value='organs' />
 
+    <!-- Linking of collaborative groups to biomarkers, protocols, and datasets -->
+    <index name='collaborativeGroup' meta_type='KeywordIndex'>
+        <indexed_attr value='collaborativeGroup' />
+    </index>
+    <column value='collaborativeGroup' />
+
+    <!-- Display of protocols on people -->
+    <index name='investigatorIdentifiers' meta_type='KeywordIndex'>
+        <indexed_attr value='investigatorIdentifiers'/>
+    </index>
+
     <!-- Display of member type of ISite -->
     <index name='memberType' meta_type='KeywordIndex'>
         <indexed_attr value='memberType' />
@@ -64,13 +75,12 @@
     </index>
     <column value='proposal' />
 
-    <!-- Search for and display of publications for a person -->
+    <!-- Search for and display of publications for a person; this contains RDF subject URIs -->
     <index name='siteID' meta_type='FieldIndex'>
         <indexed_attr value='siteID'/>
     </index>
-    <!-- TODO: do we need a column for siteID too? -->
 
-    <!-- Display of PI in ISite, IProtocolFolder -->
+    <!-- Display of PI in ISite, IProtocolFolder, and members-list -->
     <index name='piObjectID' meta_type='FieldIndex'>
         <indexed_attr value='piObjectID' />
     </index>
@@ -92,5 +102,17 @@
     </index>
     <column value='indicatedBodySystems'/>
 
+    <!-- Selection of projects versus protocols in collaborative groups -->
+    <index name='project' meta_type='FieldIndex'>
+        <indexed_attr value='project' />
+    </index>
+
+    <!-- Support the members-list faceted selector -->
+    <index name='siteName' meta_type='FieldIndex'>
+        <indexed_attr value='siteName' />
+    </index>
+    <index name='memberType' meta_type='FieldIndex'>
+        <indexed_attr value='memberType' />
+    </index>
 
 </object>

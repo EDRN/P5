@@ -1,10 +1,13 @@
 Knowledge objects and RDF ingest for the EDRN Knowledge Environment.
 
+TODO: check the numbers on all these ingest checks. Were 19 objects created
+correct? 6 updated correct?
+
 
 Functional Tests
 ================
 
-First, we shall require a test browser::
+First, we shall require a test browser:: 
 
     >>> app = layer['app']
     >>> from plone.testing.z2 import Browser
@@ -168,7 +171,24 @@ Ingesting::
     >>> keys = publicationsFolder.keys()
     >>> keys.sort()
     >>> keys
-    ['a-combination-of-muc5ac-and-ca19-9-improves-the-diagnosis-of-pancreatic-cancer-a-multicenter-study', 'association-between-combined-tmprss2-erg-and-pca3-rna-urinary-testing-and-detection-of-aggressive-prostate-cancer', 'early-detection-of-nsclc-with-scfv-selected-against-igm-autoantibody', 'evaluation-of-serum-protein-profiling-by-surface-enhanced-laser-desorption-ionization-time-of-flight-mass-spectrometry-for-the-detection-of-prostate-cancer-i-assessment-of-platform-reproducibility']
+    ['15613711-evaluation-of-serum-protein-profiling-by', '23585862-early-detection-of-nsclc-with-scfv', '27845339-a-combination-of-muc5ac-and-ca19-9', '28520829-association-between-combined-tmprss2-erg']
+    >>> publication = publicationsFolder['15613711-evaluation-of-serum-protein-profiling-by']
+    >>> publication.title
+    u'Evaluation of serum protein profiling by surface-enhanced laser desorption/ionization time-of-flight mass spectrometry for the detection of prostate cancer: I. Assessment of platform reproducibility.'
+    >>> authors = list(publication.authors)
+    >>> authors.sort()
+    >>> authors
+    [u'Adam BL', u'Banez LL', u'Bigbee WL', u'Campos D', u'Cazares LH', u'Chan DW', u'Feng Z', u'Grizzle WE', u'Izbicka E', u'Kagan J', u'Malik G', u'McLerran D', u'Moul JW', u'Partin A', u'Prasanna P', u'Rosenzweig J', u'Semmes OJ', u'Sokoll LJ', u'Srivastava S', u'Srivastava S', u'Thompson I', u'Welsh MJ', u'White N', u'Winget M', u'Yasui Y', u'Zhang Z', u'Zhu L']
+    >>> publication.volume
+    u'51'
+    >>> publication.journal
+    u'Clin. Chem.'
+    >>> publication.pubMedID
+    u'15613711'
+    >>> publication.year
+    u'2005'
+    >>> publication.siteID
+    u'http://edrn.nci.nih.gov/data/sites/815'
 
 The statistical graphics made a comeback::
 
@@ -201,7 +221,7 @@ Ingesting::
     >>> transaction.commit()
     >>> browser.open(portalURL + '/@@ingestRDF')
     >>> browser.contents
-    '...RDF Ingest Report...Objects Created (19)...Objects Updated (2)...'
+    '...RDF Ingest Report...Objects Created (19)...'
     >>> len(sitesFolder.keys())
     2
     >>> keys = sitesFolder.keys()
@@ -211,7 +231,7 @@ Ingesting::
     >>> site = sitesFolder['240-vanderbilt-ingram-cancer-center']
     >>> site.identifier
     u'http://edrn.nci.nih.gov/data/sites/240'
-    >>> site.siteID
+    >>> site.dmccSiteID
     u'240'
     >>> site.piName
     u'Massion, Pierre'
@@ -332,8 +352,8 @@ And the statistical graphics are back::
     '...<style>...<script>...datasetColor...'
 
 
-Collaborative Groups
-====================
+Groups
+======
 
 First, a folder to hold them all, and in the darkness bind them::
 
@@ -344,7 +364,9 @@ First, a folder to hold them all, and in the darkness bind them::
     >>> l.click()
     >>> browser.getControl(name='form.widgets.title').value = u'Collaborative Groups'
     >>> browser.getControl(name='form.widgets.description').value = u'Some testing collaborative groups.'
+    >>> browser.getControl(name='form.widgets.ingestEnabled:list').value = True
     >>> browser.getControl(name='form.buttons.save').click()
+    >>> browser.open(portalURL + '/collaborative-groups/content_status_modify?workflow_action=publish')
     >>> 'collaborative-groups' in portal.keys()
     True
     >>> collaborationsFolder = portal['collaborative-groups']
@@ -352,24 +374,62 @@ First, a folder to hold them all, and in the darkness bind them::
     u'Collaborative Groups'
     >>> collaborationsFolder.description
     u'Some testing collaborative groups.'
+    >>> collaborationsFolder.ingestEnabled
+    True
+    >>> collaborationsFolder.rdfDataSources = [u'testscheme://localhost/rdf/committees']
+    >>> len(collaborationsFolder.rdfDataSources)
+    1
+    >>> collaborationsFolder.rdfDataSources[0]
+    u'testscheme://localhost/rdf/committees'
+    >>> transaction.commit()    
+
+
+Group Spaces
+------------
 
 Now let's try group workspaces::
 
+    >>> browser.open(portalURL + '/collaborative-groups')
     >>> l = browser.getLink(id='eke-knowledge-groupspacefolder')
     >>> l.url.endswith('++add++eke.knowledge.groupspacefolder')
     True
     >>> l.click()
     >>> browser.getControl(name='form.widgets.title').value = u'MySpace'
     >>> browser.getControl(name='form.widgets.description').value = u'A defunct workspace.'
+    >>> browser.getControl(name='form.widgets.identifier').value = u'urn:group:myspace'
     >>> browser.getControl(name='form.buttons.save').click()
+    >>> browser.open(portalURL + '/collaborative-groups/myspace/content_status_modify?workflow_action=publish')
+    >>> browser.open(portalURL + '/collaborative-groups/myspace/index_html/content_status_modify?workflow_action=publish')
+    >>> group = collaborationsFolder['myspace']
+
+The index page is automatically created::
+
+    >>> groupIndex = group['index_html']
+    >>> from z3c.relationfield import RelationValue
+    >>> from zope.intid.interfaces import IIntIds
+    >>> from z3c.relationfield import RelationValue
+    >>> intIDUtil = getUtility(IIntIds)
+    >>> groupIndex.chair = RelationValue(intIDUtil.getId(site['antic-sanja']))
+    >>> groupIndex.coChair = RelationValue(intIDUtil.getId(site['banerjee-priyanka']))
+    >>> groupIndex.members = [RelationValue(intIDUtil.getId(site[i])) for i in ('spencer-brady', 'sullivan-amy')]
+    >>> from zope.lifecycleevent import ObjectModifiedEvent
+    >>> from zope.event import notify
+    >>> notify(ObjectModifiedEvent(groupIndex))
+    >>> transaction.commit()
+    >>> groupIndex.chair.to_object.title
+    u'Antic, Sanja'
+    >>> groupIndex.coChair.to_object.title
+    u'Banerjee, Priyanka'
+    >>> members = [i.to_object.title for i in groupIndex.members]
+    >>> members.sort()
+    >>> members
+    [u'Spencer, Brady', u'Sullivan, Amy']
 
 Group workspaces—which are folders—should automatically create an index page
-that's the default view of the folder, turn off the right-side portlets, and
-include their special index page::
+that's the default view of the folder, and turn off the right-side portlets::
 
     >>> 'portal-column-two' in browser.contents
     False
-    >>> group = collaborationsFolder['myspace']
     >>> 'index_html' in group.keys()
     True
     >>> group.getDefaultPage()
@@ -399,28 +459,144 @@ But only if you're privileged::
     >>> 'Add comment' in unprivilegedBrowser.contents
     False
 
-.. Let's put some members into the group::
+Check out these members::
 
-..     >>> group.chair = RelationValue geeba ><
+    >>> browser.contents
+    '...Chair...Antic, Sanja...Co-Chair...Banerjee, Priyanka...Members...Spencer, Brady...Sullivan, Amy...'
 
-.. Plus tabs for the group's stuff (or there will be)::
+Plus tabs for the group's stuff::
 
-..     >>> overview = browser.contents.index('fieldset-overview')
-..     >>> documents = browser.contents.index('fieldset-documents')
-..     >>> overview < documents
-..     True
+    >>> overview = browser.contents.index('overviewTab')
+    >>> calendar = browser.contents.index('calendarTab')
+    >>> documents = browser.contents.index('documentsTab')
+    >>> overview < calendar < documents
+    True
 
-.. Since we're logged in, the special note about logging in to view additional
-.. information doesn't appear (eventually)::
+Since we're logged in, the special note about logging in to view additional
+information doesn't appear (eventually)::
 
-..     >>> 'If you are a member of this group,' in browser.contents
-..     False
+    >>> 'If you are a member of this group,' in browser.contents
+    False
 
-.. But an unprivileged user does get it (some day)::
 
-..     >>> unprivilegedBrowser.open(portalURL + '/collaborative-groups/myspace')
-..     >>> unprivilegedBrowser.contents
-..     '...If you are a member of this group...log in...'
+Collaborative Groups
+--------------------
+
+These are group workspaces but linked data::
+
+    >>> browser.open(portalURL + '/collaborative-groups')
+    >>> l = browser.getLink(id='eke-knowledge-collaborativegroupfolder')
+    >>> l.url.endswith('++add++eke.knowledge.collaborativegroupfolder')
+    True
+    >>> l.click()
+    >>> browser.getControl(name='form.widgets.title').value = u'Guts'
+    >>> browser.getControl(name='form.widgets.description').value = u'The guts collaborative group.'
+    >>> browser.getControl(name='form.widgets.identifier').value = u'urn:group:guts'
+    >>> browser.getControl(name='form.buttons.save').click()
+    >>> browser.open(portalURL + '/collaborative-groups/guts/content_status_modify?workflow_action=publish')
+    >>> browser.open(portalURL + '/collaborative-groups/guts/index_html/content_status_modify?workflow_action=publish')
+    >>> group = collaborationsFolder['guts']    
+
+Just like group spaces, the index page is automatically created::
+
+    >>> groupIndex = group['index_html']
+    >>> from z3c.relationfield import RelationValue
+    >>> from zope.intid.interfaces import IIntIds
+    >>> from z3c.relationfield import RelationValue
+    >>> intIDUtil = getUtility(IIntIds)
+    >>> groupIndex.chair = RelationValue(intIDUtil.getId(site['antic-sanja']))
+    >>> groupIndex.coChair = RelationValue(intIDUtil.getId(site['banerjee-priyanka']))
+    >>> groupIndex.members = [RelationValue(intIDUtil.getId(site[i])) for i in ('spencer-brady', 'sullivan-amy')]
+    >>> groupIndex.biomarkers = []
+    >>> groupIndex.protocols = [RelationValue(intIDUtil.getId(protocolsFolder[i])) for i in protocolsFolder.keys()]
+    >>> groupIndex.datasets = [RelationValue(intIDUtil.getId(dataFolder[i])) for i in dataFolder.keys()]
+    >>> from zope.lifecycleevent import ObjectModifiedEvent
+    >>> from zope.event import notify
+    >>> notify(ObjectModifiedEvent(groupIndex))
+    >>> transaction.commit()
+    >>> groupIndex.chair.to_object.title
+    u'Antic, Sanja'
+    >>> groupIndex.coChair.to_object.title
+    u'Banerjee, Priyanka'
+    >>> members = [i.to_object.title for i in groupIndex.members]
+    >>> members.sort()
+    >>> members
+    [u'Spencer, Brady', u'Sullivan, Amy']
+    >>> groupIndex.biomarkers
+    []
+    >>> groupProtocols = [i.to_object.title for i in groupIndex.protocols]
+    >>> groupProtocols.sort()
+    >>> groupProtocols
+    [u'Hepatocellular carcinoma Early Detection Strategy study', u'Lung Reference Set A Application:  Edward Hirschowitz - University of Kentucky (2009)']
+    >>> groupDatasets = [i.to_object.title for i in groupIndex.datasets]
+    >>> groupDatasets.sort()
+    >>> groupDatasets
+    [u'GSTP1 Methylation', u'University of Pittsburg Ovarian Data']
+
+It's also set as the display for the collaborative group::
+
+    >>> 'index_html' in group.keys()
+    True
+    >>> group.getDefaultPage()
+    'index_html'
+
+And we also make room::
+
+    >>> 'portal-column-two' in browser.contents
+    False
+
+Also like plain group spaces, it uses the constrain-types feature to keep the
+"index" type off the menu::
+
+    >>> from Products.CMFPlone.interfaces.constrains import ENABLED, IConstrainTypes
+    >>> i = IConstrainTypes(group)
+    >>> i.getConstrainTypesMode() == ENABLED
+    True
+
+And you can comment::
+
+    >>> browser.open(portalURL + '/collaborative-groups/guts')
+    >>> 'Add comment' in browser.contents
+    True
+
+But only if you're privileged::
+
+    >>> unprivilegedBrowser.open(portalURL + '/collaborative-groups/guts')
+    >>> 'Add comment' in unprivilegedBrowser.contents
+    False
+
+And there are members::
+
+    >>> browser.contents
+    '...Chair...Antic, Sanja...Co-Chair...Banerjee, Priyanka...Members...Spencer, Brady...Sullivan, Amy...'
+
+And space for stuff:
+
+    >>> overview = browser.contents.index('overviewTab')
+    >>> biomarkers = browser.contents.index('biomarkersTab')
+    >>> protocols = browser.contents.index('protocolsTab')
+    >>> data = browser.contents.index('dataTab')
+    >>> calendar = browser.contents.index('calendarTab')
+    >>> documents = browser.contents.index('documentsTab')
+    >>> overview < biomarkers < protocols < data < calendar < documents
+    True
+
+Note also that, due to lack of room, we've combined Projects and Protocols::
+
+    >>> browser.contents
+    '...Projects/Protocols...'
+
+
+Committees RDF
+--------------
+
+Note that there's RDF ingest for the ``eke.knowledge.collaborationsfolder``::
+
+    >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'sites', u'protocols', u'datasets', u'collaborative-groups']
+    >>> transaction.commit()
+    >>> browser.open(portalURL + '/@@ingestRDF')
+    >>> browser.contents
+    '...Objects Created (37)...'
 
 
 Miscellaneous Resources
@@ -442,11 +618,11 @@ Miscellaneous Resources
 
 Ingesting::
 
-    >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'sites', u'protocols', u'datasets', u'resources']
+    >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'sites', u'protocols', u'datasets', u'collaborative-groups', u'resources']
     >>> transaction.commit()
     >>> browser.open(portalURL + '/@@ingestRDF')
     >>> browser.contents
-    '...RDF Ingest Report...Objects Created (19)...'
+    '...RDF Ingest Report...Objects Created (19)...Objects Updated (6)...'
     >>> len(resourcesFolder.keys())
     2
     >>> keys = resourcesFolder.keys()
@@ -561,7 +737,8 @@ And check it out::
     >>> linkedPubs = [i.to_path for i in biomarker.publications]
     >>> linkedPubs.sort()
     >>> linkedPubs
-    ['/plone/publications/a-combination-of-muc5ac-and-ca19-9-improves-the-diagnosis-of-pancreatic-cancer-a-multicenter-study', '/plone/publications/association-between-combined-tmprss2-erg-and-pca3-rna-urinary-testing-and-detection-of-aggressive-prostate-cancer', '/plone/publications/early-detection-of-nsclc-with-scfv-selected-against-igm-autoantibody', '/plone/publications/evaluation-of-serum-protein-profiling-by-surface-enhanced-laser-desorption-ionization-time-of-flight-mass-spectrometry-for-the-detection-of-prostate-cancer-i-assessment-of-platform-reproducibility']
+    ['/plone/publications/15613711-evaluation-of-serum-protein-profiling-by', '/plone/publications/23585862-early-detection-of-nsclc-with-scfv', '/plone/publications/27845339-a-combination-of-muc5ac-and-ca19-9', '/plone/publications/28520829-association-between-combined-tmprss2-erg']
+
 
 Child objects work too::
 
@@ -599,7 +776,7 @@ Did it work?
     >>> linkedPubs = [i.to_path for i in biomarkerBodySystem.publications]
     >>> linkedPubs.sort()
     >>> linkedPubs
-    ['/plone/publications/a-combination-of-muc5ac-and-ca19-9-improves-the-diagnosis-of-pancreatic-cancer-a-multicenter-study', '/plone/publications/association-between-combined-tmprss2-erg-and-pca3-rna-urinary-testing-and-detection-of-aggressive-prostate-cancer', '/plone/publications/early-detection-of-nsclc-with-scfv-selected-against-igm-autoantibody', '/plone/publications/evaluation-of-serum-protein-profiling-by-surface-enhanced-laser-desorption-ionization-time-of-flight-mass-spectrometry-for-the-detection-of-prostate-cancer-i-assessment-of-platform-reproducibility']
+    ['/plone/publications/15613711-evaluation-of-serum-protein-profiling-by', '/plone/publications/23585862-early-detection-of-nsclc-with-scfv', '/plone/publications/27845339-a-combination-of-muc5ac-and-ca19-9', '/plone/publications/28520829-association-between-combined-tmprss2-erg']
 
 But it can have child objects too::
 
@@ -637,7 +814,7 @@ Working? Yes::
     >>> linkedPubs = [i.to_path for i in bodySystemStudy.publications]
     >>> linkedPubs.sort()
     >>> linkedPubs
-    ['/plone/publications/a-combination-of-muc5ac-and-ca19-9-improves-the-diagnosis-of-pancreatic-cancer-a-multicenter-study', '/plone/publications/association-between-combined-tmprss2-erg-and-pca3-rna-urinary-testing-and-detection-of-aggressive-prostate-cancer', '/plone/publications/early-detection-of-nsclc-with-scfv-selected-against-igm-autoantibody', '/plone/publications/evaluation-of-serum-protein-profiling-by-surface-enhanced-laser-desorption-ionization-time-of-flight-mass-spectrometry-for-the-detection-of-prostate-cancer-i-assessment-of-platform-reproducibility']
+    ['/plone/publications/15613711-evaluation-of-serum-protein-profiling-by', '/plone/publications/23585862-early-detection-of-nsclc-with-scfv', '/plone/publications/27845339-a-combination-of-muc5ac-and-ca19-9', '/plone/publications/28520829-association-between-combined-tmprss2-erg']
 
 Oh but we're not done::
 
@@ -703,6 +880,8 @@ OK that's enough. RDF is the order of the day::
     u'A sticky bio-marker.'
     >>> a1.shortName
     u'A1'
+    >>> a1.collaborativeGroup
+    [u'G.I. and Other Associated Cancers Research Group']
     >>> u'Approach' in a1.bmAliases, u'Advent' in a1.bmAliases, u'Bigo' in a1.bmAliases
     (True, True, True)
     >>> a1.biomarkerType
@@ -710,7 +889,7 @@ OK that's enough. RDF is the order of the day::
     >>> a1.identifier
     u'http://edrn/bmdb/a1'
     >>> a1.publications[0].to_object.title
-    u'A Combination of MUC5AC and CA19-9 Improves the Diagnosis of Pancreatic Cancer: A Multicenter Study.'
+    u'Evaluation of serum protein profiling by surface-enhanced laser desorption/ionization time-of-flight mass spectrometry for the detection of prostate cancer: I. Assessment of platform reproducibility.'
     >>> a1.resources[0].to_object.title
     u'A web index'
     >>> a1.datasets[0].to_object.title
@@ -737,7 +916,7 @@ OK that's enough. RDF is the order of the day::
     >>> o1.identifier
     u'http://edrn/bmdb/a1/o1'
     >>> o1.publications[0].to_object.title
-    u'A Combination of MUC5AC and CA19-9 Improves the Diagnosis of Pancreatic Cancer: A Multicenter Study.'
+    u'Evaluation of serum protein profiling by surface-enhanced laser desorption/ionization time-of-flight mass spectrometry for the detection of prostate cancer: I. Assessment of platform reproducibility.'
     >>> o1.keys()
     ['lung-reference-set-a-application-edward-hirschowitz-university-of-kentucky-2009']
     >>> s1 = o1['lung-reference-set-a-application-edward-hirschowitz-university-of-kentucky-2009']
@@ -821,3 +1000,13 @@ Ingesting also links protocols to biomarkers::
     .. >>> a1.affProtFuncSiteCount
     .. '0'
 
+
+After all this testing, the ``collaborativeGroup`` index should hae quite a
+few values by now::
+
+    >>> import plone.api
+    >>> catalog = plone.api.portal.get_tool('portal_catalog')
+    >>> groupValues = list(catalog.uniqueValuesFor('collaborativeGroup'))
+    >>> groupValues.sort()
+    >>> groupValues
+    [u'Breast/GYN', u'G.I. and Other Associated Cancers Research Group', u'Lung and Upper Aerodigestive Cancers Research Group', u'Prostate and Urologic']

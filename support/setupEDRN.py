@@ -12,6 +12,7 @@ from node.ext.ldap.interfaces import ILDAPProps
 from plone.app.dexterity.behaviors.exclfromnav import IExcludeFromNavigation
 from plone.app.textfield.value import RichTextValue
 from plone.dexterity.utils import createContentInContainer
+from plone.namedfile.file import NamedBlobFile
 from plone.portlet.static.static import Assignment as StaticPortletAssignment
 from plone.portlets.interfaces import IPortletManager, IPortletAssignmentMapping
 from plone.registry.interfaces import IRegistry
@@ -23,15 +24,15 @@ from Testing import makerequest
 from zope.component import getUtility, getMultiAdapter
 from zope.component.hooks import setSite
 from zope.container.interfaces import INameChooser
-import sys, logging, transaction, argparse, os, os.path, plone.api, csv, codecs
+import sys, logging, transaction, argparse, os, os.path, plone.api, csv, codecs, json, getpass
 
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)-8s %(message)s')
 app = globals().get('app', None)  # ``app`` comes from ``instance run`` magic.
-_argParser = argparse.ArgumentParser(prog='admin.py', description=u'Adds a Manager user')
-_argParser.add_argument('username', help=u'Zope admin user')
-_argParser.add_argument('password', help=u"Zope admin password")
-_argParser.add_argument('ldapPassword', help=u"LDAP password")
+_argParser = argparse.ArgumentParser(prog='setupEDRN.py', description=u'Adds a Manager user')
+_argParser.add_argument('--username', default='zope', help=u'Zope admin user, defaults to %(default)s')
+_argParser.add_argument('--password', default=None, help=u"Zope admin password, prompted if not given")
+_argParser.add_argument('--ldapPassword', default=None, help=u"LDAP password, prompted if not given")
 
 
 _DATASETS_SUMMARY_URL = u'https://edrn.jpl.nasa.gov/cancerdataexpo/summarizer-data/dataset/@@summary'
@@ -44,6 +45,15 @@ review, and post the results as it is available. EDRN also provides secure acces
 information not available to the public that is currently under review by EDRN research groups. If you have
 access to this information, please ensure that you are logged in. If you are unsure or would like access,
 please <a href="mailto:ic-portal@jpl.nasa.gov">contact the operator</a> for more information.</p>
+'''
+_COLLAB_GROUPS_BODY = u'''<h2>Group Work Spaces</h2>
+<ul><li><a href='resolveuid/{brl}'>Biomarker Reference Laboratories</a></li></ul>
+<h2>Organ Collaborative Groups</h2>
+<ul>
+<li><a href='resolveuid/{breast}'>Breast and Gynecologic Cancers Research Group</a></li>
+<li><a href='resolveuid/{gi}'>G.I. and Other Associated Cancers Research Group</a></li>
+<li><a href='resolveuid/{lung}'>Lung and Upper Aerodigestive Cancers Research Group</a></li>
+<li><a href='resolveuid/{prostate}'>Prostate and Urologic Cancers Research Group</a></li>
 '''
 _QUICKLINKS_BODY = u'''<div class='edrnQuickLinks'>
     <ul id='edrn-quicklinks'>
@@ -58,8 +68,8 @@ _QUICKLINKS_BODY = u'''<div class='edrnQuickLinks'>
             </a>
         </li>
         <li id='q-collabGroups'>
-            <a href='collaborative-groups'>
-                Collaborative Groups
+            <a href='resolveuid/{groups}'>
+                Groups and Committees
             </a>
         </li>
         <li id='q-advocates'>
@@ -77,16 +87,6 @@ _QUICKLINKS_BODY = u'''<div class='edrnQuickLinks'>
         </li>
         <li id='q-members'>
             <a href='members-list'>Member Directory</a>
-        </li>
-        <li id='q-committees'>
-            <a href='committees'>
-                Committees
-            </a>
-        </li>
-        <li id='q-standards'>
-            <a href='https://edrn.jpl.nasa.gov/standards/'>
-                Biomarker Informatics Standards
-            </a>
         </li>
         <li id='q-dcp'>
             <a class='link-plain' href='https://prevention.cancer.gov/'>
@@ -113,6 +113,7 @@ _BLANK_UIDS = {
     u'informatics': u'Unknown',
     u'network-consulting-team': u'Unknown',
     u'sites': u'Unknown',
+    u'groups': u'Unknown',
 }
 
 
@@ -161,13 +162,16 @@ def _applyFacetsToBiomarkers(context):
     )
     criteria.add('text', 'top', 'default', title=u'Search', hidden=False, index='SearchableText',
         wildcard=True, count=False, onlyallelements=True)
-    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=False, default='sortable_title')
+    # Shouldn't be hidden but we want better sorting first
+    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=True, default='sortable_title')
     IFacetedLayout(context).update_layout('faceted_biomarkers_view')
 
 
 def _setupBiomarkers(context):
     u'''Do extra stuff for biomarkers. Must be defined before _RDF_FOLDERS below.'''
-    context.bmoDataSource = u'https://edrn.jpl.nasa.gov/bmdb/rdf/biomarkerorgans?qastate=all'
+    # Disable while BMDB is down:
+    # context.bmoDataSource = u'https://edrn.jpl.nasa.gov/bmdb/rdf/biomarkerorgans?qastate=all'
+    context.bmoDataSource = u'file:' + os.path.join(os.environ['EDRN_PORTAL_HOME'], u'data', u'bio-organ.rdf')
     context.bmuDataSource = u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/biomuta/@@rdf'
     context.idDataSource = u'https://edrn.jpl.nasa.gov/cancerdataexpo/idsearch'
     context.bmSumDataSource = u'https://edrn.jpl.nasa.gov/cancerdataexpo/summarizer-data/biomarker/@@summary'
@@ -215,7 +219,8 @@ def _applyFacetsToPublications(context):
         wildcard=True, onlyallelements=True)
     criteria.add('text', 'top', 'advanced', title=u'Abstract', hidden=False, index='Description', count=False,
         wildcard=True, onlyallelements=True)
-    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=False, default='sortable_title')
+    # Shouldn't be hidden but we want better sorting first
+    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=True, default='sortable_title')
     IFacetedLayout(context).update_layout('faceted_publications_view')
 
 
@@ -259,7 +264,8 @@ def _applyFacetsToDatasets(context):
     )
     criteria.add('text', 'top', 'default', title=u'Search', hidden=False, index='SearchableText',
         wildcard=True, count=False, onlyallelements=True)
-    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=False, default='sortable_title')
+    # Shouldn't be hidden but we want better sorting first
+    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=True, default='sortable_title')
     IFacetedLayout(context).update_layout('faceted_datasets_view')
 
 
@@ -282,6 +288,7 @@ _TO_IMPORT = (
     'beta',
     'cancer-bioinformatics-workshop',
     'c-edrn',
+    'colops',
     'docs',
     'EDRN RFA guidelines-v4.pdf',
     'FOA-guidelines',
@@ -298,13 +305,22 @@ _PEOPLE_RDF = u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/registered-per
 _RDF_FOLDERS = (
     ('resources', 'eke.knowledge.bodysystemfolder', u'Body Systems', u'Body systems are organs of the body.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/body-systems/@@rdf'], _null),
     ('resources', 'eke.knowledge.diseasefolder', u'Diseases', u'Ailements affecting body systems.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/diseases/@@rdf'], _null),
-    ('resources', 'eke.knowledge.resourcefolder', u'Miscellaneous Resources', u'Various other web-accessible resources.', [u'https://edrn.jpl.nasa.gov/bmdb/rdf/resources'], _null),
-    (None, 'eke.knowledge.publicationfolder', u'Publications', u'Items published by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf', u'http://edrn.jpl.nasa.gov/bmdb/rdf/publications'], _setupPublications),
+    ('resources', 'eke.knowledge.resourcefolder', u'Miscellaneous Resources', u'Various other web-accessible resources.', [u'file:' + os.path.join(os.environ['EDRN_PORTAL_HOME'], u'data', u'bmdb-resources.rdf')], _null),
+# Disable while BMDB is down:
+#    ('resources', 'eke.knowledge.resourcefolder', u'Miscellaneous Resources', u'Various other web-accessible resources.', [u'https://edrn.jpl.nasa.gov/bmdb/rdf/resources'], _null),
+    (None, 'eke.knowledge.publicationfolder', u'Publications', u'Items published by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf', u'file:' + os.path.join(os.environ['EDRN_PORTAL_HOME'], u'data', u'bmdb-pubs.rdf')], _setupPublications),
+# Disable while BMDB is down:
+#    (None, 'eke.knowledge.publicationfolder', u'Publications', u'Items published by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf', u'http://edrn.jpl.nasa.gov/bmdb/rdf/publications'], _setupPublications),
     (None, 'eke.knowledge.sitefolder', u'Sites', u'Institutions and PIs in EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/sites/@@rdf'], _setupSites),
     (None, 'eke.knowledge.protocolfolder', u'Protocols', u'Studies pursued by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/protocols/@@rdf'], _null),
-    (None, 'eke.knowledge.datasetfolder', u'Science Data', u'Data collected by EDRN.', [u'https://edrn.nci.nih.gov/miscellaneous-knowledge-system-artifacts/science-data-rdf/at_download/file'], _setupDatasets),
-    (None, 'eke.knowledge.biomarkerfolder', u'Biomarkers', u'Indicators for cancer.', [u'https://edrn.jpl.nasa.gov/bmdb/rdf/biomarkers?qastate=all'], _setupBiomarkers),
+    (None, 'eke.knowledge.datasetfolder', u'Data', u'Data collected by EDRN.', [u'https://edrn.nci.nih.gov/miscellaneous-knowledge-system-artifacts/science-data-rdf-1/at_download/file'], _setupDatasets),
+# Disable while BMDB is down:
+#    (None, 'eke.knowledge.biomarkerfolder', u'Biomarkers', u'Indicators for cancer.', [u'https://edrn.jpl.nasa.gov/bmdb/rdf/biomarkers?qastate=all'], _setupBiomarkers),
+    (None, 'eke.knowledge.biomarkerfolder', u'Biomarkers', u'Indicators for cancer.', [u'file:' + os.path.join(os.environ['EDRN_PORTAL_HOME'], u'data', u'bio.rdf')], _setupBiomarkers),
+    (None, 'eke.knowledge.collaborationsfolder', u'Groups', u'Collaborative Groups and Committees.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/committees/@@rdf'], _null),
 )
+# Use this to turn off all RDF during development; really speeds things up:
+# _RDF_FOLDERS = tuple()
 
 
 # From https://docs.python.org/2/library/csv.html
@@ -448,8 +464,8 @@ def _setSiteProposals(portal):
                 logging.info('No sites matching %s found; skipping', identifier)
                 continue
             elif len(results) > 1:
-                logging.critical('Multiple sites matching %s found (%d); should not happen', results, len(results))
-                raise Exception('Multiple sites matching %s found (%d); should not happen' % (results, len(results)))
+                logging.critical('Multiple sites matching %s found (%d); should not happen', identifier, len(results))
+                raise Exception('Multiple sites matching %s found (%d); should not happen' % (identifier, len(results)))
             else:
                 site = results[0].getObject()
                 site.organs = organs.split(u',')
@@ -551,9 +567,11 @@ def _doStaticQuickLinksPortlet(portal, uids):
 
 
 def _doDMCCRSSPortlet(portal):
+    frontPage = portal.get('front-page')
+    if frontPage is None: return
     assignment = DMCCRSSPortletAssignment()
     manager = getUtility(IPortletManager, u'plone.rightcolumn')
-    mapping = getMultiAdapter((portal, manager), IPortletAssignmentMapping)
+    mapping = getMultiAdapter((frontPage, manager), IPortletAssignmentMapping)
     chooser = INameChooser(mapping)
     mapping[chooser.chooseName(None, assignment)] = assignment
 
@@ -561,11 +579,275 @@ def _doDMCCRSSPortlet(portal):
 def _setGlobalNavOrder(portal):
     u'''Set the order of global navigation'''
     portal = plone.api.portal.get()
-    items = ['biomarkers', 'resources', 'publications', 'protocols', 'science-data', 'about-edrn']
+    # Change order per  HK email 3F252A07-9FC1-47AB-A29A-DAF3A6A1B141@jpl.nasa.gov:
+    items = ['biomarkers', 'protocols', 'data', 'publications', 'resources', 'about-edrn']
     items.reverse()
     for item in items:
         if item in portal.keys():
             portal.moveObjectsToTop([item])
+
+
+def _addCollaborativeGroups(portal):
+    if 'collaborative-groups' in portal.keys():
+        portal.manage_delObjects(['collaborative-groups'])
+    folder = createContentInContainer(
+        portal, 'Folder', id='collaborative-groups', title=u'Collaborative Groups',
+        description=u'Groups that work (and, in fact, collaborate) together.'
+    )
+    adapter = IExcludeFromNavigation(folder, None)
+    if adapter is not None:
+        adapter.exclude_from_nav = True
+    brl = createContentInContainer(
+        folder, 'eke.knowledge.groupspacefolder', title=u'Biomarker Reference Laboratories',
+        description=u'Biomarker Reference Laboratories Group Pages.'
+    )
+    breast = createContentInContainer(
+        folder, 'eke.knowledge.collaborativegroupfolder', title=u'Breast and Gynecologic Cancers Research Group',
+        description=u'Collaborative group for those working on breast and gynecologic cancers.'
+    )
+    gi = createContentInContainer(
+        folder, 'eke.knowledge.collaborativegroupfolder', title=u'G.I. and Other Associated Cancers Research Group',
+        description=u'Collaborative group for those working on GI and other associated cancers.'
+    )
+    lung = createContentInContainer(
+        folder, 'eke.knowledge.collaborativegroupfolder', title=u'Lung and Upper Aerodigestive Cancers Research Group',
+        description=u'Collaborative group for those working on lung and upper aerodigestive associated cancers.'
+    )
+    prostate = createContentInContainer(
+        folder, 'eke.knowledge.collaborativegroupfolder', title=u'Prostate and Urologic Cancers Research Group',
+        description=u'Collaborative group for those working on prostate and urologic cancers.'
+    )
+    body = _COLLAB_GROUPS_BODY.format(
+        brl=brl.UID(), breast=breast.UID(), gi=gi.UID(), lung=lung.UID(), prostate=prostate.UID()
+    )
+    createContentInContainer(
+        folder, 'Document', id='index_html', title=u'Collaborative Groups',
+        description=u'Groups that work (and, in fact, collaborate) together.',
+        text=RichTextValue(body, 'text/html', 'text/x-html-safe')
+    )
+    folder.setDefaultPage('index_html')
+    _publish(folder)
+
+
+def _addCommittees(portal):
+    if 'committees' in portal.keys():
+        portal.manage_delObjects(['committees'])
+    folder = createContentInContainer(
+        portal, 'Folder', id='committees', title=u'Committees',
+        description=u'The following describes the committees, subcommittees, and other components of EDRN.'
+    )
+    adapter = IExcludeFromNavigation(folder, None)
+    if adapter is not None:
+        adapter.exclude_from_nav = True
+    for name in (
+        u'Associate Member',
+        u'Biomarker Developmental Laboratories',
+        u'Biomarker Reference Laboratories',
+        u'Clinical Epidemiology and Validation Center',
+        u'Collaboration and Publication Subcommittee',
+        u'Communication and Workshop Subcommittee',
+        u'Data Management and Coordinating Center',
+        u'Data Sharing and Informatics Subcommittee',
+        u'ERNE Working Group',
+        u'Executive Committee',
+        u'Jet Propulsion Laboratory',
+        u'National Cancer Institute',
+        u'Network Consulting Team',
+        u'Prioritization Subcommittee',
+        u'Steering Committee',
+        u'Technology and Resource Sharing Subcommittee'
+    ):
+        createContentInContainer(folder, 'eke.knowledge.groupspacefolder', title=name)
+    _publish(folder)
+
+
+def _addGroupSpaces(portal):
+    u'''Add group workspaces, collaborative groups, committees'''
+    _addCollaborativeGroups(portal)
+    _addCommittees(portal)
+
+
+def _addMembersList(portal):
+    u'''Add the faceted members list'''
+    if 'members-list' in portal.keys():
+        portal.manage_delObjects(['members-list'])
+    folder = createContentInContainer(
+        portal, 'Folder', id='members-list', title=u'Members List',
+        description=u'A directory of the people that comprise EDRN.'
+    )
+    adapter = IExcludeFromNavigation(folder, None)
+    if adapter is not None:
+        adapter.exclude_from_nav = True
+    subtyper = getMultiAdapter((folder, portal.REQUEST), name=u'faceted_subtyper')
+    if subtyper.is_faceted or not subtyper.can_enable: return
+    subtyper.enable()
+    criteria = ICriteria(folder)
+    for cid in criteria.keys():
+        criteria.delete(cid)
+    criteria.add('resultsperpage', 'bottom', 'default', title='Results per page', hidden=False, start=0, end=60, step=20,
+        default=20)
+    criteria.add(
+        'checkbox', 'left', 'default',
+        title=u'Investigator',
+        hidden=False,
+        index='piName',
+        operator='or',
+        vocabulary=u'eke.knowledge.vocabularies.PrincipalInvestigators',
+        count=False,
+        maxitems=4,
+        sortreversed=False,
+        hidezerocount=False
+    )
+    criteria.add(
+        'checkbox', 'left', 'default',
+        title=u'Institution',
+        hidden=False,
+        index='siteName',
+        operator='or',
+        vocabulary=u'eke.knowledge.vocabularies.SiteNames',
+        count=False,
+        maxitems=4,
+        sortreversed=False,
+        hidezerocount=False
+    )
+    criteria.add(
+        'checkbox', 'left', 'default',
+        title=u'Member Type',
+        hidden=False,
+        index='memberType',
+        operator='or',
+        vocabulary=u'eke.knowledge.vocabularies.MemberTypes',
+        count=False,
+        maxitems=4,
+        sortreversed=False,
+        hidezerocount=False
+    )
+    criteria.add(
+        'checkbox', 'bottom', 'default',
+        title='Portal Type',
+        hidden=True,
+        index='portal_type',
+        operator='or',
+        vocabulary=u'eea.faceted.vocabularies.FacetedPortalTypes',
+        default=[u'eke.knowledge.person'],
+        count=False,
+        maxitems=0,
+        sortreversed=False,
+        hidezerocount=False
+    )
+    # Shouldn't be hidden but we want better sorting first
+    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=True, default='sortable_title')
+    IFacetedLayout(folder).update_layout('listing_view')
+    _publish(folder)
+
+
+def _getEntryType(fromFolder):
+    typeIndicator = os.path.join(fromFolder, 'TYPE.txt')
+    if not os.path.isfile(typeIndicator): return None
+    with open(typeIndicator, 'r') as f:
+        return f.read()
+
+
+def _getMetadata(fromFolder, filename='metadata.json'):
+    metadataFile = os.path.join(fromFolder, filename)
+    if not os.path.isfile(metadataFile): return None
+    with open(metadataFile, 'rb') as f:
+        return json.load(f)
+
+
+def _doFolderImport(parent, fsFolder):
+    metadata = _getMetadata(fsFolder)
+    assert metadata is not None, u'No metadata found for %s' % fsFolder
+    folder = createContentInContainer(parent, 'Folder', title=metadata['title'], description=metadata['description'])
+    _doGroupImport(folder, fsFolder)
+
+
+def _doGroupEventImport(parent, fsFolder):
+    metadata = _getMetadata(fsFolder, 'EVENT.json')
+    folder = createContentInContainer(parent, 'Folder', title=metadata['title'], description=metadata['description'])
+    event = createContentInContainer(
+        folder,
+        'Event',
+        attendees=metadata['attendees'],
+        contact_email=metadata['contactEmail'],
+        contact_name=metadata['contactName'],
+        contact_phone=metadata['contactPhone'],
+        description=metadata['description'],
+        event_url=metadata['eventUrl'],
+        location=metadata['location'],
+        text=RichTextValue(metadata['text'], 'text/html', 'text/x-html-safe'),
+        title=metadata['title']
+    )
+    folder.setDefaultPage(event.id)
+    _doGroupImport(folder, fsFolder)
+
+
+def _doFileImport(folder, fsFolder):
+    metadata = _getMetadata(fsFolder)
+    with open(os.path.join(fsFolder, 'file.dat'), 'rb') as f:
+        createContentInContainer(
+            folder,
+            'File',
+            title=metadata['title'],
+            description=metadata['description'],
+            file=NamedBlobFile(f.read(), filename=metadata['filename'], contentType=metadata['contentType'])
+        )
+
+
+def _doHighlightImport(folder, fsFolder):
+    metadata = _getMetadata(fsFolder, 'HIGHLIGHT.json')
+    highlight = createContentInContainer(
+        folder,
+        'News Item',
+        title=metadata['title'],
+        description=metadata['description'],
+        text=RichTextValue(metadata['text'], 'text/html', 'text/x-html-safe')
+    )
+    _publish(highlight)
+
+
+def _doGroupImport(folder, fsFolder):
+    for entryName in os.listdir(fsFolder):
+        entry = os.path.join(fsFolder, entryName)
+        if os.path.isdir(entry):
+            entryType = _getEntryType(entry)
+            assert entryType is not None and len(entryType) > 0
+            if entryType == 'Folder':
+                _doFolderImport(folder, entry)
+            elif entryType == 'Group Event':
+                _doGroupEventImport(folder, entry)
+            elif entryType == 'File':
+                _doFileImport(folder, entry)
+            elif entryType == 'Highlight':
+                _doHighlightImport(folder, entry)
+            else:
+                assert False, u'Bad entry type {}'.format(entryType)
+
+
+def _importGroupContent(portal):
+    groupContent = os.path.abspath(os.environ.get('GROUP_EXPORTS', u''))
+    if not os.path.isdir(groupContent):
+        logging.warn(u'Group content "%s" not present, skipping import', groupContent)
+        return
+    logging.debug(u'Importing group content from "%s"', groupContent)
+    try:
+        groups = portal.unrestrictedTraverse('groups')
+        for groupID in groups.keys():
+            fsFolder = os.path.join(groupContent, groupID)
+            if not os.path.isdir(fsFolder):
+                logging.debug(u'No FS export for %s; skipping', groupID)
+                continue
+            logging.debug(u'Importing %s from FS path %s', groupID, fsFolder)
+            groupFolder = groups[groupID]
+            _doGroupImport(groupFolder, fsFolder)
+    except KeyError:
+        logging.warn(u'No "groups" in portal, skipping')
+
+
+def _empowerSuperUsers(portal):
+    groupsTool = plone.api.portal.get_tool('portal_groups')
+    groupsTool.editGroup('Super User', roles=['Manager'], groups=())
+    groupsTool.editGroup('Portal Content Custodian', roles=['Site Administrator'], groups=())
 
 
 def _setupEDRN(app, username, password, ldapPassword):
@@ -582,6 +864,11 @@ def _setupEDRN(app, username, password, ldapPassword):
     _doStaticQuickLinksPortlet(portal, uids)
     _doDMCCRSSPortlet(portal)
     _setGlobalNavOrder(portal)
+    # Replaced with RDF folder:
+    # _addGroupSpaces(portal)
+    _addMembersList(portal)
+    _importGroupContent(portal)
+    _empowerSuperUsers(portal)
     _tuneUp(portal)  # this should be the last step always as it clears/rebuids the catalog and commits the txn
     noSecurityManager()
 
@@ -595,7 +882,10 @@ def main(argv):
         os.chdir(installDir)
         global app
         args = _argParser.parse_args(argv[1:])
-        _setupEDRN(app, args.username, args.password, args.ldapPassword)
+        username = args.username
+        password = args.password if args.password else getpass.getpass(u'Password for Zope user "{}": '.format(username))
+        ldapPassword = args.ldapPassword if args.ldapPassword else getpass.getpass(u'LDAP password: ')
+        _setupEDRN(app, username, password, ldapPassword)
     except Exception as ex:
         logging.exception(u'This is most unfortunate: %s', unicode(ex))
         return False

@@ -29,7 +29,6 @@ _logger = logging.getLogger(__name__)
 # Specific URIs
 _accessPredicateURI                      = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#AccessGrantedTo')
 _biomarkerPredicateURI                   = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#Biomarker')
-_biomarkerTypeURI                        = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#Biomarker')
 _bmOrganDataTypeURI                      = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#BiomarkerOrganData')
 _bmTitlePredicateURI                     = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#Title')
 _certificationPredicateURI               = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#certification')
@@ -64,6 +63,7 @@ _biomarkerPredicates = {
     predicateURIBase + u'Alias': ('bmAliases', False),
     predicateURIBase + u'PerformanceComment': ('performanceComment', False),
     predicateURIBase + u'Type': ('biomarkerType', False),
+    predicateURIBase + u'AssociatedDataset': ('datasets', True),
 
     # For biomarker-body-systems
     predicateURIBase + u'PerformanceComment': ('performanceComment', False),
@@ -79,6 +79,21 @@ _biomarkerPredicates = {
     predicateURIBase + u'Prevalence': ('prevalence', False),
     predicateURIBase + u'SensSpecDetail': ('details', False),
     predicateURIBase + u'SpecificAssayType': ('specificAssayType', False),
+}
+
+_organNameToCollaborativeGroupName = {
+    u'Breast': u'Breast and Gynecologic Cancers Research Group',
+    u'Ovary': u'Breast and Gynecologic Cancers Research Group',
+    u'Colon': u'G.I. and Other Associated Cancers Research Group',
+    u'Esophagus': u'G.I. and Other Associated Cancers Research Group',
+    u'Liver': u'G.I. and Other Associated Cancers Research Group',
+    u'Pancreas': u'G.I. and Other Associated Cancers Research Group',
+    u'Lung': u'Lung and Upper Aerodigestive Cancers Research Group',
+    u'Prostate': u'Prostate and Urologic Cancers Research Group',
+    u'Bladder': u'Prostate and Urologic Cancers Research Group',
+    u'Head & neck, NOS': u'Lung and Upper Aerodigestive Cancers Research Group',
+    # Used only in testing:
+    u'Rectum': u'G.I. and Other Associated Cancers Research Group'
 }
 
 
@@ -128,7 +143,7 @@ class IBiomarkerFolder(IKnowledgeFolder):
 
 class BiomarkerIngestor(Ingestor):
     grok.context(IBiomarkerFolder)
-    def getInterfaceForContainedObjects(self):
+    def getInterfaceForContainedObjects(self, predicates):
         raise NotImplementedError(u'{} handles its ingest specially'.format(self.__class__.__name__))
     def updateBiomarker(self, biomarkerObj, fti, iface, predicates, context, biomarkerStatements, request):
         # Set biomarker fields; TODO: REFACTOR HERE?
@@ -226,7 +241,7 @@ class BiomarkerIngestor(Ingestor):
                     'eke.knowledge.bodysystemstudy',
                     title=protocols[0].title,
                     description=protocols[0].description,
-                    identifier=identifier
+                    identifier=unicode(identifier)
                 )
             else:
                 bodySystemStudy = biomarkerBodySystem[identifier]
@@ -281,7 +296,13 @@ class BiomarkerIngestor(Ingestor):
                 except schema.ValidationError:
                     _logger.exception(u'RDF data "%r" for biomarker field "%s" invalid; skipping', values, predicate)
                     continue
-            # TODO: addBiomarkerToOrganGroup
+            # Make a note of the collaborative group based on the organ
+            collaborativeGroupName = _organNameToCollaborativeGroupName.get(organName)
+            if collaborativeGroupName:
+                currentGroups = biomarker.collaborativeGroup if biomarker.collaborativeGroup else []
+                if collaborativeGroupName not in currentGroups:
+                    currentGroups.append(collaborativeGroupName)
+                    biomarker.collaborativeGroup = currentGroups
             if _hasBiomarkerOrganStudyDatasPredicateURI in predicates:
                 bags = predicates[_hasBiomarkerOrganStudyDatasPredicateURI]
                 self.addStudiesToOrgan(biomarkerBodySystem, bags, statements)
@@ -320,7 +341,7 @@ class BiomarkerIngestor(Ingestor):
         for uri, predicates in biomarkerStatements.iteritems():
             try:
                 typeURI = predicates[rdflib.RDF.type][0]
-                if typeURI != _biomarkerTypeURI: continue
+                if typeURI != _biomarkerPredicateURI: continue
                 isPanel = bool(int(predicates[_isPanelPredicateURI][0]))
                 title = unicode(predicates[_bmTitlePredicateURI][0])
                 hgnc = predicates[_hgncPredicateURI][0] if _hgncPredicateURI in predicates else None
@@ -344,7 +365,7 @@ class BiomarkerIngestor(Ingestor):
         for uri, predicates in biomarkerStatements.iteritems():
             try:
                 typeURI = predicates[rdflib.RDF.type][0]
-                if typeURI != _biomarkerTypeURI: continue
+                if typeURI != _biomarkerPredicateURI: continue
                 panelURIs = predicates[_memberOfPanelPredicateURI]
                 biomarker = newBiomarkers[uri]
                 for panelURI in panelURIs:

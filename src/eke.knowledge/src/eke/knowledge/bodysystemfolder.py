@@ -15,5 +15,5 @@ class IBodySystemFolder(IKnowledgeFolder):
 
 class BodySystemIngestor(Ingestor):
     grok.context(IBodySystemFolder)
-    def getInterfaceForContainedObjects(self):
+    def getInterfaceForContainedObjects(self, predicates):
         return IBodySystem

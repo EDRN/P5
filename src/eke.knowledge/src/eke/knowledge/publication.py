@@ -1,8 +1,13 @@
 # encoding: utf-8
 
 from . import _, dublincore
+# from .person import IPerson  # Cannot import due to circulal dependency; using generated name in view class below
+from five import grok
 from knowledgeobject import IKnowledgeObject
+from plone.memoize.view import memoize
 from zope import schema
+from Acquisition import aq_inner
+import plone.api, cgi
 
 
 class IPublication(IKnowledgeObject):
@@ -52,6 +57,10 @@ class IPublication(IKnowledgeObject):
         description=_(u'Location of the publication.'),
         required=False,
     )
+    # Note we're treating ``siteID`` as a plain literal field even though in RDF
+    # it's a reference to another object (a Site object).  This lets the person.py
+    # view find publications by looking up its containing Site's Identifier on
+    # the siteID index.
     siteID = schema.TextLine(
         title=_(u'Site ID'),
         description=_(u'DMCC-assigned identifier for the site that wrote this publication.'),
@@ -74,3 +83,36 @@ IPublication.setTaggedValue('predicates', {
 })
 IPublication.setTaggedValue('fti', 'eke.knowledge.publication')
 IPublication.setTaggedValue('typeURI', u'http://edrn.nci.nih.gov/rdf/types.rdf#Publication')
+
+
+class View(grok.View):
+    grok.context(IPublication)
+    def haveAuthors(self):
+        context = aq_inner(self.context)
+        return len(context.authors) > 0
+    @memoize
+    def authors(self):
+        context, catalog = aq_inner(self.context), plone.api.portal.get_tool('portal_catalog')
+        authorNames = list(context.authors)
+        authorNames.sort()
+        authors = []
+        for authorName in authorNames:
+            space = authorName.find(u' ')
+            surname = authorName[0:space] if space > 0 else authorName
+            results = catalog(object_provides='eke.knowledge.person.IPerson', Title=surname)
+            if len(results) == 0:
+                authors.append(cgi.escape(authorName))
+            else:
+                authors.append(u'<a href="{}">{}</a>'.format(results[0].getURL(), cgi.escape(authorName)))
+        return u', '.join(authors)
+    @memoize
+    def appearance(self):
+        context = aq_inner(self.context)
+        appearances = []
+        if context.journal: appearances.append(context.journal)
+        if context.year: appearances.append(context.year)
+        if context.month: appearances.append(context.month)
+        if context.volume: appearances.append(context.volume)
+        appearances = u', '.join(appearances)
+        if context.issue: appearances += u' ({})'.format(cgi.escape(context.issue))
+        return appearances

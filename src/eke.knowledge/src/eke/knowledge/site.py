@@ -108,8 +108,8 @@ class ISite(IKnowledgeObject):
     #     required=False,
     # )
 
-    siteID = schema.TextLine(
-        title=_(u'Site ID'),
+    dmccSiteID = schema.TextLine(
+        title=_(u'DMCC Site ID'),
         description=_(u'DMCC-assigned identifier of the site.'),
         required=False,
     )
