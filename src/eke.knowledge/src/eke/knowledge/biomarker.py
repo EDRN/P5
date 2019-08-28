@@ -10,13 +10,14 @@ from .protocol import IProtocol
 from .publication import IPublication
 from .resource import IResource
 from Acquisition import aq_inner
+from collective import dexteritytextindexer
 from five import grok
 from plone.app.vocabularies.catalog import CatalogSource
 from plone.memoize.view import memoize
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
-from zope.interface import Interface
 from zope.container.interfaces import IObjectAddedEvent
+from zope.interface import Interface
 import plone.api
 
 CURATED_SECTIONS = {
@@ -107,6 +108,7 @@ class IBiomarker(IKnowledgeObject, IResearchedObject, IQualityAssuredObject):
         description=_(u'The name assigned by the HUGO Gene Nomenclature Committee.'),
         required=False,
     )
+    dexteritytextindexer.searchable('bmAliases')  # Why not a decorator? ¯\_(ツ)_/¯
     bmAliases = schema.List(
         title=_(u'Aliases'),
         description=_(u'Additional names by which the biomarker is known.'),
