@@ -1,5 +1,5 @@
 <div metal:define-macro='biomarkerFields'>
-    <div>
+    <div tal:condition='context/shortName'>
         <label for='fieldname-shortName' i18n:translate='label_shortName'>Short Name:</label>
         <span id='fieldname-shortName' tal:content='context/shortName'>Bob</span>
     </div>

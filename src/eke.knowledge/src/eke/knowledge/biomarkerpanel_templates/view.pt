@@ -75,7 +75,7 @@
                                             Sticky
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr tal:condition='context/shortName'>
                                         <th i18n:translate='label_shortName'>
                                             Short Name:
                                         </th>

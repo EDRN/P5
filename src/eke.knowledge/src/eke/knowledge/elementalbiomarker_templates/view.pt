@@ -60,7 +60,7 @@
                                 <table>
                                     <tr>
                                         <th i18n:translate='label_qaState'>
-                                            QA State 3:
+                                            QA State:
                                         </th>
                                         <td tal:content='context/qaState'>
                                             Extremely high quality
@@ -74,7 +74,7 @@
                                             Sticky
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr tal:condition='context/shortName'>
                                         <th i18n:translate='label_shortName'>
                                             Short Name:
                                         </th>
@@ -84,7 +84,7 @@
                                     </tr>
                                     <tr>
                                         <th i18n:translate='label_hgncName'>
-                                            HGNC Name 3:
+                                            HGNC Name:
                                         </th>
                                         <td tal:content='context/hgncName'>
                                             A1
