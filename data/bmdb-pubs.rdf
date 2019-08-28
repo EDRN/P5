@@ -4,758 +4,758 @@
   xmlns:ns2="http://edrn.nci.nih.gov/rdf/types.rdf#"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 >
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/163">
-    <ns1:pmid>22903690</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/230">
-    <ns1:pmid>24396457</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/207">
-    <ns1:pmid>11956108</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/174">
-    <ns1:pmid>17332286</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/121">
-    <ns1:pmid>21610147</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/140">
-    <ns1:pmid>23086769</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/55">
-    <ns1:pmid>17999418</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/26">
-    <ns1:pmid>17916591</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/94">
-    <ns1:pmid>21372037</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/113">
-    <ns1:pmid>19887610</ns1:pmid>
-  </ns2:Publication>
   <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/136">
     <ns1:pmid>21627863</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/61">
-    <ns1:pmid>15258566</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/81">
-    <ns1:pmid>19435894</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/195">
-    <ns1:pmid>23851501</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/33">
-    <ns1:pmid>17522429</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/147">
-    <ns1:pmid>22461644</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/111">
-    <ns1:pmid>21047392</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/170">
-    <ns1:pmid>15501967</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/208">
-    <ns1:pmid>16424007</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/176">
-    <ns1:pmid>20082099</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/24">
-    <ns1:pmid>8571131</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/37">
-    <ns1:pmid>16534867</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/49">
-    <ns1:pmid>18729198</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/34">
-    <ns1:pmid>6201741</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/59">
-    <ns1:pmid>18199717</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/20">
-    <ns1:pmid>18403633</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/114">
-    <ns1:pmid>21487035</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/244">
-    <ns1:pmid>25471344</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/18">
-    <ns1:pmid>18292776</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/138">
-    <ns1:pmid>11956099</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/160">
-    <ns1:pmid>21459804</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/92">
-    <ns1:pmid>20624954</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/209">
-    <ns1:pmid>23104324</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/225">
-    <ns1:pmid>24324133</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/243">
-    <ns1:pmid>24769028</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/21">
-    <ns1:pmid>16221779</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/221">
-    <ns1:pmid>23319435</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/126">
-    <ns1:pmid>21170350</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/56">
-    <ns1:pmid>16362978</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/77">
-    <ns1:pmid>2531008</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/79">
-    <ns1:pmid>10872828</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/196">
-    <ns1:pmid>17327606</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/106">
-    <ns1:pmid>19647334</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/143">
-    <ns1:pmid>20962299</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/104">
-    <ns1:pmid>18558286</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/3">
-    <ns1:pmid>35531</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/238">
-    <ns1:pmid>10397259</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/245">
-    <ns1:pmid>26565788</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/189">
-    <ns1:pmid>16444428</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/135">
-    <ns1:pmid>21116241</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/218">
-    <ns1:pmid>21042283</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/110">
-    <ns1:pmid>18616821</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/99">
-    <ns1:pmid>12406978</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/83">
-    <ns1:pmid>15686601</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/51">
-    <ns1:pmid>18382671</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/210">
-    <ns1:pmid>17192041</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/48">
-    <ns1:pmid>18972404</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/14">
-    <ns1:pmid>3479380</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/86">
-    <ns1:pmid>15623627</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/201">
-    <ns1:pmid>23807163</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/47">
-    <ns1:pmid>15825162</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/12">
-    <ns1:pmid>15781627</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/179">
-    <ns1:pmid>18538735</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/73">
-    <ns1:pmid>19389549</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/45">
-    <ns1:pmid>14970861</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/216">
-    <ns1:pmid>23431153</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/74">
-    <ns1:pmid>11705844</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/76">
-    <ns1:pmid>2970639</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/82">
-    <ns1:pmid>19053170</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/153">
-    <ns1:pmid>21300873</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/71">
-    <ns1:pmid>15059887</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/97">
-    <ns1:pmid>22759214</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/8">
-    <ns1:pmid>6310399</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/186">
-    <ns1:pmid>19200647</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/211">
-    <ns1:pmid>17178863</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/157">
-    <ns1:pmid>10371572</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/70">
-    <ns1:pmid>17499425</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/187">
-    <ns1:pmid>18311904</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/220">
-    <ns1:pmid>17867595</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/95">
-    <ns1:pmid>21820580</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/122">
-    <ns1:pmid>21744498</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/182">
-    <ns1:pmid>15368472</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/233">
-    <ns1:pmid>16924373</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/29">
-    <ns1:pmid>15455356</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/154">
-    <ns1:pmid>14969798</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/168">
-    <ns1:pmid>23220850</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/166">
-    <ns1:pmid>20471625</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/227">
-    <ns1:pmid>17709317</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/242">
-    <ns1:pmid>20651988</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/125">
-    <ns1:pmid>21257721</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/204">
-    <ns1:pmid>21617380</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/206">
-    <ns1:pmid>18316554</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/251">
-    <ns1:pmid>21419439</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/68">
-    <ns1:pmid>14630441</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/107">
-    <ns1:pmid>7544487</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/40">
-    <ns1:pmid>17537172</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/192">
-    <ns1:pmid>23319948</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/149">
-    <ns1:pmid>19138936</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/60">
-    <ns1:pmid>16952549</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/11">
-    <ns1:pmid>16452214</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/43">
-    <ns1:pmid>16795078</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/85">
-    <ns1:pmid>12637468</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/93">
-    <ns1:pmid>21372036</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/131">
-    <ns1:pmid>8924324</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/65">
-    <ns1:pmid>17970080</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/9">
-    <ns1:pmid>11124344</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/167">
-    <ns1:pmid>22543921</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/44">
-    <ns1:pmid>17015834</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/236">
-    <ns1:pmid>18388126</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/173">
-    <ns1:pmid>21717433</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/36">
-    <ns1:pmid>11694234</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/66">
-    <ns1:pmid>17192876</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/253">
-    <ns1:pmid>28520829</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/91">
-    <ns1:pmid>19454616</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/181">
-    <ns1:pmid>15368473</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/115">
-    <ns1:pmid>17409910</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/134">
-    <ns1:pmid>21694641</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/247">
-    <ns1:pmid>25385735</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/62">
-    <ns1:pmid>17975140</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/158">
-    <ns1:pmid>19788722</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/109">
-    <ns1:pmid>18349282</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/28">
-    <ns1:pmid>18089831</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/146">
-    <ns1:pmid>17289801</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/240">
-    <ns1:pmid>20418328</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/87">
-    <ns1:pmid>20447916</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/217">
-    <ns1:pmid>21139582</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/102">
-    <ns1:pmid>22539604</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/98">
-    <ns1:pmid>22542565</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/67">
-    <ns1:pmid>2442609</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/89">
-    <ns1:pmid>16137783</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/23">
-    <ns1:pmid>12717392</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/46">
-    <ns1:pmid>17893121</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/228">
-    <ns1:pmid>22560646</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/215">
-    <ns1:pmid>23781597</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/250">
-    <ns1:pmid>18550118</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/151">
-    <ns1:pmid>17909350</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/25">
-    <ns1:pmid>11504947</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/197">
-    <ns1:pmid>23285163</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/203">
-    <ns1:pmid>23050525</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/190">
-    <ns1:pmid>20132413</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/119">
-    <ns1:pmid>20570928</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/214">
-    <ns1:pmid>11991720</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/200">
-    <ns1:pmid>19635143</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/129">
-    <ns1:pmid>18245462</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/116">
-    <ns1:pmid>17932110</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/148">
-    <ns1:pmid>17334370</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/241">
-    <ns1:pmid>2546556</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/165">
-    <ns1:pmid>18422355</ns1:pmid>
   </ns2:Publication>
   <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/15">
     <ns1:pmid>3209301</ns1:pmid>
   </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/105">
-    <ns1:pmid>22142333</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/6">
-    <ns1:pmid>388427</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/112">
-    <ns1:pmid>17671213</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/239">
-    <ns1:pmid>10101297</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/10">
-    <ns1:pmid>8381375</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/142">
-    <ns1:pmid>19517474</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/117">
-    <ns1:pmid>20675559</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/252">
-    <ns1:pmid>27845339</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/80">
-    <ns1:pmid>19367279</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/194">
-    <ns1:pmid>21901169</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/150">
-    <ns1:pmid>21557218</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/7">
-    <ns1:pmid>16702385</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/35">
-    <ns1:pmid>15322314</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/191">
-    <ns1:pmid>23528302</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/124">
-    <ns1:pmid>19679554</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/185">
-    <ns1:pmid>11750710</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/234">
-    <ns1:pmid>21297881</ns1:pmid>
-  </ns2:Publication>
   <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/101">
     <ns1:pmid>19547694</ns1:pmid>
   </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/213">
-    <ns1:pmid>20651987</ns1:pmid>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/233">
+    <ns1:pmid>16924373</ns1:pmid>
   </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/248">
-    <ns1:pmid>18337498</ns1:pmid>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/140">
+    <ns1:pmid>23086769</ns1:pmid>
   </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/141">
-    <ns1:pmid>21600800</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/199">
-    <ns1:pmid>21937081</ns1:pmid>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/12">
+    <ns1:pmid>15781627</ns1:pmid>
   </ns2:Publication>
   <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/164">
     <ns1:pmid>21586622</ns1:pmid>
   </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/231">
-    <ns1:pmid>23967175</ns1:pmid>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/77">
+    <ns1:pmid>2531008</ns1:pmid>
   </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/246">
-    <ns1:pmid>15592032</ns1:pmid>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/35">
+    <ns1:pmid>15322314</ns1:pmid>
   </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/41">
-    <ns1:pmid>18820707</ns1:pmid>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/209">
+    <ns1:pmid>23104324</ns1:pmid>
   </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/53">
-    <ns1:pmid>18831746</ns1:pmid>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/191">
+    <ns1:pmid>23528302</ns1:pmid>
   </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/123">
-    <ns1:pmid>18065730</ns1:pmid>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/125">
+    <ns1:pmid>21257721</ns1:pmid>
   </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/90">
-    <ns1:pmid>18004786</ns1:pmid>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/252">
+    <ns1:pmid>27845339</ns1:pmid>
   </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/96">
-    <ns1:pmid>22042252</ns1:pmid>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/142">
+    <ns1:pmid>19517474</ns1:pmid>
   </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/226">
-    <ns1:pmid>23184467</ns1:pmid>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/251">
+    <ns1:pmid>21419439</ns1:pmid>
   </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/64">
-    <ns1:pmid>18269647</ns1:pmid>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/67">
+    <ns1:pmid>2442609</ns1:pmid>
   </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/219">
-    <ns1:pmid>17009623</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/5">
-    <ns1:pmid>47732</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/19">
-    <ns1:pmid>16702385</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/159">
-    <ns1:pmid>22870216</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/38">
-    <ns1:pmid>18422961</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/254">
-    <ns1:pmid>18258665</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/178">
-    <ns1:pmid>22315367</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/32">
-    <ns1:pmid>18089831</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/198">
-    <ns1:pmid>22647880</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/27">
-    <ns1:pmid>18794547</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/30">
-    <ns1:pmid>12859233</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/212">
-    <ns1:pmid>22262177</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/52">
-    <ns1:pmid>17452981</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/16">
-    <ns1:pmid>1913520</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/103">
-    <ns1:pmid>16963665</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/132">
-    <ns1:pmid>19362088</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/177">
-    <ns1:pmid>16077070</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/69">
-    <ns1:pmid>16643616</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/188">
-    <ns1:pmid>23515404</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/127">
-    <ns1:pmid>20977275</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/180">
-    <ns1:pmid>20184749</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/169">
-    <ns1:pmid>22285043</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/42">
-    <ns1:pmid>18154821</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/237">
-    <ns1:pmid>18089489</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/249">
-    <ns1:pmid>23232570</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/139">
-    <ns1:pmid>17255269</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/205">
-    <ns1:pmid>21549228</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/108">
-    <ns1:pmid>7541742</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/120">
-    <ns1:pmid>17934114</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/145">
-    <ns1:pmid>19883638</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/144">
-    <ns1:pmid>20110452</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/155">
-    <ns1:pmid>19951989</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/137">
-    <ns1:pmid>21907921</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/175">
-    <ns1:pmid>19856137</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/224">
-    <ns1:pmid>19564336</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/84">
-    <ns1:pmid>19849863</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/128">
-    <ns1:pmid>21558411</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/57">
-    <ns1:pmid>18799374</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/100">
-    <ns1:pmid>22689914</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/222">
-    <ns1:pmid>24520544</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/4">
-    <ns1:pmid>73325</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/223">
-    <ns1:pmid>11861388</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/75">
-    <ns1:pmid>11691811</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/63">
-    <ns1:pmid>19046942</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/202">
-    <ns1:pmid>24018557</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/156">
-    <ns1:pmid>19887487</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/152">
-    <ns1:pmid>22374995</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/78">
-    <ns1:pmid>16453457</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/58">
-    <ns1:pmid>11120884</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/72">
-    <ns1:pmid>16322328</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/54">
-    <ns1:pmid>15824739</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/88">
-    <ns1:pmid>11926890</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/118">
-    <ns1:pmid>20501620</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/232">
-    <ns1:pmid>22348612</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/39">
-    <ns1:pmid>18512240</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/229">
-    <ns1:pmid>23973329</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/193">
-    <ns1:pmid>21644365</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/17">
-    <ns1:pmid>1495694</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/50">
-    <ns1:pmid>15292927</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/183">
-    <ns1:pmid>15627055</ns1:pmid>
-  </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/171">
-    <ns1:pmid>18555254</ns1:pmid>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/71">
+    <ns1:pmid>15059887</ns1:pmid>
   </ns2:Publication>
   <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/130">
     <ns1:pmid>22245323</ns1:pmid>
   </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/22">
-    <ns1:pmid>18084611</ns1:pmid>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/9">
+    <ns1:pmid>11124344</ns1:pmid>
   </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/31">
-    <ns1:pmid>1534510</ns1:pmid>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/104">
+    <ns1:pmid>18558286</ns1:pmid>
   </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/172">
-    <ns1:pmid>19444906</ns1:pmid>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/238">
+    <ns1:pmid>10397259</ns1:pmid>
   </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/184">
-    <ns1:pmid>21292647</ns1:pmid>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/230">
+    <ns1:pmid>24396457</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/95">
+    <ns1:pmid>21820580</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/186">
+    <ns1:pmid>19200647</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/57">
+    <ns1:pmid>18799374</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/247">
+    <ns1:pmid>25385735</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/42">
+    <ns1:pmid>18154821</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/221">
+    <ns1:pmid>23319435</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/70">
+    <ns1:pmid>17499425</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/111">
+    <ns1:pmid>21047392</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/152">
+    <ns1:pmid>22374995</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/81">
+    <ns1:pmid>19435894</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/203">
+    <ns1:pmid>23050525</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/151">
+    <ns1:pmid>17909350</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/124">
+    <ns1:pmid>19679554</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/224">
+    <ns1:pmid>19564336</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/98">
+    <ns1:pmid>22542565</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/21">
+    <ns1:pmid>16221779</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/119">
+    <ns1:pmid>20570928</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/60">
+    <ns1:pmid>16952549</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/107">
+    <ns1:pmid>7544487</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/33">
+    <ns1:pmid>17522429</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/205">
+    <ns1:pmid>21549228</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/253">
+    <ns1:pmid>28520829</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/214">
+    <ns1:pmid>11991720</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/16">
+    <ns1:pmid>1913520</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/179">
+    <ns1:pmid>18538735</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/207">
+    <ns1:pmid>11956108</ns1:pmid>
   </ns2:Publication>
   <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/235">
     <ns1:pmid>16166285</ns1:pmid>
   </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/13">
-    <ns1:pmid>2410004</ns1:pmid>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/169">
+    <ns1:pmid>22285043</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/108">
+    <ns1:pmid>7541742</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/226">
+    <ns1:pmid>23184467</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/11">
+    <ns1:pmid>16452214</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/167">
+    <ns1:pmid>22543921</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/210">
+    <ns1:pmid>17192041</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/38">
+    <ns1:pmid>18422961</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/193">
+    <ns1:pmid>21644365</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/189">
+    <ns1:pmid>16444428</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/201">
+    <ns1:pmid>23807163</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/24">
+    <ns1:pmid>8571131</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/254">
+    <ns1:pmid>18258665</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/162">
+    <ns1:pmid>23028830</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/181">
+    <ns1:pmid>15368473</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/220">
+    <ns1:pmid>17867595</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/18">
+    <ns1:pmid>18292776</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/127">
+    <ns1:pmid>20977275</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/34">
+    <ns1:pmid>6201741</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/89">
+    <ns1:pmid>16137783</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/50">
+    <ns1:pmid>15292927</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/121">
+    <ns1:pmid>21610147</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/106">
+    <ns1:pmid>19647334</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/75">
+    <ns1:pmid>11691811</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/204">
+    <ns1:pmid>21617380</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/65">
+    <ns1:pmid>17970080</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/159">
+    <ns1:pmid>22870216</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/29">
+    <ns1:pmid>15455356</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/30">
+    <ns1:pmid>12859233</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/36">
+    <ns1:pmid>11694234</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/232">
+    <ns1:pmid>22348612</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/122">
+    <ns1:pmid>21744498</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/237">
+    <ns1:pmid>18089489</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/150">
+    <ns1:pmid>21557218</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/173">
+    <ns1:pmid>21717433</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/163">
+    <ns1:pmid>22903690</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/118">
+    <ns1:pmid>20501620</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/147">
+    <ns1:pmid>22461644</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/80">
+    <ns1:pmid>19367279</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/19">
+    <ns1:pmid>16702385</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/218">
+    <ns1:pmid>21042283</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/49">
+    <ns1:pmid>18729198</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/166">
+    <ns1:pmid>20471625</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/63">
+    <ns1:pmid>19046942</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/244">
+    <ns1:pmid>25471344</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/249">
+    <ns1:pmid>23232570</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/28">
+    <ns1:pmid>18089831</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/213">
+    <ns1:pmid>20651987</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/208">
+    <ns1:pmid>16424007</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/134">
+    <ns1:pmid>21694641</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/59">
+    <ns1:pmid>18199717</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/14">
+    <ns1:pmid>3479380</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/168">
+    <ns1:pmid>23220850</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/96">
+    <ns1:pmid>22042252</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/43">
+    <ns1:pmid>16795078</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/64">
+    <ns1:pmid>18269647</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/228">
+    <ns1:pmid>22560646</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/32">
+    <ns1:pmid>18089831</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/78">
+    <ns1:pmid>16453457</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/26">
+    <ns1:pmid>17916591</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/56">
+    <ns1:pmid>16362978</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/135">
+    <ns1:pmid>21116241</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/190">
+    <ns1:pmid>20132413</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/93">
+    <ns1:pmid>21372036</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/85">
+    <ns1:pmid>12637468</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/48">
+    <ns1:pmid>18972404</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/3">
+    <ns1:pmid>35531</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/129">
+    <ns1:pmid>18245462</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/176">
+    <ns1:pmid>20082099</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/198">
+    <ns1:pmid>22647880</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/110">
+    <ns1:pmid>18616821</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/47">
+    <ns1:pmid>15825162</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/54">
+    <ns1:pmid>15824739</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/222">
+    <ns1:pmid>24520544</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/215">
+    <ns1:pmid>23781597</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/72">
+    <ns1:pmid>16322328</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/246">
+    <ns1:pmid>15592032</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/206">
+    <ns1:pmid>18316554</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/113">
+    <ns1:pmid>19887610</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/76">
+    <ns1:pmid>2970639</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/69">
+    <ns1:pmid>16643616</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/55">
+    <ns1:pmid>17999418</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/139">
+    <ns1:pmid>17255269</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/223">
+    <ns1:pmid>11861388</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/52">
+    <ns1:pmid>17452981</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/154">
+    <ns1:pmid>14969798</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/231">
+    <ns1:pmid>23967175</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/216">
+    <ns1:pmid>23431153</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/31">
+    <ns1:pmid>1534510</ns1:pmid>
   </ns2:Publication>
   <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/133">
     <ns1:pmid>16109979</ns1:pmid>
   </ns2:Publication>
-  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/162">
-    <ns1:pmid>23028830</ns1:pmid>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/46">
+    <ns1:pmid>17893121</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/7">
+    <ns1:pmid>16702385</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/58">
+    <ns1:pmid>11120884</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/188">
+    <ns1:pmid>23515404</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/6">
+    <ns1:pmid>388427</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/170">
+    <ns1:pmid>15501967</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/177">
+    <ns1:pmid>16077070</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/184">
+    <ns1:pmid>21292647</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/200">
+    <ns1:pmid>19635143</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/97">
+    <ns1:pmid>22759214</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/39">
+    <ns1:pmid>18512240</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/112">
+    <ns1:pmid>17671213</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/192">
+    <ns1:pmid>23319948</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/175">
+    <ns1:pmid>19856137</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/219">
+    <ns1:pmid>17009623</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/45">
+    <ns1:pmid>14970861</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/94">
+    <ns1:pmid>21372037</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/185">
+    <ns1:pmid>11750710</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/126">
+    <ns1:pmid>21170350</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/160">
+    <ns1:pmid>21459804</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/225">
+    <ns1:pmid>24324133</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/227">
+    <ns1:pmid>17709317</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/239">
+    <ns1:pmid>10101297</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/73">
+    <ns1:pmid>19389549</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/183">
+    <ns1:pmid>15627055</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/180">
+    <ns1:pmid>20184749</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/22">
+    <ns1:pmid>18084611</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/212">
+    <ns1:pmid>22262177</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/115">
+    <ns1:pmid>17409910</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/116">
+    <ns1:pmid>17932110</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/17">
+    <ns1:pmid>1495694</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/4">
+    <ns1:pmid>73325</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/137">
+    <ns1:pmid>21907921</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/202">
+    <ns1:pmid>24018557</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/155">
+    <ns1:pmid>19951989</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/61">
+    <ns1:pmid>15258566</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/194">
+    <ns1:pmid>21901169</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/199">
+    <ns1:pmid>21937081</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/13">
+    <ns1:pmid>2410004</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/146">
+    <ns1:pmid>17289801</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/84">
+    <ns1:pmid>19849863</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/91">
+    <ns1:pmid>19454616</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/172">
+    <ns1:pmid>19444906</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/156">
+    <ns1:pmid>19887487</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/82">
+    <ns1:pmid>19053170</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/86">
+    <ns1:pmid>15623627</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/174">
+    <ns1:pmid>17332286</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/10">
+    <ns1:pmid>8381375</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/23">
+    <ns1:pmid>12717392</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/171">
+    <ns1:pmid>18555254</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/145">
+    <ns1:pmid>19883638</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/138">
+    <ns1:pmid>11956099</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/229">
+    <ns1:pmid>23973329</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/196">
+    <ns1:pmid>17327606</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/153">
+    <ns1:pmid>21300873</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/157">
+    <ns1:pmid>10371572</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/195">
+    <ns1:pmid>23851501</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/53">
+    <ns1:pmid>18831746</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/99">
+    <ns1:pmid>12406978</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/114">
+    <ns1:pmid>21487035</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/248">
+    <ns1:pmid>18337498</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/243">
+    <ns1:pmid>24769028</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/148">
+    <ns1:pmid>17334370</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/211">
+    <ns1:pmid>17178863</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/178">
+    <ns1:pmid>22315367</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/241">
+    <ns1:pmid>2546556</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/234">
+    <ns1:pmid>21297881</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/123">
+    <ns1:pmid>18065730</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/66">
+    <ns1:pmid>17192876</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/87">
+    <ns1:pmid>20447916</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/250">
+    <ns1:pmid>18550118</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/132">
+    <ns1:pmid>19362088</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/41">
+    <ns1:pmid>18820707</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/68">
+    <ns1:pmid>14630441</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/5">
+    <ns1:pmid>47732</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/83">
+    <ns1:pmid>15686601</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/27">
+    <ns1:pmid>18794547</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/79">
+    <ns1:pmid>10872828</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/165">
+    <ns1:pmid>18422355</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/8">
+    <ns1:pmid>6310399</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/74">
+    <ns1:pmid>11705844</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/117">
+    <ns1:pmid>20675559</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/92">
+    <ns1:pmid>20624954</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/141">
+    <ns1:pmid>21600800</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/40">
+    <ns1:pmid>17537172</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/158">
+    <ns1:pmid>19788722</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/90">
+    <ns1:pmid>18004786</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/105">
+    <ns1:pmid>22142333</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/20">
+    <ns1:pmid>18403633</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/88">
+    <ns1:pmid>11926890</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/128">
+    <ns1:pmid>21558411</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/144">
+    <ns1:pmid>20110452</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/236">
+    <ns1:pmid>18388126</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/102">
+    <ns1:pmid>22539604</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/245">
+    <ns1:pmid>26565788</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/109">
+    <ns1:pmid>18349282</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/62">
+    <ns1:pmid>17975140</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/240">
+    <ns1:pmid>20418328</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/197">
+    <ns1:pmid>23285163</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/44">
+    <ns1:pmid>17015834</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/100">
+    <ns1:pmid>22689914</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/187">
+    <ns1:pmid>18311904</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/131">
+    <ns1:pmid>8924324</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/182">
+    <ns1:pmid>15368472</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/217">
+    <ns1:pmid>21139582</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/51">
+    <ns1:pmid>18382671</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/37">
+    <ns1:pmid>16534867</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/120">
+    <ns1:pmid>17934114</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/143">
+    <ns1:pmid>20962299</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/103">
+    <ns1:pmid>16963665</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/242">
+    <ns1:pmid>20651988</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/25">
+    <ns1:pmid>11504947</ns1:pmid>
+  </ns2:Publication>
+  <ns2:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/149">
+    <ns1:pmid>19138936</ns1:pmid>
   </ns2:Publication>
 </rdf:RDF>
 
