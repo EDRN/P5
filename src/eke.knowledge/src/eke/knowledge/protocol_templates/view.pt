@@ -157,7 +157,7 @@
                                 Collaborative Group:
                             </label>
                             <span id='collaborativeGroup'
-                                tal:content='structure context/collaborativeGroup'>
+                                tal:content='python:u", ".join(context.collaborativeGroup)'>
                                 Taboo Villas is a vacation experience unlike any vacation you have ever had or ever will.
                                 We designed Taboo Villas as a custom built "all-inclusive' vacation
                             </span>
