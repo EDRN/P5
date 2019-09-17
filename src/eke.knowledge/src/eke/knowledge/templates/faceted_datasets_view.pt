@@ -114,6 +114,7 @@
                     </a>
                   </td>
                   <td>
+                    <a tal:content='item/collaborativeGroup'>CG</a>
                   </td>
                 </tr>
               </metal:block>
