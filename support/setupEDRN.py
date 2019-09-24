@@ -33,6 +33,7 @@ _argParser = argparse.ArgumentParser(prog='setupEDRN.py', description=u'Adds a M
 _argParser.add_argument('--username', default='zope', help=u'Zope admin user, defaults to %(default)s')
 _argParser.add_argument('--password', default=None, help=u"Zope admin password, prompted if not given")
 _argParser.add_argument('--ldapPassword', default=None, help=u"LDAP password, prompted if not given")
+_argParser.add_argument('--lightweight', action='store_true', help=u'Make a lite portal, default %(default)s')
 
 
 _DATASETS_SUMMARY_URL = u'https://edrn.jpl.nasa.gov/cancerdataexpo/summarizer-data/dataset/@@summary'
@@ -315,14 +316,12 @@ _RDF_FOLDERS = (
 #    (None, 'eke.knowledge.publicationfolder', u'Publications', u'Items published by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf', u'http://edrn.jpl.nasa.gov/bmdb/rdf/publications'], _setupPublications),
     (None, 'eke.knowledge.sitefolder', u'Sites', u'Institutions and PIs in EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/sites/@@rdf'], _setupSites),
     (None, 'eke.knowledge.protocolfolder', u'Protocols', u'Studies pursued by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/protocols/@@rdf'], _null),
-    (None, 'eke.knowledge.datasetfolder', u'Data', u'Data collected by EDRN.', [u'https://edrn.nci.nih.gov/miscellaneous-knowledge-system-artifacts/science-data-rdf-1/at_download/file'], _setupDatasets),
+    (None, 'eke.knowledge.datasetfolder', u'Data', u'Data collected by EDRN.', [u'file:' + os.path.join(os.environ['EDRN_PORTAL_HOME'], u'data', u'ecas.rdf')], _setupDatasets),
 # Disable while BMDB is down:
 #    (None, 'eke.knowledge.biomarkerfolder', u'Biomarkers', u'Indicators for cancer.', [u'https://edrn.jpl.nasa.gov/bmdb/rdf/biomarkers?qastate=all'], _setupBiomarkers),
     (None, 'eke.knowledge.biomarkerfolder', u'Biomarkers', u'Indicators for cancer.', [u'file:' + os.path.join(os.environ['EDRN_PORTAL_HOME'], u'data', u'bio.rdf')], _setupBiomarkers),
     (None, 'eke.knowledge.collaborationsfolder', u'Groups', u'Collaborative Groups and Committees.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/committees/@@rdf'], _null),
 )
-# Use this to turn off all RDF during development; really speeds things up:
-# _RDF_FOLDERS = tuple()
 
 
 # From https://docs.python.org/2/library/csv.html
@@ -497,8 +496,11 @@ def _tuneUp(portal):
         'administrivia/division-of-cancer-prevention',
         'administrivia/cancer-biomarkers-research-group'
     ):
-        folder = portal.unrestrictedTraverse(path)
-        _addToQuickLinks(folder)
+        try:
+            folder = portal.unrestrictedTraverse(path)
+            _addToQuickLinks(folder)
+        except KeyError:
+            pass
 
     # Set site proposal
     _setSiteProposals(portal)
@@ -524,9 +526,9 @@ def _publish(context, workflowTool=None):
             _publish(subItem, workflowTool)
 
 
-def _ingest(portal):
+def _ingest(portal, rdfFolders):
     folders, paths, uids = [], [], {}
-    for containerPath, fti, title, desc, urls, postFunction in _RDF_FOLDERS:
+    for containerPath, fti, title, desc, urls, postFunction in rdfFolders:
         if containerPath is None:
             container = portal
         else:
@@ -852,7 +854,7 @@ def _empowerSuperUsers(portal):
     groupsTool.editGroup('Portal Content Custodian', roles=['Site Administrator'], groups=())
 
 
-def _setupEDRN(app, username, password, ldapPassword):
+def _setupEDRN(app, username, password, ldapPassword, rdfFolders, lightweight):
     app = makerequest.makerequest(app)
     _setupZopeSecurity(app)
     _nukeAdmins(app)
@@ -860,16 +862,19 @@ def _setupEDRN(app, username, password, ldapPassword):
     portal = _createEDRNSite(app)
     setSite(portal)
     uids = _BLANK_UIDS
-    uids.update(_loadZEXPFiles(portal))  # Stack traces; see https://community.plone.org/t/stack-trace-when-loading-zexp-from-a-script/8060
+    if not lightweight:
+        # Stack traces; see https://community.plone.org/t/stack-trace-when-loading-zexp-from-a-script/8060
+        uids.update(_loadZEXPFiles(portal))
     _setLDAPPassword(portal, ldapPassword)
-    uids.update(_ingest(portal))
+    uids.update(_ingest(portal, rdfFolders))
     _doStaticQuickLinksPortlet(portal, uids)
     _doDMCCRSSPortlet(portal)
     _setGlobalNavOrder(portal)
     # Replaced with RDF folder:
     # _addGroupSpaces(portal)
     _addMembersList(portal)
-    _importGroupContent(portal)
+    if not lightweight:
+        _importGroupContent(portal)
     _empowerSuperUsers(portal)
     _tuneUp(portal)  # this should be the last step always as it clears/rebuids the catalog and commits the txn
     noSecurityManager()
@@ -887,7 +892,8 @@ def main(argv):
         username = args.username
         password = args.password if args.password else getpass.getpass(u'Password for Zope user "{}": '.format(username))
         ldapPassword = args.ldapPassword if args.ldapPassword else getpass.getpass(u'LDAP password: ')
-        _setupEDRN(app, username, password, ldapPassword)
+        rdfFolders = tuple() if args.lightweight else _RDF_FOLDERS
+        _setupEDRN(app, username, password, ldapPassword, rdfFolders, args.lightweight)
     except Exception as ex:
         logging.exception(u'This is most unfortunate: %s', unicode(ex))
         return False
