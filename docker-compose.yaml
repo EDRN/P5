@@ -1,0 +1,85 @@
+# Docker Composition for EDRN P5
+# ==============================
+#
+# Sample Docker Composition to support the EDRN Portal, power level 5.
+
+
+# Services
+# --------
+#
+# Just two are needed for the EDRN portal, the portal software plus a cache.
+services:
+    # EDRN Plone 5-based Portal
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~
+    #
+    # Happens to be in this host's filesystem, so we can toss in a ``build``
+    # tag too.
+    edrn-portal:
+        container_name: edrn-portal
+        image: edrn-p5:${EDRN_PORTAL_VERSION-latest}
+        volumes:
+            # This is the main Zope database; super important!
+            - type: bind
+              source: ${EDRN_DATA_DIR}/filestorage
+              target: /data/filestorage
+              consistency: consistent
+            # This is the Zope's blob storage, also super important
+            - type: bind
+              source: ${EDRN_DATA_DIR}/blobstorage
+              target: /data/blobstorage
+              consistency: consistent
+            # This contains Zope logs
+            - type: bind
+              source: ${EDRN_DATA_DIR}/log
+              target: /data/log
+              consistency: delegated
+            # TODO: make the "import" directory available some day
+        ports:
+            # Map container's Plone's 8080 to 2345 (or EDRN_PUBLISHED_PORT)
+            - target: 8080
+              published: ${EDRN_PUBLISHED_PORT-2345}
+              protocol: tcp
+              mode: host
+        environment:
+            # Empty settings inherit values from the host's environment
+            EDRN_PORTAL_VERSION:
+            EDRN_DATA_DIR:
+            EDRN_PUBLISHED_PORT:
+        depends_on:
+            # The cache should start first
+            - edrn-memory-cache
+        build:
+            context: .
+            dockerfile: Dockerfile
+        restart: on-failure
+        stop_grace_period: 23s
+
+    # Memory Cache
+    # ~~~~~~~~~~~~
+    #
+    # Mainly (exclusively?) for caching LDAP query results
+    edrn-memory-cache:
+        container_name: edrn-memory-cache
+        image: memcached
+        ports:
+            - target: 11211
+              published: 11211
+              protocol: tcp
+              mode: host
+
+
+# Networks
+# --------
+#
+# Thankfully, this is pretty simple.
+networks:
+    default:
+        driver: bridge
+
+
+# Misc
+# ----
+#
+# Only thing we have here is some Docker Compose metadata.
+version: '3.7'
+
