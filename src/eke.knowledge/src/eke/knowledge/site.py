@@ -6,8 +6,12 @@ from Acquisition import aq_inner
 from five import grok
 from knowledgeobject import IKnowledgeObject
 from plone.app.vocabularies.catalog import CatalogSource
+from plone.memoize.view import memoize
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
+from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
+import urlparse, plone.api
 
 
 # Pre-declared so that the "sponsor" field works, see below.
@@ -173,3 +177,32 @@ class View(grok.View):
         potential = memberType.startswith(u'Associate') or memberType.startswith('Assocaite')  # Thanks DMCC. Ugh >.<
         sponsorAvailable = context.sponsor is not None and context.sponsor.to_object is not None
         return potential and sponsorAvailable
+    def siteID(self):
+        context = aq_inner(self.context)
+        return urlparse.urlparse(context.identifier).path.split(u'/')[-1]
+    def haveStaff(self):
+        return len(self.staff()) > 0
+    @memoize
+    def staff(self):
+        context = aq_inner(self.context)
+        annointed = set()
+        if context.principalInvestigator:
+            annointed.add(context.principalInvestigator.to_id)
+        for fieldName in ('coPrincipalInvestigators', 'coInvestigators', 'investigators'):
+            investigators = getattr(context, fieldName, [])
+            if investigators is None: investigators = []
+            for i in investigators:
+                annointed.add(i.to_id)
+        itUtil, catalog = getUtility(IIntIds), plone.api.portal.get_tool('portal_catalog')
+        brains = catalog(
+            object_provides=IPerson.__identifier__,
+            path=dict(query='/'.join(context.getPhysicalPath()), depth=1),
+            sort_on='sortable_title'
+        )
+        staff = []
+        for brain in brains:
+            person = brain.getObject()
+            personID = itUtil.getId(person)
+            if personID not in annointed:
+                staff.append(brain)
+        return staff

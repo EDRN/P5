@@ -35,9 +35,9 @@
                   </span>
               </a>
               -->
-              <span class='tile' tal:content='item/title' style='font-weight: bold;'>
+              <h6 class='tile' tal:content='item/title' style='font-weight: bold; padding-bottom: 0.5em;'>
                 news item title
-              </span>
+              </h6>
               <span class='portletItemDetails' tal:content='structure item/summary'>
                 blah
               </span>

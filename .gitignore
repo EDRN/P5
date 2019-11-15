@@ -21,3 +21,5 @@ robot_output.xml
 zexp-exports
 typescript
 _build
+group-export
+sk-rebuild.sh

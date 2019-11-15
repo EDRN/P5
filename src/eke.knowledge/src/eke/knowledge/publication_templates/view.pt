@@ -14,12 +14,12 @@
         <metal:content-core fill-slot='content-core'>
             <metal:content-core define-macro='content-core'>
 
-                <div tal:define='abstract context/description'>
+                <div tal:define='abstract context/abstract'>
                     <label for='abstract'>Abstract:</label>
                     <p id='abstract' class='discreet' tal:condition='not:abstract'>
                         No abstract available.
                     </p>
-                    <p id='abstract' tal:condition='abstract' tal:content='abstract'>
+                    <p id='abstract' tal:condition='abstract' tal:content='structure abstract'>
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
                         quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo

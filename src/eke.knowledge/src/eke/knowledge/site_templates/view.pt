@@ -14,9 +14,27 @@
         <metal:content-core fill-slot='content-core'>
             <metal:content-core define-macro='content-core'>
 
-                <div id="site-abbreviation">
-                    <label for='field-abbreviation' i18n:translate='label_abbreviation'>Abbreviation:</label>
-                    <span id='field-abbreviation' tal:content='structure context/abbreviation'>XQY</span>
+                <div class='field' id='formfield-form-widgets-abbreviation'>
+                    <label for='form-widgets-abbreviation' i18n:translate='label_abbreviation' class='horizontal'>
+                        Abbreviation:
+                        <span class='formHelp'>A small acronym or abbreviation for the site</span>
+                    </label>
+                    <div id='form-widgets-abbreviation' class='string-widget string-field'
+                        tal:content='context/abbreviation'>
+                        XQY
+                    </div>
+                </div>
+
+                <div class='field' id='formfield-form-widgets-siteID'>
+                    <label for='form-widgets-siteID' i18n:translate='label_siteID' class='horizontal'>
+                        Site ID:
+                        <span class='formHelp'>A simple number (but could be a more sophisticated RDF URI)
+                        </span>
+                    </label>
+                    <div id='form-widgets-siteID' class='string-widget int-field'
+                        tal:content='view/siteID'>
+                        123
+                    </div>
                 </div>
 
                 <div id="site-column-container">
@@ -103,6 +121,17 @@
                                 </li>
                             </ul>
                         </div>
+                    </div>
+
+                    <div tal:condition='view/haveStaff' tal:omit-tag=''>
+                        <h4 i18n:translate='staff-header'>Staff</h4>
+                        <ul>
+                            <li tal:repeat='staff view/staff'>
+                                <a href='#' tal:attributes='href staff/getURL' tal:content='staff/Title'>
+                                    Josephina Blow
+                                </a>
+                            </li>
+                        </ul>
                     </div>
 
 <!--

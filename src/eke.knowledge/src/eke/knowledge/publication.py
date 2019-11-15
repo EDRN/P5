@@ -6,12 +6,18 @@ from five import grok
 from knowledgeobject import IKnowledgeObject
 from plone.memoize.view import memoize
 from zope import schema
+from plone.app.textfield import RichText
 from Acquisition import aq_inner
 import plone.api, cgi
 
 
 class IPublication(IKnowledgeObject):
     u'''Something published.'''
+    abstract = RichText(
+        title=_(u'Abstract'),
+        description=_(u'A summary of the content of this publication.'),
+        required=False,
+    )
     authors = schema.List(
         title=_(u'Authors'),
         description=_(u'Creators of the publication.'),
