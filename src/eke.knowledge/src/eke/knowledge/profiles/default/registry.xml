@@ -8,9 +8,9 @@
             <description i18n:domain='eke.knowledge' i18n:translate=''>
                 Globally enable RDF ingest.
             </description>
-            <default>True</default>
+            <default>False</default>
         </field>
-        <value>True</value>
+        <value>False</value>
     </record>
     <record name='eke.knowledge.interfaces.IPanel.ingestStart'
         interface='eke.knowledge.interfaces.IPanel'
