@@ -13,7 +13,7 @@ For commands below (csh style) and for ``docker-compose.yml``::
     setenv EDRN_PORTAL_VERSION 5.0.0
     setenv EDRN_DATA_DIR ${HOME}/Downloads/docker-data/edrn
     setenv EDRN_PUBLISHED_PORT 4135
-    mkdir -p ${EDRN_DATA_DIR}
+    mkdir -p ${EDRN_DATA_DIR}/log
 
 
 Dockerfile
@@ -33,6 +33,12 @@ To explore a plain Plone container::
 To build::
         
     docker build --tag edrn-p5 .
+
+Then::
+
+    docker login
+    docker tag edrn-p5:latest nutjob4life/edrn-p5:latest
+    docker push nutjob4life/edrn-p5:latest
 
 
 Running Standalone
@@ -120,6 +126,7 @@ Docker Composition
 
 Start (including perhaps build, don't forget env vars)::
 
+    mkdir -p ${EDRN_DATA_DIR}/log
     docker-compose --project-name edrn up --detach
 
 NOTE: you must do::
