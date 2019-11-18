@@ -50,6 +50,10 @@ class RDFIngestor(grok.View):
                         self.skipped.append(folder)
                     except IngestDisabled:
                         self.skipped.append(folder)
+                    except Exception as ex:
+                        # What should we do here??!
+                        raise ex
+                        # import pdb;pdb.set_trace()
                     # TODO except what else? We need a more graceful way to handle other exceptions
                     # like network outages
             finally:
