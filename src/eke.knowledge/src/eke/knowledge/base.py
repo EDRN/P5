@@ -106,11 +106,12 @@ class Ingestor(grok.Adapter):
                 newVals = [i.toPython() for i in newVals]
                 if isReference:
                     rvs = fieldBinding.get(obj)
-                    if rvs is None: continue
+                    # If a RelationValue's target item is deleted, the RelationValue object still exists,
+                    # but will have None settings for to_id, to_object, and to_path
                     if schema.interfaces.ICollection.providedBy(field):
-                        paths = [i.to_path for i in rvs]
+                        paths = [i.to_path for i in rvs if i.to_path] if rvs else []
                     else:
-                        paths = [rvs.to_path]
+                        paths = [rvs.to_path] if rvs and rvs.to_path else []
                     matches = catalog(path={'query': paths, 'depth': 0})
                     currentRefs = [i['identifier'].decode('utf-8') for i in matches]
                     currentRefs.sort()
