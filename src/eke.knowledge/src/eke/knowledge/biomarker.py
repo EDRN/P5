@@ -306,6 +306,7 @@ class BiomarkerView(grok.View):
     @memoize
     def bodySystems(self):
         context = aq_inner(self.context)
+        mtool = plone.api.portal.get_tool('portal_membership')
         catalog = plone.api.portal.get_tool('portal_catalog')
         results = catalog(
             object_provides=IBiomarkerBodySystem.__identifier__,
@@ -313,7 +314,10 @@ class BiomarkerView(grok.View):
             sort_on='sortable_title'
         )
         results = [dict(
-            name=i.Title, obj=i.getObject(), resources=[j.to_object for j in i.getObject().resources]
+            name=i.Title,
+            obj=i.getObject(),
+            resources=[j.to_object for j in i.getObject().resources],
+            viewable=i.getObject().qaState == u'Accepted' or not mtool.isAnonymousUser()
         ) for i in results]
         for result in results:
             resources = result['resources']
