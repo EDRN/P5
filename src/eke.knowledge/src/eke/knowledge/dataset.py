@@ -133,7 +133,7 @@ IDataset.setTaggedValue('predicates', {
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#site': ('sites', True),
     u'urn:edrn:Author': ('authors', False),
     u'urn:edrn:GrantSupport': ('grantSupport', False),
-    u'urn:edrn:ResearchSupport': ('researchSupprot', False),
+    u'urn:edrn:ResearchSupport': ('researchSupport', False),
     u'urn:edrn:DataDisclaimer': ('dataDisclaimer', False),
     u'urn:edrn:StudyBackground': ('studyBackground', False),
     u'urn:edrn:StudyMethods': ('studyMethods', False),
