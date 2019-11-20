@@ -164,7 +164,7 @@
                             <ul tal:condition='resources'>
                                 <li tal:repeat='resource resources'>
                                     <a href='#' tal:content='resource/to_object/title' title='Chat Service'
-                                        tal:attributes='title resources/to_object/description|nothing; href resource/to_object/absolute_url'>
+                                        tal:attributes='title resources/to_object/description|nothing; href resource/to_object/identifier'>
                                         Yahoo Instant Messenger
                                     </a>
                                 </li>
