@@ -24,12 +24,13 @@ from Testing import makerequest
 from zope.component import getUtility, getMultiAdapter
 from zope.component.hooks import setSite
 from zope.container.interfaces import INameChooser
+from zope.globalrequest import setRequest
 import sys, logging, transaction, argparse, os, os.path, plone.api, csv, codecs, json, getpass
 
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)-8s %(message)s')
 app = globals().get('app', None)  # ``app`` comes from ``instance run`` magic.
-_argParser = argparse.ArgumentParser(prog='setupEDRN.py', description=u'Adds a Manager user')
+_argParser = argparse.ArgumentParser(prog='setupEDRN.py', description=u'Set up P5 EDRN database')
 _argParser.add_argument('--username', default='zope', help=u'Zope admin user, defaults to %(default)s')
 _argParser.add_argument('--password', default=None, help=u"Zope admin password, prompted if not given")
 _argParser.add_argument('--ldapPassword', default=None, help=u"LDAP password, prompted if not given")
@@ -505,11 +506,12 @@ def _tuneUp(portal):
     # Set site proposal
     _setSiteProposals(portal)
 
-    # Finally, make sure everything is indexed so they appear where they need
-    # to be
+    # Clear find rebuild
     logging.info('Clearing and rebuilding the catalog')
     catalog = plone.api.portal.get_tool('portal_catalog')
     catalog.clearFindAndRebuild()
+
+    # Done for now
     transaction.commit()
     return True
 
@@ -526,7 +528,7 @@ def _publish(context, workflowTool=None):
             _publish(subItem, workflowTool)
 
 
-def _ingest(portal, rdfFolders):
+def _createIngestFolders(portal, rdfFolders, lightweight):
     folders, paths, uids = [], [], {}
     for containerPath, fti, title, desc, urls, postFunction in rdfFolders:
         if containerPath is None:
@@ -550,10 +552,24 @@ def _ingest(portal, rdfFolders):
     for f in folders:
         _publish(f)
         uids[f.id] = f.UID()
-    registry = getUtility(IRegistry)
-    registry['eke.knowledge.interfaces.IPanel.objects'] = paths
-    ingestor = portal.unrestrictedTraverse('@@ingestRDF')
-    ingestor()
+    if not lightweight:
+        # In non-lightweight mode, an ingest step could populate the database with huge
+        # amounts of content, which would make it decidedly non-lightweight.  So we set
+        # the ingest paths only in heavy mode (not lightweight).
+        registry = getUtility(IRegistry)
+        registry['eke.knowledge.interfaces.IPanel.objects'] = paths
+
+        # The paths normally include:
+        # resources/body-systems
+        # resources/diseases
+        # resources/miscellaneous-resources
+        # publications
+        # sites
+        # protocols
+        # data
+        # biomarkers
+        # groups
+
     return uids
 
 
@@ -856,6 +872,8 @@ def _empowerSuperUsers(portal):
 
 def _setupEDRN(app, username, password, ldapPassword, rdfFolders, lightweight):
     app = makerequest.makerequest(app)
+    app.REQUEST['PARENTS'] = [app]
+    setRequest(app.REQUEST)
     _setupZopeSecurity(app)
     _nukeAdmins(app)
     _installAdmin(app, username, password)
@@ -866,7 +884,7 @@ def _setupEDRN(app, username, password, ldapPassword, rdfFolders, lightweight):
         # Stack traces; see https://community.plone.org/t/stack-trace-when-loading-zexp-from-a-script/8060
         uids.update(_loadZEXPFiles(portal))
     _setLDAPPassword(portal, ldapPassword)
-    uids.update(_ingest(portal, rdfFolders))
+    uids.update(_createIngestFolders(portal, rdfFolders, lightweight))  # this used to ingest as well, but reasons
     _doStaticQuickLinksPortlet(portal, uids)
     _doDMCCRSSPortlet(portal)
     _setGlobalNavOrder(portal)
@@ -876,7 +894,10 @@ def _setupEDRN(app, username, password, ldapPassword, rdfFolders, lightweight):
     if not lightweight:
         _importGroupContent(portal)
     _empowerSuperUsers(portal)
-    _tuneUp(portal)  # this should be the last step always as it clears/rebuids the catalog and commits the txn
+    # We used to clear/rebuild the catalog here but ingest is moved to a separate step for reasons.
+    # That means some other step must clear/rebuild the catalog in order to get a database in good
+    # working order.
+    _tuneUp(portal)
     noSecurityManager()
 
 

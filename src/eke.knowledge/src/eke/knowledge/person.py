@@ -4,7 +4,7 @@
 # from .protocol import IProtocol  # We can't import this because of a circular dependency
 from . import _
 from .publication import IPublication
-from Acquisition import aq_inner
+from Acquisition import aq_inner, aq_parent
 from five import grok
 from knowledgeobject import IKnowledgeObject
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -154,7 +154,7 @@ class View(grok.View):
         catalog = plone.api.portal.get_tool('portal_catalog')
         results = catalog(
             object_provides=IPublication.__identifier__,
-            siteID=context.siteID,
+            siteID=aq_parent(context).identifier,  # This was context.siteID, but how did that ever work?
             sort_on='sortable_title'
         )
         publications = []

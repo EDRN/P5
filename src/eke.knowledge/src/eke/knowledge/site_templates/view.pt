@@ -60,13 +60,17 @@
 
                     </div>
                     <div id="site-right-column">
-                        <div>
+                        <div tal:define='
+                            piRef context/principalInvestigator|nothing;
+                            piObj nocall:piRef/to_object|nothing;
+                        '>
                             <label for='principalInvestigator' i18n:translate='label_principalInvestigator'>
                                 Principal Investigator:
                             </label>
-                            <a href='#' tal:attributes='href context/principalInvestigator/to_object/absolute_url'
+                            <a href='#' tal:condition='piObj'
+                                tal:attributes='href piObj/absolute_url'
                                 id='principalInvestigator'
-                                tal:content='context/principalInvestigator/to_object/Title'>
+                                tal:content='piObj/Title'>
                                 Joe PI
                             </a>
                         </div>
