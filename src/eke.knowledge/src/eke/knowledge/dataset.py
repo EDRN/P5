@@ -16,6 +16,7 @@ from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
 from zope.interface import Interface
 from .person import IPerson
+from collective import dexteritytextindexer
 import plone.api
 
 
@@ -114,6 +115,7 @@ class IDataset(IKnowledgeObject):
         description=_(u'The name of the protocol or study that produced this data.'),
         required=False,
     )
+    dexteritytextindexer.searchable('investigator')
     investigator = RelationChoice(
         title=_(u'Investigator'),
         description=_(u'Principal investigator investigating this data.'),

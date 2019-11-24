@@ -67,4 +67,9 @@
 
     <browser:resourceDirectory name='eke.knowledge' directory='static'/>
 
+    <!-- Converters for collective.dexteritytextindexer -->
+    <adapter factory='eke.knowledge.converters.RelationChoiceFieldConverter'/>
+    <adapter factory='eke.knowledge.converters.RelationListFieldConverter'/>
+
+
 </configure>
