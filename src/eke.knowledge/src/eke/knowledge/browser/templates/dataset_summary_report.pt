@@ -32,7 +32,7 @@ function dashboard(id, fData){
     // function to handle histogram.
     function histoGram(fD){
         var hG={},    hGDim = {t: 20, r: 0, b: 20, l: 0};
-        hGDim.w = 900 - hGDim.l - hGDim.r, 
+        hGDim.w = 700 - hGDim.l - hGDim.r, 
         hGDim.h = 180 - hGDim.t - hGDim.b;
             
         //create svg for histogram.
@@ -100,7 +100,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
             items.push({organ: datakeys[key], freq:{datasets:data[datakeys[key]]}});
         });
         var sorted = items.sort(function(a, b) {
-           return a.freq.datasets - b.freq.datasets;
+           return b.freq.datasets - a.freq.datasets;
         });
         console.log(sorted);
         dashboard('#dashboard', sorted);
