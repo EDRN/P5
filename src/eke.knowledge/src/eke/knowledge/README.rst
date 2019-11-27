@@ -622,7 +622,7 @@ Ingesting::
     >>> transaction.commit()
     >>> browser.open(portalURL + '/@@ingestRDF')
     >>> browser.contents
-    '...RDF Ingest Report...Objects Created (19)...Objects Updated (6)...'
+    '...RDF Ingest Report...Objects Created (19)...Objects Updated (22)...'
     >>> len(resourcesFolder.keys())
     2
     >>> keys = resourcesFolder.keys()
