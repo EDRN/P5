@@ -256,24 +256,23 @@
         </field>
         <value purge='False'>
             <element>eke.knowledge.biomarkerbodysystem</element>
-            <element>eke.knowledge.bodysystemfolder</element>
-            <element>eke.knowledge.bodysystem</element>
             <element>eke.knowledge.biomarkerfolder</element>
+            <element>eke.knowledge.bodysystem</element>
+            <element>eke.knowledge.bodysystemfolder</element>
             <element>eke.knowledge.bodysystemstudy</element>
             <element>eke.knowledge.collaborationsfolder</element>
-            <element>eke.knowledge.collaborativegroupindex</element>
+            <element>eke.knowledge.collaborativegroupfolder</element>
+            <element>eke.knowledge.groupspacefolder</element>
             <element>eke.knowledge.datasetfolder</element>
-            <element>eke.knowledge.diseasefolder</element>
             <element>eke.knowledge.disease</element>
-            <element>eke.knowledge.groupspaceindex</element>
+            <element>eke.knowledge.diseasefolder</element>
             <element>eke.knowledge.protocolfolder</element>
             <element>eke.knowledge.publicationfolder</element>
-            <element>eke.knowledge.publication</element>
             <element>eke.knowledge.resource</element>
             <element>eke.knowledge.resourcefolder</element>
             <element>eke.knowledge.sitefolder</element>
             <element>eke.knowledge.studystatistics</element>
-            </value>
+        </value>
     </record>
 
 </registry>
