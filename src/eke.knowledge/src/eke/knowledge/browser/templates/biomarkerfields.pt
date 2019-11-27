@@ -246,7 +246,7 @@
             </div>
             <div tal:condition='not:bodySystem/viewable'>
                 Organ-specific information for this biomarker is currently being annotated or is under review.
-                You must be logged in or do not have permission to view any additional information. Contact Heather Kincaid at heather.kincaid@jpl.nasa.gov if you should have access to this biomarker.
+                You must be logged in or do not have permission to view any additional information. Contact the <a href='mailto:ic-portal@jpl.nasa.gov'>Informatics Center</a> if you should have access to this biomarker.
             </div>
         </div>
         <script>
