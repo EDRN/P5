@@ -12,7 +12,6 @@ from node.ext.ldap.interfaces import ILDAPProps
 from plone.app.dexterity.behaviors.exclfromnav import IExcludeFromNavigation
 from plone.app.textfield.value import RichTextValue
 from plone.dexterity.utils import createContentInContainer
-from plone.namedfile.file import NamedBlobFile
 from plone.portlet.static.static import Assignment as StaticPortletAssignment
 from plone.portlets.interfaces import IPortletManager, IPortletAssignmentMapping
 from plone.registry.interfaces import IRegistry
@@ -25,7 +24,7 @@ from zope.component import getUtility, getMultiAdapter
 from zope.component.hooks import setSite
 from zope.container.interfaces import INameChooser
 from zope.globalrequest import setRequest
-import sys, logging, transaction, argparse, os, os.path, plone.api, csv, codecs, json, getpass
+import sys, logging, transaction, argparse, os, os.path, plone.api, csv, codecs, getpass
 
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)-8s %(message)s')
@@ -607,86 +606,6 @@ def _setGlobalNavOrder(portal):
             portal.moveObjectsToTop([item])
 
 
-def _addCollaborativeGroups(portal):
-    if 'collaborative-groups' in portal.keys():
-        portal.manage_delObjects(['collaborative-groups'])
-    folder = createContentInContainer(
-        portal, 'Folder', id='collaborative-groups', title=u'Collaborative Groups',
-        description=u'Groups that work (and, in fact, collaborate) together.'
-    )
-    adapter = IExcludeFromNavigation(folder, None)
-    if adapter is not None:
-        adapter.exclude_from_nav = True
-    brl = createContentInContainer(
-        folder, 'eke.knowledge.groupspacefolder', title=u'Biomarker Reference Laboratories',
-        description=u'Biomarker Reference Laboratories Group Pages.'
-    )
-    breast = createContentInContainer(
-        folder, 'eke.knowledge.collaborativegroupfolder', title=u'Breast and Gynecologic Cancers Research Group',
-        description=u'Collaborative group for those working on breast and gynecologic cancers.'
-    )
-    gi = createContentInContainer(
-        folder, 'eke.knowledge.collaborativegroupfolder', title=u'G.I. and Other Associated Cancers Research Group',
-        description=u'Collaborative group for those working on GI and other associated cancers.'
-    )
-    lung = createContentInContainer(
-        folder, 'eke.knowledge.collaborativegroupfolder', title=u'Lung and Upper Aerodigestive Cancers Research Group',
-        description=u'Collaborative group for those working on lung and upper aerodigestive associated cancers.'
-    )
-    prostate = createContentInContainer(
-        folder, 'eke.knowledge.collaborativegroupfolder', title=u'Prostate and Urologic Cancers Research Group',
-        description=u'Collaborative group for those working on prostate and urologic cancers.'
-    )
-    body = _COLLAB_GROUPS_BODY.format(
-        brl=brl.UID(), breast=breast.UID(), gi=gi.UID(), lung=lung.UID(), prostate=prostate.UID()
-    )
-    createContentInContainer(
-        folder, 'Document', id='index_html', title=u'Collaborative Groups',
-        description=u'Groups that work (and, in fact, collaborate) together.',
-        text=RichTextValue(body, 'text/html', 'text/x-html-safe')
-    )
-    folder.setDefaultPage('index_html')
-    _publish(folder)
-
-
-def _addCommittees(portal):
-    if 'committees' in portal.keys():
-        portal.manage_delObjects(['committees'])
-    folder = createContentInContainer(
-        portal, 'Folder', id='committees', title=u'Committees',
-        description=u'The following describes the committees, subcommittees, and other components of EDRN.'
-    )
-    adapter = IExcludeFromNavigation(folder, None)
-    if adapter is not None:
-        adapter.exclude_from_nav = True
-    for name in (
-        u'Associate Member',
-        u'Biomarker Developmental Laboratories',
-        u'Biomarker Reference Laboratories',
-        u'Clinical Epidemiology and Validation Center',
-        u'Collaboration and Publication Subcommittee',
-        u'Communication and Workshop Subcommittee',
-        u'Data Management and Coordinating Center',
-        u'Data Sharing and Informatics Subcommittee',
-        u'ERNE Working Group',
-        u'Executive Committee',
-        u'Jet Propulsion Laboratory',
-        u'National Cancer Institute',
-        u'Network Consulting Team',
-        u'Prioritization Subcommittee',
-        u'Steering Committee',
-        u'Technology and Resource Sharing Subcommittee'
-    ):
-        createContentInContainer(folder, 'eke.knowledge.groupspacefolder', title=name)
-    _publish(folder)
-
-
-def _addGroupSpaces(portal):
-    u'''Add group workspaces, collaborative groups, committees'''
-    _addCollaborativeGroups(portal)
-    _addCommittees(portal)
-
-
 def _addMembersList(portal):
     u'''Add the faceted members list'''
     if 'members-list' in portal.keys():
@@ -761,109 +680,6 @@ def _addMembersList(portal):
     _publish(folder)
 
 
-def _getEntryType(fromFolder):
-    typeIndicator = os.path.join(fromFolder, 'TYPE.txt')
-    if not os.path.isfile(typeIndicator): return None
-    with open(typeIndicator, 'r') as f:
-        return f.read()
-
-
-def _getMetadata(fromFolder, filename='metadata.json'):
-    metadataFile = os.path.join(fromFolder, filename)
-    if not os.path.isfile(metadataFile): return None
-    with open(metadataFile, 'rb') as f:
-        return json.load(f)
-
-
-def _doFolderImport(parent, fsFolder):
-    metadata = _getMetadata(fsFolder)
-    assert metadata is not None, u'No metadata found for %s' % fsFolder
-    folder = createContentInContainer(parent, 'Folder', title=metadata['title'], description=metadata['description'])
-    _doGroupImport(folder, fsFolder)
-
-
-def _doGroupEventImport(parent, fsFolder):
-    metadata = _getMetadata(fsFolder, 'EVENT.json')
-    folder = createContentInContainer(parent, 'Folder', title=metadata['title'], description=metadata['description'])
-    event = createContentInContainer(
-        folder,
-        'Event',
-        attendees=metadata['attendees'],
-        contact_email=metadata['contactEmail'],
-        contact_name=metadata['contactName'],
-        contact_phone=metadata['contactPhone'],
-        description=metadata['description'],
-        event_url=metadata['eventUrl'],
-        location=metadata['location'],
-        text=RichTextValue(metadata['text'], 'text/html', 'text/x-html-safe'),
-        title=metadata['title']
-    )
-    folder.setDefaultPage(event.id)
-    _doGroupImport(folder, fsFolder)
-
-
-def _doFileImport(folder, fsFolder):
-    metadata = _getMetadata(fsFolder)
-    with open(os.path.join(fsFolder, 'file.dat'), 'rb') as f:
-        createContentInContainer(
-            folder,
-            'File',
-            title=metadata['title'],
-            description=metadata['description'],
-            file=NamedBlobFile(f.read(), filename=metadata['filename'], contentType=metadata['contentType'])
-        )
-
-
-def _doHighlightImport(folder, fsFolder):
-    metadata = _getMetadata(fsFolder, 'HIGHLIGHT.json')
-    highlight = createContentInContainer(
-        folder,
-        'News Item',
-        title=metadata['title'],
-        description=metadata['description'],
-        text=RichTextValue(metadata['text'], 'text/html', 'text/x-html-safe')
-    )
-    _publish(highlight)
-
-
-def _doGroupImport(folder, fsFolder):
-    for entryName in os.listdir(fsFolder):
-        entry = os.path.join(fsFolder, entryName)
-        if os.path.isdir(entry):
-            entryType = _getEntryType(entry)
-            assert entryType is not None and len(entryType) > 0
-            if entryType == 'Folder':
-                _doFolderImport(folder, entry)
-            elif entryType == 'Group Event':
-                _doGroupEventImport(folder, entry)
-            elif entryType == 'File':
-                _doFileImport(folder, entry)
-            elif entryType == 'Highlight':
-                _doHighlightImport(folder, entry)
-            else:
-                assert False, u'Bad entry type {}'.format(entryType)
-
-
-def _importGroupContent(portal):
-    groupContent = os.path.abspath(os.environ.get('GROUP_EXPORTS', u''))
-    if not os.path.isdir(groupContent):
-        logging.warn(u'Group content "%s" not present, skipping import', groupContent)
-        return
-    logging.debug(u'Importing group content from "%s"', groupContent)
-    try:
-        groups = portal.unrestrictedTraverse('groups')
-        for groupID in groups.keys():
-            fsFolder = os.path.join(groupContent, groupID)
-            if not os.path.isdir(fsFolder):
-                logging.debug(u'No FS export for %s; skipping', groupID)
-                continue
-            logging.debug(u'Importing %s from FS path %s', groupID, fsFolder)
-            groupFolder = groups[groupID]
-            _doGroupImport(groupFolder, fsFolder)
-    except KeyError:
-        logging.warn(u'No "groups" in portal, skipping')
-
-
 def _empowerSuperUsers(portal):
     groupsTool = plone.api.portal.get_tool('portal_groups')
     groupsTool.editGroup('Super User', roles=['Manager'], groups=())
@@ -888,11 +704,7 @@ def _setupEDRN(app, username, password, ldapPassword, rdfFolders, lightweight):
     _doStaticQuickLinksPortlet(portal, uids)
     _doDMCCRSSPortlet(portal)
     _setGlobalNavOrder(portal)
-    # Replaced with RDF folder:
-    # _addGroupSpaces(portal)
     _addMembersList(portal)
-    if not lightweight:
-        _importGroupContent(portal)
     _empowerSuperUsers(portal)
     # We used to clear/rebuild the catalog here but ingest is moved to a separate step for reasons.
     # That means some other step must clear/rebuild the catalog in order to get a database in good
