@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:cas="urn:oodt:" xmlns:edrn="urn:edrn:" xmlns:x="http://edrn.nci.nih.gov/rdf/schema.rdf#">
+  <edrn:DukeLabMAPBreastData rdf:about="http://edrn.jpl.nasa.gov/ecas/data/dataset/urn:edrn:DukeLabMAPBreastData">
+    <edrn:Date>2008-06-24T20:12:00.000Z</edrn:Date>
+    <edrn:DataCustodianPhone>TBD</edrn:DataCustodianPhone>
+    <x:protocol rdf:resource="http://edrn.nci.nih.gov/data/protocols/70"/>
+    <edrn:DataCustodian>Tina Xiao</edrn:DataCustodian>
+    <x:organ rdf:resource="http://edrn.nci.nih.gov/data/body-systems/Breast"/>
+    <edrn:DataDisclaimer>Data and information released from the National Cancer Institute (NCI) are provided on an "AS IS" basis, without warranty of any kind, including without limitation the warranties of merchantability, fitness for a particular purpose and non-infringement. Availability of this data and information does not constitute scientific publication. Data and/or information may contain errors or be incomplete.
+NCI and its employees make no representation or warranty, express or implied, including without limitation any warranties of merchantability or fitness for a particular purpose or warranties as to the identity or ownership of data or information, the quality, accuracy or completeness of data or information, or that the use of such data or information will not infringe any patent, intellectual property or proprietary rights of any party.
+NCI shall not be liable for any claim for any loss, harm, illness or other damage or injury arising from access to or use of data or information, including without limitation any direct, indirect, incidental, exemplary, special or consequential damages, even if advised of the possibility of such damages.
+In accordance with scientific standards, appropriate acknowledgment of NCI should be made in any publications or other disclosures concerning data or information made available by NCI. 
+      	</edrn:DataDisclaimer>
+    <edrn:DatasetId>urn:edrn:DukeLabMAPBreastData</edrn:DatasetId>
+    <edrn:CollaborativeGroup>Breast/GYN</edrn:CollaborativeGroup>
+    <edrn:StudyDesign>TBD</edrn:StudyDesign>
+    <x:AccessGrantedTo>Breast and Gynecologic</x:AccessGrantedTo>
+    <x:AccessGrantedTo>Super User</x:AccessGrantedTo>
+    <x:site rdf:resource="http://edrn.nci.nih.gov/data/sites/81"/>
+    <x:QAState>Under Review</x:QAState>
+    <edrn:DataCustodianEmail>TBD</edrn:DataCustodianEmail>
+    <edrn:DataSetName>Duke University Breast Data</edrn:DataSetName>
+    <edrn:AnalyticMethods>TBD</edrn:AnalyticMethods>
+    <edrn:StudyBackground>Early detection of breast cancer might improve clinical outcome. Some studies have 
+        shown the role of cytokines as a new group of tumor markers for breast cancer. We hypothesized 
+        that a panel comprised of multiple cytokines, which individually may not show strong correlation 
+        with the disease, might provide higher diagnostic power.</edrn:StudyBackground>
+    <edrn:StudyMethods>To evaluate the diagnostic utility of cytokine panel, we used a novel multianalyte LabMAP profiling 
+        technology that allows simultaneous measurement of multiple markers.</edrn:StudyMethods>
+    <edrn:LeadPI>Jeffrey Marks</edrn:LeadPI>
+    <x:protocol rdf:resource="http://edrn.nci.nih.gov/data/protocols/70"/>
+    <edrn:EligibilityCriteria>TBD</edrn:EligibilityCriteria>
+    <edrn:ResultsAndConclusionSummary>TBD</edrn:ResultsAndConclusionSummary>
+    <edrn:MethodDetails>TBD</edrn:MethodDetails>
+    <edrn:PublishState>yes</edrn:PublishState>
+  </edrn:DukeLabMAPBreastData>
+</rdf:RDF>
