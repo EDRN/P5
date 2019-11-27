@@ -3,16 +3,17 @@
 from . import _
 from .disease import IDisease
 from .dublincore import TITLE_URI, DESCRIPTION_URI
-from .publication import IPublication
 from .person import IPerson
+from .publication import IPublication
 from .site import ISite
 from Acquisition import aq_inner
+from collective import dexteritytextindexer
 from five import grok
 from knowledgeobject import IKnowledgeObject
-from plone.memoize.view import memoize
-from zope import schema
-from z3c.relationfield.schema import RelationChoice, RelationList
 from plone.app.vocabularies.catalog import CatalogSource
+from plone.memoize.view import memoize
+from z3c.relationfield.schema import RelationChoice, RelationList
+from zope import schema
 import plone.api
 
 
@@ -135,6 +136,7 @@ class IProtocol(IKnowledgeObject):
         description=_(u'No one knows what is really supposed to go here.'),
         required=False,
     )
+    dexteritytextindexer.searchable('abbrevName')
     abbrevName = schema.Text(
         title=_(u'Abbreviated Name'),
         description=_(u'A shorter and possibly far more convenient name for the protocol.'),
@@ -327,6 +329,13 @@ class IProtocol(IKnowledgeObject):
         description=_(u'Name of the principal investigator.'),
         required=False,
     )
+    dexteritytextindexer.searchable('protocolID')
+    protocolID = schema.TextLine(
+        title=_(u'Protocol ID'),
+        description=_(u'A kind of code assigned by the DMCC for EDRN protocols; may be blank for non-EDRN protocols.'),
+        required=False,
+    )
+    dexteritytextindexer.searchable('principalInvestigator')
     principalInvestigator = RelationChoice(
         title=_(u'Principal Investigtaor'),
         description=_(u'The investigator principally in charge.'),
@@ -405,9 +414,7 @@ class View(grok.View):
         return [dict(title=i.Title, description=i.Description, url=i.getURL()) for i in items]
     def protocolID(self):
         context = aq_inner(self.context)
-        if not context.identifier:
-            return u'?'
-        return context.identifier.split('/')[-1]
+        return context.protocolID if context.protocolID else u'?'
     def isEDRNProtocol(self):
         protocolID = self.protocolID()
         try:

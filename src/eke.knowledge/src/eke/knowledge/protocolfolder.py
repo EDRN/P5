@@ -119,6 +119,8 @@ class ProtocolIngestor(Ingestor):
                     p.collaborativeGroup = []
                 # Set project flag
                 p.project = True if isProject else False
+                # Set protocol ID
+                p.protocolID = urlparse.urlparse(uri).path.split(u'/')[-1]
                 # Set PI
                 siteIdentifier = unicode(predicates.get(_leadInvestigatorSiteURI, [u''])[0])
                 if siteIdentifier:
