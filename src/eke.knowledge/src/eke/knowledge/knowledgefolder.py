@@ -3,11 +3,11 @@
 
 u'''EKE Knowledge: Knowledge Folder'''
 
+from Acquisition import aq_inner
 from eke.knowledge import _
 from five import grok
 from plone.supermodel import model
 from zope import schema
-from Acquisition import aq_inner
 import plone.api
 
 
