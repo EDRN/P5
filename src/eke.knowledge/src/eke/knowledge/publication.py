@@ -6,6 +6,7 @@ from five import grok
 from knowledgeobject import IKnowledgeObject
 from plone.memoize.view import memoize
 from zope import schema
+from collective import dexteritytextindexer
 from plone.app.textfield import RichText
 from Acquisition import aq_inner
 import plone.api, cgi
@@ -18,6 +19,7 @@ class IPublication(IKnowledgeObject):
         description=_(u'A summary of the content of this publication.'),
         required=False,
     )
+    dexteritytextindexer.searchable('authors')
     authors = schema.List(
         title=_(u'Authors'),
         description=_(u'Creators of the publication.'),

@@ -4,6 +4,7 @@ u'''Panel of biomarkers'''
 
 from . import _
 from .biomarker import BiomarkerView, IBiomarker
+from collective import dexteritytextindexer
 from five import grok
 from plone.app.vocabularies.catalog import CatalogSource
 from z3c.relationfield.schema import RelationChoice, RelationList
@@ -11,6 +12,7 @@ from z3c.relationfield.schema import RelationChoice, RelationList
 
 class IBiomarkerPanel(IBiomarker):
     u'''A panel of biomarkers that itself behaves as a single (yet composite) biomarker.'''
+    dexteritytextindexer.searchable('members')
     members = RelationList(
         title=_(u'Member Markers'),
         description=_(u'Biomarkers that are a part of this panel'),

@@ -17,6 +17,7 @@ from plone.memoize.view import memoize
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
 from zope.container.interfaces import IObjectAddedEvent
+from collective import dexteritytextindexer
 from zope.interface import Interface
 import plone.api
 
@@ -62,6 +63,7 @@ class IResearchedObject(Interface):
             source=CatalogSource(object_provides=IProtocol.__identifier__)
         )
     )
+    dexteritytextindexer.searchable('publications')
     publications = RelationList(
         title=_(u'Publications'),
         description=_(u'Publications that have been written discussing this object.'),
@@ -98,11 +100,13 @@ class IResearchedObject(Interface):
 
 class IBiomarker(IKnowledgeObject, IResearchedObject, IQualityAssuredObject):
     u'''An abstract biomarker.'''
+    dexteritytextindexer.searchable('shortName')
     shortName = schema.TextLine(
         title=_(u'Short Name'),
         description=_(u'A shorter and preferred alias for the biomarker.'),
         required=False
     )
+    dexteritytextindexer.searchable('hgncName')
     hgncName = schema.TextLine(
         title=_(u'HGNC Name'),
         description=_(u'The name assigned by the HUGO Gene Nomenclature Committee.'),

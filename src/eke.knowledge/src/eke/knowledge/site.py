@@ -3,6 +3,7 @@
 from . import _, dublincore
 from .person import IPerson
 from Acquisition import aq_inner
+from collective import dexteritytextindexer
 from five import grok
 from knowledgeobject import IKnowledgeObject
 from plone.app.vocabularies.catalog import CatalogSource
@@ -21,6 +22,7 @@ class ISite(IKnowledgeObject):
 
 class ISite(IKnowledgeObject):
     '''Site.'''
+    dexteritytextindexer.searchable('abbreviation')
     abbreviation = schema.TextLine(
         title=_(u'Abbreviation'),
         description=_(u'A short name for the site.'),
@@ -68,12 +70,14 @@ class ISite(IKnowledgeObject):
         description=_(u'Various notes made by various individuals within EDRN about this EDRN site.'),
         required=False,
     )
+    dexteritytextindexer.searchable('principalInvestigator')
     principalInvestigator = RelationChoice(
         title=_(u'Principal Investigator'),
         description=_(u'The leading investigator leading EDRN research at this site.'),
         required=False,
         source=CatalogSource(object_provides=IPerson.__identifier__)
     )
+    dexteritytextindexer.searchable('coPrincipalInvestigators')
     coPrincipalInvestigators = RelationList(
         title=_(u'Co-Principal Investigators'),
         description=_(u'Additional leading principal investigators.'),
@@ -84,6 +88,7 @@ class ISite(IKnowledgeObject):
             source=CatalogSource(object_provides=IPerson.__identifier__)
         )
     )
+    dexteritytextindexer.searchable('coInvestigators')
     coInvestigators = RelationList(
         title=_(u'Co-Investigators'),
         description=_(u'Assistant or associate investigators helping out with EDRN research at the site.'),
@@ -94,6 +99,7 @@ class ISite(IKnowledgeObject):
             source=CatalogSource(object_provides=IPerson.__identifier__)
         )
     )
+    dexteritytextindexer.searchable('investigators')
     investigators = RelationList(
         title=_(u'Investigators'),
         description=_(u'Investigators at the site conducting other research.'),
@@ -117,6 +123,7 @@ class ISite(IKnowledgeObject):
         description=_(u'DMCC-assigned identifier of the site.'),
         required=False,
     )
+    dexteritytextindexer.searchable('organs')
     organs = RelationList(
         title=_(u'Organs'),
         description=_(u'Names of the organs on which this site focuses.'),

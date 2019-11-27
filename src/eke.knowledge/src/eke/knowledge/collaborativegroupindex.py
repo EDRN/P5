@@ -5,18 +5,20 @@ u'''EKE Knowledge: Collaborative Group Index'''
 
 # from .person import IPerson
 # import plone.api
+
 from . import _
 from .biomarker import IBiomarker
 from .dataset import IDataset
 from .groupspaceindex import IGroupSpaceIndex
 from .groupspaceindex import View as BaseView
 from .protocol import IProtocol
-from five import grok
-from plone.app.vocabularies.catalog import CatalogSource
-from z3c.relationfield.schema import RelationChoice, RelationList
-from plone.memoize.view import memoize
-from plone.app.contenttypes.interfaces import INewsItem
 from Acquisition import aq_inner, aq_parent
+from collective import dexteritytextindexer
+from five import grok
+from plone.app.contenttypes.interfaces import INewsItem
+from plone.app.vocabularies.catalog import CatalogSource
+from plone.memoize.view import memoize
+from z3c.relationfield.schema import RelationChoice, RelationList
 
 
 # How many top items to show
@@ -25,6 +27,7 @@ _top = 3
 
 class ICollaborativeGroupIndex(IGroupSpaceIndex):
     u'''Index page for a collaborative group folder.'''
+    dexteritytextindexer.searchable('biomarkers')
     biomarkers = RelationList(
         title=_(u'Biomarkers'),
         description=_(u'Biomarkers being researched by this group.'),

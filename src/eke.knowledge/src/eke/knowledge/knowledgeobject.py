@@ -3,6 +3,7 @@
 
 u'''EKE Knowledge: Knowledge Object'''
 
+from collective import dexteritytextindexer
 from eke.knowledge import _
 from plone.supermodel import model
 from zope import schema
@@ -15,6 +16,7 @@ class IKnowledgeObject(model.Schema):
         description=_(u'Name of this object.'),
         required=True,
     )
+    dexteritytextindexer.searchable('description')
     description = schema.Text(
         title=_(u'Description'),
         description=_(u'A short summary of this object.'),
