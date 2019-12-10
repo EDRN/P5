@@ -142,6 +142,7 @@ class SiteIngestor(Ingestor):
             id=personID,
             title=personTitle,
             identifier=unicode(identifier),
+            personID=urlparse.urlparse(unicode(identifier)).path.split(u'/')[-1]
         )
         getUtility(IIntIds).register(person)  # WHY IS THIS NEEDED?
         for predicate, fieldName in _personPredicates:
