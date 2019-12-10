@@ -24,7 +24,7 @@ from zope.component import getUtility, getMultiAdapter
 from zope.component.hooks import setSite
 from zope.container.interfaces import INameChooser
 from zope.globalrequest import setRequest
-import sys, logging, transaction, argparse, os, os.path, plone.api, csv, codecs, getpass
+import sys, logging, transaction, argparse, os, os.path, plone.api, getpass
 
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)-8s %(message)s')
@@ -324,40 +324,6 @@ _RDF_FOLDERS = (
 )
 
 
-# From https://docs.python.org/2/library/csv.html
-class UTF8Recoder(object):
-    """
-    Iterator that reads an encoded stream and reencodes the input to UTF-8
-    """
-    def __init__(self, f, encoding):
-        self.reader = codecs.getreader(encoding)(f)
-
-    def __iter__(self):
-        return self
-
-    def next(self):
-        return self.reader.next().encode("utf-8")
-
-
-# From https://docs.python.org/2/library/csv.html
-class UnicodeReader(object):
-    """
-    A CSV reader which will iterate over lines in the CSV file "f",
-    which is encoded in the given encoding.
-    """
-
-    def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
-        f = UTF8Recoder(f, encoding)
-        self.reader = csv.reader(f, dialect=dialect, **kwds)
-
-    def next(self):
-        row = self.reader.next()
-        return [unicode(s, "utf-8") for s in row]
-
-    def __iter__(self):
-        return self
-
-
 def _setupLogging():
     channel = logging.StreamHandler()
     channel.setFormatter(logging.Formatter('%(asctime)-15s %(levelname)-8s %(message)s'))
@@ -452,27 +418,6 @@ def _addToQuickLinks(context):
         context.subject = tuple(subjects)
 
 
-def _setSiteProposals(portal):
-    u'''HK entered this stuff by hand on the old portal.'''
-    # Organ or proposal text can be empty strings
-    catalog = plone.api.portal.get_tool('portal_catalog')
-    with open(os.path.join('data', 'site-hand-info.csv'), 'rb') as f:
-        reader = UnicodeReader(f)
-        for row in reader:
-            identifier, organs, proposal = row
-            results = catalog(identifier=identifier, object_provides='eke.knowledge.site.ISite')
-            if len(results) == 0:
-                logging.info('No sites matching %s found; skipping', identifier)
-                continue
-            elif len(results) > 1:
-                logging.critical('Multiple sites matching %s found (%d); should not happen', identifier, len(results))
-                raise Exception('Multiple sites matching %s found (%d); should not happen' % (identifier, len(results)))
-            else:
-                site = results[0].getObject()
-                site.organs = organs.split(u',')
-                site.proposal = proposal
-
-
 def _tuneUp(portal):
     u'''Final tweaks.'''
 
@@ -501,9 +446,6 @@ def _tuneUp(portal):
             _addToQuickLinks(folder)
         except KeyError:
             pass
-
-    # Set site proposal
-    _setSiteProposals(portal)
 
     # Clear find rebuild
     logging.info('Clearing and rebuilding the catalog')
