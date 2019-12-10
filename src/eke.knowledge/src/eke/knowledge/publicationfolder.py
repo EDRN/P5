@@ -151,11 +151,18 @@ class PublicationIngestor(Ingestor):
                 if not pmID or not _pubMedExpr.match(pmID): continue
                 if pmID in pmIDtoSubjectURIs:
                     _logger.warning(
-                        u'PubMedID %s already represented by publication %s; ignoring',
+                        u'PubMedID %s already represented by publication %s; but making a duplicate anyway',
                         pmID,
                         pmIDtoSubjectURIs[pmID]
                     )
-                    continue
+                    # Argh! Normally I would want to do this:
+                    #     continue
+                    # except that other parts of the knowledge environment use various
+                    # RDF subject URIs (like BMDB, eCAS) to link to what should be the
+                    # same publication—and have the same pubmedID—but don't know any
+                    # better. So for now, allow multiple Publication objects to exist
+                    # even with the same pubmed ID just so we can address them with
+                    # different RDF URI identifiers. Fuuuuuuuu—
                 siteID = unicode(predicates.get(_siteIDURI, [u''])[0])
                 subjectURItoPMIDs[unicode(subjectURI)] = (pmID, siteID)
                 pmIDtoSubjectURIs[pmID] = unicode(subjectURI)
