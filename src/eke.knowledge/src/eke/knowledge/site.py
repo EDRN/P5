@@ -118,6 +118,7 @@ class ISite(IKnowledgeObject):
     #     required=False,
     # )
 
+    dexteritytextindexer.searchable('dmccSiteID')
     dmccSiteID = schema.TextLine(
         title=_(u'DMCC Site ID'),
         description=_(u'DMCC-assigned identifier of the site.'),
@@ -184,9 +185,6 @@ class View(grok.View):
         potential = memberType.startswith(u'Associate') or memberType.startswith('Assocaite')  # Thanks DMCC. Ugh >.<
         sponsorAvailable = context.sponsor is not None and context.sponsor.to_object is not None
         return potential and sponsorAvailable
-    def siteID(self):
-        context = aq_inner(self.context)
-        return urlparse.urlparse(context.identifier).path.split(u'/')[-1]
     def haveStaff(self):
         return len(self.staff()) > 0
     @memoize

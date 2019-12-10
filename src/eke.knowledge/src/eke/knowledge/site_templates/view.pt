@@ -25,14 +25,13 @@
                     </div>
                 </div>
 
-                <div class='field' id='formfield-form-widgets-siteID'>
-                    <label for='form-widgets-siteID' i18n:translate='label_siteID' class='horizontal'>
-                        Site ID:
-                        <span class='formHelp'>A simple number (but could be a more sophisticated RDF URI)
-                        </span>
+                <div class='field' id='formfield-form-widgets-dmccSiteID'>
+                    <label for='form-widgets-dmccSiteID' i18n:translate='label_dmccSiteID' class='horizontal'>
+                        DMCC Site ID:
+                        <span class='formHelp'>A numeric code assigned by the DMCC but could be blank for non-EDRN sites.</span>
                     </label>
-                    <div id='form-widgets-siteID' class='string-widget int-field'
-                        tal:content='view/siteID'>
+                    <div id='form-widgets-dmccSiteID' class='string-widget text-field'
+                        tal:content='context/dmccSiteID'>
                         123
                     </div>
                 </div>
