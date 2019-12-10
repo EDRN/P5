@@ -34,13 +34,19 @@
                 </td>
               </tr>
             </table>    
+            <div tal:condition='context/personID' class='field' id='formfield-form-widgets-personID'>
+                <label for='form-widgets-personID' i18n:translate='label_personID' class='horizontal'>
+                    DMCC Person ID:
+                    <span class='formHelp'>A code assigned by the DMCC to identify this person; may be blank for non-EDRN people.</span>
+                </label>
+                <div id='form-widgets-personID' class='string-widget text-field'
+                    tal:content='context/personID'>
+                    123
+                </div>
+            </div>
             <div>
                 <label for='edrnTitle' i18n:translate='label_edrnTitle'>EDRN Title:</label>
                 <span id='edrnTitle' tal:content='context/edrnTitle'>Grand Poobah</span>
-            </div>
-            <div>
-                <label for='staffID' i18n:translate='label_staffID'>Staff ID:</label>
-                <span id='staffID' tal:content='view/staffID'>123</span>
             </div>
             <div tal:define='specialty context/specialty'>
                 <label for='specialty' i18n:translate='label_specialty'>Specialty:</label>

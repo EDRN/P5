@@ -13,6 +13,7 @@ from zope.component import getUtility
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
 from .utils import generateVocabularyFromIndex
+from collective import dexteritytextindexer
 import plone.api, urlparse
 
 
@@ -119,6 +120,12 @@ class IPerson(IKnowledgeObject):
         required=False,
         value_type=schema.TextLine(title=_(u'Degree'), description=_(u'Academic degree bestowed upon this person'))
     )
+    dexteritytextindexer.searchable('personID')
+    personID = schema.TextLine(
+        title=_(u'Person ID'),
+        description=_(u'A kind of code assigned by the DMCC for EDRN people; may be blank for non-EDRN people.'),
+        required=False,
+    )
 
 
 IPerson.setTaggedValue('predicates', {
@@ -161,10 +168,6 @@ class View(grok.View):
         for i in results:
             publications.append(i.getObject())  # Any reason we're waking up objects here?
         return publications
-    def staffID(self):
-        context = aq_inner(self.context)
-        i = urlparse.urlparse(context.identifier).path.split(u'/')[-1]
-        return i if i else u'?'
 
 
 class PrincipalInvestigatorsVocabulary(object):
