@@ -16,7 +16,7 @@ from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
-import urlparse, logging, plone.api, rdflib, urllib2, contextlib
+import urlparse, logging, plone.api, rdflib, urllib2, contextlib, json
 
 
 _logger = logging.getLogger(__name__)
@@ -115,4 +115,11 @@ class DatasetSummary(grok.View):
         context = aq_inner(self.context)
         self.request.response.setHeader('Content-type', 'application/json; charset=utf-8')
         self.request.response.setHeader('Content-Transfer-Encoding', '8bit')
-        return context.dataSummary
+        if not context.dataSummary:
+            return u'{}'
+        data = json.loads(context.dataSummary)
+        if u'Liver, Placenta, Brain' in data:
+            data[u'Liver etc.']  = data[u'Liver, Placenta, Brain']
+            del data[u'Liver, Placenta, Brain']
+        return json.dumps(data)
+
