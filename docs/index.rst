@@ -8,9 +8,51 @@ Research Network (EDRN). The EDRN portal is nominally available at
 https://edrn.nci.nih.gov/.
 
 
+Functions
+---------
+
 .. autofunction:: eke.knowledge.utils.publish
 
+That was publish.
 
+
+Modules
+-------
+
+.. automodule:: eke.knowledge.utils
+
+That was utils.
+
+
+Exceptions
+----------
+
+.. autoexception:: eke.knowledge.errors.TitlePredicateMissingError
+
+That as an error.
+
+
+Classes
+-------
+
+.. autoclass:: eke.knowledge.interfaces.IPanel
+
+And there's a class.
+
+
+Data
+----
+
+.. autodata:: eke.knowledge.base.DC_TITLE
+
+That was data.
+
+
+
+
+
+
+.. what else is auto???
 
 
 .. toctree::
