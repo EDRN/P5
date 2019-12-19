@@ -316,7 +316,7 @@ _RDF_FOLDERS = (
 #    (None, 'eke.knowledge.publicationfolder', u'Publications', u'Items published by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf', u'http://edrn.jpl.nasa.gov/bmdb/rdf/publications'], _setupPublications),
     (None, 'eke.knowledge.sitefolder', u'Sites', u'Institutions and PIs in EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/sites/@@rdf'], _setupSites),
     (None, 'eke.knowledge.protocolfolder', u'Protocols', u'Studies pursued by EDRN.', [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/protocols/@@rdf'], _null),
-    (None, 'eke.knowledge.datasetfolder', u'Data', u'Data collected by EDRN.', [u'file:' + os.path.join(os.environ['EDRN_PORTAL_HOME'], u'data', u'ecas.rdf')], _setupDatasets),
+    (None, 'eke.knowledge.datasetfolder', u'Data', u'Data collected by EDRN.', [u'file:' + os.path.join(os.environ['EDRN_PORTAL_HOME'], u'data', u'labcas.rdf')], _setupDatasets),
 # Disable while BMDB is down:
 #    (None, 'eke.knowledge.biomarkerfolder', u'Biomarkers', u'Indicators for cancer.', [u'https://edrn.jpl.nasa.gov/bmdb/rdf/biomarkers?qastate=all'], _setupBiomarkers),
     (None, 'eke.knowledge.biomarkerfolder', u'Biomarkers', u'Indicators for cancer.', [u'file:' + os.path.join(os.environ['EDRN_PORTAL_HOME'], u'data', u'bio.rdf')], _setupBiomarkers),
