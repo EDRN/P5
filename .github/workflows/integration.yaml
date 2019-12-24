@@ -4,6 +4,7 @@
 ---
 
 name: P5 Continuous Integration
+
 on:
     push:
         branches:
@@ -12,9 +13,21 @@ on:
             - 'docs/**'
 
 jobs:
-    image:
-        name: Docker Image Creation
+    testing:
+        name: P5 Testing
         runs-on: ubuntu-latest
+        steps:
+            -
+                name: Checking out P5 repository
+                uses: actions/checkout@v2
+            -
+                name: Running tests
+                uses: ./.github/actions/buildout
+
+    imaging:
+        name: P5 Docker Image Creation
+        runs-on: ubuntu-latest
+        needs: testing
         steps:
             -
                 name: Checking out P5 repository

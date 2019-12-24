@@ -1,0 +1,27 @@
+# Buildout Action
+# ===============
+#
+# GitHub action that bootstraps and runs a zc.buildout
+
+---
+
+name: 'Buildout'
+author: 'Sean Kelly <kelly@seankelly.biz>'
+description: 'Bootstrap and run a zc.buildout'
+branding:
+    icon: 'meh'
+    color: 'purple'
+inputs:
+    boostrap-url:
+        description: >
+            URL to the boostrapper to use; only used if the repository lacks `bootstrap.py`
+            and defaults to zc.buildout's web master file
+        required: false
+        default: 'https://bootstrap.pypa.io/bootstrap-buildout.py'
+runs:
+    using: 'docker'
+    image: 'Dockerfile'
+    args:
+        - ${{ inputs.bootstrap-url }}
+
+...
