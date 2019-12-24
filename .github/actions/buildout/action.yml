@@ -12,9 +12,9 @@ branding:
     icon: 'meh'
     color: 'purple'
 inputs:
-    boostrap-url:
+    bootstrap-url:
         description: >
-            URL to the boostrapper to use; only used if the repository lacks `bootstrap.py`
+            URL to the bootstrapper to use; only used if the repository lacks `bootstrap.py`
             and defaults to zc.buildout's web master file
         required: false
         default: 'https://bootstrap.pypa.io/bootstrap-buildout.py'

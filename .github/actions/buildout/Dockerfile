@@ -4,7 +4,7 @@
 FROM debian:9.5-slim
 
 LABEL "com.github.actions.name"="Buildout"
-LABEL "com.github.actions.description"="Boostraps and builds-out in the style of zc.buildout"
+LABEL "com.github.actions.description"="Bootstraps and builds-out in the style of zc.buildout"
 LABEL "com.github.actions.icon"="meh"
 LABEL "com.github.actions.color"="purple"
 
