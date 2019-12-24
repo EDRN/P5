@@ -1,7 +1,7 @@
 # Image Specification for Buildout for GitHub Actions
 # ===================================================
 
-FROM debian:9.5-slim
+FROM python:2.7
 
 LABEL "com.github.actions.name"="Buildout"
 LABEL "com.github.actions.description"="Bootstraps and builds-out in the style of zc.buildout"

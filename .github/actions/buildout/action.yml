@@ -14,14 +14,21 @@ branding:
 inputs:
     bootstrap-url:
         description: >
-            URL to the bootstrapper to use; only used if the repository lacks `bootstrap.py`
-            and defaults to zc.buildout's web master file
+            URL to the bootstrapper to use; only used if the repository lacks `bootstrap.py` and defaults to
+            zc.buildout's web master file
         required: false
         default: 'https://bootstrap.pypa.io/bootstrap-buildout.py'
+    buildout-config:
+        description: >
+            Path within the GitHub workspace of the zc.buildout configuration to use, if any; defaults to
+            `buildout.cfg`.
+        required: false
+        default: 'buildout.cfg'
 runs:
     using: 'docker'
     image: 'Dockerfile'
     args:
         - ${{ inputs.bootstrap-url }}
+        - ${{ inputs.buildout-config }}
 
 ...
