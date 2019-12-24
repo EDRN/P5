@@ -1,0 +1,27 @@
+# P5 Continous Integration
+# ========================
+
+---
+
+name: P5 Continuous Integration
+on:
+    push:
+        branches:
+            - master
+        paths-ignore:
+            - 'docs/**'
+
+jobs:
+    image:
+        name: Docker Image Creation
+        runs-on: ubuntu-latest
+        steps:
+            -
+                name: Checking out P5 repository
+                uses: actions/checkout@v2
+            -
+                name: Building image
+                run: docker image build --file Dockerfile --tag edrn-p5 .
+
+
+...
