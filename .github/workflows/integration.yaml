@@ -22,21 +22,14 @@ jobs:
                 uses: actions/checkout@v2
             -
                 name: Building out P5 in dev mode
-                uses: ./.github/actions/buildout
+                uses: ./.github/actions/buildout-test
                 with:
                     buildout-config: dev.cfg
-            -
-                name: Testing theme package `edrn.theme`
-                run: bin/test -s edrn.theme
-            -
-                name: Testing policy package `edrnsite.portlets`
-                run: bin/test -s edrnsite.policy
-            -
-                name: Testing portlets package `edrnsite.portlets`
-                run: bin/test -s edrnsite.portlets
-            -
-                name: Testing knowledge environment `eke.knowledge`
-                run: bin/test -s eke.knowledge
+                    test-packages: |
+                        edrn.theme
+                        edrnsite.policy
+                        edrnsite.portlets
+                        eke.knowledge
     imaging:
         name: P5 Docker Image Creation
         runs-on: ubuntu-latest

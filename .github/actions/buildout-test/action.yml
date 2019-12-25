@@ -1,13 +1,16 @@
-# Buildout Action
-# ===============
+# Buildout and Test Action
+# ========================
 #
-# GitHub action that bootstraps and runs a zc.buildout
+# GitHub action that
+# • Bootstraps a zc.buildout 
+# • Runs the buildout, which we assume makes a zope testrunner
+# • RUns the test runner
 
 ---
 
 name: 'Buildout'
 author: 'Sean Kelly <kelly@seankelly.biz>'
-description: 'Bootstrap and run a zc.buildout'
+description: 'Bootstrap and run a zc.buildout and then tests'
 branding:
     icon: 'meh'
     color: 'purple'
@@ -24,11 +27,16 @@ inputs:
             `buildout.cfg`.
         required: false
         default: 'buildout.cfg'
+    test-packages:
+        description: >
+            Test packages to run
+        required: true
 runs:
     using: 'docker'
     image: 'Dockerfile'
     args:
         - ${{ inputs.bootstrap-url }}
         - ${{ inputs.buildout-config }}
+        - ${{ inputs.test-packages }}
 
 ...

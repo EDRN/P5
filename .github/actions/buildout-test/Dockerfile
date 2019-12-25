@@ -1,5 +1,5 @@
-# Image Specification for Buildout for GitHub Actions
-# ===================================================
+# Image Specification for Buildout+Test for GitHub Actions
+# ========================================================
 
 FROM plone/plone:5.1.5
 
@@ -12,6 +12,7 @@ LABEL "repository"="https://github.com/EDRN/P5.git"
 LABEL "homepage"="https://edrn.nci.nih.gov/"
 LABEL "maintainer"="Sean Kelly <kelly@seankelly.biz>"
 
+# For my application, I need additional libraries
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         libldap2-dev \
@@ -26,8 +27,13 @@ RUN apt-get update \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /root/.buildout
+
+# Avoid re-downloading Plone; note this must get copied to $HOME which changes
+# from /root to /github/home by GitHub Actions; the ``entrypoint.sh`` takes
+# care of that
 ADD default.cfg /root/.buildout/default.cfg
+
+# The entry point
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-
 ENTRYPOINT ["/entrypoint.sh"]

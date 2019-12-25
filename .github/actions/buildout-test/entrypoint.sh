@@ -1,8 +1,12 @@
 #!/bin/sh -l
 #
+# Bootstrap, buildout, and run tests
+#
+# This feels … not so modular
 
 bootstrapURL="$1"
 buildoutConfig="$2"
+testPackages="$3"
 
 PATH=/usr/local/bin:/usr/bin:/bin
 export PATH
@@ -21,10 +25,16 @@ fi
 
 python bootstrap.py -c "$buildoutConfig" && bin/buildout -c "$buildoutConfig"
 
-# echo "🚗 ===== OK we are in ====="
-# echo "⚙️ ===== args = $@ "
-# echo "… bootstrapURL= $bootstrapURL"
-# echo "… buildoutConfig = $buildoutConfig"
+# Check if bin/test exists
+
+echo "🚗 ===== OK we are in ====="
+echo "⚙️ ===== args = $@ "
+echo "… bootstrapURL= $bootstrapURL"
+echo "… buildoutConfig = $buildoutConfig"
+echo "… testPackages = $testPackages"
+echo "… and bin dir contains"
+ls -F bin
+
 # echo "…pwd"
 # pwd
 # echo "🌳 ===== env follows"
