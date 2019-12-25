@@ -25,7 +25,11 @@ jobs:
                 uses: ./.github/actions/buildout
                 with:
                     buildout-config: dev.cfg
-
+            -
+                name: Testing theme
+                run: |
+                    pwd
+                    env
     imaging:
         name: P5 Docker Image Creation
         runs-on: ubuntu-latest
