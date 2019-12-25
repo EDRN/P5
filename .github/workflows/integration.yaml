@@ -26,10 +26,17 @@ jobs:
                 with:
                     buildout-config: dev.cfg
             -
-                name: Testing theme
-                run: |
-                    pwd
-                    env
+                name: Testing theme package `edrn.theme`
+                run: bin/test -s edrn.theme
+            -
+                name: Testing policy package `edrnsite.portlets`
+                run: bin/test -s edrnsite.policy
+            -
+                name: Testing portlets package `edrnsite.portlets`
+                run: bin/test -s edrnsite.portlets
+            -
+                name: Testing knowledge environment `eke.knowledge`
+                run: bin/test -s eke.knowledge
     imaging:
         name: P5 Docker Image Creation
         runs-on: ubuntu-latest
@@ -41,6 +48,5 @@ jobs:
             -
                 name: Building image
                 run: docker image build --file Dockerfile --tag edrn-p5 .
-
 
 ...
