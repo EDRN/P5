@@ -7,16 +7,10 @@ buildoutConfig="$2"
 PATH=/usr/local/bin:/usr/bin:/bin
 export PATH
 
+mkdir $HOME/.buildout
+cp /root/.buildout/default.cfg $HOME/.buildout
+
 cd "$GITHUB_WORKSPACE"
-
-if [ \! -f $HOME/.buildout/default.cfg ]; then
-    echo "The image is missing the buildout default.cfg; home=$HOME"
-    ls -F $HOME
-    ls -F $HOME/.buildout
-    id
-    exit 1
-fi
-
 if [ \! -f bootstrap.py ]; then
     if [ \! -f bootstrap-buildout.py ]; then
         curl -L "$bootstrapURL" > bootstrap.py

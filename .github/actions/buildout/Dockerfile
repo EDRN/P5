@@ -25,9 +25,8 @@ RUN apt-get update \
     && apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
-    && mkdir -p /root/.buildout /github/home/.buildout
+    && mkdir -p /root/.buildout
 ADD default.cfg /root/.buildout/default.cfg
-ADD default.cfg /github/home/.buildout/default.cfg
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
