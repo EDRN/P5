@@ -13,6 +13,7 @@ if [ \! -f $HOME/.buildout/default.cfg ]; then
     echo "The image is missing the buildout default.cfg; home=$HOME"
     ls -F $HOME
     ls -F $HOME/.buildout
+    id
     exit 1
 fi
 
