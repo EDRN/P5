@@ -23,6 +23,8 @@ jobs:
             -
                 name: Building out P5 in dev mode
                 uses: ./.github/actions/buildout
+                with:
+                    buildout-config: dev.cfg
 
     imaging:
         name: P5 Docker Image Creation
