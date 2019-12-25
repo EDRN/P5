@@ -9,6 +9,11 @@ export PATH
 
 cd "$GITHUB_WORKSPACE"
 
+if [ \! -f $HOME/.buildout/default.cfg ]; then
+    echo "The image is missing the buildout default.cfg"
+    exit 1
+fi
+
 if [ \! -f bootstrap.py ]; then
     if [ \! -f bootstrap-buildout.py ]; then
         curl -L "$bootstrapURL" > bootstrap.py
