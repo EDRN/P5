@@ -1,7 +1,7 @@
 # Image Specification for Buildout for GitHub Actions
 # ===================================================
 
-FROM python:2.7
+FROM plone/plone:5.1.5
 
 LABEL "com.github.actions.name"="Buildout"
 LABEL "com.github.actions.description"="Bootstraps and builds-out in the style of zc.buildout"
@@ -12,6 +12,12 @@ LABEL "repository"="https://github.com/EDRN/P5.git"
 LABEL "homepage"="https://edrn.nci.nih.gov/"
 LABEL "maintainer"="Sean Kelly <kelly@seankelly.biz>"
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libldap2-dev libsasl2-dev build-essential curl \
+    && apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+
 ENTRYPOINT ["/entrypoint.sh"]
