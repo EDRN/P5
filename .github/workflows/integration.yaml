@@ -21,7 +21,7 @@ jobs:
                 name: Checking out P5 repository
                 uses: actions/checkout@v2
             -
-                name: Building out P5 in dev mode
+                name: Building out and testing P5
                 uses: ./.github/actions/buildout-test
                 with:
                     buildout-config: dev.cfg
