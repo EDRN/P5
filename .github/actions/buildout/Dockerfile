@@ -18,6 +18,7 @@ RUN apt-get update \
         libsasl2-dev \
         build-essential \
         zlib1g-dev \
+        libjpeg-dev \
         curl \
     && apt-get autoremove -y \
     && apt-get clean -y \
