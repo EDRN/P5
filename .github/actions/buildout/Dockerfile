@@ -13,7 +13,12 @@ LABEL "homepage"="https://edrn.nci.nih.gov/"
 LABEL "maintainer"="Sean Kelly <kelly@seankelly.biz>"
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libldap2-dev libsasl2-dev build-essential curl \
+    && apt-get install -y --no-install-recommends \
+        libldap2-dev \
+        libsasl2-dev \
+        build-essential \
+        zlib1g-dev \
+        curl \
     && apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
