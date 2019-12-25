@@ -1,10 +1,20 @@
 # P5 Continous Integration
 # ========================
+#
+# This workflow builds the P5 software, runs tests, and creates a Docker
+# image.
+#
+# TODO: publish the image to a hub (Docker Hub? GitHub Packages?)
 
 ---
 
 name: P5 Continuous Integration
 
+# Triggers
+# ========
+#
+# Whenever there's a push to the master branch, which we always are supposed
+# to keep "usable at the drop of a hat"; except for the documentation.
 on:
     push:
         branches:
@@ -12,7 +22,12 @@ on:
         paths-ignore:
             - 'docs/**'
 
+# Jobs
+# ====
+#
+# What to do: test it (which also builds it) and image it.
 jobs:
+    # Testing builds it out (with zc.buildout) and runs the tests
     testing:
         name: P5 Testing
         runs-on: ubuntu-latest
@@ -30,6 +45,8 @@ jobs:
                         edrnsite.policy
                         edrnsite.portlets
                         eke.knowledge
+
+    # If testing works, then imaging builds the image and tags it `edrn-p5`.
     imaging:
         name: P5 Docker Image Creation
         runs-on: ubuntu-latest

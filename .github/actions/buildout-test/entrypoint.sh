@@ -14,7 +14,7 @@ export PATH
 mkdir $HOME/.buildout
 cp /root/.buildout/default.cfg $HOME/.buildout
 
-echo "🔍 Checking for `bootstrap.py` in $GITHUB_WORKSPACE…" 1>&2
+echo "🔍 Checking for \`bootstrap.py\` in $GITHUB_WORKSPACE…" 1>&2
 cd "$GITHUB_WORKSPACE"
 if [ ! -f bootstrap.py ]; then
     echo '🔍 Checking for `bootstrap-buildout.py`…' 1>&2

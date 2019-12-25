@@ -1,7 +1,13 @@
 # Image Specification for Buildout+Test for GitHub Actions
 # ========================================================
+#
+# Not reusable for generic Plone sites; this is just for EDRN P5.
 
 FROM plone/plone:5.1.5
+
+
+# Metadata
+# ========
 
 LABEL "com.github.actions.name"="Buildout"
 LABEL "com.github.actions.description"="Bootstraps and builds-out in the style of zc.buildout"
@@ -12,7 +18,12 @@ LABEL "repository"="https://github.com/EDRN/P5.git"
 LABEL "homepage"="https://edrn.nci.nih.gov/"
 LABEL "maintainer"="Sean Kelly <kelly@seankelly.biz>"
 
-# For my application, I need additional libraries
+
+# Additional Installations
+# ========================
+#
+# For P5, I need additional libraries
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         libldap2-dev \

@@ -1,7 +1,7 @@
 # Buildout and Test Action
 # ========================
 #
-# GitHub action that
+# GitHub action that:
 # • Bootstraps a zc.buildout 
 # • Runs the buildout, which we assume makes a zope testrunner
 # • RUns the test runner
@@ -12,6 +12,7 @@ name: 'Buildout'
 author: 'Sean Kelly <kelly@seankelly.biz>'
 description: 'Bootstrap and run a zc.buildout and then tests'
 branding:
+    # Quite possibly the best icon:
     icon: 'meh'
     color: 'purple'
 inputs:
