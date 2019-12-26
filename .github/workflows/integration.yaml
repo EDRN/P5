@@ -1,0 +1,81 @@
+# P5 Continous Integration
+# ========================
+#
+# This workflow builds the P5 software, runs tests, and creates a Docker
+# image.
+#
+# TODO: publish the image to a hub (Docker Hub? GitHub Packages?)
+
+---
+
+name: P5 Continuous Integration
+
+# Triggers
+# ========
+#
+# Whenever there's a push to the master branch, which we always are supposed
+# to keep "usable at the drop of a hat"; except for the documentation.
+on:
+    push:
+        branches:
+            - master
+        paths-ignore:
+            - 'docs/**'
+
+# Jobs
+# ====
+#
+# What to do: test it (which also builds it) and image it.
+jobs:
+    # Testing builds it out (with zc.buildout) and runs the tests
+    testing:
+        name: P5 Testing
+        runs-on: ubuntu-latest
+        steps:
+            -
+                name: Checking out P5 repository
+                uses: actions/checkout@v2
+            -
+                name: Building out and testing P5
+                uses: ./.github/actions/buildout-test
+                with:
+                    buildout-config: dev.cfg
+                    test-packages: |
+                        edrn.theme
+                        edrnsite.policy
+                        edrnsite.portlets
+                        eke.knowledge
+
+    # If testing works, then imaging builds the image and tags it `edrn-p5`.
+    imaging:
+        name: P5 Image creation+publication
+        needs: testing
+        runs-on: ubuntu-latest
+        steps:
+            -
+                name: Checking out P5 repository
+                uses: actions/checkout@v2
+            -
+                name: Building image
+                run: docker image build --file Dockerfile --tag edrn-p5 .
+            -
+                name: Logging into package registry
+                run: echo ${{ secrets.GITHUB_TOKEN }} |  docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
+            -
+                name: Pushing image
+                run: |
+                    # See https://github.com/actions/starter-workflows/blob/master/ci/docker-push.yml
+                    REPOSITORY=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')
+                    IMAGE_ID=docker.pkg.github.com/$REPOSITORY/edrn-p5
+                    # Strip git ref prefix from version
+                    VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+                    # Strip "v" prefix from tag name
+                    [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+                    # Use Docker `latest` tag convention
+                    [ "$VERSION" == "master" ] && VERSION=latest
+                    echo "💿 IMAGE_ID=$IMAGE_ID"
+                    echo "📚 VERSION=$VERSION"
+                    docker image tag edrn-p5 $IMAGE_ID:$VERSION
+                    docker image push $IMAGE_ID:$VERSION
+
+...
