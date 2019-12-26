@@ -48,7 +48,7 @@ jobs:
 
     # If testing works, then imaging builds the image and tags it `edrn-p5`.
     imaging:
-        name: P5 Docker Image creation & publication
+        name: P5 Image creation+publication
         needs: testing
         runs-on: ubuntu-latest
         steps:
