@@ -48,9 +48,9 @@ jobs:
 
     # If testing works, then imaging builds the image and tags it `edrn-p5`.
     imaging:
-        name: P5 Docker Image Creation
-        runs-on: ubuntu-latest
+        name: P5 Docker Image creation & publication
         needs: testing
+        runs-on: ubuntu-latest
         steps:
             -
                 name: Checking out P5 repository
@@ -58,5 +58,23 @@ jobs:
             -
                 name: Building image
                 run: docker image build --file Dockerfile --tag edrn-p5 .
+            -
+                name: Logging into package registry
+                run: echo ${{ secrets.GITHUB_TOKEN }} |  docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
+            -
+                name: Pushing image
+                run: |
+                    # See https://github.com/actions/starter-workflows/blob/master/ci/docker-push.yml
+                    IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+                    # Strip git ref prefix from version
+                    VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+                    # Strip "v" prefix from tag name
+                    [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+                    # Use Docker `latest` tag convention
+                    [ "$VERSION" == "master" ] && VERSION=latest
+                    echo "💿 IMAGE_ID=$IMAGE_ID"
+                    echo "📚 VERSION=$VERSION"
+                    docker image tag edrn-p5 $IMAGE_ID:$VERSION
+                    docker image push $IMAGE_ID:$VERSION
 
 ...
