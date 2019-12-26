@@ -65,7 +65,8 @@ jobs:
                 name: Pushing image
                 run: |
                     # See https://github.com/actions/starter-workflows/blob/master/ci/docker-push.yml
-                    IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/edrn-p5
+                    REPOSITORY=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')
+                    IMAGE_ID=docker.pkg.github.com/$REPOSITORY/edrn-p5
                     # Strip git ref prefix from version
                     VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
                     # Strip "v" prefix from tag name
