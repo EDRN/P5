@@ -3,8 +3,6 @@
 #
 # This workflow builds the P5 software, runs tests, and creates a Docker
 # image.
-#
-# TODO: publish the image to a hub (Docker Hub? GitHub Packages?)
 
 ---
 
@@ -12,6 +10,7 @@ name: P5 Continuous Integration
 
 # Triggers
 # ========
+
 #
 # Whenever there's a push to the master branch, which we always are supposed
 # to keep "usable at the drop of a hat"; except for the documentation.
