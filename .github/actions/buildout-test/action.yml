@@ -31,7 +31,8 @@ inputs:
     test-packages:
         description: >
             Test packages to run
-        required: true
+        required: false
+        default: ''
 runs:
     using: 'docker'
     image: 'Dockerfile'
