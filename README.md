@@ -2,6 +2,8 @@
 
 This is the software for the Early Detection Research Network (EDRN) public portal and knowledge environment. It nominally runs the site at https://edrn.nci.nih.gov/
 
+![](https://github.com/EDRN/P5/workflows/P5%20Continuous%20Integration/badge.svg)
+
 
 ## 🚗 Getting Started
 
