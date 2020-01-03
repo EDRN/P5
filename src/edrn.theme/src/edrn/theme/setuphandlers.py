@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
+
+u'''This is the usual Plone + GenericSetup custom setup code that gets executed
+on installation of this package.
+'''
+
 from Products.CMFPlone.interfaces import INonInstallable
 from zope.interface import implementer
-import transaction
 
 
 PREFERRED_THEME = 'barceloneta'

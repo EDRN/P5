@@ -8,6 +8,17 @@ Research Network (EDRN). The EDRN portal is nominally available at
 https://edrn.nci.nih.gov/.
 
 
+Outline:
+
+•  Installation
+•  Architecture
+   •  Content
+   •  RDF ingest
+•  API
+
+
+
+
 Functions
 ---------
 

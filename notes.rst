@@ -200,7 +200,7 @@ If your ``docker-compose`` doesn't recognize ``--detach``, try ``-d``.
 
 ..  Important:: You **must** do::
 
-        curl http://localhost:${EDRN_PUBLISHED_PORT}/edrn/publications
+        curl http://localhost:${EDRN_PUBLISHED_PORT}/edrn/
 
     as the first request or the plone.subrequest VHM gets screwed up! NO IDEA WHY!
 

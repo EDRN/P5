@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+
+u'''Layers and fixtures for the EDRN theme'''
+
 from plone.app.contenttypes.testing import PLONE_APP_CONTENTTYPES_FIXTURE
 from plone.app.robotframework.testing import REMOTE_LIBRARY_BUNDLE_FIXTURE
 from plone.app.testing import applyProfile
@@ -11,7 +14,9 @@ import edrn.theme
 
 
 class EdrnThemeLayer(PloneSandboxLayer):
-
+    u'''Test layer for the EDRN theme: loads the ``edrn.theme`` Zope confguration
+    at Zope set up and applies the ``edrn.theme`` profile at Plone set up.
+    '''
     defaultBases = (PLONE_APP_CONTENTTYPES_FIXTURE,)
 
     def setUpZope(self, app, configurationContext):
