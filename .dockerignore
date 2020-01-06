@@ -1,6 +1,5 @@
 *.rdf
 *.rst
-*.sh
 *.sublime-*
 .*.cfg
 .DS_Store

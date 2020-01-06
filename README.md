@@ -44,3 +44,5 @@ To contact the team as a whole, [email the Informatics Center](mailto:ic-portal@
 ## 📃 License
 
 The project is licensed under the [Apache version 2](LICENSE.txt) license.
+
+Note that this package includes software from [Plone Docker](https://github.com/plone/plone.docker) licensed under the [GNU Public License version 2](GNU-LICENSE.txt). The source code fot this software is included in the files [Dockerfile](Dockerfile), [docker-entrypoint.sh](docker-entrypoint.sh), [docker-initialize.py](docker-initialize.py), and [buildout.cfg](buildout.cfg).
