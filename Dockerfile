@@ -9,13 +9,15 @@
 # Used to be based on Plone (Debian) 5.1.5, except that it specifies ``VOLUME /data``
 # and CBIIT demands we run the internal container with username "edrn" with user ID
 # 26013. Normally we would just ``adduser`` and ``chown`` except thanks to the
-# ``VOLUME /data`` nothing we ``chwon`` under ``/data`` takes effect and there's no
+# ``VOLUME /data`` nothing we ``chown`` under ``/data`` takes effect and there's no
 # way to undo a basis image's ``VOLUME`` (see this_). So now we have to reproduce
 # every damn thing the ``plone/plone:5.1.5`` image does.
 #
-# That's what follows below:
+# That's what follows below.
+#
+# #16: also we now use python:2.7-slim-buster for security fixes
 
-FROM python:2.7-slim-stretch
+FROM python:2.7-slim-buster
 
 ENV PIP=9.0.3 \
     ZC_BUILDOUT=2.11.4 \
@@ -79,8 +81,15 @@ CMD ["start"]
 # Add additional build-time and run-time needs. The ``build-essential``
 # is the build-time. The rest are run-time. We remove ``build-essential``
 # at the end of the ``Dockerfile``.
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends libldap2-dev libsasl2-dev build-essential
+#
+# #16: Add backports+experimental, upgrade, and install steps for TwistLock security fixes
+RUN echo 'deb http://deb.debian.org/debian buster-backports main' > /etc/apt/sources.list.d/backports.list && \
+    echo 'deb http://deb.debian.org/debian experimental main' > /etc/apt/sources.list.d/experimental.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends libldap2-dev libsasl2-dev build-essential && \
+    apt-get -y upgrade && \
+    apt-get -t buster-backports install -y linux-libc-dev && \
+    apt-get -t experimental install -y libjpeg62-turbo-dev libjpeg-dev
 
 
 # Image Filesystem
@@ -99,9 +108,12 @@ COPY --chown=edrn:edrn src /plone/instance/src
 #
 # Build everything out by first cleaning any host-provided Python objects
 # and buildout detritus then running Buildout on the ``docker.cfg``.
-RUN find /plone/instance/src -name '*.py[co]' -exec rm -f '{}' + \
-    && rm -rf /plone/instance/src/*/{var,bin,develop-eggs,parts} \
-    && gosu edrn buildout -c docker.cfg
+RUN find /plone/instance/src -name '*.py[co]' -exec rm -f '{}' + && \
+    pip install urllib3==1.25.7 && \
+    rm -rf /plone/instance/src/*/{var,bin,develop-eggs,parts} && \
+    rm -rf /plone/buildout-cache/eggs/urllib3-1.22* && \
+    rm -rf /plone/buildout-cache/downloads/dist/urllib3-1.22* && \
+    gosu edrn buildout -c docker.cfg
 
 # TOD: do we need utf-8 sys.defaultencoding workaround??
 
@@ -111,10 +123,10 @@ RUN find /plone/instance/src -name '*.py[co]' -exec rm -f '{}' + \
 #
 # We can now get rid of the build-time dependencies and leave the APT system
 # in a clean state.
-RUN apt-get remove -y --purge build-essential \
-    && apt-get autoremove -y \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get remove -y --purge build-essential && \
+    apt-get autoremove -y && \
+    apt-get clean -y && \
+    rm -rf /var/lib/apt/lists/*
 
 
 # Metadata
