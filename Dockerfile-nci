@@ -1,5 +1,5 @@
-# EDRN P5 - Image Building
-# ========================
+# EDRN P5 - Image Building — User ID 26013
+# ========================================
 #
 # Used by "docker build"
 #
@@ -21,9 +21,9 @@
 # because our data volume runs as 500, so let's throw Docker best practices out
 # the window and make two images:
 #
-# ``Dockerfile`` (this file)
+# ``Dockerfile``
 #     Makes an image the old fashioned way (user ID 500)
-# ``Dockerfile-nci``
+# ``Dockerfile.nci`` (this file)
 #     Makes an image with the user ID 26013 requirement
 
 
@@ -44,7 +44,7 @@ LABEL plone=$PLONE_VERSION \
     description="Plone image, based on Unified Installer" \
     maintainer="Plone Community"
 
-RUN useradd --system -m -d /plone -U -u 500 edrn \
+RUN useradd --system -m -d /plone -U -u 26013 edrn \
  && mkdir -p /plone/instance/ /data/filestorage /data/blobstorage
 
 COPY buildout.cfg /plone/instance/
