@@ -42,9 +42,13 @@ environment variables::
 Using the Dockerfile
 --------------------
 
-To build the EDRN P5 image::
+To build the EDRN P5 image for the free world::
         
     docker image build --tag edrn-p5 .
+
+But for NCI it's::
+
+    docker image build --tag edrn-p5 --file Dockerfile-nci .
 
 Then you can publish it::
 
