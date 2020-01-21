@@ -93,13 +93,15 @@ CMD ["start"]
 # at the end of the ``Dockerfile``.
 #
 # #16: Add backports+experimental, upgrade, and install steps for TwistLock security fixes
-RUN echo 'deb http://deb.debian.org/debian buster-backports main' > /etc/apt/sources.list.d/backports.list && \
+RUN echo 'deb http://deb.debian.org/debian buster-backports main contrib non-free' > /etc/apt/sources.list.d/backports.list && \
+    echo 'deb http://deb.debian.org/debian bullseye main contrib' > /etc/apt/sources.list.d/bullseye.list && \
     echo 'deb http://deb.debian.org/debian experimental main' > /etc/apt/sources.list.d/experimental.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends libldap2-dev libsasl2-dev build-essential && \
     apt-get -y upgrade && \
     apt-get -t buster-backports install -y linux-libc-dev && \
-    apt-get -t experimental install -y libjpeg62-turbo-dev libjpeg-dev
+    apt-get -t bullseye install -y libcurl3-gnutls && \
+    apt-get -t experimental install -y libjpeg62-turbo-dev libjpeg-dev libturbojpeg0-dev libjpeg-turbo-progs
 
 
 # Image Filesystem
