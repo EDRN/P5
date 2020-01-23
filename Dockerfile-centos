@@ -1,5 +1,5 @@
 # A Dockerfile for "Centos" Experimentation
 # =========================================
 
-FROM debian:bullseye
+FROM ubuntu:18.04
 CMD ["sh", "-c", "/bin/uname -a; cat /etc/debian_version"]
