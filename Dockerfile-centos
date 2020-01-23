@@ -1,5 +1,5 @@
-# A Dockerfile for Centos Experimentation
-# =======================================
+# A Dockerfile for "Centos" Experimentation
+# =========================================
 
-FROM centos:8.1.1911
-CMD ["sh", "-c", "/usr/bin/uname -a; cat /etc/redhat-release"]
+FROM debian:bullseye
+CMD ["sh", "-c", "/bin/uname -a; cat /etc/debian_version"]
