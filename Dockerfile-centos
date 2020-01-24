@@ -1,5 +1,4 @@
 # A Dockerfile for "Centos" Experimentation
 # =========================================
 
-FROM alpine:3.11.3
-CMD ["sh", "-c", "/bin/uname -a; cat /etc/alpine-release"]
+FROM plone:5.2.0
