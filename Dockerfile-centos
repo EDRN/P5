@@ -1,4 +1,68 @@
-# A Dockerfile for "Centos" Experimentation
-# =========================================
+# Experimental
+# ============
+#
 
-FROM plone:5.2.0
+
+FROM python:2.7.17-alpine3.11
+
+ENV \
+    PIP=9.0.3 \
+    ZC_BUILDOUT=2.11.4 \
+    SETUPTOOLS=39.1.0 \
+    WHEEL=0.31.1 \
+    PLONE_MAJOR=5.1 \
+    PLONE_VERSION=5.1.5 \
+    PLONE_MD5=8ed5ff27fab67b1b510a1ce0ee2dd655
+
+# NCI prefers group and user ID "edrn"
+RUN : &&\
+    addgroup -S -g 500 edrn &&\
+    adduser -S -D -h /plone -G edrn -u 500 -g 'Plone for EDRN User' edrn &&\
+    mkdir -p /plone/instance /data/filestorage /data/blobstorage
+
+COPY buildout.cfg /plone/instance/
+
+# TODO Add --quiet to ``apk add`` — no, let's not; some feedback is nice
+# NB: the two spaces in the ``echo`` to ``md5sum`` is vital with BusyBox-based ``md5sum``
+RUN : &&\
+    echo '@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositories &&\
+    echo '@edge http://dl-cdn.alpinelinux.org/alpine/edge/main' >> /etc/apk/repositories &&\
+    apk update &&\
+    : We will uninstall these later &&\
+    buildDeps="gcc bzip2-dev musl-dev libjpeg-turbo-dev openjpeg-dev pcre-dev openssl-dev tiff-dev libxml2-dev libxslt-dev zlib-dev openldap-dev cyrus-sasl-dev libffi-dev" &&\
+    apk add --virtual plone-build $buildDeps &&\
+    : These stay &&\
+    runDeps="libjpeg-turbo tiff libxml2 libxslt lynx netcat-openbsd poppler-utils@edge rsync wv su-exec bash" &&\
+    apk add $runDeps &&\
+    : Get, check, and extract Plone &&\
+    wget -q -O Plone.tgz https://launchpad.net/plone/$PLONE_MAJOR/$PLONE_VERSION/+download/Plone-$PLONE_VERSION-UnifiedInstaller.tgz &&\
+    echo "$PLONE_MD5  Plone.tgz" | md5sum -c - &&\
+    tar -xzf Plone.tgz &&\
+    cp -r ./Plone-$PLONE_VERSION-UnifiedInstaller/base_skeleton/* /plone/instance/ &&\
+    cp ./Plone-$PLONE_VERSION-UnifiedInstaller/buildout_templates/buildout.cfg /plone/instance/buildout-base.cfg &&\
+    : Install buildout, setuptools, and pip at specific versions &&\
+    pip --quiet install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT wheel==$WHEEL &&\
+    cd /plone/instance &&\
+    buildout &&\
+    ln -s /data/filestorage/ /plone/instance/var/filestorage &&\
+    ln -s /data/blobstorage /plone/instance/var/blobstorage &&\
+    chown -R edrn:edrn /plone /data &&\
+    rm -rf /Plone* &&\
+    apk del plone-build &&\
+    rm -rf /plone/buildout-cache/downloads/* &&\
+    : TODO: At this point we could incorporate our P5 specific stuff? &&\
+    :
+
+
+# AT THIS POINT:
+VOLUME /data
+COPY docker-initialize.py docker-entrypoint.sh /
+EXPOSE 8080
+WORKDIR /plone/instance
+HEALTHCHECK --interval=1m --timeout=5s --start-period=1m \
+  CMD nc -z -w5 127.0.0.1 8080 || exit 1
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["start"]
+# let's see if we can get a working Plone
+
+
