@@ -5,12 +5,12 @@ COMMANDS="debug help logtail show stop adduser fg kill quit run wait console for
 START="start restart zeoserver"
 CMD="bin/instance"
 
-gosu edrn python /docker-initialize.py
+python /docker-initialize.py
 
 if [ -e "custom.cfg" ]; then
   if [ ! -e "bin/develop" ]; then
-    gosu edrn buildout -c custom.cfg
-    gosu edrn python /docker-initialize.py
+    buildout -c custom.cfg
+    python /docker-initialize.py
   fi
 fi
 
@@ -28,13 +28,13 @@ fi
 
 if [[ $START == *"$1"* ]]; then
   _stop() {
-    gosu edrn $CMD stop
+    $CMD stop
     kill -TERM $child 2>/dev/null
   }
 
   trap _stop SIGTERM SIGINT
-  gosu edrn $CMD start
-  gosu edrn $CMD logtail &
+  $CMD start
+  $CMD logtail &
   child=$!
 
   pid=`$CMD status | sed 's/[^0-9]*//g'`
@@ -50,7 +50,7 @@ if [[ $START == *"$1"* ]]; then
   fi
 else
   if [[ $COMMANDS == *"$1"* ]]; then
-    exec gosu edrn bin/instance "$@"
+    exec bin/instance "$@"
   fi
   exec "$@"
 fi
