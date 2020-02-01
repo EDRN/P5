@@ -7,7 +7,8 @@
 # Services
 # --------
 #
-# Just two are needed for the EDRN portal, the portal software plus a cache.
+# Just three are needed for the EDRN portal: an app server (Zope), a database
+# (ZEO), and a cache (memcached).
 services:
     # EDRN Plone 5-based Portal
     # ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -15,25 +16,30 @@ services:
     # Zope app server running an instance of the Plone portal for EDRN
     edrn-portal:
         container_name: edrn-portal
-        image: nutjob4life/edrn-p5:${EDRN_PORTAL_VERSION:-latest}
+        image: docker.pkg.github.com/edrn/p5/edrn-p5:${EDRN_PORTAL_VERISON:-latest}
+        # image: nutjob4life/edrn-p5:${EDRN_PORTAL_VERSION:-latest}
+        # image: edrn-p5:latest
         volumes:
-            # Binary large objects or BLOBs; must be same as edrn-db below
-            - type: bind
-              source: ${EDRN_DATA_DIR}/blobstorage
-              target: /data/blobstorage
-              consistency: consistent
-            # This contains Zope logs
-            - type: bind
-              source: ${EDRN_DATA_DIR}/log
-              target: /data/log
-              consistency: delegated
+            -
+                # Binary large objects or BLOBs; must be same as edrn-db below
+                type: bind
+                source: ${EDRN_DATA_DIR}/blobstorage
+                target: /data/blobstorage
+                consistency: consistent
+            -
+                # This contains Zope logs
+                type: bind
+                source: ${EDRN_DATA_DIR}/log
+                target: /data/log
+                consistency: delegated
             # TODO: make the "import" directory available some day
         ports:
-            # Map container's Plone's 8080 to 4135 (or EDRN_PUBLISHED_PORT)
-            - target: 8080
-              published: ${EDRN_PUBLISHED_PORT:-4135}
-              protocol: tcp
-              mode: host
+            -
+                # Map container's Plone's 8080 to 4135 (or EDRN_PUBLISHED_PORT)
+                target: 8080
+                published: ${EDRN_PUBLISHED_PORT:-4135}
+                protocol: tcp
+                mode: host
         networks:
             - backplane
             - default
@@ -62,21 +68,24 @@ services:
         image: nutjob4life/edrn-p5:${EDRN_PORTAL_VERSION-latest}
         command: zeo
         volumes:
-            # This is the main Zope database; super important!
-            - type: bind
-              source: ${EDRN_DATA_DIR}/filestorage
-              target: /data/filestorage
-              consistency: consistent
-            # Binary large objects or BLOBs; must be same as in edrn-portal above
-            - type: bind
-              source: ${EDRN_DATA_DIR}/blobstorage
-              target: /data/blobstorage
-              consistency: consistent
-            # This contains ZEO logs
-            - type: bind
-              source: ${EDRN_DATA_DIR}/log
-              target: /data/log
-              consistency: delegated
+            -
+                # This is the main Zope database; super important!
+                type: bind
+                source: ${EDRN_DATA_DIR}/filestorage
+                target: /data/filestorage
+                consistency: consistent
+            -
+                # Binary large objects or BLOBs; must be same as in edrn-portal above
+                type: bind
+                source: ${EDRN_DATA_DIR}/blobstorage
+                target: /data/blobstorage
+                consistency: consistent
+            -
+                # This contains ZEO logs
+                type: bind
+                source: ${EDRN_DATA_DIR}/log
+                target: /data/log
+                consistency: delegated
         networks:
             - backplane
         environment:
