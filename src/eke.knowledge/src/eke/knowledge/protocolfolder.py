@@ -74,6 +74,11 @@ class ProtocolIngestor(Ingestor):
         return protocolToInvolvedSites
     def setInvolvedInvestigatorSites(self, protocol, protocolToInvolvedSites):
         catalog, idUtil = plone.api.portal.get_tool('portal_catalog'), getUtility(IIntIds)
+        # https://github.com/EDRN/P5/issues/21
+        # Issue #21: investigators grow on subsequent ingest, so figure out current site IDs and
+        # check against it before adding any new ones
+        if protocol.involvedInvestigatorSites is None: protocol.involvedInvestigatorSites = []
+        currentInvolvedInvestigatorSitesIntIDs = set([i.to_id for i in protocol.involvedInvestigatorSites])
         protocolID = os.path.basename(urlparse.urlparse(protocol.identifier).path).split(u'-')[0]
         siteNumbers = protocolToInvolvedSites.get(protocolID, [])
         siteIDs = [_siteURIPrefix + i for i in siteNumbers]
@@ -81,8 +86,8 @@ class ProtocolIngestor(Ingestor):
         for b in brains:
             site = b.getObject()
             siteIntID = idUtil.getId(b.getObject())
-            if protocol.involvedInvestigatorSites is None: protocol.involvedInvestigatorSites = []
-            protocol.involvedInvestigatorSites.append(RelationValue(siteIntID))
+            if siteIntID not in currentInvolvedInvestigatorSitesIntIDs:
+                protocol.involvedInvestigatorSites.append(RelationValue(siteIntID))
             piIdentifier = site.principalInvestigator.to_object.identifier if site.principalInvestigator else None
             if piIdentifier:
                 currentIDs = set(protocol.investigatorIdentifiers if protocol.investigatorIdentifiers else [])
