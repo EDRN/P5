@@ -9,6 +9,7 @@ from .biomarkerpanel import IBiomarkerPanel
 from .bodysystem import IBodySystem
 from .elementalbiomarker import IElementalBiomarker
 from .knowledgefolder import IKnowledgeFolder
+from .protocol import IProtocol
 from .utils import IngestConsequences, publish
 from Acquisition import aq_inner
 from five import grok
@@ -322,6 +323,11 @@ class BiomarkerIngestor(Ingestor):
         biomarkerID = getUtility(IIntIds).getId(biomarker)
         if biomarkerID not in currentIDs:
             protocol.biomarkers.append(RelationValue(biomarkerID))
+    def _removeProtocolToBiomarkerReferences(self, catalog):
+        results = catalog(object_provides=IProtocol.__identifier__)
+        for i in results:
+            obj = i.getObject()
+            obj.biomarkers = []
     def ingest(self):
         request = plone.api.portal.get().REQUEST
         normalize = getUtility(IIDNormalizer).normalize
@@ -336,6 +342,11 @@ class BiomarkerIngestor(Ingestor):
             object_provides=IBiomarker.__identifier__
         )
         context.manage_delObjects([i.id for i in results])
+        # Issue #20 — https://github.com/EDRN/P5/issues/20
+        # Protocols have a ``biomarkers`` relation field, but the statement above just deleted all the
+        # biomarkers. Since there's no ON DELETE CASCADE in Plone, we need to reset all protocols' fields
+        # to empty so that when we repopulate them later we won't have bad values left over.
+        self._removeProtocolToBiomarkerReferences(catalog)
         # Make all biomarker objects
         newBiomarkers, panels = {}, {}
         for uri, predicates in biomarkerStatements.iteritems():
