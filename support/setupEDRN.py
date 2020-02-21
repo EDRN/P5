@@ -136,7 +136,7 @@ def _applyFacetsToBiomarkers(context):
     criteria.add('resultsperpage', 'bottom', 'default', title='Results per page', hidden=False, start=0, end=60, step=20,
         default=20)
     criteria.add(
-        'checkbox', 'left', 'default',
+        'checkbox', 'bottom', 'default',
         title='Organs',
         hidden=False,
         index='indicatedBodySystems',
@@ -240,7 +240,7 @@ def _applyFacetsToDatasets(context):
     criteria.add('resultsperpage', 'bottom', 'default', title='Results per page', hidden=False, start=0, end=60, step=20,
         default=20)
     criteria.add(
-        'checkbox', 'left', 'default',
+        'checkbox', 'bottom', 'default',
         title='Organs',
         hidden=False,
         index='bodySystemName',
@@ -568,7 +568,7 @@ def _addMembersList(portal):
     criteria.add('resultsperpage', 'bottom', 'default', title='Results per page', hidden=False, start=0, end=60, step=20,
         default=20)
     criteria.add(
-        'checkbox', 'left', 'default',
+        'checkbox', 'bottom', 'default',
         title=u'Investigator',
         hidden=False,
         index='piName',
@@ -580,7 +580,7 @@ def _addMembersList(portal):
         hidezerocount=False
     )
     criteria.add(
-        'checkbox', 'left', 'default',
+        'checkbox', 'bottom', 'default',
         title=u'Institution',
         hidden=False,
         index='siteName',
@@ -592,7 +592,7 @@ def _addMembersList(portal):
         hidezerocount=False
     )
     criteria.add(
-        'checkbox', 'left', 'default',
+        'checkbox', 'bottom', 'default',
         title=u'Member Type',
         hidden=False,
         index='memberType',

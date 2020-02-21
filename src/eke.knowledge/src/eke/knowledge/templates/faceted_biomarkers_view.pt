@@ -46,7 +46,7 @@
                         toLocalizedTime nocall: context/@@plone/toLocalizedTime;
                         navigation_root_url context/@@plone_portal_state/navigation_root_url;
                         pas_member context/@@pas_member;">
-        <div class='biomarker-summary-report' style='padding-left: 200px;'>
+        <div class='small-proviso biomarker-summary-report' style='padding-left: 200px;'>
           <center><u><h4>Biomarker Statistics:</h4></u></center>
           <span id='analyitcs-display'>
             <iframe width='100%' height='190px' frameborder='0' src='@@biomarker_summary_report'>
@@ -125,7 +125,7 @@
     </tal:foldercontents>
     </metal:listingmacro>
 
-    <div class='discreet' tal:condition='disclaimer'>
+    <div class='small-proviso' tal:condition='disclaimer'>
         <p tal:replace='structure disclaimer/output'>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
     </div>
 
