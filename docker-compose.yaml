@@ -53,7 +53,7 @@ services:
         depends_on:
             - edrn-db
             - edrn-memory-cache
-        restart: on-failure
+        restart: always
         stop_grace_period: 23s
         labels:
             org.label-schema.name: EDRN Public Portal Zope/Plone
@@ -91,7 +91,7 @@ services:
         environment:
             # Empty settings inherit values from the host's environment
             EDRN_PORTAL_VERSION:
-        restart: on-failure
+        restart: always
         stop_grace_period: 13s
         labels:
             org.label-schema.name: Database
@@ -106,6 +106,7 @@ services:
         image: memcached
         networks:
             - backplane
+        restart: always
         labels:
             org.label-schema.name: Memory Cache
             org.label-schema.description: Cache for computed objects using `memcached` to speed up the EDRN Public Portal
