@@ -148,8 +148,3 @@ IDataset.setTaggedValue('predicates', {
 })
 IDataset.setTaggedValue('fti', 'eke.knowledge.dataset')
 IDataset.setTaggedValue('typeURI', u'http://edrn.nci.nih.gov/rdf/types.rdf#Dataset')
-
-
-class View(grok.View):
-    grok.context(IDataset)
-    grok.require('zope2.View')

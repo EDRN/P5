@@ -51,6 +51,16 @@
         template='templates/biomarker_summary_report.pt'
     />
 
+    <!-- Redirect datsets into eCAS or LabCAS -->
+    <browser:page
+        name='dataset_redirect_view'
+        class='.dataset.DatasetRedirectView'
+        for='eke.knowledge.dataset.IDataset'
+        layer='eke.knowledge.interfaces.IEkeKnowledgeLayer'
+        menu='plone_displayviews'
+        permission='zope2.View'
+        title='View Dataset'
+    />
 
     <!-- Macros -->
     <browser:page

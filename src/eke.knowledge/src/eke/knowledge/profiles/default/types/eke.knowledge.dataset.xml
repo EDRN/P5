@@ -14,7 +14,7 @@
         <element value='plone.app.content.interfaces.INameFromTitle'/>
         <element value='collective.dexteritytextindexer.behavior.IDexterityTextIndexer'/>
     </property>
-    <property name='default_view'>view</property>
+    <property name='default_view'>dataset_redirect_view</property>
     <property name='default_view_fallback'>False</property>
     <property name='view_methods'>
         <element value='view'/>

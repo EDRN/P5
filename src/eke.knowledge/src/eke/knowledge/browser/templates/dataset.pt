@@ -1,0 +1,52 @@
+<html
+    i18n:domain='eke.knowledge'
+    lang='en'
+    metal:use-macro='context/main_template/macros/master'
+    xml:lang='en'
+    xmlns:i18n='http://xml.zope.org/namespaces/i18n'
+    xmlns:metal='http://xml.zope.org/namespaces/metal'
+    xmlns:tal='http://xml.zope.org/namespaces/tal'
+    xmlns='http://www.w3.org/1999/xhtml'>
+    <head>
+        <title>Dataset View</title>
+    </head>
+    <body>
+        <metal:content-core fill-slot='content-core'>
+            <metal:block define-macro='content-core'>
+                <div class='portalMessage info'
+                    tal:define='redirect_links python:context.portal_registry["plone.redirect_links"]'
+                    tal:condition='python:redirect_links and checkPermission("Modify portal content", context)'>
+                    <strong i18n:translate=''>Info</strong>
+                    <span tal:omit-tag='' i18n:translate='message_permissions_blocking_dataset_redirect'>
+                        You are seeing this page because you have permission to edit this dataset in the portal.
+                        Others will be immediately redirected to the portal's identifier URI, which is typically
+                        a URL to eCAS or LabCAS.
+                    </span>
+                </div>
+                <div class='field' id='formfield-form-widgets-title'>
+                    <label for='form-widgets-title' i18n:translate='label_title' class='horizontal'>
+                        Dataset Name
+                        <span class='formHelp'>Title (in the Dublin Core sense) of this dataset</span>
+                    </label>
+                    <div id='form-widgets-title' class='string-widget string-field'
+                        tal:content='context/title'>
+                        Booger Collection 123
+                    </div>
+                </div>
+                <div class='field' id='formfield-form-widgets-identifier'>
+                    <label for='form-widgets-identifier' i18n:translate='label_identifier' class='horizontal'>
+                        Identifier
+                        <span class='formHelp'>RDF Identifier</span>
+                    </label>
+                    <div id='form-widgets-identifier' class='url-widget string-field'>
+                        <code>
+                            <a href='#' tal:attributes='href context/identifier' tal:content='context/identifier'>
+                                https://whatever.com/
+                            </a>
+                        </code>
+                    </div>
+                </div>
+            </metal:block>
+        </metal:content-core>
+    </body>
+</html>
