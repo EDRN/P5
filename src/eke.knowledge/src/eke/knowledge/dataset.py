@@ -116,7 +116,12 @@ class IDataset(IKnowledgeObject):
         description=_(u'The name of the protocol or study that produced this data.'),
         required=False,
     )
-    dexteritytextindexer.searchable('investigator')
+    dexteritytextindexer.searchable('investigatorName')
+    investigatorName = schema.TextLine(
+        title=_(u'Investigator Name'),
+        description=_(u"Name of the principal investigator of this data if the protocol doesn't otherwise indicate"),
+        required=False,
+    )
     investigator = RelationChoice(
         title=_(u'Investigator'),
         description=_(u'Principal investigator investigating this data.'),
@@ -144,6 +149,7 @@ IDataset.setTaggedValue('predicates', {
     u'urn:edrn:StudyConclusion': ('studyConclusion', False),
     u'urn:edrn:Date': ('dataUpdateDate', False),
     u'urn:edrn:CollaborativeGroup': ('collaborativeGroup', False),
+    u'urn:edrn:LeadPI': ('investigatorName', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#organ': ('bodySystem', True)
 })
 IDataset.setTaggedValue('fti', 'eke.knowledge.dataset')

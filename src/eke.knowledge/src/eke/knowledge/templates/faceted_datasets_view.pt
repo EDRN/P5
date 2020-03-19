@@ -89,10 +89,11 @@
                       Advanced rhinoplasty dataset
                     </a>
                   </td>
+                  <!-- Yes, this wakes objects and needs better indexing, but Plone reference fields are mind-boggling -->
                   <td tal:define='
                     piRV python:item.getObject().investigator if item.getObject().investigator else None;
                     investigator nocall:piRV/to_object|nothing;
-                    investigatorName investigator/piName|nothing;
+                    investigatorName python:item.getObject().investigatorName;
                     investigatorURL investigator/absolute_url|nothing;
                   '>
                     <tal:if condition='investigatorName'>
