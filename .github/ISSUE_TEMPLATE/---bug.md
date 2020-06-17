@@ -19,6 +19,13 @@ Put steps to reproduce the behavior here, **including URLs**, such as
 3. Scroll down to `…`
 4. See the error at `…` 💥
 
+❗️ Mention if the bug appears:
+- [ ] When logged in
+- [ ] When not logged in
+
+or possibly *all* the time!
+
+
 ## 🔎 Expected Behavior
 
 Replace this with what you thought *should* happen.
