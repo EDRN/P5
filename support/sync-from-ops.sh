@@ -48,7 +48,7 @@ source=https://edrn.nci.nih.gov/
 echo "📈 Retrieving Zope database" 1>&2
 [ -d "$filestorage" ] || mkdir -p "$filestorage"
 cd "$filestorage"
-rm "Data.fs"
+rm -f "Data.fs"
 wget \
     --quiet \
     --execute robots=off \
