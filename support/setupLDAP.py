@@ -38,7 +38,6 @@ def _setupZopeSecurity(app):
 
 def setLDAPcacheParams(portal):
     registry = getUtility(IRegistry)
-    import pdb;pdb.set_trace()
     registry['pas.plugins.ldap.memcached'] = u'localhost:11211'
 
 
