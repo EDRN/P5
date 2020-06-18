@@ -11,6 +11,7 @@ from zope import schema
 
 class IKnowledgeObject(model.Schema):
     u'''Knowledge object.'''
+    dexteritytextindexer.searchable('title')
     title = schema.TextLine(
         title=_(u'Title'),
         description=_(u'Name of this object.'),
