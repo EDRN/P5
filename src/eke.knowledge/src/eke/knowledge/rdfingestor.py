@@ -54,7 +54,7 @@ class RDFIngestor(grok.View):
                     except Exception as ex:
                         # import pdb;pdb.set_trace()
                         _logger.exception(
-                            u"Got an exception %r on path %s; this could be serious, but skipping",
+                            u"SERIOUS? Got an exception %r on path %s; this could be bad, but skipping",
                             ex, path
                         )
                     # TODO except what else? We need a more graceful way to handle other exceptions

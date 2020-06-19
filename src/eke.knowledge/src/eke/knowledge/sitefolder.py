@@ -196,14 +196,21 @@ class SiteIngestor(Ingestor):
         # So we'll do a "best effort":
         personIDs = []
         for personURI in personURIs:
+            p = people[personURI]
             try:
-                personIDs.append(getUtility(IIntIds).getId(people[personURI]))
+                personIDs.append(getUtility(IIntIds).getId(p))
             except KeyError:
+                _logger.warn(u'=== Cannot get an intID for person %s', personURI)
                 pass
         if multiValued:
             setattr(site, fieldName, [RelationValue(personID) for personID in personIDs])
         else:
-            setattr(site, fieldName, RelationValue(personIDs[0]))
+            if len(personIDs) > 0:
+                setattr(site, fieldName, RelationValue(personIDs[0]))
+            else:
+                # No person found, le sigh
+                _logger.warn(u'=== Setting %s to ``None`` on site %r since I got no personIDs', fieldName, site)
+                setattr(site, fieldName, None)
         notify(ObjectModifiedEvent(site))
     def ingest(self):
         u'''Override Ingestor.ingest so we can handle people'''
