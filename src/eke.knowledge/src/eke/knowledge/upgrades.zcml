@@ -3,8 +3,15 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
     <genericsetup:upgradeStep
-        title='Reindex Catalog'
-        description='Upgrade eke.knowledge which has new fields to index by reindexing the portal catalog'
+        title='Publish DiseaseFolders'
+        description='Upgrade eke.knowledge which fixes views for Diseases so we can publish all DiseaseFolders'
+        profile='eke.knowledge:default'
+        handler='.upgrades.publishDiseaseFolders'
+        source='1000' destination='1001' sortkey='998'
+    />
+    <genericsetup:upgradeStep
+        title='Reindex SearchableText'
+        description='Upgrade eke.knowledge which has searchable titles–reindexing knowledge objects for SearchableText'
         profile='eke.knowledge:default'
         handler='.upgrades.reindexSearchableTextForKnowledgeObjects'
         source='1000' destination='1001' sortkey='999'

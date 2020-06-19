@@ -1,0 +1,53 @@
+<html
+    i18n:domain='eke.knowledge'
+    lang='en'
+    metal:use-macro='context/main_template/macros/master'
+    xml:lang='en'
+    xmlns:i18n='http://xml.zope.org/namespaces/i18n'
+    xmlns:metal='http://xml.zope.org/namespaces/metal'
+    xmlns:tal='http://xml.zope.org/namespaces/tal'
+    xmlns='http://www.w3.org/1999/xhtml'>
+    <head>
+        <title>Disease View</title>
+    </head>
+    <body>
+        <metal:content-core fill-slot='content-core'>
+            <metal:content-core define-macro='content-core'>
+                <div class='field' id='formfield-form-widgets-icd9Code'>
+                    <label for='form-widgets-icd9Code' i18n:translate='label_icd9Code' class='horizontal'>
+                        ICD-9 Code:
+                        <span class='formHelp'>The International Classification of Diseases (ICD) system for disease classification code (9th edition) for this disease.</span>
+                    </label>
+                    <div id='form-widgets-icd9Code' class='textline-widget string-field'
+                        tal:content='context/icd9Code'>
+                        132.9
+                    </div>
+                </div>
+                <div class='field' id='formfield-form-widgets-icd10Code'>
+                    <label for='form-widgets-icd10Code' i18n:translate='label_icd10Code' class='horizontal'>
+                        ICD-10 Code:
+                        <span class='formHelp'>The International Classification of Diseases (ICD) system for disease classification code (10th edition) for this disease.</span>
+                    </label>
+                    <div id='form-widgets-icd10Code' class='textline-widget string-field'
+                        tal:content='context/icd10Code'>
+                        132.9.1391349
+                    </div>
+                </div>
+                <div class='field' id='formfield-form-widgets-affectedOrgans'>
+                    <label for='form-widgets-affectedOrgans' i18n:translate='label_affectedOrgans' class='horizontal'>
+                        Affected Organs:
+                        <span class='formHelp'>The body systems that this disease can affect.</span>
+                    </label>
+                    <ul id='form-widgets-affectedOrgans'>
+                        <li tal:repeat='organ context/affectedOrgans'>
+                            <a href='#' tal:attributes='href organ/to_object/absolute_url'
+                                tal:content='organ/to_object/title'>
+                                Anus
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </metal:content-core>
+        </metal:content-core>
+    </body>
+</html>
