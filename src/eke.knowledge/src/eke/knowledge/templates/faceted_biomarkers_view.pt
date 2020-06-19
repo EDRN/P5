@@ -126,7 +126,7 @@
     </metal:listingmacro>
 
     <div class='small-proviso' tal:condition='disclaimer'>
-        <p tal:replace='structure disclaimer/output'>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+        <p tal:content='disclaimer'>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
     </div>
 
 
