@@ -21,6 +21,11 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)-8s %(message)s')
 app = globals().get('app', None)  # ``app`` comes from ``instance run`` magic.
 
 
+NO_ROBOTS = u'''User-agent: *
+Disallow: /
+'''
+
+
 def _setupLogging():
     channel = logging.StreamHandler()
     channel.setFormatter(logging.Formatter('%(asctime)-15s %(levelname)-8s %(message)s'))
@@ -41,6 +46,12 @@ def setLDAPcacheParams(portal):
     registry['pas.plugins.ldap.memcached'] = u'localhost:11211'
 
 
+def disableSearchEngines(portal):
+    registry = getUtility(IRegistry)
+    registry['plone.webstats_js'] = u''
+    registry['plone.robots_txt'] = NO_ROBOTS
+
+
 def _main(app):
     app = makerequest.makerequest(app)
     app.REQUEST['PARENTS'] = [app]
@@ -50,6 +61,7 @@ def _main(app):
     portal = app['edrn']
     setSite(portal)
     setLDAPcacheParams(portal)
+    disableSearchEngines(portal)
     noSecurityManager()
     transaction.commit()
     return True
