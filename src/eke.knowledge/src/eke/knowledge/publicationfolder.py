@@ -101,7 +101,7 @@ class PublicationIngestor(Ingestor):
                     title = unicode(medline[u'MedlineCitation'][u'Article'][u'ArticleTitle'])
                     objID = normalize(u'{} {}'.format(pubMedID, title))
                     if objID in context.keys():
-                        _logger.info(u'Publiation %s already exists; skipping', objID)
+                        _logger.info(u'Publication %s already exists; skipping', objID)
                     pub = createContentInContainer(
                         context,
                         'eke.knowledge.publication',
