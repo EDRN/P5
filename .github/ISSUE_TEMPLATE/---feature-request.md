@@ -2,7 +2,7 @@
 name: "\U0001F195 Feature Request"
 about: Suggest an idea for a new feature in P5
 title: ''
-labels: ''
+labels: "\U0001F9D9‍♀️enhancement"
 assignees: ''
 
 ---
