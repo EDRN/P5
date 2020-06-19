@@ -36,6 +36,7 @@ class RDFIngestor(grok.View):
                 paths = registry['eke.knowledge.interfaces.IPanel.objects']
                 if not paths: return
                 portal = plone.api.portal.get()
+                _logger.info('🏁 BEGIN FULL INGEST')
                 for path in paths:
                     folder = portal.unrestrictedTraverse(path.encode('utf-8'))
                     try:
@@ -51,9 +52,11 @@ class RDFIngestor(grok.View):
                     except IngestDisabled:
                         self.skipped.append(folder)
                     except Exception as ex:
-                        # What should we do here??!
-                        raise ex
                         # import pdb;pdb.set_trace()
+                        _logger.exception(
+                            u"Got an exception %r on path %s; this could be serious, but skipping",
+                            ex, path
+                        )
                     # TODO except what else? We need a more graceful way to handle other exceptions
                     # like network outages
             finally:
@@ -64,3 +67,4 @@ class RDFIngestor(grok.View):
                 self.completeResults.deleted.sort()
                 self.skipped.sort(lambda a, b: cmp(a.title, b.title))
                 transaction.commit()
+                _logger.info('⏹ END FULL INGEST')
