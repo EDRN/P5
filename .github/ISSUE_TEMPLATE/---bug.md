@@ -2,7 +2,7 @@
 name: "\U0001F41B Bug"
 about: Report a bug in P5
 title: ''
-labels: ''
+labels: "\U0001F41Bbug"
 assignees: ''
 
 ---
