@@ -42,27 +42,32 @@ def _setupZopeSecurity(app):
 
 
 def setLDAPcacheParams(portal):
+    logging.info('Setting memcached server for LDAP to localhost:11211')
     registry = getUtility(IRegistry)
     registry['pas.plugins.ldap.memcached'] = u'localhost:11211'
 
 
 def disableSearchEngines(portal):
+    logging.info('Disabling search engines')
     registry = getUtility(IRegistry)
     registry['plone.webstats_js'] = u''
     registry['plone.robots_txt'] = NO_ROBOTS
 
 
 def _main(app):
-    app = makerequest.makerequest(app)
-    app.REQUEST['PARENTS'] = [app]
-    setRequest(app.REQUEST)
-    app.REQUEST.traverse('edrn')
-    _setupZopeSecurity(app)
+    # Apparently we don't need this; just do ``bin/zope-debug -O edrn run $PWD/support/upgradeEDRN.py``
+    # app = makerequest.makerequest(app)
+    # app.REQUEST['PARENTS'] = [app]
+    # setRequest(app.REQUEST)
+    # app.REQUEST.traverse('edrn')
+    # _setupZopeSecurity(app)
     portal = app['edrn']
-    setSite(portal)
+    # Don't need this either, thanks to ``-O edrn``
+    # setSite(portal)
     setLDAPcacheParams(portal)
     disableSearchEngines(portal)
-    noSecurityManager()
+    # And don't need this:
+    # noSecurityManager()
     transaction.commit()
     return True
 

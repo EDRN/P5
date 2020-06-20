@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
-# Copyright 2019 California Institute of Technology. ALL RIGHTS
+# Copyright 2019–2020 California Institute of Technology. ALL RIGHTS
 # RESERVED. U.S. Government Sponsorship acknowledged.
 
 from AccessControl.SecurityManagement import newSecurityManager, noSecurityManager
@@ -128,16 +128,21 @@ def _setSiteProposals(portal):
 
 
 def _main(app):
-    app = makerequest.makerequest(app)
-    app.REQUEST['PARENTS'] = [app]
-    setRequest(app.REQUEST)
-    app.REQUEST.traverse('edrn')
-    _setupZopeSecurity(app)
+    # Apparently we don't need this—and it doesn't work anyway:
+    # app = makerequest.makerequest(app)
+    # app.REQUEST['PARENTS'] = [app]
+    # setRequest(app.REQUEST)
+    # app.REQUEST.traverse('edrn')
+    # _setupZopeSecurity(app)
+    # Instead, just do ``bin/zope-debug -O edrn run $PWD/support/ingest.py``
     portal = app['edrn']
-    setSite(portal)
+    # Don't need this either:
+    # setSite(portal)
     _ingest(portal)
-    _setSiteProposals(portal)
-    noSecurityManager()
+    # No longer need to do this; it was only needed once during initial P5 setup:
+    # _setSiteProposals(portal)
+    # And don't need this:
+    # noSecurityManager()
     transaction.commit()
     return True
 

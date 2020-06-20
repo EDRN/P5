@@ -50,19 +50,23 @@ def upgradeEDRN(portal):
     # on the add/remove programs panel in Plone, maybe followed by a full ingest
     qi = get_installer(portal)
     for productID in _edrnProductsIDs:
+        logging.info(u'=== UPGRADING %s', productID)
         qi.upgrade_product(productID)
 
 
 def _main(app):
-    app = makerequest.makerequest(app)
-    app.REQUEST['PARENTS'] = [app]
-    setRequest(app.REQUEST)
-    app.REQUEST.traverse('edrn')
-    _setupZopeSecurity(app)
+    # Apparently we don't need this; just do ``bin/zope-debug -O edrn run $PWD/support/upgradeEDRN.py``
+    # app = makerequest.makerequest(app)
+    # app.REQUEST['PARENTS'] = [app]
+    # setRequest(app.REQUEST)
+    # app.REQUEST.traverse('edrn')
+    # _setupZopeSecurity(app)
     portal = app['edrn']
-    setSite(portal)
+    # Don't need this either, thanks to ``-O edrn``
+    # setSite(portal)
     upgradeEDRN(portal)
-    noSecurityManager()
+    # And don't need this:
+    # noSecurityManager()
     transaction.commit()
     return True
 
