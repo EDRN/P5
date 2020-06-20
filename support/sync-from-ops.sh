@@ -50,7 +50,7 @@ echo "📈 Retrieving Zope database" 1>&2
 cd "$filestorage"
 rm -f "Data.fs"
 wget \
-    --quiet \
+    --no-verbose \
     --execute robots=off \
     --timestamping \
     --no-check-certificate \
@@ -70,7 +70,7 @@ echo "📀 Retrieving blobs" 1>&2
 [ -d "$blobstorage" ] || mkdir -p "$blobstorage"
 cd "$blobstorage"
 wget \
-    --quiet \
+    --no-verbose \
     --execute robots=off \
     --cut-dirs=2 \
     --reject='index.html*' \
