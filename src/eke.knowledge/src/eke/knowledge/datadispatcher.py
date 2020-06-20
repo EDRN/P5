@@ -19,7 +19,7 @@ class DataDispatcher(grok.View):
         catalog = plone.api.portal.get_tool('portal_catalog')
         results = catalog(identifier=subjectURI)
         if len(results) == 0:
-            self.request.response.setStatus(httplib.NOT_FOUND, subjectURI + ' matched no objects', lock=True)
+            self.request.response.setStatus(httplib.NOT_FOUND, 'Not found')
         elif len(results) > 1:
             raise ValueError('The subjectURI {} matched more than one ({}) objects'.format(subjectURI, len(results)))
         else:
