@@ -55,14 +55,6 @@ class UnicodeReader(object):
         return self
 
 
-def _setupLogging():
-    channel = logging.StreamHandler()
-    channel.setFormatter(logging.Formatter('%(asctime)-15s %(levelname)-8s %(message)s'))
-    logger = logging.getLogger('jpl')
-    logger.setLevel(logging.DEBUG)
-    logger.addHandler(channel)
-
-
 def _setupZopeSecurity(app):
     logging.info(u'Setting up Zope security')
     acl_users = app.acl_users
@@ -91,18 +83,25 @@ def _ingest(portal):
     if not paths:
         logging.warn(u'No objects set in registry key eke.knowledge.interfaces.IPanel.objects; nothing to do')
         return
+    else:
+        logging.warn(u'About to ingest from the following: %r', paths)
     for path in paths:
+        if not path: continue
         logging.info(u'Ingesting %s', path)
         folder = portal.unrestrictedTraverse(path.encode('utf-8'))
-        ingestor = IIngestor(folder)
+        try:
+            ingestor = IIngestor(folder)
+        except TypeError:
+            logging.info(u"Can't adapt IIngestor to folder at path %s; skipping", path)
         ingestor.ingest()
         transaction.commit()
 
-    # Finally, make sure everything is indexed so they appear where they need
-    # to be
+    # Make sure everything is indexed so they appear where they need to be
     logging.info('Clearing and rebuilding the catalog')
     catalog = plone.api.portal.get_tool('portal_catalog')
     catalog.clearFindAndRebuild()
+    logging.info('DONE')
+    # At this point we could disable ingest which is safer in most cases but we'll leave it be for now
 
 
 def _setSiteProposals(portal):
@@ -148,7 +147,6 @@ def _main(app):
 
 
 def main(argv):
-    _setupLogging()
     try:
         global app
         _main(app)

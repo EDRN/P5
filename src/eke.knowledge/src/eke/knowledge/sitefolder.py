@@ -177,7 +177,23 @@ class SiteIngestor(Ingestor):
         siteURI = unicode(siteURI)
         if siteURI not in sites: return
         site = sites[siteURI]
+        # #46: first set the ``fieldName`` to its default value, ``[]`` for ``multiValued`` or
+        # ``None`` for single valued.
+        #
+        #
+        # Why? suppose a site had a ``<pi rdf:resource='urn:fred'/>``; we set the PI to fred.
+        # Then suppose later fred left. We then leave a dangling reference to fred in the
+        # ``principalInvestigator`` field which when rendered causes stack traces.
+        if multiValued:
+            setattr(site, fieldName, [])
+        else:
+            setattr(site, fieldName, None)
+
+        # Now if this person isn't even here, we don't need to go any further. We've cleared
+        # the field in the 4 lines above.
         if personPredicate not in sitePredicates: return
+
+        # Find the URIs for the people.
         personURIs = [unicode(i) for i in sitePredicates[personPredicate]]
         # Normally I'd do this:
         #
