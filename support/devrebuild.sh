@@ -1,0 +1,76 @@
+#!/bin/sh -e
+#
+# Devrebuild
+# ==========
+# 
+# Download and build a development database massaged from NCI
+
+PATH=/usr/local/bin:/usr/bin:/bin
+export PATH
+opsHost=tumor.jpl.nasa.gov
+opsDir=/usr/local/edrn/portal/ops-nci/var
+
+# Argument check
+
+if [ $# -ne 0 ]; then
+    echo "😩 This program takes no arguments; try again?" 1>&2
+    exit 1
+fi
+
+
+# Sentinel files check
+
+if [ \! -f "bootstrap.py" ]; then
+    echo "🤔 Not finding the bootsrap.py file; are you in the right directory?" 1>&2
+    exit 1
+fi
+
+
+# Warning
+
+cat <<EOF
+❗️ This program will wipe out your local Zope database and log files, then
+copy the latest processed operations database, and then upgrade it to the
+current development software you have in this working directory. If you have
+any local changes to your content database or blob files you want to preserve,
+abort now!
+
+⏱ You have 5 seconds.
+EOF
+sleep 5
+trap 'echo "😲 Interrupted" 1>&2; exit 1' SIGINT
+
+echo "🏃‍♀️Here we go"
+
+[ -x bin/zope-debug ] && echo "🛑 Stopping zope-debug, if any…\c" && bin/zope-debug stop >/dev/null 2>&1; echo "done"
+for d in var/filestorage var/log; do
+    [ -d "$d" ] && echo "🧨 Nuking files in ${d}…\c" && find "$d" -type f -delete && echo "done"
+    [ \! -d "$d" ] && echo "📁 Making new empty ${d}…\c" && mkdir -p "$d" && echo "done"
+done
+
+echo "📀 Syncing content blobs"
+rsync -cr --progress $opsHost:$opsDir/blobstorage var
+echo "📈 Copying Zope database"
+rsync -c --progress $opsHost:$opsDir/filestorage/Data.fs var/filestorage
+password=`openssl rand -hex 16`
+echo "👮‍♀️ Adding Manager account to Zope DB; username = «admin», password = «${password}»"
+bin/zope-debug adduser admin ${password}
+# TODO:
+# We are sticking with 5.1.5 for now but we will need to enable this for future upgrades
+# (or figure out how do to it from a ``zope-debug run`` like the good old days):
+echo "🏃‍♂️ Starting Zope for upgrade"
+echo "⚠️ Actually no! We are staying with 5.1.5 for now"
+# bin/zope-debug start
+# echo "⏰ Waiting 30 seconds for Zope to get ready"
+# sleep 30
+# echo "⬆️ Upgrading Plone"
+# curl -v 'http://localhost:6468/edrn/@@plone-upgrade' --user 'admin:admin' -H 'Content-Type: application/x-www-form-urlencoded' --data 'form.submitted%3Aboolean=True&submit=Upgrade'
+# echo "✋ Stopping Zope"
+# bin/zope-debug stop
+# sleep 10
+echo "🩺 Upgrading EDRN"
+bin/zope-debug -O edrn run $PWD/support/upgradeEDRN.py
+echo "🍽 Ingesting RDF and other data"
+bin/zope-debug -O edrn run $PWD/support/ingest.py
+echo "🏁 Done! You can now start a debug Zope instance with «bin/zope-debug fg»."
+exit 0
