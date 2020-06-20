@@ -93,6 +93,33 @@ Let's enable ingest and try again::
     u'urn:edrn:organs:rectum'
 
 
+Data Dispatcher
+===============
+
+This is a new feature (see https://github.com/EDRN/P5/issues/33) that lets you
+find the page for an EDRN Knowledge Environment object if you have its subject
+URI.
+
+    >>> browser.open(portalURL + '/@@dataDispatch')
+    Traceback (most recent call last):
+    ...
+    ValueError: The subjectURI parameter is required
+
+So make sure you give the subject URI. What if you give a nonexistent URI::
+
+    >>> browser.open(portalURL + '/@@dataDispatch?subjectURI=urn:not:found')
+    Traceback (most recent call last):
+    ...
+    HTTPError: HTTP Error 404: Not Found
+
+And if you give a valid subject URI, you get a redirect. Look how we end up
+on a body system page::
+
+    >>> browser.open(portalURL + '/@@dataDispatch?subjectURI=urn:edrn:organs:anus')
+    >>> browser.url
+    'http://nohost/plone/body-systems/anus'
+
+
 Diseases
 ========
 
@@ -1010,3 +1037,5 @@ few values by now::
     >>> groupValues.sort()
     >>> groupValues
     [u'Breast/GYN', u'G.I. and Other Associated Cancers Research Group', u'Lung and Upper Aerodigestive Cancers Research Group', u'Prostate and Urologic']
+
+
