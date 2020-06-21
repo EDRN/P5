@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<object purge='False'>
+    <order manager='plone.portaltop' skinname='Plone Default' purge='True'>
+        <viewlet name='edrn.dev_warning' />
+        <viewlet name='plone.header' />
+    </order>
+</object>

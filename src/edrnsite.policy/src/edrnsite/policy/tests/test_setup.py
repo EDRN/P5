@@ -6,6 +6,8 @@ from plone import api
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.registry.interfaces import IRegistry
+from plone.app.viewletmanager.interfaces import IViewletSettingsStorage
+from zope.component import getUtility
 
 import unittest
 
@@ -39,6 +41,12 @@ class TestSetup(unittest.TestCase):
         title = api.portal.get_registry_record('plone.site_title')
         self.assertEquals(title, u'Early Detection Research Network',
             u'Title not set to "Early Detection Research Network"')
+
+    def test_viewlets(self):
+        '''Make sure the custom viewlet is there'''
+        storage = getUtility(IViewletSettingsStorage)
+        viewlets = list(storage.getOrder(u'plone.portaltop', 'Plone Default'))
+        self.assertEqual(u'edrn.dev_warning', viewlets[0])
 
 
 class TestUninstall(unittest.TestCase):
