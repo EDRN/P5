@@ -81,7 +81,7 @@ def setValue(obj, fti, iface, predicate, predicateMap, values):
         return
     field = iface.get(fieldName)
     if field is None:
-        _logger.info(u'Field %s does not exist in %s', fieldName, fti)
+        _logger.debug(u'Field %s does not exist in %s; ignoring', fieldName, fti)
         return
     fieldBinding = field.bind(obj)
     if isReference:
