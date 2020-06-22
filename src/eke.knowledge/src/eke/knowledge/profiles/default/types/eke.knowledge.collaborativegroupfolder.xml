@@ -22,6 +22,7 @@
         <element value='plone.app.content.interfaces.INameFromTitle'/>
         <element value='plone.app.dexterity.behaviors.exclfromnav.IExcludeFromNavigation'/>
         <element value='Products.CMFPlone.interfaces.constrains.ISelectableConstrainTypes'/>
+        <element value='plone.app.dexterity.behaviors.metadata.ICategorization'/>
     </property>
     <property name='default_view'>view</property>
     <property name='default_view_fallback'>False</property>

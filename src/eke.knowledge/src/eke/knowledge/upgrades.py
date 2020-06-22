@@ -16,11 +16,18 @@ import logging, plone.api
 PROFILE = 'profile-' + PACKAGE_NAME + ':default'
 
 
+def reloadTypes(setupTool, logger=None):
+    if logger is None:
+        logger = logging.getLogger(PACKAGE_NAME)
+    logger.info(u'Reloading content types')
+    setupTool.runImportStepFromProfile(PROFILE, 'typeinfo')
+
+
 def reindexSearchableTextForKnowledgeObjects(setupTool, logger=None):
     # For https://github.com/EDRN/P5/issues/32
     if logger is None:
         logger = logging.getLogger(PACKAGE_NAME)
-    logger.info('📚 Re-indexing the catalog')
+    logger.info(u'Re-indexing the catalog')
     catalog = plone.api.portal.get_tool('portal_catalog')
     # This takes FOREVER:
     # catalog.refreshCatalog(clear=1)  # Do we need clear=1?

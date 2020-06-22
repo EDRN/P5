@@ -23,5 +23,12 @@
         handler='.upgrades.changeFacets'
         source='1000' destination='1001' sortkey='1000'
     />
+    <genericsetup:upgradeStep
+        title='Reload Content types'
+        description='Upgrade eke.knowledge with new and changed content types'
+        profile='eke.knowledge:default'
+        handler='.upgrades.reloadTypes'
+        source='1000' destination='1001' sortkey='1001'
+    />
 
 </configure>
