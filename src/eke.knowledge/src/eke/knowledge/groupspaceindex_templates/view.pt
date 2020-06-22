@@ -90,9 +90,10 @@
                         <!-- TAB: Overview -->
                         <div id='overviewTab'>
                             <p class='arg' i18n:translate='groupLoginAdmonition' tal:condition='isAnon'
-                                tal:define='loginURL string:${context/aq_parent/absolute_url}/login'>
+                                tal:define='loginURL string:${context/aq_parent/absolute_url}/login'
+                                id='login-please'>
                                 If you are a member of this group,
-                                <a href='#' i18n:name='loginURL' tal:attributes='href loginURL'>log in</a>
+                                👉 <a href='#' i18n:name='loginURL' tal:attributes='href loginURL'>log in</a> 👈
                                 to gain full access.
                             </p>
                             <div class='topCollabGroupItems' tal:define='
@@ -256,6 +257,7 @@
                         collapsible: true,
                         active: false
                     });
+                    $('#login-please').effect("highlight", {}, 1999);
                 </script>
 
             </tal:main-macro>

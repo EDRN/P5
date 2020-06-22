@@ -1,5 +1,14 @@
 @charset "UTF-8";
 
+
+#login-please {
+    font-size: 150%;
+    font-weight: bold;
+}
+#login-please a {
+    color: #004665;
+    text-decoration: underline;
+}
 .cbInfoBox {
     border: 1px solid #bbb;
     padding: 0.5em;
