@@ -45,7 +45,8 @@
                         No Pub Med ID defined.
                     </p>
                     <p id='pubMedID' tal:condition='pubMedID'>
-                        <a href='#' tal:attributes='href string:https://www.ncbi.nlm.nih.gov/sites/entrez?Db=pubmed&amp;Cmd=DetailsSearch&amp;Term=${pubMedID}%5Buid%5D' tal:content='pubMedID'>
+                        <a href='#' tal:attributes='href string:https://pubmed.ncbi.nlm.nih.gov/${pubMedID}/'
+                            tal:content='pubMedID'>
                             12345
                         </a>
                     </p>
