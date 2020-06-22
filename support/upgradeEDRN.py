@@ -18,11 +18,14 @@ import sys, logging, transaction, plone.api, csv, codecs, os, os.path
 from Products.CMFPlone.utils import get_installer
 
 
-_edrnProductsIDs = [
+_products = [
     'edrnsite.portlets',
     'edrn.theme',
     'eke.knowledge',
     'edrnsite.policy',
+    'collective.js.jqueryui',    # This wants to be upgraded even though it says its profile version is the same
+    'eea.facetednavigation',     # 11.7→13.8
+    'eea.faceted.vocabularies',  # 6.8→6.9
 ]
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)-8s %(message)s')
@@ -49,7 +52,7 @@ def upgradeEDRN(portal):
     # Probably the equivalemnt of hitting the upgrade button on edrnsite.policy
     # on the add/remove programs panel in Plone, maybe followed by a full ingest
     qi = get_installer(portal)
-    for productID in _edrnProductsIDs:
+    for productID in _products:
         logging.info(u'=== UPGRADING %s', productID)
         qi.upgrade_product(productID)
 

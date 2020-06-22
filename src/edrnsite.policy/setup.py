@@ -45,6 +45,7 @@ setup(
         'edrn.theme',
         'edrnsite.portlets',
         'eea.facetednavigation',
+        'eea.faceted.blue',
         'eke.knowledge',
         'pas.plugins.ldap',
         'plone.api>=1.8.4',

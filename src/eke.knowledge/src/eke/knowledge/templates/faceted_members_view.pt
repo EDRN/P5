@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:tal="http://xml.zope.org/namespaces/tal" xmlns:metal="http://xml.zope.org/namespaces/metal" xmlns:i18n="http://xml.zope.org/namespaces/i18n" xml:lang="en" lang="en" metal:use-macro="context/main_template/macros/master" i18n:domain="eea">
+    <body>
+        <metal:content-core fill-slot="content-core">
+            <metal:block define-macro="content-core">
+                <metal:css fill-slot='style_slot'>
+                    <link type='text/css' rel='stylesheet' href='#'
+                        tal:define='navroot context/@@plone_portal_state/navigation_root_url'
+                        tal:attributes='href string:${navroot}/++resource++eke.knowledge/member-list.css'
+                    />
+                </metal:css>
+                <div tal:define="
+                    folderContents folderContents | python:context.getFolderContents();
+                    Batch python:modules['Products.CMFPlone'].Batch;
+                    b_start python:request.get('b_start', 0);
+                    batch python:isinstance(folderContents, Batch) and folderContents or Batch(folderContents, 100, int(b_start), orphan=2);
+                ">
+                    <div metal:use-macro="context/batch_macros/macros/navigation"/>
+                    <div class="eea-preview-items">
+                        <tal:entries repeat="brain batch">
+                            <div class='memberAlbumEntry'>
+                                <a href='#' tal:attributes='href brain/getURL'>
+                                    <span class="memberAlbumEntryTitle" tal:content="brain/Title|string:">
+                                        Title
+                                    </span>
+                                    <br/>
+                                    <span class="memberAlbumEntryDescription">
+                                        <span tal:replace='brain/memberType|nothing'>Underfunded Peon</span>
+                                        <br/>
+                                        <span tal:replace='brain/specialty|nothing'>Being underpaid</span>
+                                    </span>
+                                </a>
+                            </div>
+
+<!--
+                            <code>here?</code>
+                            <tal:entry tal:define="doc brain/getObject|nothing" tal:condition="python:doc is not None">
+                                <tal:preview tal:condition="exists:doc/@@faceted-preview-item" tal:replace="structure doc/@@faceted-preview-item"/>
+                            </tal:entry>
+-->
+                        </tal:entries>
+                        <span tal:condition="not: batch/sequence_length" class="table_faceted_no_results" i18n:domain="plone" i18n:translate="description_no_results_found">No results were found.</span>
+                    </div>
+                    <div metal:use-macro="context/batch_macros/macros/navigation"/>
+                </div>
+            </metal:block>
+        </metal:content-core>
+    </body>
+</html>

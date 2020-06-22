@@ -64,6 +64,13 @@
         title='Faceted Biomarkers View'
         permission='zope2.View'
     />
+    <faceted:view
+        name='faceted_members_view'
+        template='templates/faceted_members_view.pt'
+        title='Faceted Members View'
+        permission='zope2.View'
+    />
+
 
     <browser:resourceDirectory name='eke.knowledge' directory='static'/>
 
