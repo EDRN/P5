@@ -32,10 +32,10 @@ body {
 }
 
 ul#edrn-quicklinks {
-    margin-top:0px;
+    margin-top: 0px;
 }
 ul#edrn-quicklinks li {
-    padding-right:5px;
+    padding-right: 5px;
 }
 #edrn-quicklinks {
     margin: 10px 0 0 0;
@@ -47,21 +47,16 @@ ul#edrn-quicklinks li {
     border: 1px solid;
     border-color: #ccc #bbb #b6b6b6 #ccc;
     margin: 0 0 3px 0;
-    background: #f1f1f1 url(++resource++edrn.theme.images/s-bg.gif) top left repeat-x;
 }
 #edrn-quicklinks li a {
     display: block;
-    padding: 13px 0 13px 60px;
+    padding: 13px 0 13px 0;
     text-decoration: none;
 }
 #edrn-quicklinks li a, #edrn-quicklinks li a:link, #edrn-quicklinks li a:visited {
-    background-position: 4px 50%;
-    background-repeat: no-repeat;
     color: #400;
 }
 #edrn-quicklinks li a:hover, #edrn-quicklinks li a:active {
-    background-position: -462px 50%;
-    background-repeat: no-repeat;
     color: #004;
     text-decoration: none;
 }
@@ -69,20 +64,22 @@ ul#edrn-quicklinks li {
     background-color: #fff;
     color: #f00;
 }
-#q-collabGroups  a {background: url(++resource++edrn.theme/s-collabgroups.gif);}
-#q-committees    a {background: url(++resource++edrn.theme/s-committees.gif);}
-#q-fund          a {background: url(++resource++edrn.theme/s-newfund.gif);}
-#q-book          a {background: url(++resource++edrn.theme/s-newbook.gif);}
-#q-cbrg          a {background: url(++resource++edrn.theme/s-investigators.gif);}
-#q-dcp           a {background: url(++resource++edrn.theme/s-newdcp.gif);}
-#q-advocates     a {background: url(++resource++edrn.theme/s-advocates.gif);}
-#q-sites         a {background: url(++resource++edrn.theme/s-sites.gif);}
-#q-specimens     a {background: url(++resource++edrn.theme/s-newcbrg.gif);}
-#q-standards     a {background: url(++resource++edrn.theme/s-standards.gif);}
-#q-newMembers    a {background: url(++resource++edrn.theme/s-newMembers.gif);}
-#q-members       a {background: url(++resource++edrn.theme/s-membersList.gif);}
-#q-informatics   a {background: url(++resource++edrn.theme/s-informatics.png);}
-#q-nct           a {background: url(++resource++edrn.theme/s-nct.png);}
+
+/* There are smarter ways to get margins in there but I have no time for research */
+#q-collabGroups  a::before { content: '\00a0\e830\00a0'; font-family: "Fontello"; font-size: 150%; }
+#q-committees    a::before { content: '\00a0\e802\00a0'; font-family: "Fontello"; font-size: 150%; }
+#q-fund          a::before { content: '\00a0\e80f\00a0'; font-family: "Fontello"; font-size: 150%; }
+#q-book          a::before { content: '\00a0\e81b\00a0'; font-family: "Fontello"; font-size: 150%; }
+#q-cbrg          a::before { content: '\00a0\e831'; font-family: "Fontello"; font-size: 150%; } /* Ghetto kern */
+#q-dcp           a::before { content: '\00a0\e80a\00a0'; font-family: "Fontello"; font-size: 150%; }
+#q-advocates     a::before { content: '\00a0\e80b\00a0'; font-family: "Fontello"; font-size: 150%; }
+#q-sites         a::before { content: '\00a0\e80c\00a0'; font-family: "Fontello"; font-size: 150%; }
+#q-specimens     a::before { content: '\00a0\e808\00a0'; font-family: "Fontello"; font-size: 150%; }
+#q-standards     a::before { content: '\00a0\e809\00a0'; font-family: "Fontello"; font-size: 150%; }
+#q-newMembers    a::before { content: '\00a0\e80a\00a0'; font-family: "Fontello"; font-size: 150%; }
+#q-members       a::before { content: '\00a0\e824\00a0'; font-family: "Fontello"; font-size: 150%; }
+#q-informatics   a::before { content: '\00a0\e849\00a0'; font-family: "Fontello"; font-size: 150%; }
+#q-nct           a::before { content: '\00a0\e804\00a0'; font-family: "Fontello"; font-size: 150%; }
 
 #portal-footer-wrapper {
     background-color: white;
