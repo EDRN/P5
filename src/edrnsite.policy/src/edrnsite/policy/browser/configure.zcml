@@ -27,5 +27,12 @@
         permission='zope2.View'
         class='.viewlets.EDRNDevWarningViewlet'
     />
+    <browser:viewlet
+        name='edrn.colophon'
+        manager='plone.app.layout.viewlets.interfaces.IPortalFooter'
+        layer='edrnsite.policy.interfaces.IEdrnsitePolicyLayer'
+        permission='zope2.View'
+        class='.viewlets.EDRNColophonViewlet'
+    />
 
 </configure>

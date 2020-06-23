@@ -95,3 +95,9 @@ ul#edrn-quicklinks li {
         display: inherit;
     }
 }
+
+#edrn-colophon {
+    text-align: right;
+    padding: 10px;
+    margin: 10px;
+}

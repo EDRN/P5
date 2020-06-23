@@ -7,7 +7,13 @@
         description='Upgrade edrnsite.policy with viewlet manager so that new viewlets get registered'
         profile='edrnsite.policy:default'
         handler='.upgrades.reloadViewlets'
-        source='1000' destination='1001' sortkey='998'
+        source='1000' destination='1001' sortkey='10'
     />
-
+    <genericsetup:upgradeStep
+        title='Reload registry'
+        description='Upgrade edrnsite.policy with new settings in the configuration registry'
+        profile='edrnsite.policy:default'
+        handler='.upgrades.reloadRegistry'
+        source='1000' destination='1001' sortkey='20'
+    />
 </configure>

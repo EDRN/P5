@@ -7,9 +7,11 @@ PROFILE = 'profile-' + PACKAGE_NAME + ':default'
 
 
 def reloadViewlets(setupTool, logger=None):
-    if logger is None:
-        logger = logging.getLogger(PACKAGE_NAME)
     setupTool.runImportStepFromProfile(PROFILE, 'viewlets')
+
+
+def reloadRegistry(setupTool, logger=None):
+    setupTool.runImportStepFromProfile(PROFILE, 'plone.app.registry')
 
 
 # Boilerplate from paster template; leaving for posterity:
