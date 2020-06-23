@@ -36,12 +36,6 @@ class TestSetup(unittest.TestCase):
             IEdrnsitePolicyLayer,
             utils.registered_layers())
 
-    def test_title(self):
-        '''Ensure the title is correct.'''
-        title = api.portal.get_registry_record('plone.site_title')
-        self.assertEquals(title, u'Early Detection Research Network',
-            u'Title not set to "Early Detection Research Network"')
-
     def test_viewlets(self):
         '''Make sure the custom viewlet is there'''
         storage = getUtility(IViewletSettingsStorage)
