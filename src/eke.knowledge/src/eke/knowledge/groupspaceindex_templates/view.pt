@@ -252,12 +252,12 @@
                 <script type='text/javascript'>
                     $(function() {
                         $("#groupDetailTabs").tabs();
+                        $('.collapse').accordion({
+                            collapsible: true,
+                            active: false
+                        });
+                        $('#login-please').effect("highlight", {}, 1999);
                     });
-                    $('.collapse').accordion({
-                        collapsible: true,
-                        active: false
-                    });
-                    $('#login-please').effect("highlight", {}, 1999);
                 </script>
 
             </tal:main-macro>
