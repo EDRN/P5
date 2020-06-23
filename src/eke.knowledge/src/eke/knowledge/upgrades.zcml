@@ -3,6 +3,13 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
     <genericsetup:upgradeStep
+        title='Reload Content types'
+        description='Upgrade eke.knowledge with new and changed content types'
+        profile='eke.knowledge:default'
+        handler='.upgrades.reloadTypes'
+        source='1000' destination='1001' sortkey='997'
+    />
+    <genericsetup:upgradeStep
         title='Publish DiseaseFolders'
         description='Upgrade eke.knowledge which fixes views for Diseases so we can publish all DiseaseFolders'
         profile='eke.knowledge:default'
@@ -22,13 +29,6 @@
         profile='eke.knowledge:default'
         handler='.upgrades.changeFacets'
         source='1000' destination='1001' sortkey='1000'
-    />
-    <genericsetup:upgradeStep
-        title='Reload Content types'
-        description='Upgrade eke.knowledge with new and changed content types'
-        profile='eke.knowledge:default'
-        handler='.upgrades.reloadTypes'
-        source='1000' destination='1001' sortkey='1001'
     />
 
 </configure>
