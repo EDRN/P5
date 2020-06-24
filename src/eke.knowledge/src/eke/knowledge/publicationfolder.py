@@ -197,7 +197,13 @@ class PublicationIngestor(Ingestor):
                 # • "N/A-not peer reviewed"
                 # • "PMC***" which is wtf?
                 # We choose to filter these out.
-                if not pmID or not _pubMedExpr.match(pmID): continue
+                if not pmID or not _pubMedExpr.match(pmID):
+                    _logger.warning(
+                        u'Got a weird "pubmed" ID "%s" from "%s" that doesn\'t look like a pubmed ID',
+                        pmID,
+                        subjectURI
+                    )
+                    continue
                 if pmID in pmIDtoSubjectURIs:
                     _logger.warning(
                         u'PubMedID %s already represented by publication %s; but making a duplicate anyway',
