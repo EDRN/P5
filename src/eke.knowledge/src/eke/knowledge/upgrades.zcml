@@ -7,28 +7,34 @@
         description='Upgrade eke.knowledge with new and changed content types'
         profile='eke.knowledge:default'
         handler='.upgrades.reloadTypes'
-        source='1000' destination='1001' sortkey='997'
+        source='1000' destination='1001' sortkey='10'
     />
     <genericsetup:upgradeStep
         title='Publish DiseaseFolders'
         description='Upgrade eke.knowledge which fixes views for Diseases so we can publish all DiseaseFolders'
         profile='eke.knowledge:default'
         handler='.upgrades.publishDiseaseFolders'
-        source='1000' destination='1001' sortkey='998'
+        source='1000' destination='1001' sortkey='20'
     />
     <genericsetup:upgradeStep
         title='Reindex SearchableText'
         description='Upgrade eke.knowledge which has searchable titles–reindexing knowledge objects for SearchableText'
         profile='eke.knowledge:default'
         handler='.upgrades.reindexSearchableTextForKnowledgeObjects'
-        source='1000' destination='1001' sortkey='999'
+        source='1000' destination='1001' sortkey='30'
     />
     <genericsetup:upgradeStep
         title='Reconfigure Faceted Navigation'
         description='Upgrade eke.knowledge so that facets do different things this time'
         profile='eke.knowledge:default'
         handler='.upgrades.changeFacets'
-        source='1000' destination='1001' sortkey='1000'
+        source='1000' destination='1001' sortkey='40'
     />
-
+    <genericsetup:upgradeStep
+        title='Add Grant Numbers'
+        description='Upgrade eke.knowledge by adding grant numbers to publication folders; must come after content types'
+        profile='eke.knowledge:default'
+        handler='.upgrades.addGrantNumbers'
+        source='1000' destination='1001' sortkey='50'
+    />
 </configure>

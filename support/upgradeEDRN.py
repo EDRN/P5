@@ -25,7 +25,6 @@ _products = [
     'edrnsite.policy',
     'collective.js.jqueryui',    # This wants to be upgraded even though it says its profile version is the same
     'eea.facetednavigation',     # 11.7→13.8
-    'eea.faceted.vocabularies',  # 6.8→6.9
 ]
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)-8s %(message)s')

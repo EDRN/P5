@@ -4,6 +4,7 @@
 from . import PACKAGE_NAME
 from .diseasefolder import IDiseaseFolder
 from .knowledgeobject import IKnowledgeObject
+from .publicationfolder import IPublicationFolder
 from .utils import publish
 from eea.facetednavigation.interfaces import ICriteria
 from eea.facetednavigation.layout.interfaces import IFacetedLayout
@@ -132,6 +133,44 @@ def changeFacets(setupTool, logger=None):
     criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=True, default='sortable_title')
     IFacetedLayout(members).update_layout('faceted_members_view')
     publish(members)
+
+
+def addGrantNumbers(setupTool, logger=None):
+    if logger is None:
+        logger = logging.getLogger(PACKAGE_NAME)
+    portal = plone.api.portal.get()
+    if 'publications' not in portal.keys():
+        logger.warn(u'No publications folder in the root of the portal, so no upgrading it with grant numbers')
+        return
+    publications = portal['publications']
+    publications.grantNumbers = [
+        u'CA086368',
+        u'CA086400',
+        u'CA113913',
+        u'CA115091',
+        u'CA115102',
+        u'CA152637',
+        u'CA152653',
+        u'CA152662',
+        u'CA152753',
+        u'CA152756',
+        u'CA152813',
+        u'CA152990',
+        u'CA200462',
+        u'CA200464',
+        u'CA200469',
+        u'CA200495',
+        u'CA214165',
+        u'CA214170',
+        u'CA214172',
+        u'CA214182',
+        u'CA214183',
+        u'CA214194',
+        u'CA214195',
+        u'CA214201'
+    ]
+    num = len(publications.grantNumbers)
+    logger.info(u'Added %d grant numbers to the publications folder; now you just have to do an ingest', num)
 
 
 # Commented-out from auto-generated code in case we need it some day:

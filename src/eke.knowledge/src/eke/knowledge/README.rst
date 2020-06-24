@@ -224,6 +224,41 @@ The statistical graphics made a comeback::
     '...<style>...<script>...'
 
 
+Grant Support for Publications
+------------------------------
+
+Not sure if this is the *right* place for ingesting publications based on
+grant numbers, but these are strange times. Notice this field::
+
+    >>> publicationsFolder.grantNumbers = [u'CA214194', u'CA214195']
+    >>> transaction.commit()
+
+These act sort of like an additional RDF source, populating the pool of
+possible PubMed IDs based on publications supported by the given grant
+numbers. Watch what happens when we ingest now::
+
+    >>> publicationsFolder.grantNumbers
+    [u'CA214194', u'CA214195']
+    >>> browser.open(portalURL + '/@@ingestRDF')
+    >>> browser.contents
+    '...RDF Ingest Report...Objects Created (6)...'
+    >>> len(publicationsFolder.keys())
+    10
+    >>> keys = publicationsFolder.keys()
+    >>> '28716134-detecting-protein-variants-by-mass' in keys
+    True
+    >>> publication = publicationsFolder['28716134-detecting-protein-variants-by-mass']
+    >>> publication.title
+    u'Detecting protein variants by mass spectrometry: a comprehensive study in cancer cell-lines.'
+    >>> publication.identifier
+    u'urn:edrn:knowledge:publication:via-grants:28716134'
+
+Notice the URN-style URI we use for these kinds of publications. Because they
+don't come from the DMCC or from BMDB, we have to synthesize our own URI.
+(They also will never have site information because only the DMCC curates
+that.)
+
+
 Sites
 =====
 
@@ -764,8 +799,7 @@ And check it out::
     >>> linkedPubs = [i.to_path for i in biomarker.publications]
     >>> linkedPubs.sort()
     >>> linkedPubs
-    ['/plone/publications/15613711-evaluation-of-serum-protein-profiling-by', '/plone/publications/23585862-early-detection-of-nsclc-with-scfv', '/plone/publications/27845339-a-combination-of-muc5ac-and-ca19-9', '/plone/publications/28520829-association-between-combined-tmprss2-erg']
-
+    ['/plone/publications/15613711-evaluation-of-serum-protein-profiling-by', '/plone/publications/23585862-early-detection-of-nsclc-with-scfv', '/plone/publications/27845339-a-combination-of-muc5ac-and-ca19-9', '/plone/publications/28520829-association-between-combined-tmprss2-erg', '/plone/publications/28716134-detecting-protein-variants-by-mass', '/plone/publications/29510677-summarizing-performance-for-genome-scale', '/plone/publications/29524617-progress-in-the-management-of-malignant', '/plone/publications/30889379-the-proteogenomic-landscape-of-curable', '/plone/publications/31283845-mesothelioma-scientific-clues-for', '/plone/publications/31591588-genome-wide-germline-correlates-of-the']
 
 Child objects work too::
 
@@ -803,7 +837,7 @@ Did it work?
     >>> linkedPubs = [i.to_path for i in biomarkerBodySystem.publications]
     >>> linkedPubs.sort()
     >>> linkedPubs
-    ['/plone/publications/15613711-evaluation-of-serum-protein-profiling-by', '/plone/publications/23585862-early-detection-of-nsclc-with-scfv', '/plone/publications/27845339-a-combination-of-muc5ac-and-ca19-9', '/plone/publications/28520829-association-between-combined-tmprss2-erg']
+    ['/plone/publications/15613711-evaluation-of-serum-protein-profiling-by', '/plone/publications/23585862-early-detection-of-nsclc-with-scfv', '/plone/publications/27845339-a-combination-of-muc5ac-and-ca19-9', '/plone/publications/28520829-association-between-combined-tmprss2-erg', '/plone/publications/28716134-detecting-protein-variants-by-mass', '/plone/publications/29510677-summarizing-performance-for-genome-scale', '/plone/publications/29524617-progress-in-the-management-of-malignant', '/plone/publications/30889379-the-proteogenomic-landscape-of-curable', '/plone/publications/31283845-mesothelioma-scientific-clues-for', '/plone/publications/31591588-genome-wide-germline-correlates-of-the']
 
 But it can have child objects too::
 
@@ -841,7 +875,7 @@ Working? Yes::
     >>> linkedPubs = [i.to_path for i in bodySystemStudy.publications]
     >>> linkedPubs.sort()
     >>> linkedPubs
-    ['/plone/publications/15613711-evaluation-of-serum-protein-profiling-by', '/plone/publications/23585862-early-detection-of-nsclc-with-scfv', '/plone/publications/27845339-a-combination-of-muc5ac-and-ca19-9', '/plone/publications/28520829-association-between-combined-tmprss2-erg']
+    ['/plone/publications/15613711-evaluation-of-serum-protein-profiling-by', '/plone/publications/23585862-early-detection-of-nsclc-with-scfv', '/plone/publications/27845339-a-combination-of-muc5ac-and-ca19-9', '/plone/publications/28520829-association-between-combined-tmprss2-erg', '/plone/publications/28716134-detecting-protein-variants-by-mass', '/plone/publications/29510677-summarizing-performance-for-genome-scale', '/plone/publications/29524617-progress-in-the-management-of-malignant', '/plone/publications/30889379-the-proteogenomic-landscape-of-curable', '/plone/publications/31283845-mesothelioma-scientific-clues-for', '/plone/publications/31591588-genome-wide-germline-correlates-of-the']
 
 Oh but we're not done::
 
