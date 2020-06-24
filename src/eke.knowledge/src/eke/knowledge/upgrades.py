@@ -2,9 +2,7 @@
 
 
 from . import PACKAGE_NAME
-from .diseasefolder import IDiseaseFolder
 from .knowledgeobject import IKnowledgeObject
-from .publicationfolder import IPublicationFolder
 from .utils import publish
 from eea.facetednavigation.interfaces import ICriteria
 from eea.facetednavigation.layout.interfaces import IFacetedLayout
@@ -42,10 +40,13 @@ def publishDiseaseFolders(setupTool, logger=None):
     # For https://github.com/EDRN/P5/issues/30
     if logger is None:
         logger = logging.getLogger(PACKAGE_NAME)
-    catalog = plone.api.portal.get_tool('portal_catalog')
-    results = catalog(object_provides=IDiseaseFolder.__identifier__)
-    for i in results:
-        publish(i.getObject())
+    portal = plone.api.portal.get()
+    try:
+        df = portal.unrestrictedTraverse('resources/diseases')
+        logger.info('Publishing disease folder %r', df)
+        publish(df)
+    except KeyError:
+        logger.warn('No diseases folder found under resources, so cannot publish it; skipping')
 
 
 def changeFacets(setupTool, logger=None):
