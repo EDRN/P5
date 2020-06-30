@@ -87,8 +87,6 @@ function dashboard(id, fData){
 }
 </script>
 <script type="text/javascript" src="++resource++plone.app.jquery.js"></script>
-<script type="text/javascript" src="jquery-integration.js"></script>
-<script type="text/javascript" src="++resource++plone.app.jquerytools.js"></script>
 <script>
 
 document.addEventListener( 'DOMContentLoaded', function () {
