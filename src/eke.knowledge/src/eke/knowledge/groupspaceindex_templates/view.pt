@@ -86,6 +86,7 @@
                             <li><a href='#overviewTab' i18n:translate='overviewTab'>Overview</a></li>
                             <li><a href='#calendarTab' i18n:translate='calendarTab'>Calendar</a></li>
                             <li><a href='#documentsTab' i18n:translate='documentsTab'>Documents</a></li>
+
                         </ul>
                         <!-- TAB: Overview -->
                         <div id='overviewTab'>
@@ -251,6 +252,7 @@
 
                 <script type='text/javascript'>
                     $(function() {
+                        $("base").remove();
                         $("#groupDetailTabs").tabs();
                         $('.collapse').accordion({
                             collapsible: true,

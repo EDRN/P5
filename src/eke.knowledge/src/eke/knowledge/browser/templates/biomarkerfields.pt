@@ -253,6 +253,7 @@
         </div>
         <script>
             $(function() {
+                $("base").remove();
                 $("#organsTab").tabs();
             });
         </script>

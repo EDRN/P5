@@ -191,6 +191,7 @@
 
                 <script type='text/javascript'>
                     $(function() {
+                        $("base").remove();
                         $("#bmSectionTabs").tabs();
                     });
                 </script>

@@ -360,6 +360,7 @@
 
                 <script type='text/javascript'>
                     $(function() {
+                        $("base").remove();
                         $("#groupDetailTabs").tabs();
                         $('.collapse').accordion({
                             collapsible: true,
