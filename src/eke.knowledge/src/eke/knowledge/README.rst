@@ -799,7 +799,7 @@ And check it out::
     >>> linkedPubs = [i.to_path for i in biomarker.publications]
     >>> linkedPubs.sort()
     >>> linkedPubs
-    ['/plone/publications/15613711-evaluation-of-serum-protein-profiling-by', '/plone/publications/23585862-early-detection-of-nsclc-with-scfv', '/plone/publications/27845339-a-combination-of-muc5ac-and-ca19-9', '/plone/publications/28520829-association-between-combined-tmprss2-erg', '/plone/publications/28716134-detecting-protein-variants-by-mass', '/plone/publications/29510677-summarizing-performance-for-genome-scale', '/plone/publications/29524617-progress-in-the-management-of-malignant', '/plone/publications/30889379-the-proteogenomic-landscape-of-curable', '/plone/publications/31283845-mesothelioma-scientific-clues-for', '/plone/publications/31591588-genome-wide-germline-correlates-of-the']
+    ['/plone/publications/15613711-evaluation-of-serum-protein-profiling-by', '/plone/publications/23585862-early-detection-of-nsclc-with-scfv', '/plone/publications/27845339-a-combination-of-muc5ac-and-ca19-9', '/plone/publications/28520829-association-between-combined-tmprss2-erg', '/plone/publications/28716134-detecting-protein-variants-by-mass', '/plone/publications/29330297-characterization-and-evidence-of-the-mir', '/plone/publications/29510677-summarizing-performance-for-genome-scale', '/plone/publications/29524617-progress-in-the-management-of-malignant', '/plone/publications/30889379-the-proteogenomic-landscape-of-curable', '/plone/publications/31283845-mesothelioma-scientific-clues-for']
 
 Child objects work too::
 
@@ -837,7 +837,7 @@ Did it work?
     >>> linkedPubs = [i.to_path for i in biomarkerBodySystem.publications]
     >>> linkedPubs.sort()
     >>> linkedPubs
-    ['/plone/publications/15613711-evaluation-of-serum-protein-profiling-by', '/plone/publications/23585862-early-detection-of-nsclc-with-scfv', '/plone/publications/27845339-a-combination-of-muc5ac-and-ca19-9', '/plone/publications/28520829-association-between-combined-tmprss2-erg', '/plone/publications/28716134-detecting-protein-variants-by-mass', '/plone/publications/29510677-summarizing-performance-for-genome-scale', '/plone/publications/29524617-progress-in-the-management-of-malignant', '/plone/publications/30889379-the-proteogenomic-landscape-of-curable', '/plone/publications/31283845-mesothelioma-scientific-clues-for', '/plone/publications/31591588-genome-wide-germline-correlates-of-the']
+    ['/plone/publications/15613711-evaluation-of-serum-protein-profiling-by', '/plone/publications/23585862-early-detection-of-nsclc-with-scfv', '/plone/publications/27845339-a-combination-of-muc5ac-and-ca19-9', '/plone/publications/28520829-association-between-combined-tmprss2-erg', '/plone/publications/28716134-detecting-protein-variants-by-mass', '/plone/publications/29330297-characterization-and-evidence-of-the-mir', '/plone/publications/29510677-summarizing-performance-for-genome-scale', '/plone/publications/29524617-progress-in-the-management-of-malignant', '/plone/publications/30889379-the-proteogenomic-landscape-of-curable', '/plone/publications/31283845-mesothelioma-scientific-clues-for']
 
 But it can have child objects too::
 
@@ -875,7 +875,7 @@ Working? Yes::
     >>> linkedPubs = [i.to_path for i in bodySystemStudy.publications]
     >>> linkedPubs.sort()
     >>> linkedPubs
-    ['/plone/publications/15613711-evaluation-of-serum-protein-profiling-by', '/plone/publications/23585862-early-detection-of-nsclc-with-scfv', '/plone/publications/27845339-a-combination-of-muc5ac-and-ca19-9', '/plone/publications/28520829-association-between-combined-tmprss2-erg', '/plone/publications/28716134-detecting-protein-variants-by-mass', '/plone/publications/29510677-summarizing-performance-for-genome-scale', '/plone/publications/29524617-progress-in-the-management-of-malignant', '/plone/publications/30889379-the-proteogenomic-landscape-of-curable', '/plone/publications/31283845-mesothelioma-scientific-clues-for', '/plone/publications/31591588-genome-wide-germline-correlates-of-the']
+    ['/plone/publications/15613711-evaluation-of-serum-protein-profiling-by', '/plone/publications/23585862-early-detection-of-nsclc-with-scfv', '/plone/publications/27845339-a-combination-of-muc5ac-and-ca19-9', '/plone/publications/28520829-association-between-combined-tmprss2-erg', '/plone/publications/28716134-detecting-protein-variants-by-mass', '/plone/publications/29330297-characterization-and-evidence-of-the-mir', '/plone/publications/29510677-summarizing-performance-for-genome-scale', '/plone/publications/29524617-progress-in-the-management-of-malignant', '/plone/publications/30889379-the-proteogenomic-landscape-of-curable', '/plone/publications/31283845-mesothelioma-scientific-clues-for']
 
 Oh but we're not done::
 
