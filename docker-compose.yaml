@@ -16,9 +16,9 @@ services:
     # Zope app server running an instance of the Plone portal for EDRN
     edrn-portal:
         container_name: edrn-portal
-        image: docker.pkg.github.com/edrn/p5/edrn-p5:${EDRN_PORTAL_VERSION:-latest}
+        # image: docker.pkg.github.com/edrn/p5/edrn-p5:${EDRN_PORTAL_VERSION:-latest}
         # image: nutjob4life/edrn-p5:${EDRN_PORTAL_VERSION:-latest}
-        # image: edrn-p5:latest
+        image: edrn-p5:latest
         volumes:
             -
                 # Binary large objects or BLOBs; must be same as edrn-db below

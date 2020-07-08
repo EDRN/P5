@@ -48,9 +48,10 @@ FROM python:2.7.17-alpine3.11
 # --------------------
 #
 # The urllib3 is to get around a Twistlock security flag
+# And urllib3 1.25.7 → 1.25.9 is another Twistlock security flag
 
 ENV \
-    URLLIB3=1.25.7 \
+    URLLIB3=1.25.9 \
     PIP=9.0.3 \
     ZC_BUILDOUT=2.11.4 \
     SETUPTOOLS=39.1.0 \
@@ -103,7 +104,7 @@ RUN : &&\
     buildDeps="gcc bzip2-dev musl-dev libjpeg-turbo-dev openjpeg-dev pcre-dev openssl-dev tiff-dev libxml2-dev libxslt-dev zlib-dev openldap-dev cyrus-sasl-dev libffi-dev" &&\
     apk add --virtual plone-build $buildDeps &&\
     : These stay &&\
-    runDeps="libldap libsasl libjpeg-turbo tiff libxml2 libxslt lynx netcat-openbsd libstdc++@edge libgcc@edge sqlite-libs@edge poppler-utils@edge rsync wv su-exec bash" &&\
+    runDeps="openjpeg@edge libldap libsasl libjpeg-turbo tiff libxml2 libxslt lynx netcat-openbsd libstdc++@edge libgcc@edge sqlite-libs@edge poppler-utils@edge rsync wv su-exec bash" &&\
     apk add $runDeps &&\
     : Get, check, and extract Plone &&\
     wget -q -O Plone.tgz https://launchpad.net/plone/$PLONE_MAJOR/$PLONE_VERSION/+download/Plone-$PLONE_VERSION-UnifiedInstaller.tgz &&\

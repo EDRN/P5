@@ -52,6 +52,14 @@ echo "📀 Syncing content blobs"
 rsync -cr --progress $opsHost:$opsDir/blobstorage var
 echo "📈 Copying Zope database"
 rsync -c --progress $opsHost:$opsDir/filestorage/Data.fs var/filestorage
+
+# Stop here if you want to test by manually doing upgrades through the
+# prefs_install_products_panel. Note: you'll need to manually ingest as well.
+#
+# You'll also have to manually add your own Zope "Manager" user.
+#
+# exit 0
+
 password=`openssl rand -hex 16`
 echo "👮‍♀️ Adding Manager account to Zope DB; username = «admin», password = «${password}»"
 bin/zope-debug adduser admin ${password}

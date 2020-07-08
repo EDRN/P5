@@ -16,7 +16,7 @@ one to use, apparently.
 For commands below (csh style) and for ``docker-compose.yaml``, first set some
 environment variables::
 
-    setenv EDRN_PORTAL_VERSION 5.0.0
+    setenv EDRN_PORTAL_VERSION 5.0.2
     setenv EDRN_DATA_DIR ${HOME}/Downloads/docker-data/edrn
     setenv EDRN_PUBLISHED_PORT 4135
     mkdir -p ${EDRN_DATA_DIR}/log
@@ -29,14 +29,13 @@ environment variables::
 
     This may be the case on *other* systems too.
 
-    At least Docker Desktop (2.1.0.5) for macOS gets it right:
+    At least Docker Desktop (2.3.0.3) for macOS gets it right:
 
-    • Engine = 19.03.5
-    • Compose = 1.24.1
-    • Kubernetes = v1.14.8
+    • Engine = 19.03.8
+    • Compose = 1.25.5
+    • Kubernetes = v1.16.5
     • Notary = 0.6.1
     • Credential Helper = 0.6.3
-    • Machine = 0.16.2
 
 
 Using the Dockerfile
