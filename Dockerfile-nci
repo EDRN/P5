@@ -18,7 +18,7 @@
 #
 # BUT WAIT THERE'S MORE!
 #
-# The Twistlock security scanner absolutely hates Debian Linux, so we can't
+# The Twit-lock security scanner absolutely hates Debian Linux, so we can't
 # base ourselves off the python:2.7 image either, which uses Debian. Further
 # tests show that Ubuntu is out too (of course); the only acceptable Linuxes
 # are centos:8 and alpine:3. So we either have to install Python, Plone, and
@@ -47,8 +47,8 @@ FROM python:2.7.17-alpine3.11
 # Versions and digests
 # --------------------
 #
-# The urllib3 is to get around a Twistlock security flag
-# And urllib3 1.25.7 → 1.25.9 is another Twistlock security flag
+# The urllib3 is to get around a Twit-lock security flag
+# And urllib3 1.25.7 → 1.25.9 is another Twit-lock security flag
 
 ENV \
     URLLIB3=1.25.9 \
@@ -100,6 +100,8 @@ RUN : &&\
     echo '@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositories &&\
     echo '@edge http://dl-cdn.alpinelinux.org/alpine/edge/main' >> /etc/apk/repositories &&\
     apk update &&\
+    : More Twit-lock &&\
+    apk del tiff &&\
     : We will uninstall these later &&\
     buildDeps="gcc bzip2-dev musl-dev libjpeg-turbo-dev openjpeg-dev pcre-dev openssl-dev tiff-dev libxml2-dev libxslt-dev zlib-dev openldap-dev cyrus-sasl-dev libffi-dev" &&\
     apk add --virtual plone-build $buildDeps &&\
@@ -115,8 +117,6 @@ RUN : &&\
     : Clean up anything copied from our src dirs &&\
     find /plone/instance/src -name '*.py[co]' -exec rm -f '{}' + &&\
     rm -rf /plone/instance/src/*/{var,bin,develop-eggs,parts} &&\
-    rm -rf /plone/buildout-cache/eggs/urllib3-1.22* &&\
-    rm -rf /plone/buildout-cache/downloads/dist/urllib3-1.22* &&\
     : Install buildout, setuptools, and pip at specific versions &&\
     pip --quiet install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT wheel==$WHEEL urllib3==$URLLIB3 &&\
     cd /plone/instance &&\
