@@ -6,6 +6,7 @@
 from AccessControl.SecurityManagement import newSecurityManager, noSecurityManager
 from AccessControl.SecurityManager import setSecurityPolicy
 from eke.knowledge.interfaces import IIngestor
+from plone.app.viewletmanager.interfaces import IViewletSettingsStorage
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces import IFolderish
 from Products.CMFCore.tests.base.security import PermissiveSecurityPolicy, OmnipotentUser
@@ -54,6 +55,17 @@ def disableSearchEngines(portal):
     registry['plone.robots_txt'] = NO_ROBOTS
 
 
+def showDevWarning(portal):
+    storage = getUtility(IViewletSettingsStorage)
+    skinName = portal.getCurrentSkinName() if portal.getCurrentSkinName() else 'Plone Default'
+    hidden = list(storage.getHidden('plone.portaltop', skinName))
+    try:
+        hidden.remove('edrn.dev_warning')
+        storage.setHidden('plone.portaltop', skinName, hidden)
+    except ValueError:
+        pass
+
+
 def _main(app):
     # Apparently we don't need this; just do ``bin/zope-debug -O edrn run $PWD/support/upgradeEDRN.py``
     # app = makerequest.makerequest(app)
@@ -66,6 +78,7 @@ def _main(app):
     # setSite(portal)
     setLDAPcacheParams(portal)
     disableSearchEngines(portal)
+    showDevWarning(portal)
     # And don't need this:
     # noSecurityManager()
     transaction.commit()
