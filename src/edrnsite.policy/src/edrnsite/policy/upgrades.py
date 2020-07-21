@@ -10,7 +10,7 @@ import logging, plone.api, os
 PROFILE = 'profile-' + PACKAGE_NAME + ':default'
 
 _HOME_PAGE_DESC = u'''The Early Detection Research Network (EDRN), an initiative of the National Cancer Institute (NCI), brings together dozens of institutions to help accelerate the translation of biomarker information into clinical applications and to evaluate new ways of testing cancer in its earliest stages and for cancer risk.'''
-_HOME_PAGE_BODY = u'''<p><img alt="Home Page Banner Splash"
+_HOME_PAGE_BODY = u'''<p style='text-align: center;'><img alt="Home Page Banner Splash"
 src="resolveuid/{banner}" class="image-inline" title="Home Page Banner Splash"
 data-linktype="image" data-scale="" data-val="{banner}" /></p>
 <div class="homeGrid">
