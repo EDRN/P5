@@ -8,4 +8,7 @@
         <for interface='plone.app.portlets.interfaces.IColumn'/>
         <for interface='plone.app.portlets.interfaces.IDashboard'/>
     </portlet>
+    <assignment purge='True' name='quick-links' category='context' key='/' manager='plone.leftcolumn'
+        type='plone.portlet.static.Static' visible='False'>
+    </assignment>
 </portlets>

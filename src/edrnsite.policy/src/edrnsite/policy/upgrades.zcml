@@ -2,6 +2,8 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
+
+    <!-- 1000 → 1001 -->
     <genericsetup:upgradeStep
         title='Add Viewlets'
         description='Upgrade edrnsite.policy with viewlet manager so that new viewlets get registered'
@@ -16,4 +18,28 @@
         handler='.upgrades.reloadRegistry'
         source='1000' destination='1001' sortkey='20'
     />
+
+    <!-- 1001 → 1002 -->
+    <genericsetup:upgradeStep
+        title='Reload Registry (1001→1002)'
+        description='Get the new portal version number (and other things) loaded in the Plone Registry'
+        profile='edrnsite.policy:default'
+        handler='.upgrades.reloadRegistry'
+        source='1001' destination='1002' sortkey='10'
+    />
+    <genericsetup:upgradeStep
+        title='Reload Portlets (1001→1002)'
+        description='Hide the quick links portlet at the root of the site'
+        profile='edrnsite.policy:default'
+        handler='.upgrades.reloadPortlets'
+        source='1001' destination='1002' sortkey='11'
+    />
+    <genericsetup:upgradeStep
+        title='New Home Page (1001→1002)'
+        description="Set up the new home page, replacing the current one and its RSS news portlet"
+        profile='edrnsite.policy:default'
+        handler='.upgrades.install2020SOWHomePage'
+        source='1001' destination='1002' sortkey='11'
+    />
+
 </configure>

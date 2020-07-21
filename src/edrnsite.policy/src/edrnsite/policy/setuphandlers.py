@@ -50,7 +50,7 @@ class HiddenProfiles(object):
         ]
 
 
-def _publish(context, workflowTool=None):
+def publish(context, workflowTool=None):
     try:
         if workflowTool is None:
             workflowTool = plone.api.portal.get_tool('portal_workflow')
@@ -60,7 +60,7 @@ def _publish(context, workflowTool=None):
         pass
     if IFolderish.providedBy(context):
         for itemID, subItem in context.contentItems():
-            _publish(subItem, workflowTool)
+            publish(subItem, workflowTool)
 
 
 def _removePortlets(portal):
@@ -97,7 +97,7 @@ def _getAdminFolder(portal):
             description=u'Objects used to support the portal itself.',
             exclude_from_nav=True
         )
-        _publish(folder)
+        publish(folder)
         return folder
 
 
@@ -132,7 +132,7 @@ def _addQuickLinks(portal):
                 description=desc,
                 remoteUrl=url
             )
-    _publish(folder)
+    publish(folder)
     # This was a nice idea (auto-generate QuickLinks) but Dan wants the static HTML version instead:
     # assignment = CollectionPortletAssignment(
     #     header=u'Quick Links',
@@ -177,7 +177,7 @@ def _addHomePage(portal):
         text=RichTextValue(_HOME_PAGE_BODY.format(collage=collage.UID()), 'text/html', 'text/x-html-safe')
     )
     portal.setDefaultPage(frontPage.id)
-    _publish(frontPage)
+    publish(frontPage)
     return frontPage
 
 
