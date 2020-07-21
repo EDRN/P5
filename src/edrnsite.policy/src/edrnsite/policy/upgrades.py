@@ -17,30 +17,30 @@ data-linktype="image" data-scale="" data-val="{banner}" /></p>
 <div class="homeData">
 <h2>Data and Resources</h2>
 <ul>
-<li><a href="#">Biomarkers</a></li>
-<li><a href="#">Protocols</a></li>
-<li><a href="#">Data</a></li>
-<li><a href="#">Tools and Specimens</a></li>
-<li><a href="#">Informatics Tools</a></li>
-<li><a href="#">Publications</a></li>
+<li><a href="biomarkers">Biomarkers</a></li>
+<li><a href="protocols">Protocols</a></li>
+<li><a href="data">Data</a></li>
+<li><a href="resources">Tools and Specimens</a></li>
+<li><a href="informatics">Informatics Tools</a></li>
+<li><a href="publications">Publications</a></li>
 </ul>
 </div>
 <div class="homeWork">
 <h2>Work with EDRN</h2>
 <ul>
-<li><a href="#">Associate Membership</a></li>
-<li><a href="#">Funding Opportunities</a></li>
-<li><a href="#">Propose a Validation Study</a></li>
-<li><a href="#">Public-Private Partnerships</a></li>
+<li><a href="colops/assoc">Associate Membership</a></li>
+<li><a href="funding-opportunities">Funding Opportunities</a></li>
+<li><a href="colops/vsp">Propose a Validation Study</a></li>
+<li><a href="colops/edrn-ppp-guidelines">Public-Private Partnerships</a></li>
 <li><a href="#">Propose a Study</a></li>
-<li><a href="#">Advocacy Groups</a></li>
-<li><a href="#">Request Biomarkers</a></li>
+<li><a href="advocates">Advocacy Groups</a></li>
+<li><a href="colops/request-for-biomarkers.pdf">Request Biomarkers</a></li>
 </ul>
 </div>
 <div class="homeNews">
 <h2>News and Events</h2>
 <ul>
-<li><a href="#">EDRN Newsletter</a></li>
+<li><a href="docs/edrn-enewsletter-april-2019">EDRN Newsletter</a></li>
 <li><a href="#">Prevention Science blogs</a></li>
 <li><a href="#">Meeting Registration</a></li>
 <li><a href="#">Meeting Reports</a></li>
