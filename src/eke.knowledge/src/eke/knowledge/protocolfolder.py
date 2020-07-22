@@ -114,6 +114,9 @@ class ProtocolIngestor(Ingestor):
                     p = context[objectID]
                 else:
                     p = results[0].getObject()
+                # Clear out old datasets; these will get repopulated in the data ingest which happens
+                # next (usually); fix for https://github.com/EDRN/P5/issues/54
+                p.datasets = []
                 # Fix the collaborative groups. The RDF from the DMCC contains comma-separated
                 # collab group names which have all gone into item 0 of the group. We need
                 # to split those into an actual list of ``n`` items and also fix the group names.

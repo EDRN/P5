@@ -64,8 +64,8 @@ def reloadPortlets(setupTool, logger=None):
 def install2020SOWHomePage(setupTool, logger=None):
     if logger is None: logger = logging.getLogger(__name__)
     portal = plone.api.portal.get()
-    try: portal.manage_delObjects(['front-page'])
-    except AttributeError: pass
+    if 'front-page' in portal.keys():
+        plone.api.content.rename(obj=portal['front-page'], new_id='front-page-old')
     # Shouldn't we use pkg_resources here?
     with open(os.path.join(os.path.dirname(__file__), 'content', 'tentative-banner.png'), 'rb') as f:
         imageData = f.read()
