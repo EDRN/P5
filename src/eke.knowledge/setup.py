@@ -40,6 +40,8 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
+        'matplotlib==2.2.5',
+        'kiwisolver==1.1.0',
         'biopython',
         'collective.dexteritytextindexer',
         'eea.facetednavigation',
