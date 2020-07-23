@@ -10,9 +10,10 @@ import logging, plone.api, os
 PROFILE = 'profile-' + PACKAGE_NAME + ':default'
 
 _HOME_PAGE_DESC = u'''The Early Detection Research Network (EDRN), an initiative of the National Cancer Institute (NCI), brings together dozens of institutions to help accelerate the translation of biomarker information into clinical applications and to evaluate new ways of testing cancer in its earliest stages and for cancer risk.'''
-_HOME_PAGE_BODY = u'''<p style='text-align: center;'><img alt="Home Page Banner Splash"
-src="resolveuid/{banner}" class="image-inline" title="Home Page Banner Splash"
-data-linktype="image" data-scale="" data-val="{banner}" /></p>
+_HOME_PAGE_BODY = u'''<p style="text-align: center;">
+<img alt="Knowledge Environment" src="@@stats?graphic=graph_knowledgeObjects" class="image-inline" title="Knowledge Environment" />
+<img alt="Biomarkers by Organ" src="@@stats?graphic=graph_biomarkers" class="image-inline" title="Biomarkers by Organ" />
+<img alt="Datasets by Organ" src="@@stats?graphic=graph_datasets" class="image-inline" title="Datasets by Organ" /></p>
 <div class="homeGrid">
 <div class="homeData">
 <h2>Data and Resources</h2>
@@ -65,7 +66,7 @@ def install2020SOWHomePage(setupTool, logger=None):
     if logger is None: logger = logging.getLogger(__name__)
     portal = plone.api.portal.get()
     if 'front-page' in portal.keys():
-        plone.api.content.rename(obj=portal['front-page'], new_id='front-page-old')
+        plone.api.content.delete(obj=portal['front-page'], check_linkintegrity=False)
     # Shouldn't we use pkg_resources here?
     with open(os.path.join(os.path.dirname(__file__), 'content', 'tentative-banner.png'), 'rb') as f:
         imageData = f.read()
