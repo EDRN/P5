@@ -66,16 +66,8 @@ bin/zope-debug adduser admin ${password}
 # TODO:
 # We are sticking with 5.1.5 for now but we will need to enable this for future upgrades
 # (or figure out how do to it from a ``zope-debug run`` like the good old days):
-echo "🏃‍♂️ Starting Zope for upgrade"
-echo "⚠️ Actually no! We are staying with 5.1.5 for now"
-# bin/zope-debug start
-# echo "⏰ Waiting 30 seconds for Zope to get ready"
-# sleep 30
-# echo "⬆️ Upgrading Plone"
-# curl -v 'http://localhost:6468/edrn/@@plone-upgrade' --user 'admin:admin' -H 'Content-Type: application/x-www-form-urlencoded' --data 'form.submitted%3Aboolean=True&submit=Upgrade'
-# echo "✋ Stopping Zope"
-# bin/zope-debug stop
-# sleep 10
+echo "🆙 Upgrading Plone"
+bin/zope-debug -O edrn run $PWD/support/upgradePlone.py
 echo "🩺 Upgrading EDRN"
 bin/zope-debug -O edrn run $PWD/support/upgradeEDRN.py
 echo "🍽 Ingesting RDF and other data"
