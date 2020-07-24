@@ -14,29 +14,36 @@ _HOME_PAGE_BODY = u'''<p style='text-align: center;'><img alt="Home Page Banner 
 src="resolveuid/{banner}" class="image-inline" title="Home Page Banner Splash"
 data-linktype="image" data-scale="" data-val="{banner}" /></p>
 <div class="homeGrid">
+
 <div class="homeData">
 <h2>Data and Resources</h2>
 <ul>
 <li><a href="biomarkers">Biomarkers</a></li>
 <li><a href="protocols">Protocols</a></li>
 <li><a href="data">Data</a></li>
-<li><a href="resources">Tools and Specimens</a></li>
-<li><a href="informatics">Informatics Tools</a></li>
 <li><a href="publications">Publications</a></li>
+<li><a href="informatics">Informatics Tools</a></li>
+<li><a href="resources/sample-reference-sets">Specimen Reference Sets</a></li>
 </ul>
 </div>
+
 <div class="homeWork">
 <h2>Work with EDRN</h2>
 <ul>
-<li><a href="colops/assoc">Associate Membership</a></li>
-<li><a href="funding-opportunities">Funding Opportunities</a></li>
-<li><a href="colops/vsp">Propose a Validation Study</a></li>
-<li><a href="colops/edrn-ppp-guidelines">Public-Private Partnerships</a></li>
-<li><a href="#">Propose a Study</a></li>
+<li>
+    Collaborative Opportunities
+    <ul>
+        <li><a href="colops/assoc">Associate Membership</a> Program</li>
+        <li><a href="colops">Find/Participate in a Collaborative Study</a></li>
+        <li><a href="colops/vsp">Propose a Study</a></li>
+        <li><a href="colops/edrn-ppp-guidelines">Public-Private Partnerships</a></li>
+        <li><a href="colops/request-for-biomarkers-1.pdf/view">Request Biomarkers</a></li>
+    </ul>
+</li>
 <li><a href="advocates">Advocacy Groups</a></li>
-<li><a href="colops/request-for-biomarkers.pdf">Request Biomarkers</a></li>
 </ul>
 </div>
+
 <div class="homeNews">
 <h2>News and Events</h2>
 <ul>
