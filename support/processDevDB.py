@@ -3,19 +3,13 @@
 # Copyright 2020 California Institute of Technology. ALL RIGHTS
 # RESERVED. U.S. Government Sponsorship acknowledged.
 
-from AccessControl.SecurityManagement import newSecurityManager, noSecurityManager
+from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManager import setSecurityPolicy
-from eke.knowledge.interfaces import IIngestor
 from plone.app.viewletmanager.interfaces import IViewletSettingsStorage
 from plone.registry.interfaces import IRegistry
-from Products.CMFCore.interfaces import IFolderish
 from Products.CMFCore.tests.base.security import PermissiveSecurityPolicy, OmnipotentUser
-from Products.CMFCore.WorkflowCore import WorkflowException
-from Testing import makerequest
 from zope.component import getUtility
-from zope.component.hooks import setSite
-from zope.globalrequest import setRequest
-import sys, logging, transaction, plone.api, csv, codecs, os, os.path
+import sys, logging, transaction
 
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)-8s %(message)s')
@@ -55,6 +49,12 @@ def disableSearchEngines(portal):
     registry['plone.robots_txt'] = NO_ROBOTS
 
 
+def disableEmail(portal):
+    logging.info('Setting SMTP server to bogus value')
+    registry = getUtility(IRegistry)
+    registry['plone.smtp_host'] = u'non.exist.int'  # Ths misspelling is intentional; get it?
+
+
 def showDevWarning(portal):
     storage = getUtility(IViewletSettingsStorage)
     skinName = portal.getCurrentSkinName() if portal.getCurrentSkinName() else 'Plone Default'
@@ -78,6 +78,7 @@ def _main(app):
     # setSite(portal)
     setLDAPcacheParams(portal)
     disableSearchEngines(portal)
+    disableEmail(portal)
     showDevWarning(portal)
     # And don't need this:
     # noSecurityManager()
