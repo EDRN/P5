@@ -8,7 +8,6 @@ from .knowledgefolder import IKnowledgeFolder, KnowledgeFolderView
 from .protocol import IProtocol
 from .site import ISite
 from Acquisition import aq_inner
-from five import grok
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from z3c.relationfield import RelationValue
 from zope.component import getUtility
@@ -40,7 +39,6 @@ class IProtocolFolder(IKnowledgeFolder):
 
 
 class ProtocolIngestor(Ingestor):
-    grok.context(IProtocolFolder)
     def getInterfaceForContainedObjects(self, predicates):
         return IProtocol
     def getObjID(self, subjectURI, titles, predicates):
@@ -151,7 +149,8 @@ class ProtocolIngestor(Ingestor):
 
 
 class View(KnowledgeFolderView):
-    grok.context(IProtocolFolder)
+    pass
+    # Broke my own rule about explaining commented-out code:
     # @memoize
     # def protocols(self):
     #     context = aq_inner(self.context)

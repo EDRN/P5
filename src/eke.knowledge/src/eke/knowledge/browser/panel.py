@@ -3,11 +3,11 @@
 u'''Knowledge control panel'''
 
 
-from plone.app.registry.browser.controlpanel import ControlPanelFormWrapper
-from plone.app.registry.browser.controlpanel import RegistryEditForm
 from eke.knowledge import _
 from eke.knowledge.interfaces import IPanel
 from eke.knowledge.rdfingestor import DAWN_OF_TIME
+from plone.app.registry.browser.controlpanel import ControlPanelFormWrapper
+from plone.app.registry.browser.controlpanel import RegistryEditForm
 
 
 class PanelEditForm(RegistryEditForm):

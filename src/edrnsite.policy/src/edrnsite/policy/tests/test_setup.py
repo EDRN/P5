@@ -5,8 +5,8 @@ from edrnsite.policy.testing import EDRNSITE_POLICY_INTEGRATION_TESTING  # noqa
 from plone import api
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
-from plone.registry.interfaces import IRegistry
 from plone.app.viewletmanager.interfaces import IViewletSettingsStorage
+from Products.CMFPlone.utils import get_installer
 from zope.component import getUtility
 
 import unittest
@@ -20,21 +20,17 @@ class TestSetup(unittest.TestCase):
     def setUp(self):
         """Custom shared utility setup for tests."""
         self.portal = self.layer['portal']
-        self.installer = api.portal.get_tool('portal_quickinstaller')
+        self.installer = get_installer(self.portal)
 
     def test_product_installed(self):
         """Test if edrnsite.policy is installed."""
-        self.assertTrue(self.installer.isProductInstalled(
-            'edrnsite.policy'))
+        self.assertTrue(self.installer.is_product_installed('edrnsite.policy'))
 
     def test_browserlayer(self):
         """Test that IEdrnsitePolicyLayer is registered."""
-        from edrnsite.policy.interfaces import (
-            IEdrnsitePolicyLayer)
+        from edrnsite.policy.interfaces import IEdrnsitePolicyLayer
         from plone.browserlayer import utils
-        self.assertIn(
-            IEdrnsitePolicyLayer,
-            utils.registered_layers())
+        self.assertIn(IEdrnsitePolicyLayer, utils.registered_layers())
 
     def test_viewlets(self):
         '''Make sure the custom viewlet is there'''
@@ -49,16 +45,15 @@ class TestUninstall(unittest.TestCase):
 
     def setUp(self):
         self.portal = self.layer['portal']
-        self.installer = api.portal.get_tool('portal_quickinstaller')
+        self.installer = get_installer(self.portal)
         roles_before = api.user.get_roles(TEST_USER_ID)
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
-        self.installer.uninstallProducts(['edrnsite.policy'])
+        self.installer.uninstall_product('edrnsite.policy')
         setRoles(self.portal, TEST_USER_ID, roles_before)
 
     def test_product_uninstalled(self):
         """Test if edrnsite.policy is cleanly uninstalled."""
-        self.assertFalse(self.installer.isProductInstalled(
-            'edrnsite.policy'))
+        self.assertFalse(self.installer.is_product_installed('edrnsite.policy'))
 
     def test_browserlayer_removed(self):
         """Test that IEdrnsitePolicyLayer is removed."""

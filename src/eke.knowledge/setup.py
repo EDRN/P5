@@ -44,7 +44,7 @@ setup(
         'collective.dexteritytextindexer',
         'eea.facetednavigation',
         'plone.api>=1.8.4',
-        'plone.app.dexterity[grok,relations]',
+        'plone.app.dexterity[relations]',
         'plone.app.relationfield',
         'plone.behavior',
         'plone.formwidget.contenttree',

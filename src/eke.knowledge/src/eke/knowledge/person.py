@@ -2,19 +2,18 @@
 # encoding: utf-8
 
 # from .protocol import IProtocol  # We can't import this because of a circular dependency
+
 from . import _
 from .publication import IPublication
-from Acquisition import aq_inner, aq_parent
-from five import grok
-from knowledgeobject import IKnowledgeObject
-from plone.i18n.normalizer.interfaces import IIDNormalizer
-from zope import schema
-from zope.component import getUtility
-from zope.schema.interfaces import IVocabularyFactory
-from zope.schema.vocabulary import SimpleVocabulary
 from .utils import generateVocabularyFromIndex
+from Acquisition import aq_inner, aq_parent
 from collective import dexteritytextindexer
-import plone.api, urlparse
+from knowledgeobject import IKnowledgeObject
+from Products.Five import BrowserView
+from zope import schema
+from zope.interface import implementer
+from zope.schema.interfaces import IVocabularyFactory
+import plone.api
 
 
 class IPerson(IKnowledgeObject):
@@ -134,9 +133,7 @@ IPerson.setTaggedValue('fti', 'eke.knowledge.site')
 IPerson.setTaggedValue('typeURI', u'http://edrn.nci.nih.gov/rdf/types.rdf#Site')
 
 
-class View(grok.View):
-    grok.context(IPerson)
-    grok.require('zope2.View')
+class View(BrowserView):
     def protocols(self):
         context = aq_inner(self.context)
         catalog = plone.api.portal.get_tool('portal_catalog')
@@ -170,25 +167,20 @@ class View(grok.View):
         return publications
 
 
+@implementer(IVocabularyFactory)
 class PrincipalInvestigatorsVocabulary(object):
     u'''Vocabulary for PIs'''
-    grok.implements(IVocabularyFactory)
     def __call__(self, context):
         return generateVocabularyFromIndex('piName', context)
 
 
+@implementer(IVocabularyFactory)
 class SiteNamesVocabulary(object):
-    grok.implements(IVocabularyFactory)
     def __call__(self, context):
         return generateVocabularyFromIndex('siteName', context)
 
 
+@implementer(IVocabularyFactory)
 class MemberTypesVocabulary(object):
-    grok.implements(IVocabularyFactory)
     def __call__(self, context):
         return generateVocabularyFromIndex('memberType', context)
-
-
-grok.global_utility(PrincipalInvestigatorsVocabulary, name=u'eke.knowledge.vocabularies.PrincipalInvestigators')
-grok.global_utility(SiteNamesVocabulary, name=u'eke.knowledge.vocabularies.SiteNames')
-grok.global_utility(MemberTypesVocabulary, name=u'eke.knowledge.vocabularies.MemberTypes')

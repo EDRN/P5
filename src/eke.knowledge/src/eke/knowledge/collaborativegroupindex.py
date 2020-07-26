@@ -3,8 +3,6 @@
 
 u'''EKE Knowledge: Collaborative Group Index'''
 
-# from .person import IPerson
-# import plone.api
 
 from . import _
 from .biomarker import IBiomarker
@@ -14,7 +12,6 @@ from .groupspaceindex import View as BaseView
 from .protocol import IProtocol
 from Acquisition import aq_inner, aq_parent
 from collective import dexteritytextindexer
-from five import grok
 from plone.app.contenttypes.interfaces import INewsItem
 from plone.app.vocabularies.catalog import CatalogSource
 from plone.memoize.view import memoize
@@ -76,7 +73,6 @@ class ICollaborativeGroupIndex(IGroupSpaceIndex):
 
 class View(BaseView):
     u'''View for a collaborative group index'''
-    grok.context(ICollaborativeGroupIndex)
     @memoize
     def _getHighlights(self, review_state=None):
         context = aq_parent(aq_inner(self.context))

@@ -6,7 +6,6 @@ u'''EKE Knowledge: Disease Folder'''
 from .base import Ingestor
 from .disease import IDisease
 from .knowledgefolder import IKnowledgeFolder
-from five import grok
 
 
 class IDiseaseFolder(IKnowledgeFolder):
@@ -14,6 +13,5 @@ class IDiseaseFolder(IKnowledgeFolder):
 
 
 class DiseaseIngestor(Ingestor):
-    grok.context(IDiseaseFolder)
     def getInterfaceForContainedObjects(self, predicates):
         return IDisease

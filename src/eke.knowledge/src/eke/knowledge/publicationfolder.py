@@ -10,9 +10,9 @@ from .publication import IPublication
 from .utils import IngestConsequences, publish
 from Acquisition import aq_inner
 from Bio import Entrez
-from five import grok
 from plone.dexterity.utils import createContentInContainer
 from plone.i18n.normalizer.interfaces import IIDNormalizer
+from Products.Five import BrowserView
 from zope import schema
 from zope.component import getUtility
 import contextlib, urllib2, rdflib, re, plone.api, cgi, logging
@@ -58,7 +58,6 @@ class IPublicationFolder(IKnowledgeFolder):
 
 
 class PublicationIngestor(Ingestor):
-    grok.context(IPublicationFolder)
     def getInterfaceForContainedObjects(self, predicates):
         return IPublication
     def getSummaryData(self, source):
@@ -234,11 +233,8 @@ class PublicationIngestor(Ingestor):
         return IngestConsequences(created=created, updated=[], deleted=[])
 
 
-class PublicationSummary(grok.View):
-    grok.context(IPublicationFolder)
-    grok.require('zope2.View')
-    grok.name('summary')
-    def render(self):
+class PublicationSummary(BrowserView):
+    def __call__(self):
         context = aq_inner(self.context)
         self.request.response.setHeader('Content-type', 'application/json; charset=utf-8')
         self.request.response.setHeader('Content-Transfer-Encoding', '8bit')

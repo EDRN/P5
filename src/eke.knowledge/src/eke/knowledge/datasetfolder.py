@@ -9,10 +9,11 @@ from .dataset import IDataset
 from .dublincore import TITLE_URI
 from .knowledgefolder import IKnowledgeFolder
 from Acquisition import aq_inner
-from five import grok
+from Products.Five import BrowserView
 from z3c.relationfield import RelationValue
 from zope import schema
 from zope.component import getUtility
+from zope.interface import implementer
 from zope.intid.interfaces import IIntIds
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
@@ -40,7 +41,6 @@ class IDatasetFolder(IKnowledgeFolder):
 
 
 class DatasetIngestor(Ingestor):
-    grok.context(IDatasetFolder)
     def getInterfaceForContainedObjects(self, predicates):
         return IDataset
     def readRDF(self, url):
@@ -92,9 +92,9 @@ class DatasetIngestor(Ingestor):
         # Set bodySystemName, protocolName, piNames manually; bodySystemName done
 
 
+@implementer(IVocabularyFactory)
 class BodySystemsInDatasetsVocabulary(object):
     u'''Vocabulary for body systems in datasets'''
-    grok.implements(IVocabularyFactory)
     def __call__(self, context):
         catalog = plone.api.portal.get_tool('portal_catalog')
         results = catalog.uniqueValuesFor('bodySystemName')
@@ -106,14 +106,8 @@ class BodySystemsInDatasetsVocabulary(object):
         return SimpleVocabulary.fromItems(vocabs)
 
 
-grok.global_utility(BodySystemsInDatasetsVocabulary, name=u'eke.knowledge.vocabularies.BodySystemsInDatasets')
-
-
-class DatasetSummary(grok.View):
-    grok.context(IDatasetFolder)
-    grok.require('zope2.View')
-    grok.name('summary')
-    def render(self):
+class DatasetSummary(BrowserView):
+    def __call__(self):
         context = aq_inner(self.context)
         self.request.response.setHeader('Content-type', 'application/json; charset=utf-8')
         self.request.response.setHeader('Content-Transfer-Encoding', '8bit')
@@ -124,4 +118,3 @@ class DatasetSummary(grok.View):
             data[u'Liver etc.']  = data[u'Liver, Placenta, Brain']
             del data[u'Liver, Placenta, Brain']
         return json.dumps(data)
-

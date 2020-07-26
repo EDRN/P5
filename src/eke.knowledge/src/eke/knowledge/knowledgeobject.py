@@ -3,8 +3,8 @@
 
 u'''EKE Knowledge: Knowledge Object'''
 
+from . import _
 from collective import dexteritytextindexer
-from eke.knowledge import _
 from plone.supermodel import model
 from zope import schema
 

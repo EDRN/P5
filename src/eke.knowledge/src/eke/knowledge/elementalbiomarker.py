@@ -5,7 +5,6 @@ u'''Elemental biomarker.'''
 
 from . import _
 from .biomarker import BiomarkerView, IBiomarker
-from five import grok
 from zope import schema
 
 
@@ -19,6 +18,5 @@ class IElementalBiomarker(IBiomarker):
 
 
 class View(BiomarkerView):
-    grok.context(IElementalBiomarker)
     def getType(self):
         return u'elemental'

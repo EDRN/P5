@@ -24,9 +24,13 @@ class EdrnThemeLayer(PloneSandboxLayer):
         # The z3c.autoinclude feature is disabled in the Plone fixture base
         # layer.
         self.loadZCML(package=edrn.theme)
+        z2.installProduct(app, 'edrn.theme')
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'edrn.theme:default')
+
+    def teatDownZope(self, app):
+        z2.uninstallProduct(app, 'edrn.theme')
 
 
 EDRN_THEME_FIXTURE = EdrnThemeLayer()

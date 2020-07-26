@@ -16,7 +16,7 @@ one to use, apparently.
 For commands below (csh style) and for ``docker-compose.yaml``, first set some
 environment variables::
 
-    setenv EDRN_PORTAL_VERSION 5.0.2
+    setenv EDRN_PORTAL_VERSION 5.0.3
     setenv EDRN_DATA_DIR ${HOME}/Downloads/docker-data/edrn
     setenv EDRN_PUBLISHED_PORT 4135
     mkdir -p ${EDRN_DATA_DIR}/log
@@ -118,9 +118,10 @@ You could add ``--detach`` too.
 
 ..  Important:: You **must** do:: 
 
-        curl http://localhost:${EDRN_PUBLISHED_PORT}/edrn/publications
+        curl http://localhost:${EDRN_PUBLISHED_PORT}/edrn/
 
-    as the first request or the plone.subrequest VHM gets screwed up! NO IDEA WHY!
+    as the first request before any reverse-proxied VHM requests or the
+    plone.subrequest VHM gets screwed up! NO IDEA WHY!
 
 
 With ZEO Database Server
@@ -159,9 +160,10 @@ You could add ``--detach`` too.
 
 ..  Important:: You **must** do:: 
 
-        curl http://localhost:${EDRN_PUBLISHED_PORT}/edrn/publications
+        curl http://localhost:${EDRN_PUBLISHED_PORT}/edrn/
 
-    as the first request or the plone.subrequest VHM gets screwed up! NO IDEA WHY!
+    as the first request before any reverse-proxied VHM requests or the
+    plone.subrequest VHM gets screwed up! NO IDEA WHY!
 
 
 Zope Manager Password
@@ -201,11 +203,12 @@ To start it::
 
 If your ``docker-compose`` doesn't recognize ``--detach``, try ``-d``.
 
-..  Important:: You **must** do::
+..  Important:: You **must** do:: 
 
         curl http://localhost:${EDRN_PUBLISHED_PORT}/edrn/
 
-    as the first request or the plone.subrequest VHM gets screwed up! NO IDEA WHY!
+    as the first request before any reverse-proxied VHM requests or the
+    plone.subrequest VHM gets screwed up! NO IDEA WHY!
 
 To change the Zope password::
 

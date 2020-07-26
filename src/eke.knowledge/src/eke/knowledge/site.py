@@ -4,7 +4,7 @@ from . import _, dublincore
 from .person import IPerson
 from Acquisition import aq_inner
 from collective import dexteritytextindexer
-from five import grok
+from Products.Five import BrowserView
 from knowledgeobject import IKnowledgeObject
 from plone.app.vocabularies.catalog import CatalogSource
 from plone.memoize.view import memoize
@@ -12,7 +12,7 @@ from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
-import urlparse, plone.api
+import plone.api
 
 
 # Pre-declared so that the "sponsor" field works, see below.
@@ -174,9 +174,7 @@ ISite.setTaggedValue('fti', 'eke.knowledge.site')
 ISite.setTaggedValue('typeURI', u'http://edrn.nci.nih.gov/rdf/types.rdf#Site')
 
 
-class View(grok.View):
-    grok.context(ISite)
-    grok.require('zope2.View')
+class View(BrowserView):
     def showSponsor(self):
         context = aq_inner(self.context)
         memberType = context.memberType

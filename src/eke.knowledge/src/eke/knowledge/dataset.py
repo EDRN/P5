@@ -2,22 +2,18 @@
 
 # from plone.formwidget.contenttree import ObjPathSourceBinder
 # No longer for Plone 5?
+
 from . import _
 from .bodysystem import IBodySystem
 from .dublincore import TITLE_URI
 from .person import IPerson
 from .protocol import IProtocol
 from .site import ISite
-from Acquisition import aq_inner
 from collective import dexteritytextindexer
-from five import grok
 from knowledgeobject import IKnowledgeObject
 from plone.app.vocabularies.catalog import CatalogSource
-from plone.memoize.view import memoize
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
-from zope.interface import Interface
-import plone.api
 
 
 class IDataset(IKnowledgeObject):

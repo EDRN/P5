@@ -5,7 +5,6 @@ u'''Panel of biomarkers'''
 from . import _
 from .biomarker import BiomarkerView, IBiomarker
 from collective import dexteritytextindexer
-from five import grok
 from plone.app.vocabularies.catalog import CatalogSource
 from z3c.relationfield.schema import RelationChoice, RelationList
 
@@ -26,6 +25,5 @@ class IBiomarkerPanel(IBiomarker):
 
 
 class View(BiomarkerView):
-    grok.context(IBiomarkerPanel)
     def getType(self):
         return u'panel'

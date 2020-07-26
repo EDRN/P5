@@ -6,8 +6,7 @@ from .errors import IngestDisabled
 from .interfaces import IIngestor
 from .utils import IngestConsequences
 from datetime import datetime
-from five import grok
-from plone.app.layout.navigation.interfaces import INavigationRoot
+from Products.Five import BrowserView
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 import logging, transaction, plone.api
@@ -17,12 +16,11 @@ _logger = logging.getLogger(__name__)
 DAWN_OF_TIME = datetime(1970, 1, 1, 0, 0, 0, 0)
 
 
-class RDFIngestor(grok.View):
+class RDFIngestor(BrowserView):
     u'''Ingest the RDF'''
-    grok.context(INavigationRoot)
-    grok.name('ingestRDF')
-    grok.require('cmf.ManagePortal')
-    def update(self):
+    def render(self):
+        return self.index()
+    def __call__(self):
         self.request.set('disable_border', True)
         registry = getUtility(IRegistry)
         ingestStart = registry['eke.knowledge.interfaces.IPanel.ingestStart']
@@ -68,3 +66,4 @@ class RDFIngestor(grok.View):
                 self.skipped.sort(lambda a, b: cmp(a.title, b.title))
                 transaction.commit()
                 _logger.info('⏹ END FULL INGEST')
+        return self.render()

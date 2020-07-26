@@ -3,18 +3,15 @@
 
 u'''EKE Knowledge: Group Space Index'''
 
+from . import _
 from Acquisition import aq_inner, aq_parent
-from eke.knowledge import _
-from five import grok
-from plone.app.contenttypes.permissions import AddDocument, AddEvent, AddFile, AddFolder, AddImage
+from datetime import datetime
 from plone.app.contenttypes.interfaces import IDocument, IEvent, IFile, IFolder, IImage
+from plone.app.contenttypes.permissions import AddDocument, AddEvent, AddFile, AddFolder, AddImage
 from plone.memoize.view import memoize
 from plone.supermodel import model
+from Products.Five import BrowserView
 from zope import schema
-from datetime import datetime
-from plone.app.vocabularies.catalog import CatalogSource
-from z3c.relationfield.schema import RelationChoice, RelationList
-from .person import IPerson
 import plone.api
 
 
@@ -36,9 +33,8 @@ class IGroupSpaceIndex(model.Schema):
     )
 
 
-class View(grok.View):
+class View(BrowserView):
     u'''View for a group space index'''
-    grok.context(IGroupSpaceIndex)
     def getAddableContent(self):
         '''Get the addable content types.  Subclasses can override.  Must return a mapping of type ID to
         a tuple of (permission name, portal type name, and true/false confusing flag).'''

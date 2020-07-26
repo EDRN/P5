@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-"""Init and utils."""
+
+'''Early Detection Research Newtork (EDRN) Knowledge Environment.'''
+
 from zope.i18nmessageid import MessageFactory
 
 

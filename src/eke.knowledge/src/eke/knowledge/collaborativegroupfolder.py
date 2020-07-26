@@ -5,17 +5,14 @@ u'''EKE Knowledge: Collaborative Group Folder'''
 
 from .dublincore import TITLE_URI, DESCRIPTION_URI
 from .groupspacefolder import IGroupSpaceFolder
-from five import grok
 from plone.dexterity.utils import createContentInContainer
 from Products.CMFPlone.interfaces.constrains import ISelectableConstrainTypes, ENABLED
-from zope.container.interfaces import IObjectAddedEvent
 
 
 class ICollaborativeGroupFolder(IGroupSpaceFolder):
     u'''Folder for an individual collaborative group to hold their stuff.'''
 
 
-@grok.subscribe(ICollaborativeGroupFolder, IObjectAddedEvent)
 def setupCollaborativeGroupFolder(folder, event):
     if not ICollaborativeGroupFolder.providedBy(folder):
         # This is in case the group space superclass' event fires. We want this only on

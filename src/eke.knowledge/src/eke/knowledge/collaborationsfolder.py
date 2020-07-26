@@ -4,6 +4,7 @@
 u'''EKE Knowledge: Collaborations Folder'''
 
 
+from . import _
 from .base import Ingestor
 from .biomarker import IBiomarker
 from .collaborativegroupfolder import ICollaborativeGroupFolder
@@ -12,9 +13,7 @@ from .groupspacefolder import IGroupSpaceFolder
 from .knowledgefolder import IKnowledgeFolder, KnowledgeFolderView
 from .protocol import IProtocol
 from Acquisition import aq_inner
-from eke.knowledge import _
 from eke.knowledge.collaborativegroupindex import ICollaborativeGroupIndex
-from five import grok
 from plone.memoize.view import memoize
 from z3c.relationfield import RelationValue
 from zope import schema
@@ -50,7 +49,6 @@ class ICollaborationsFolder(IKnowledgeFolder):
 
 
 class CollaborationsFolderIngestor(Ingestor):
-    grok.context(ICollaborationsFolder)
     def getInterfaceForContainedObjects(self, predicates):
         committeeType = unicode(predicates.get(_committeeTypePredicateURI, [u'Unknown'])[0])
         return ICollaborativeGroupFolder if committeeType == u'Collaborative Group' else IGroupSpaceFolder
@@ -95,7 +93,6 @@ class CollaborationsFolderIngestor(Ingestor):
 
 
 class View(KnowledgeFolderView):
-    grok.context(ICollaborationsFolder)
     def _contents(self, portal_type):
         context = aq_inner(self.context)
         catalog = plone.api.portal.get_tool('portal_catalog')

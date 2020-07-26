@@ -3,17 +3,14 @@
 
 u'''EKE Knowledge: Group Space Folder'''
 
+from . import _
 from .dublincore import TITLE_URI, DESCRIPTION_URI
 from .knowledgeobject import IKnowledgeObject
 from .person import IPerson
-from eke.knowledge import _
-from five import grok
 from plone.app.vocabularies.catalog import CatalogSource
 from plone.dexterity.utils import createContentInContainer
 from Products.CMFPlone.interfaces.constrains import ISelectableConstrainTypes, ENABLED
 from z3c.relationfield.schema import RelationChoice, RelationList
-from zope import schema
-from zope.container.interfaces import IObjectAddedEvent
 
 
 class IGroupSpaceFolder(IKnowledgeObject):
@@ -43,7 +40,6 @@ class IGroupSpaceFolder(IKnowledgeObject):
     )
 
 
-@grok.subscribe(IGroupSpaceFolder, IObjectAddedEvent)
 def setupGroupSpaceFolder(folder, event):
     if not IGroupSpaceFolder.providedBy(folder): return  # This should never happen but I'm defensive—er, paranoid.
     try:

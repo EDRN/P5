@@ -11,13 +11,11 @@ from .publication import IPublication
 from .resource import IResource
 from Acquisition import aq_inner
 from collective import dexteritytextindexer
-from five import grok
 from plone.app.vocabularies.catalog import CatalogSource
 from plone.memoize.view import memoize
+from Products.Five import BrowserView
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
-from zope.container.interfaces import IObjectAddedEvent
-from collective import dexteritytextindexer
 from zope.interface import Interface
 import plone.api
 
@@ -263,7 +261,6 @@ class IStudyStatistics(IKnowledgeObject):
     )
 
 
-@grok.subscribe(IBiomarkerBodySystem, IObjectAddedEvent)
 def updateIndicatedBodySystems(context, event):
     if not IBiomarkerBodySystem.providedBy(context): return  # This should never happen but I'm defensive—er, paranoid.
     organName = context.id.capitalize()
@@ -276,9 +273,7 @@ def updateIndicatedBodySystems(context, event):
         biomarker.reindexObject(idxs=['indicatedBodySystems'])
 
 
-class BiomarkerView(grok.View):
-    grok.baseclass()
-    grok.require('zope2.View')
+class BiomarkerView(BrowserView):
     def getType(self):
         raise NotImplementedError('subclass must impl')
     def viewable(self, section):

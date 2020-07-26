@@ -4,7 +4,7 @@ from . import _
 from .bodysystem import IBodySystem
 from .dublincore import TITLE_URI, DESCRIPTION_URI
 from .knowledgeobject import IKnowledgeObject
-from five import grok
+from Products.Five import BrowserView
 from zope import schema
 
 
@@ -40,5 +40,5 @@ IDisease.setTaggedValue('fti', 'eke.knowledge.disease')
 IDisease.setTaggedValue('typeURI', u'http://edrn.nci.nih.gov/rdf/types.rdf#Disease')
 
 
-class View(grok.View):
-    grok.context(IDisease)
+class View(BrowserView):
+    pass
