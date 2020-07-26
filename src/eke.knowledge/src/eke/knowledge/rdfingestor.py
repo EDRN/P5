@@ -50,7 +50,7 @@ class RDFIngestor(BrowserView):
                     except IngestDisabled:
                         self.skipped.append(folder)
                     except Exception as ex:
-                        import pdb;pdb.set_trace()
+                        # import pdb;pdb.set_trace()
                         _logger.exception(
                             u"SERIOUS? Got an exception %r on path %s; this could be bad, but skipping",
                             ex, path
