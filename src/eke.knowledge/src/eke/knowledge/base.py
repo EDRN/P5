@@ -3,21 +3,13 @@
 u'''Abstract (or not)) base classes for EKE'''
 
 
-from . import _
 from .dublincore import TITLE_URI
 from .errors import IngestDisabled, IngestError, RDFTypeMismatchError, TitlePredicateMissingError
-from .interfaces import IIngestor
-from .knowledgefolder import IKnowledgeFolder
 from .knowledgeobject import IKnowledgeObject
 from .utils import IngestConsequences, publish, setValue
 from Acquisition import aq_inner
-from five import grok
 from plone.dexterity.utils import createContentInContainer
-from z3c.relationfield import RelationValue
 from zope import schema
-from zope.component import getUtility
-from zope.intid.interfaces import IIntIds
-from zope.interface import Invalid
 import rdflib, plone.api, logging
 
 
@@ -26,9 +18,9 @@ DC_TITLE = rdflib.URIRef(TITLE_URI)
 _logger = logging.getLogger(__name__)
 
 
-class Ingestor(grok.Adapter):
-    grok.context(IKnowledgeFolder)
-    grok.provides(IIngestor)
+class Ingestor(object):
+    def __init__(self, context):
+        self.context = context
     def getInterfaceForContainedObjects(self, predicates):
         u'''Return the interface for objects contained'''
         raise NotImplementedError(u'Subclasses need to implement getInterfaceForContainedObjects')
@@ -175,5 +167,7 @@ class Ingestor(grok.Adapter):
         updateURIs = statementURIs & existingURIs
         newObjects = self.createObjects(context, newURIs, statements)
         updatedObjects = self.updateObjects(context, updateURIs, existingBrains, statements)
-        context.manage_delObjects([existingBrains[i]['id'].decode('utf-8') for i in deadURIs])
+        deadObjIDs = [existingBrains[i]['id'].decode('utf-8') for i in deadURIs]
+        if deadObjIDs:
+            context.manage_delObjects(deadObjIDs)
         return IngestConsequences(newObjects, updatedObjects, deadURIs, statements)

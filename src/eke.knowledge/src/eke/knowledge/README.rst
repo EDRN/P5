@@ -110,7 +110,7 @@ So make sure you give the subject URI. What if you give a nonexistent URI::
     >>> browser.open(portalURL + '/@@dataDispatch?subjectURI=urn:not:found')
     Traceback (most recent call last):
     ...
-    HTTPError: HTTP Error 404: Not Found
+    HTTPError: HTTP Error 404: Not found
 
 And if you give a valid subject URI, you get a redirect. Look how we end up
 on a body system page::

@@ -39,7 +39,7 @@
 # Basis
 # -----
 #
-# We'd normally just ue plone:5.1.5 but see the "diatribe" above.
+# We'd normally just ue plone:5.2.1 but see the "diatribe" above.
 
 FROM python:2.7.17-alpine3.11
 
@@ -53,12 +53,13 @@ FROM python:2.7.17-alpine3.11
 ENV \
     URLLIB3=1.25.9 \
     PIP=9.0.3 \
-    ZC_BUILDOUT=2.11.4 \
+    ZC_BUILDOUT=2.12.1 \
     SETUPTOOLS=39.1.0 \
     WHEEL=0.31.1 \
-    PLONE_MAJOR=5.1 \
-    PLONE_VERSION=5.1.5 \
-    PLONE_MD5=8ed5ff27fab67b1b510a1ce0ee2dd655
+    PLONE_MAJOR=5.2 \
+    PLONE_VERSION=5.2.1 \
+    PLONE_VERSION_RELEASE=Plone-5.2.1-UnifiedInstaller-r2 \
+    PLONE_MD5=42407c0313791d3626dc86e674684efe
 
 
 # Plone and EDRN Setup
@@ -109,11 +110,11 @@ RUN : &&\
     runDeps="openjpeg@edge libldap libsasl libjpeg-turbo tiff libxml2 libxslt lynx netcat-openbsd libstdc++@edge libgcc@edge sqlite-libs@edge poppler-utils@edge rsync wv su-exec bash" &&\
     apk add $runDeps &&\
     : Get, check, and extract Plone &&\
-    wget -q -O Plone.tgz https://launchpad.net/plone/$PLONE_MAJOR/$PLONE_VERSION/+download/Plone-$PLONE_VERSION-UnifiedInstaller.tgz &&\
+    wget -q -O Plone.tgz https://launchpad.net/plone/$PLONE_MAJOR/$PLONE_VERSION/+download/$PLONE_VERSION_RELEASE.tgz &&\
     echo "$PLONE_MD5  Plone.tgz" | md5sum -c - &&\
     tar -xzf Plone.tgz &&\
-    cp -r ./Plone-$PLONE_VERSION-UnifiedInstaller/base_skeleton/* /plone/instance/ &&\
-    cp ./Plone-$PLONE_VERSION-UnifiedInstaller/buildout_templates/buildout.cfg /plone/instance/buildout-base.cfg &&\
+    cp -r ./$PLONE_VERSION_RELEASE/base_skeleton/* /plone/instance/ &&\
+    cp ./$PLONE_VERSION_RELEASE/buildout_templates/buildout.cfg /plone/instance/buildout-base.cfg &&\
     : Clean up anything copied from our src dirs &&\
     find /plone/instance/src -name '*.py[co]' -exec rm -f '{}' + &&\
     rm -rf /plone/instance/src/*/{var,bin,develop-eggs,parts} &&\

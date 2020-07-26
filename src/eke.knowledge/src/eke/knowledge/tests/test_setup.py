@@ -6,6 +6,7 @@ from plone.app.testing import TEST_USER_ID
 from eke.knowledge.testing import EKE_KNOWLEDGE_INTEGRATION_TESTING  # noqa
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
+from Products.CMFPlone.utils import get_installer
 
 import unittest, plone.api
 
@@ -18,21 +19,17 @@ class TestSetup(unittest.TestCase):
     def setUp(self):
         """Custom shared utility setup for tests."""
         self.portal = self.layer['portal']
-        self.installer = api.portal.get_tool('portal_quickinstaller')
+        self.installer = get_installer(self.portal)
 
     def test_product_installed(self):
         """Test if eke.knowledge is installed."""
-        self.assertTrue(self.installer.isProductInstalled(
-            'eke.knowledge'))
+        self.assertTrue(self.installer.is_product_installed('eke.knowledge'))
 
     def test_browserlayer(self):
         """Test that IEkeKnowledgeLayer is registered."""
-        from eke.knowledge.interfaces import (
-            IEkeKnowledgeLayer)
+        from eke.knowledge.interfaces import IEkeKnowledgeLayer
         from plone.browserlayer import utils
-        self.assertIn(
-            IEkeKnowledgeLayer,
-            utils.registered_layers())
+        self.assertIn(IEkeKnowledgeLayer, utils.registered_layers())
 
     def test_jqueryui_tabs(self):
         u'''Make sure jQueryUI tabs are enabled'''
@@ -64,22 +61,18 @@ class TestUninstall(unittest.TestCase):
 
     def setUp(self):
         self.portal = self.layer['portal']
-        self.installer = api.portal.get_tool('portal_quickinstaller')
+        self.installer = get_installer(self.portal)
         roles_before = api.user.get_roles(TEST_USER_ID)
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
-        self.installer.uninstallProducts(['eke.knowledge'])
+        self.installer.uninstall_product('eke.knowledge')
         setRoles(self.portal, TEST_USER_ID, roles_before)
 
     def test_product_uninstalled(self):
         """Test if eke.knowledge is cleanly uninstalled."""
-        self.assertFalse(self.installer.isProductInstalled(
-            'eke.knowledge'))
+        self.assertFalse(self.installer.is_product_installed('eke.knowledge'))
 
     def test_browserlayer_removed(self):
         """Test that IEkeKnowledgeLayer is removed."""
-        from eke.knowledge.interfaces import \
-            IEkeKnowledgeLayer
+        from eke.knowledge.interfaces import IEkeKnowledgeLayer
         from plone.browserlayer import utils
-        self.assertNotIn(
-            IEkeKnowledgeLayer,
-            utils.registered_layers())
+        self.assertNotIn(IEkeKnowledgeLayer, utils.registered_layers())

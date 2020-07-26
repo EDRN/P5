@@ -12,13 +12,14 @@ from .knowledgefolder import IKnowledgeFolder
 from .protocol import IProtocol
 from .utils import IngestConsequences, publish
 from Acquisition import aq_inner
-from five import grok
 from plone.dexterity.utils import createContentInContainer
 from plone.i18n.normalizer.interfaces import IIDNormalizer
+from Products.Five import BrowserView
 from z3c.relationfield import RelationValue
 from zope import schema
 from zope.component import getUtility, getMultiAdapter
 from zope.event import notify
+from zope.interface import implementer
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema.interfaces import IVocabularyFactory
@@ -143,7 +144,6 @@ class IBiomarkerFolder(IKnowledgeFolder):
 
 
 class BiomarkerIngestor(Ingestor):
-    grok.context(IBiomarkerFolder)
     def getInterfaceForContainedObjects(self, predicates):
         raise NotImplementedError(u'{} handles its ingest specially'.format(self.__class__.__name__))
     def updateBiomarker(self, biomarkerObj, fti, iface, predicates, context, biomarkerStatements, request):
@@ -395,20 +395,17 @@ class BiomarkerIngestor(Ingestor):
         return IngestConsequences(newBiomarkers.values(), [], [])
 
 
-class BiomarkerSummary(grok.View):
-    grok.context(IBiomarkerFolder)
-    grok.require('zope2.View')
-    grok.name('summary')
-    def render(self):
+class BiomarkerSummary(BrowserView):
+    def __call__(self):
         context = aq_inner(self.context)
         self.request.response.setHeader('Content-type', 'application/json; charset=utf-8')
         self.request.response.setHeader('Content-Transfer-Encoding', '8bit')
         return context.dataSummary
 
 
+@implementer(IVocabularyFactory)
 class BodySystemsInBiomarkersVocabulary(object):
     u'''Vocabulary for body systems in biomarkers'''
-    grok.implements(IVocabularyFactory)
     def __call__(self, context):
         catalog = plone.api.portal.get_tool('portal_catalog')
         results = catalog.uniqueValuesFor('indicatedBodySystems')
@@ -418,6 +415,3 @@ class BodySystemsInBiomarkersVocabulary(object):
                 vocabs.append((i, i))
         vocabs.sort()
         return SimpleVocabulary.fromItems(vocabs)
-
-
-grok.global_utility(BodySystemsInBiomarkersVocabulary, name=u'eke.knowledge.vocabularies.BodySystemsInBiomarkers')

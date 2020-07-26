@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
 
 
-from plone.app.textfield.value import RichTextValue
-from plone.dexterity.utils import createContentInContainer
 
 # This was a nice idea (auto-generate QuickLinks) but Dan wants the static HTML version instead:
 # from plone.portlet.collection.collection import Assignment as CollectionPortletAssignment
 
+from plone.app.textfield.value import RichTextValue
+from plone.dexterity.utils import createContentInContainer
+from plone.namedfile.file import NamedBlobImage
 from plone.portlets.interfaces import ILocalPortletAssignable, IPortletManager, IPortletAssignmentMapping
 from Products.CMFCore.interfaces import IFolderish
+from Products.CMFCore.interfaces import IWorkflowTool
 from Products.CMFCore.WorkflowCore import WorkflowException
 from Products.CMFPlone.interfaces import INonInstallable
 from zope.component import getUtility, getMultiAdapter
 from zope.container import contained
-from plone.namedfile.file import NamedBlobImage
 from zope.interface import implementer
 import plone.api, logging, transaction, os.path
 
@@ -53,7 +54,7 @@ class HiddenProfiles(object):
 def publish(context, workflowTool=None):
     try:
         if workflowTool is None:
-            workflowTool = plone.api.portal.get_tool('portal_workflow')
+            workflowTool = getUtility(IWorkflowTool)
         workflowTool.doActionFor(context, action='publish')
         context.reindexObject()
     except WorkflowException:

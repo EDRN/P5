@@ -3,10 +3,10 @@
 
 u'''EKE Knowledge: Knowledge Folder'''
 
+from . import _
 from Acquisition import aq_inner
-from eke.knowledge import _
-from five import grok
 from plone.supermodel import model
+from Products.Five import BrowserView
 from zope import schema
 import plone.api
 
@@ -40,10 +40,7 @@ class IKnowledgeFolder(model.Schema):
     )
 
 
-class KnowledgeFolderView(grok.View):
-    grok.baseclass()
-    grok.context(IKnowledgeFolder)
-    grok.require('zope2.View')
+class KnowledgeFolderView(BrowserView):
     def contents(self):
         context = aq_inner(self.context)
         catalog = plone.api.portal.get_tool('portal_catalog')

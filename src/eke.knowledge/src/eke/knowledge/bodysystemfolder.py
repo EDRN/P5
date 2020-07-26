@@ -6,7 +6,6 @@ u'''EKE Knowledge: Body System Folder'''
 from .base import Ingestor
 from .bodysystem import IBodySystem
 from .knowledgefolder import IKnowledgeFolder
-from five import grok
 
 
 class IBodySystemFolder(IKnowledgeFolder):
@@ -14,6 +13,5 @@ class IBodySystemFolder(IKnowledgeFolder):
 
 
 class BodySystemIngestor(Ingestor):
-    grok.context(IBodySystemFolder)
     def getInterfaceForContainedObjects(self, predicates):
         return IBodySystem

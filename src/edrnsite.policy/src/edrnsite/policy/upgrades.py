@@ -48,9 +48,16 @@ data-linktype="image" data-scale="" data-val="{banner}" /></p>
 <h2>News and Events</h2>
 <ul>
 <li><a href="docs/edrn-enewsletter-april-2019">EDRN Newsletter</a></li>
-<li><a href="#">Prevention Science blogs</a></li>
-<li><a href="#">Meeting Registration</a></li>
-<li><a href="#">Meeting Reports</a></li>
+<li><a href="https://prevention.cancer.gov/news-and-events/blog">Cancer Prevention Science blogs</a></li>
+<li>
+    Meetings
+    <ul>
+        <li>EDRN</li>
+        <li>MCL</li>
+        <li>CIB</li>
+        <li>…</li>
+    </ul>
+</li>
 </ul>
 </div>
 </div>'''

@@ -5,6 +5,7 @@ u'''EKE Utilities'''
 
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from Products.CMFCore.interfaces import IFolderish
+from Products.CMFCore.interfaces import IWorkflowTool
 from Products.CMFCore.WorkflowCore import WorkflowException
 from z3c.relationfield import RelationValue
 from zope import schema
@@ -61,7 +62,7 @@ def publish(context, workflowTool=None):
     u'''Publish ``context`` item and all of its children with the ``workflowTool``, unless the ``workflowTool``
     is None, in which case we'll look it up ourselves.'''
     try:
-        if workflowTool is None: workflowTool = plone.api.portal.get_tool('portal_workflow')
+        if workflowTool is None: workflowTool = getUtility(IWorkflowTool)
         workflowTool.doActionFor(context, action='publish')
         context.reindexObject()
     except WorkflowException:

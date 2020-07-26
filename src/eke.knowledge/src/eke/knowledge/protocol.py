@@ -8,10 +8,10 @@ from .publication import IPublication
 from .site import ISite
 from Acquisition import aq_inner
 from collective import dexteritytextindexer
-from five import grok
 from knowledgeobject import IKnowledgeObject
 from plone.app.vocabularies.catalog import CatalogSource
 from plone.memoize.view import memoize
+from Products.Five import BrowserView
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
 import plone.api
@@ -403,9 +403,7 @@ IProtocol.setTaggedValue('fti', 'eke.knowledge.protocol')
 IProtocol.setTaggedValue('typeURI', u'http://edrn.nci.nih.gov/rdf/types.rdf#Protocol')
 
 
-class View(grok.View):
-    grok.context(IProtocol)
-    grok.require('zope2.View')
+class View(BrowserView):
     @memoize
     def documentation(self):
         context = aq_inner(self.context)

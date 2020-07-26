@@ -63,9 +63,6 @@ rsync -c --progress $opsHost:$opsDir/filestorage/Data.fs var/filestorage
 password=`openssl rand -hex 16`
 echo "👮‍♀️ Adding Manager account to Zope DB; username = «admin», password = «${password}»"
 bin/zope-debug adduser admin ${password}
-# TODO:
-# We are sticking with 5.1.5 for now but we will need to enable this for future upgrades
-# (or figure out how do to it from a ``zope-debug run`` like the good old days):
 echo "🆙 Upgrading Plone"
 bin/zope-debug -O edrn run $PWD/support/upgradePlone.py
 echo "🩺 Upgrading EDRN"

@@ -2,17 +2,13 @@
 
 u'''Provide convenient lookups for RDF subject URIs'''
 
-from five import grok
-from plone.app.layout.navigation.interfaces import INavigationRoot
+from Products.Five import BrowserView
 import plone.api, httplib
 
 
-class DataDispatcher(grok.View):
+class DataDispatcher(BrowserView):
     u'''Data dispatcher'''
-    grok.context(INavigationRoot)
-    grok.name('dataDispatch')
-    grok.require('zope2.View')
-    def render(self):
+    def __call__(self):
         subjectURI = self.request.form.get('subjectURI')
         if not subjectURI:
             raise ValueError('The subjectURI parameter is required')

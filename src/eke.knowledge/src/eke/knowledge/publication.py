@@ -1,14 +1,15 @@
 # encoding: utf-8
 
-from . import _, dublincore
 # from .person import IPerson  # Cannot import due to circulal dependency; using generated name in view class below
-from five import grok
-from knowledgeobject import IKnowledgeObject
-from plone.memoize.view import memoize
-from zope import schema
-from collective import dexteritytextindexer
-from plone.app.textfield import RichText
+
+from . import _, dublincore
 from Acquisition import aq_inner
+from collective import dexteritytextindexer
+from knowledgeobject import IKnowledgeObject
+from plone.app.textfield import RichText
+from plone.memoize.view import memoize
+from Products.Five import BrowserView
+from zope import schema
 import plone.api, cgi
 
 
@@ -93,8 +94,7 @@ IPublication.setTaggedValue('fti', 'eke.knowledge.publication')
 IPublication.setTaggedValue('typeURI', u'http://edrn.nci.nih.gov/rdf/types.rdf#Publication')
 
 
-class View(grok.View):
-    grok.context(IPublication)
+class View(BrowserView):
     def haveAuthors(self):
         context = aq_inner(self.context)
         return len(context.authors) > 0

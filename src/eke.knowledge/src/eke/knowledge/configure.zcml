@@ -5,7 +5,6 @@
     xmlns:genericsetup='http://namespaces.zope.org/genericsetup'
     xmlns:i18n='http://namespaces.zope.org/i18n'
     xmlns:plone='http://namespaces.plone.org/plone'
-    xmlns:grok='http://namespaces.zope.org/grok'
     xmlns:faceted='http://namespaces.zope.org/faceted'
     i18n_domain='eke.knowledge'>
 
@@ -20,7 +19,6 @@
     <include package='.browser' />
     <include file='permissions.zcml' />
     <include file='upgrades.zcml' />
-    <grok:grok package='.'/>
 
     <genericsetup:registerProfile
         name='default'
@@ -45,7 +43,7 @@
         name='eke.knowledge-hiddenprofiles'
     />
 
-    <!-- -*- extra stuff goes here -*- -->
+    <!-- Faceted navigation -->
     <faceted:view
         name='faceted_publications_view'
         template='templates/faceted_publications_view.pt'
@@ -72,11 +70,254 @@
     />
 
 
+    <!-- Static resources -->
     <browser:resourceDirectory name='eke.knowledge' directory='static'/>
+
 
     <!-- Converters for collective.dexteritytextindexer -->
     <adapter factory='eke.knowledge.converters.RelationChoiceFieldConverter'/>
     <adapter factory='eke.knowledge.converters.RelationListFieldConverter'/>
+
+
+    <!-- Site Root Callables -->
+    <browser:page
+        class='.datadispatcher.DataDispatcher'
+        for='plone.app.layout.navigation.interfaces.INavigationRoot'
+        name='dataDispatch'
+        permission='zope2.View'
+    />
+    <browser:page
+        class='.rdfingestor.RDFIngestor'
+        for='plone.app.layout.navigation.interfaces.INavigationRoot'
+        name='ingestRDF'
+        permission='cmf.ManagePortal'
+        template='rdfingestor_templates/rdfingestor.pt'
+    />
+
+
+    <!-- Knowledge Objects and Folders -->
+    <adapter factory='.base.Ingestor' provides='.interfaces.IIngestor' for='.knowledgefolder.IKnowledgeFolder'/>
+
+
+    <!-- Biomarkers -->
+    <adapter
+        factory='.biomarkerfolder.BiomarkerIngestor'
+        for='.biomarkerfolder.IBiomarkerFolder'
+        provides='.interfaces.IIngestor'
+    />
+    <browser:page
+        class='.biomarkerfolder.BiomarkerSummary'
+        for='.biomarkerfolder.IBiomarkerFolder'
+        name='summary'
+        permission='zope2.View'
+    />
+    <browser:page
+        class='.biomarkerpanel.View'
+        for='.biomarkerpanel.IBiomarkerPanel'
+        name='view'
+        permission='zope2.View'
+        template='biomarkerpanel_templates/view.pt'
+    />
+    <browser:page
+        class='.elementalbiomarker.View'
+        for='.elementalbiomarker.IElementalBiomarker'
+        name='view'
+        permission='zope2.View'
+        template='elementalbiomarker_templates/view.pt'
+    />
+    <subscriber
+        for='.biomarker.IBiomarkerBodySystem zope.container.interfaces.IObjectAddedEvent'
+        handler='.biomarker.updateIndicatedBodySystems'
+    />
+    <utility
+        factory='.biomarkerfolder.BodySystemsInBiomarkersVocabulary'
+        name='eke.knowledge.vocabularies.BodySystemsInBiomarkers'
+    />
+
+    <!-- Body Systems (Organs) -->
+    <adapter
+        factory='.bodysystemfolder.BodySystemIngestor'
+        for='.bodysystemfolder.IBodySystemFolder'
+        provides='.interfaces.IIngestor'
+    />
+
+    <!-- (Collaborative) Groups -->
+    <adapter
+        factory='.collaborationsfolder.CollaborationsFolderIngestor'
+        for='.collaborationsfolder.ICollaborationsFolder'
+        provides='.interfaces.IIngestor'
+    />
+    <browser:page
+        class='.collaborationsfolder.View'
+        for='.collaborationsfolder.ICollaborationsFolder'
+        name='view'
+        permission='zope2.View'
+        template='collaborationsfolder_templates/view.pt'
+    />
+    <browser:page
+        class='.collaborativegroupindex.View'
+        for='.collaborativegroupindex.ICollaborativeGroupIndex'
+        name='view'
+        permission='zope2.View'
+        template='collaborativegroupindex_templates/view.pt'
+    />
+    <browser:page
+        class='.groupspaceindex.View'
+        for='.groupspaceindex.IGroupSpaceIndex'
+        name='view'
+        permission='zope2.View'
+        template='groupspaceindex_templates/view.pt'
+    />
+    <browser:page
+        class='.collaborativegroupindex.HighlightsView'
+        for='.collaborativegroupindex.ICollaborativeGroupIndex'
+        name='highlightsview'
+        permission='zope2.View'
+        template='collaborativegroupindex_templates/highlightsview.pt'
+    />
+    <subscriber
+        for='.collaborativegroupfolder.ICollaborativeGroupFolder zope.container.interfaces.IObjectAddedEvent'
+        handler='.collaborativegroupfolder.setupCollaborativeGroupFolder'
+    />
+    <subscriber
+        for='.groupspacefolder.IGroupSpaceFolder zope.container.interfaces.IObjectAddedEvent'
+        handler='.groupspacefolder.setupGroupSpaceFolder'
+    />
+
+
+    <!-- Science Data -->
+    <adapter
+        factory='.datasetfolder.DatasetIngestor'
+        for='.datasetfolder.IDatasetFolder'
+        provides='.interfaces.IIngestor'
+    />
+    <utility
+        factory='.datasetfolder.BodySystemsInDatasetsVocabulary'
+        name='eke.knowledge.vocabularies.BodySystemsInDatasets'
+    />
+    <browser:page
+        class='.datasetfolder.DatasetSummary'
+        for='.datasetfolder.IDatasetFolder'
+        name='summary'
+        permission='zope2.View'
+    />
+
+
+    <!-- Disease -->
+    <browser:page
+        class='.disease.View'
+        for='.disease.IDisease'
+        name='view'
+        permission='zope2.View'
+        template='disease_templates/view.pt'
+    />
+    <adapter
+        factory='.diseasefolder.DiseaseIngestor'
+        for='.diseasefolder.IDiseaseFolder'
+        provides='.interfaces.IIngestor'
+    />
+
+
+    <!-- Person -->
+    <browser:page
+        class='.person.View'
+        for='.person.IPerson'
+        name='view'
+        permission='zope2.View'
+        template='person_templates/view.pt'
+    />
+    <utility
+        factory='.person.PrincipalInvestigatorsVocabulary'
+        name='eke.knowledge.vocabularies.PrincipalInvestigators'
+    />
+    <utility
+        factory='.person.SiteNamesVocabulary'
+        name='eke.knowledge.vocabularies.SiteNames'
+    />
+    <utility
+        factory='.person.MemberTypesVocabulary'
+        name='eke.knowledge.vocabularies.MemberTypes'
+    />
+
+
+    <!-- Protocol -->
+    <browser:page
+        class='.protocol.View'
+        for='.protocol.IProtocol'
+        name='view'
+        permission='zope2.View'
+        template='protocol_templates/view.pt'
+    />
+    <browser:page
+        class='.protocolfolder.View'
+        for='.protocolfolder.IProtocolFolder'
+        name='view'
+        permission='zope2.View'
+        template='protocolfolder_templates/view.pt'
+    />
+    <adapter
+        factory='.protocolfolder.ProtocolIngestor'
+        for='.protocolfolder.IProtocolFolder'
+        provides='.interfaces.IIngestor'
+    />
+
+
+    <!-- Publication -->
+    <browser:page
+        class='.publication.View'
+        for='.publication.IPublication'
+        name='view'
+        permission='zope2.View'
+        template='publication_templates/view.pt'
+    />
+    <browser:page
+        class='.publicationfolder.PublicationSummary'
+        for='.publicationfolder.IPublicationFolder'
+        name='summary'
+        permission='zope2.View'
+    />
+    <adapter
+        factory='.publicationfolder.PublicationIngestor'
+        for='.publicationfolder.IPublicationFolder'
+        provides='.interfaces.IIngestor'
+    />
+
+
+    <!-- Resources -->
+    <browser:page
+        class='.resource.View'
+        for='.resource.IResource'
+        name='view'
+        permission='zope2.View'
+        template='resource_templates/view.pt'
+    />
+    <adapter
+        factory='.resourcefolder.ResourceIngestor'
+        for='.resourcefolder.IResourceFolder'
+        provides='.interfaces.IIngestor'
+    />
+
+
+    <!-- Sites -->
+    <browser:page
+        class='.site.View'
+        for='.site.ISite'
+        name='view'
+        permission='zope2.View'
+        template='site_templates/view.pt'
+    />
+    <adapter
+        factory='.sitefolder.SiteIngestor'
+        for='.sitefolder.ISiteFolder'
+        provides='.interfaces.IIngestor'
+    />
+    <browser:page
+        class='.sitefolder.View'
+        for='.sitefolder.ISiteFolder'
+        name='view'
+        permission='zope2.View'
+        template='sitefolder_templates/view.pt'
+    />
 
 
 </configure>

@@ -1,8 +1,8 @@
 # encoding: utf-8
 
 
-from collective.dexteritytextindexer.interfaces import IDexterityTextIndexFieldConverter
 from collective.dexteritytextindexer.converters import DefaultDexterityTextIndexFieldConverter
+from collective.dexteritytextindexer.interfaces import IDexterityTextIndexFieldConverter
 from plone.dexterity.interfaces import IDexterityContent
 from z3c.form.interfaces import IWidget
 from z3c.relationfield.interfaces import IRelationChoice, IRelationList

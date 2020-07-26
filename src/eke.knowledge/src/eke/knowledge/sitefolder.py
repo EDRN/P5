@@ -8,7 +8,7 @@ from .knowledgefolder import IKnowledgeFolder, KnowledgeFolderView
 from .site import ISite
 from .utils import publish
 from Acquisition import aq_inner
-from five import grok
+from Products.Five import BrowserView
 from plone.dexterity.utils import createContentInContainer
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize.view import memoize
@@ -77,7 +77,6 @@ class ISiteFolder(IKnowledgeFolder):
 
 
 class SiteIngestor(Ingestor):
-    grok.context(ISiteFolder)
     def getInterfaceForContainedObjects(self, predicates):
         return ISite
     def getObjID(self, subjectURI, titles, predicates):
@@ -278,7 +277,6 @@ class SiteIngestor(Ingestor):
 
 
 class View(KnowledgeFolderView):
-    grok.context(ISiteFolder)
     def _sortByInvestigator(self, sitesList):
         sitesList.sort(lambda a, b: cmp(a['investigator'], b['investigator']))
     def _sortBySiteName(self, sitesList):
