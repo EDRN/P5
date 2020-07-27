@@ -141,4 +141,13 @@ def install(portal):
 
     ### pac.delete(obj=pac.get('/colops'))
 
-    # Drop down! We're done
+    # Drop down! Fix the new ingest paths
+    registry['eke.knowledge.interfaces.IPanel.objects'] = [
+        u'resources/body-systems', u'resources/diseases', u'resources/miscellaneous-resources',
+        u'data-and-resources/publications',
+        u'sites',
+        u'data-and-resoources/protocols',
+        u'data-and-resoources/data',
+        u'data-and-resoources/biomarkers',
+        u'groups'
+    ]
