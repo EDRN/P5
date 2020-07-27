@@ -146,8 +146,8 @@ def install(portal):
         u'resources/body-systems', u'resources/diseases', u'resources/miscellaneous-resources',
         u'data-and-resources/publications',
         u'sites',
-        u'data-and-resoources/protocols',
-        u'data-and-resoources/data',
-        u'data-and-resoources/biomarkers',
+        u'data-and-resources/protocols',
+        u'data-and-resources/data',
+        u'data-and-resources/biomarkers',
         u'groups'
     ]
