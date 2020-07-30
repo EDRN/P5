@@ -15,10 +15,10 @@ _logger = logging.getLogger(__name__)
 
 
 def _getPageText(name):
-    return pkg_resources.resource_stream(__name__, os.path.join('content', 'pages', name + '.html')).read()
+    return pkg_resources.resource_stream(__name__, 'content/pages/' + name + '.html').read().decode('utf-8')
 
 
-def _createFolderWithDefaultPageView(context, ident, title, desc, body=None):
+def _createFolderWithOptionalDefaultPageView(context, ident, title, desc, body=None):
     '''Create a Folder with object identifier ``ident`` and title ``title`` as well as description
     ``desc`` in the ``context`` object. If ``body`` is not None, then also create a Page in the
     Folder with the same title and description and the given ``body`` text, and make the Page the
@@ -26,33 +26,21 @@ def _createFolderWithDefaultPageView(context, ident, title, desc, body=None):
     '''
     if ident in context.keys(): context.manage_delObjects([ident])
     folder = ccic(context, 'Folder', id=ident, title=title, description=desc)
-    body = RichTextValue(body,  'text/html', 'text/x-html-safe')
     if body:
-        page = ccic(folder, 'Document', id=ident, title=title, description=desc, body=body)
+        body = RichTextValue(body,  'text/html', 'text/x-html-safe')
+        page = ccic(folder, 'Document', id=ident, title=title, description=desc, text=body)
         folder.setDefaultPage(page.id)
+    else:
+        folder.setLayout('summary_view')
     publish(folder)
     return folder
 
 
-def install(portal):
-    # First, turn on; activate drop-down menus by setting a depth > 1
-    registry = getUtility(IRegistry)
-    registry['plone.navigation_depth'] = 3
+def installDataAndResources(context):
+    u'''Set up the "Data and Resources" tab'''
 
-    # Now tune in; that is, rearrange the content so the menus work nicely.
-    #
-    # We'll need a dumping ground for stuff we don't know what to do with
-    misc = ccic(
-        portal, 'Folder', id='misc', title=u'Miscellaneous',
-        description=u'Miscellaneous items that should go elsewhere.', exclude_from_nav=True
-    )
-    pac.move(source=pac.get('/colops/china-edrn'), target=misc)
-    pac.move(source=pac.get('/funding-opportunities'), target=misc)
-
-    # First tab: "Data and Resources"
-
-    dataAndResources = _createFolderWithDefaultPageView(
-        portal,
+    dataAndResources = _createFolderWithOptionalDefaultPageView(
+        context,
         'data-and-resources',
         u'Data and Resources',
         u'Scientific data, informatics tools, reference specimens, and more.',
@@ -65,22 +53,24 @@ def install(portal):
     pac.move(source=pac.get('/informatics'), target=dataAndResources)
     pac.move(source=pac.get('/resources/sample-reference-sets'), target=dataAndResources)
 
-    # Second tab: "Work with EDRN"
-    workWithEDRN = _createFolderWithDefaultPageView(
-        portal,
+
+def installWorkWithEDRN(context):
+    '''Set up the "Work with EDRN" tab'''
+    workWithEDRN = _createFolderWithOptionalDefaultPageView(
+        context,
         'work-with-edrn',
         u'Work with EDRN',
         u'Cooperative and collaborative opportunities, funding opportunities, studies, and more.',
         _getPageText('workWithEDRN')
     )
-    _createFolderWithDefaultPageView(
+    _createFolderWithOptionalDefaultPageView(
         workWithEDRN,
         'associate-membership-program',
         u'Associate Membership Program',
         u'Please note: the EDRN is suspending the acceptance of applications for Associate Membership categories A and B until further notice. Associate Membership applications category C are still accepted.',
         _getPageText('associateMembershipProgram')
     )
-    _createFolderWithDefaultPageView(
+    _createFolderWithOptionalDefaultPageView(
         workWithEDRN,
         'validation-study-proposals',
         u'Propose a Validation Study',
@@ -91,7 +81,7 @@ def install(portal):
     ### pac.delete(obj=pac.get('/colops/vsp'))
 
     # But we need to split out the 'private' part of the existing 'advocates' page
-    pubPriv = _createFolderWithDefaultPageView(
+    pubPriv = _createFolderWithOptionalDefaultPageView(
         workWithEDRN,
         'public-private-partnerships',
         u'Public-Private Partnerships',
@@ -108,9 +98,8 @@ def install(portal):
         '/advocates/loi-with-beijing-tiantan-hospital',
     ):
         obj = pac.get(path)
-        if not obj: import pdb;pdb.set_trace()
         pac.move(source=obj, target=pubPriv)
-    advocacy = _createFolderWithDefaultPageView(
+    advocacy = _createFolderWithOptionalDefaultPageView(
         workWithEDRN,
         'advocacy-groups',
         u'Advocacy Groups',
@@ -139,9 +128,72 @@ def install(portal):
 
     pac.delete(obj=pac.get('/advocates'))
 
+
+def installNewsAndEvents(context):
+    '''News and events menu'''
+    newsAndEvents = _createFolderWithOptionalDefaultPageView(
+        context,
+        'news-and-events',
+        u'News and Events',
+        u'Announcements, noteworthy information, and occasions (both special and otherwise) for EDRN.',
+        _getPageText('newsAndEvents')
+    )
+    # Collect the newsletters
+    newsletters = _createFolderWithOptionalDefaultPageView(
+        newsAndEvents,
+        'newsletters',
+        u'EDRN Newsletter',
+        u'A bulletin issued periodically to the members of and anyone interested in EDRN.'
+    )
+    # So we need to edit the page with them and remove their hyperlinks
+    bookshelfView = pac.get('/docs/index_html')
+    bookshelfView.text = RichTextValue(_getPageText('bookshelf'), 'text/html', 'text/x-html-safe')
+    for i in (
+        'EDRNeNewsletters.pdf',
+        'EDRNeNewslettersJune2018.pdf',
+        'enewsletter-august-2018',
+        'enewsletter-october-2018',
+        'EDRNeNewslettersDecember32018FINAL.pdf',
+        'edrn-enewsletter-february-2019',
+        'edrn-enewsletter-march-2019',
+        'edrn-enewsletter-april-2019',
+    ):
+        obj = pac.get('/docs/' + i)
+        if not obj: import pdb;pdb.set_trace()
+        pac.move(source=obj, target=newsletters)
+
+    # Add the "Prevention Science blogs"
+    _createFolderWithOptionalDefaultPageView(
+        newsAndEvents,
+        'prevention-science-blogs',
+        u'Prevention Science blogs',
+        u'A research blog published by the Division of Cancer Prevention.',
+        _getPageText('preventionScienceBlog')
+    )
+
+
+def install(portal):
+    # First, turn on; activate drop-down menus by setting a depth > 1
+    registry = getUtility(IRegistry)
+    registry['plone.navigation_depth'] = 3
+
+    # Now tune in; that is, rearrange the content so the menus work nicely.
+    #
+    # We'll need a dumping ground for stuff we don't know what to do with
+    misc = ccic(
+        portal, 'Folder', id='misc', title=u'Miscellaneous',
+        description=u'Miscellaneous items that should go elsewhere.', exclude_from_nav=True
+    )
+    pac.move(source=pac.get('/colops/china-edrn'), target=misc)
+    pac.move(source=pac.get('/funding-opportunities'), target=misc)
+
+    installDataAndResources(portal)
+    installWorkWithEDRN(portal)
+    installNewsAndEvents(portal)
+
     ### pac.delete(obj=pac.get('/colops'))
 
-    # Drop down! Fix the new ingest paths
+    # Drop out! Fix the new ingest paths
     registry['eke.knowledge.interfaces.IPanel.objects'] = [
         u'resources/body-systems', u'resources/diseases', u'resources/miscellaneous-resources',
         u'data-and-resources/publications',
@@ -151,3 +203,12 @@ def install(portal):
         u'data-and-resources/biomarkers',
         u'groups'
     ]
+
+    # Misc cleanup
+    resources = pac.get('/resources')
+    resources.exclude_from_nav = True
+    resources.reindexObject()
+    about = pac.get('/about-edrn')
+    about.exclude_from_nav = True
+    about.reindexObject()
+
