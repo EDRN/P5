@@ -4,18 +4,31 @@
 
 
 from .setuphandlers import publish
-from plone.dexterity.utils import createContentInContainer as ccic
+from plone.api import content as pac
 from plone.app.textfield.value import RichTextValue
+from plone.dexterity.utils import createContentInContainer as ccic
+from plone.namedfile.file import NamedBlobImage
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
-from plone.api import content as pac
 import logging, pkg_resources, os.path
 
 _logger = logging.getLogger(__name__)
 
 
 def _getPageText(name):
-    return pkg_resources.resource_stream(__name__, 'content/pages/' + name + '.html').read().decode('utf-8')
+    return pkg_resources.resource_stream(__name__, u'content/pages/' + name + u'.html').read().decode('utf-8')
+
+
+def _installImage(context, fn, ident, title, desc, contentType):
+    imageData = pkg_resources.resource_stream(__name__, u'content/pages/' + fn).read()
+    return ccic(
+        context,
+        'Image',
+        id=ident,
+        title=title,
+        description=desc,
+        image=NamedBlobImage(data=imageData, contentType=contentType, filename=fn)
+    )
 
 
 def _createFolderWithOptionalDefaultPageView(context, ident, title, desc, body=None):
@@ -46,6 +59,16 @@ def installDataAndResources(context):
         u'Scientific data, informatics tools, reference specimens, and more.',
         _getPageText('dataAndResources')
     )
+
+    for ident, fn, ct, title, desc in (
+        ('biomarker-image', u'nci-dna.jpg', 'image/jpeg', u'Biomarker Image', u'DNA and other material representative of biomarkers.'),
+        ('protocols-image', u'ferguson-protocol.jpg', 'image/jpeg', u'Protocols Image', u'A physician with a stethoscope and protective gloves.'),
+        ('data-image', u'nci-sci-data.jpg', 'image/jpeg', u'Science Data Image', u'A physician in front of a modern computing device.'),
+        ('specimen-availability-image', u'reed-tubes.jpg', 'image/jpeg', u'Research Tools and Clinical Specimen Availability Image', u'The title says it all.'),
+        ('informatics-image', u'monitors.jpg', 'image/jpeg', u'Informatics Tools Image', u'An abstract background representing data with computer monitors in the foreground.'),
+        ('publications-image', u'emily-books.jpg', 'image/jpeg', u'Publications Image', u'An photograph of upright books, but not their spines—their opposite page sides instead.'),
+    ):
+        _installImage(dataAndResources, fn, ident, title, desc, ct)
     pac.move(source=pac.get('/biomarkers'), target=dataAndResources)
     pac.move(source=pac.get('/protocols'), target=dataAndResources)
     pac.move(source=pac.get('/data'), target=dataAndResources)
@@ -169,6 +192,24 @@ def installNewsAndEvents(context):
         u'Prevention Science blogs',
         u'A research blog published by the Division of Cancer Prevention.',
         _getPageText('preventionScienceBlog')
+    )
+
+    # Meeting registration
+    _createFolderWithOptionalDefaultPageView(
+        newsAndEvents,
+        'meeting-registration',
+        u'Meeting Registration',
+        u'How to register for and details about upcoming EDRN meetings.',
+        _getPageText('meetingRegistration')
+    )
+
+    # Upcoming meetings
+    _createFolderWithOptionalDefaultPageView(
+        newsAndEvents,
+        'meeting-reports',
+        u'Meeting Reports',
+        u'Reports generated from EDRN meetings in the past.',
+        _getPageText('meetingReports')
     )
 
 
