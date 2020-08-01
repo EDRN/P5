@@ -8,9 +8,12 @@ from plone.api import content as pac
 from plone.app.textfield.value import RichTextValue
 from plone.dexterity.utils import createContentInContainer as ccic
 from plone.namedfile.file import NamedBlobImage
+from plone.portlet.static.static import Assignment as StaticPortletAssignment
+from plone.portlets.interfaces import IPortletManager, IPortletAssignmentMapping
 from plone.registry.interfaces import IRegistry
-from zope.component import getUtility
-import logging, pkg_resources, os.path
+from zope.component import getUtility, getMultiAdapter
+from zope.container.interfaces import INameChooser
+import logging, pkg_resources
 
 _logger = logging.getLogger(__name__)
 
@@ -213,6 +216,32 @@ def installNewsAndEvents(context):
     )
 
 
+def installAboutEDRN(portal):
+    '''…'''
+    about = _createFolderWithOptionalDefaultPageView(
+        portal,
+        'about',
+        u'About EDRN',
+        u'All about the Early Detection Research Network.',
+        _getPageText('about')
+    )
+    portlet = StaticPortletAssignment(
+        header=u'Organization',
+        text=RichTextValue(_getPageText('aboutPortlet'), 'text/html', 'text/html'),
+        omit_border=False
+    )
+    manager = getUtility(IPortletManager, u'plone.leftcolumn')
+    mapping = getMultiAdapter((about, manager), IPortletAssignmentMapping)
+    chooser = INameChooser(mapping)
+    mapping[chooser.chooseName(None, portlet)] = portlet
+
+    pac.move(source=pac.get('/resources/highlights'), target=about)
+    pac.move(source=pac.get('/sites'), target=about)
+    pac.move(source=pac.get('/members-list'), target=about)
+    pac.move(source=pac.get('/groups'), target=about)
+    pac.move(source=pac.get('/about-edrn/image-1.gif'), target=about)
+
+
 def install(portal):
     # First, turn on; activate drop-down menus by setting a depth > 1
     registry = getUtility(IRegistry)
@@ -231,6 +260,7 @@ def install(portal):
     installDataAndResources(portal)
     installWorkWithEDRN(portal)
     installNewsAndEvents(portal)
+    installAboutEDRN(portal)
 
     ### pac.delete(obj=pac.get('/colops'))
 
