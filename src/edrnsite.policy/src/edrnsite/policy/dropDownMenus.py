@@ -272,11 +272,11 @@ def install(portal):
     registry['eke.knowledge.interfaces.IPanel.objects'] = [
         u'resources/body-systems', u'resources/diseases', u'resources/miscellaneous-resources',
         u'data-and-resources/publications',
-        u'sites',
+        u'about/sites',
         u'data-and-resources/protocols',
         u'data-and-resources/data',
         u'data-and-resources/biomarkers',
-        u'groups'
+        u'about/groups'
     ]
 
     # Misc cleanup
@@ -286,4 +286,5 @@ def install(portal):
     about = pac.get('/about-edrn')
     about.exclude_from_nav = True
     about.reindexObject()
+
 
