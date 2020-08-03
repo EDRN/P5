@@ -235,11 +235,15 @@ def installAboutEDRN(portal):
     chooser = INameChooser(mapping)
     mapping[chooser.chooseName(None, portlet)] = portlet
 
+    _installImage(
+        about, u'org-chart.png', 'org-chart.png', u'Organizational Chart',
+        u'A chart depicting the organizational structure of the Early Detection Research Network.', 'image/png'
+    )
+
     pac.move(source=pac.get('/resources/highlights'), target=about)
     pac.move(source=pac.get('/sites'), target=about)
     pac.move(source=pac.get('/members-list'), target=about)
     pac.move(source=pac.get('/groups'), target=about)
-    pac.move(source=pac.get('/about-edrn/image-1.gif'), target=about)
 
 
 def install(portal):
