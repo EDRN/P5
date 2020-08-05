@@ -39,7 +39,14 @@
         description="Set up the new home page, replacing the current one and its RSS news portlet"
         profile='edrnsite.policy:default'
         handler='.upgrades.install2020SOWHomePage'
-        source='1001' destination='1002' sortkey='11'
+        source='1001' destination='1002' sortkey='100'
+    />
+    <genericsetup:upgradeStep
+        title='Caching Settings (1001→1002)'
+        description='Get rid of obsolete resourceRegistries from plone.app.caching'
+        profile='edrnsite.policy:default'
+        handler='.upgrades.dropCachedResourceRegistries'
+        source='1001' destination='1002' sortkey='120'
     />
 
 </configure>

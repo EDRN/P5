@@ -5,6 +5,8 @@ from .setuphandlers import publish
 from plone.app.textfield.value import RichTextValue
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobImage
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 import logging, plone.api, os
 
 PROFILE = 'profile-' + PACKAGE_NAME + ':default'
@@ -101,6 +103,23 @@ def install2020SOWHomePage(setupTool, logger=None):
     )
     portal.setDefaultPage(frontPage.id)
     publish(frontPage)
+
+
+def dropCachedResourceRegistries(setupTool, logger=None):
+    if logger is None: logger = logging.getLogger(__name__)
+    registry = getUtility(IRegistry)
+    for key in (
+        'plone.app.caching.weakCaching.plone.content.folderView.etags',
+        'plone.app.caching.weakCaching.plone.content.itemView.etags',
+    ):
+        try:
+            current = list(registry[key])
+            logger.info('Removing resourceRegistries from %s', key)
+            current.remove('resourceRegistries')
+            registry[key] = tuple(current)
+        except ValueError:
+            logger.info('resourceRegistries not found in %s, skipping', key)
+            pass
 
 
 # Boilerplate from paster template; leaving for posterity:
