@@ -48,5 +48,12 @@
         handler='.upgrades.install202SOWMenus'
         source='1001' destination='1002' sortkey='110'
     />
+    <genericsetup:upgradeStep
+        title='Caching Settings (1001→1002)'
+        description='Get rid of obsolete resourceRegistries from plone.app.caching'
+        profile='edrnsite.policy:default'
+        handler='.upgrades.dropCachedResourceRegistries'
+        source='1001' destination='1002' sortkey='120'
+    />
 
 </configure>
