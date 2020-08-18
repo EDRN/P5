@@ -3,7 +3,7 @@ name: "\U0001F4D5 Content Update"
 about: Request change to P5 content
 title: ''
 labels: "\U0001F4DDcontent"
-assignees: ''
+assignees: nutjob4life
 
 ---
 
