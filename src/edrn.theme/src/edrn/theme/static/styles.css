@@ -83,35 +83,46 @@ ul#edrn-quicklinks li {
 
 .homeGrid {
     display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 10px; grid-auto-rows: minmax(100px, auto);
+    color: white;
+}
+.homeGrid a {
+    color: white;
 }
 .homeGrid > div {
     padding: 1rem;
-    border-radius: 0.8rem;
+}
+.homeGrid h2 {
+    padding-left: 1.5rem;
 }
 .homeData {
-    background: rgb(254,199,199);
-    background: linear-gradient(135deg, rgba(254,199,199,1) 0%, rgba(199,162,162,0) 50%);
+    background: rgb(13,102,161);
+    background: linear-gradient(180deg, rgba(13,102,161,1) 0%, rgba(13,102,161,0.85) 100%);
 }
 .homeWork {
-    background: rgb(229,254,199);
-    background: linear-gradient(135deg, rgba(229,254,199,1) 0%, rgba(185,199,162,0) 50%);
+    background: rgb(13,102,161);
+    background: linear-gradient(180deg, rgba(13,102,161,1) 0%, rgba(13,102,161,0.85) 100%);
 }
 .homeNews {
-    background: rgb(199,250,254);
-    background: linear-gradient(135deg, rgba(199,250,254,1) 0%, rgba(162,189,199,0) 50%);
+    background: rgb(13,102,161);
+    background: linear-gradient(180deg, rgba(13,102,161,1) 0%, rgba(13,102,161,0.85) 100%);
 }
 
 
 .dataResourcesGrid {
     display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 10px; grid-auto-rows: minmax(100px, auto);
+    color: white;
+}
+.dataResourcesGrid a {
+    color: white;
 }
 .dataResourcesGrid > div {
     padding: 1rem;
 }
 .dataResource {
-    background: rgb(229,254,199);
-    background: linear-gradient(135deg, rgba(229,254,199,1) 0%, rgba(185,199,162,0) 50%);
+    background: rgb(13,102,161);
+    background: linear-gradient(180deg, rgba(13,102,161,1) 0%, rgba(13,102,161,0.85) 100%);
 }
 .dataResource h2 a img {
     margin-top: 0;
 }
+    

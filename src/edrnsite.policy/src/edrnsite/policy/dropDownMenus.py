@@ -2,112 +2,103 @@
 
 '''Drop down menus'''
 
-
-from .setuphandlers import publish
+from .utils import getPageText, installImage, createFolderWithOptionalDefaultPageView
 from plone.api import content as pac
 from plone.app.textfield.value import RichTextValue
 from plone.dexterity.utils import createContentInContainer as ccic
-from plone.namedfile.file import NamedBlobImage
 from plone.portlet.static.static import Assignment as StaticPortletAssignment
 from plone.portlets.interfaces import IPortletManager, IPortletAssignmentMapping
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility, getMultiAdapter
 from zope.container.interfaces import INameChooser
-import logging, pkg_resources
+import logging
 
 _logger = logging.getLogger(__name__)
-
-
-def _getPageText(name):
-    return pkg_resources.resource_stream(__name__, u'content/pages/' + name + u'.html').read().decode('utf-8')
-
-
-def _installImage(context, fn, ident, title, desc, contentType):
-    imageData = pkg_resources.resource_stream(__name__, u'content/pages/' + fn).read()
-    return ccic(
-        context,
-        'Image',
-        id=ident,
-        title=title,
-        description=desc,
-        image=NamedBlobImage(data=imageData, contentType=contentType, filename=fn)
-    )
-
-
-def _createFolderWithOptionalDefaultPageView(context, ident, title, desc, body=None):
-    '''Create a Folder with object identifier ``ident`` and title ``title`` as well as description
-    ``desc`` in the ``context`` object. If ``body`` is not None, then also create a Page in the
-    Folder with the same title and description and the given ``body`` text, and make the Page the
-    default view of the folder.
-    '''
-    if ident in context.keys(): context.manage_delObjects([ident])
-    folder = ccic(context, 'Folder', id=ident, title=title, description=desc)
-    if body:
-        body = RichTextValue(body,  'text/html', 'text/x-html-safe')
-        page = ccic(folder, 'Document', id=ident, title=title, description=desc, text=body)
-        folder.setDefaultPage(page.id)
-    else:
-        folder.setLayout('summary_view')
-    publish(folder)
-    return folder
 
 
 def installDataAndResources(context):
     u'''Set up the "Data and Resources" tab'''
 
-    dataAndResources = _createFolderWithOptionalDefaultPageView(
+    dataAndResources = createFolderWithOptionalDefaultPageView(
         context,
         'data-and-resources',
         u'Data and Resources',
         u'Scientific data, informatics tools, reference specimens, and more.',
-        _getPageText('dataAndResources')
+        getPageText('dataAndResources')
     )
 
     for ident, fn, ct, title, desc in (
         ('biomarker-image', u'nci-dna.jpg', 'image/jpeg', u'Biomarker Image', u'DNA and other material representative of biomarkers.'),
         ('protocols-image', u'ferguson-protocol.jpg', 'image/jpeg', u'Protocols Image', u'A physician with a stethoscope and protective gloves.'),
-        ('data-image', u'nci-sci-data.jpg', 'image/jpeg', u'Science Data Image', u'A physician in front of a modern computing device.'),
+        ('data-image', u'nci-vol-9792-72.jpg', 'image/jpeg', u'Science Data Image', u'A physician in front of a modern computing device.'),
         ('specimen-availability-image', u'reed-tubes.jpg', 'image/jpeg', u'Research Tools and Clinical Specimen Availability Image', u'The title says it all.'),
         ('informatics-image', u'monitors.jpg', 'image/jpeg', u'Informatics Tools Image', u'An abstract background representing data with computer monitors in the foreground.'),
         ('publications-image', u'emily-books.jpg', 'image/jpeg', u'Publications Image', u'An photograph of upright books, but not their spines—their opposite page sides instead.'),
     ):
-        _installImage(dataAndResources, fn, ident, title, desc, ct)
+        installImage(dataAndResources, fn, ident, title, desc, ct)
+
+    # 👉 Okay, big moves:
     pac.move(source=pac.get('/biomarkers'), target=dataAndResources)
     pac.move(source=pac.get('/protocols'), target=dataAndResources)
     pac.move(source=pac.get('/data'), target=dataAndResources)
     pac.move(source=pac.get('/publications'), target=dataAndResources)
     pac.move(source=pac.get('/informatics'), target=dataAndResources)
-    pac.move(source=pac.get('/resources/sample-reference-sets'), target=dataAndResources)
+    # pac.move(source=pac.get('/resources/sample-reference-sets'), target=dataAndResources)
+
+    # During development, I'm just doing this instead of the above:
+    # pac.delete(obj=pac.get('/biomarkers'), check_linkintegrity=False)
+    # # pac.delete(obj=pac.get('/protocols'), check_linkintegrity=False)  # Can't delete this; causes error
+    # # So for now, delete its contents and move its container
+    # for item in pac.get('/protocols').values():
+    #     pac.delete(obj=item, check_linkintegrity=False)
+    # pac.move(source=pac.get('/protocols'), target=dataAndResources)
+    # pac.delete(obj=pac.get('/data'), check_linkintegrity=False)
+    # pac.delete(obj=pac.get('/publications'), check_linkintegrity=False)
+    # pac.delete(obj=pac.get('/resources/sample-reference-sets'), check_linkintegrity=False)  # Can't delete this either; error
+
+    # HK wants LabCAS in a sub menu
+    i = pac.get('/data-and-resources/informatics')
+    f = createFolderWithOptionalDefaultPageView(i, 'labcas', u'LabCAS', u'Laboratory Catalog and Archive System')
+    pac.move(source=pac.get('/resources/edrnLabCASUserGuide31081716118.pdf'), target=f)
+    pac.move(source=pac.get('/resources/core_labcasmetadataversion2.xlsx'), target=f)
+    pac.move(source=pac.get('/resources/LabCASAPIs.pdf'), target=f)
+
+    # HK wants a tools folder
+    f = createFolderWithOptionalDefaultPageView(i, 'tools', u'Informatics Tools', u'Utilities for cancer informatics.')
+    pac.move(source=pac.get('/resources/secretome'), target=f)
+    pac.move(source=pac.get('/resources/microrna'), target=f)
 
 
-def installWorkWithEDRN(context):
+def installWorkWithEDRN(context, archive):
     '''Set up the "Work with EDRN" tab'''
-    workWithEDRN = _createFolderWithOptionalDefaultPageView(
+    workWithEDRN = createFolderWithOptionalDefaultPageView(
         context,
         'work-with-edrn',
         u'Work with EDRN',
         u'Cooperative and collaborative opportunities, funding opportunities, studies, and more.',
-        _getPageText('workWithEDRN')
+        getPageText('workWithEDRN')
     )
-    _createFolderWithOptionalDefaultPageView(
+    createFolderWithOptionalDefaultPageView(
         workWithEDRN,
         'associate-membership-program',
         u'Associate Membership Program',
         u'Please note: the EDRN is suspending the acceptance of applications for Associate Membership categories A and B until further notice. Associate Membership applications category C are still accepted.',
-        _getPageText('associateMembershipProgram')
+        getPageText('associateMembershipProgram')
     )
-    _createFolderWithOptionalDefaultPageView(
+    createFolderWithOptionalDefaultPageView(
         workWithEDRN,
         'validation-study-proposals',
         u'Propose a Validation Study',
         u'Describes the steps necessary to propose a validation study.',
-        _getPageText('validatinStudyProposals')
+        getPageText('validatinStudyProposals')
     )
-    ### pac.delete(obj=pac.get('/colops/assoc'))
-    ### pac.delete(obj=pac.get('/colops/vsp'))
+    pac.move(source=pac.get('/colops/faq'), target=workWithEDRN)
+    pac.move(source=pac.get('/colops/image.gif'), target=workWithEDRN)
+    pac.move(source=pac.get('/colops/assoc'), target=archive)
+    pac.move(source=pac.get('/colops/vsp'), target=archive)
 
     # But we need to split out the 'private' part of the existing 'advocates' page
-    pubPriv = _createFolderWithOptionalDefaultPageView(
+    pubPriv = createFolderWithOptionalDefaultPageView(
         workWithEDRN,
         'public-private-partnerships',
         u'Public-Private Partnerships',
@@ -116,56 +107,32 @@ def installWorkWithEDRN(context):
     for path in (
         '/advocates/edrn-ip.pdf',
         '/colops/edrn-ppp-guidelines',
-        '/advocates/mou-canary-foundation.pdf',
-        '/advocates/31003_turkishministryofhealth_nci_mou.pdf',
-        '/advocates/lustgarten.pdf',
-        '/advocates/MOU Shanghai Center for Bioinformation Technology.pdf',
-        '/advocates/mou-with-beijing-youan-hospital',
-        '/advocates/loi-with-beijing-tiantan-hospital',
     ):
         obj = pac.get(path)
         pac.move(source=obj, target=pubPriv)
-    advocacy = _createFolderWithOptionalDefaultPageView(
+    advocacy = createFolderWithOptionalDefaultPageView(
         workWithEDRN,
         'advocacy-groups',
         u'Advocacy Groups',
         u'Information for cancer patients and their advocates.',
-        _getPageText('advocacyGroups')
+        getPageText('advocacyGroups')
     )
-    pac.move(source=pac.get('/advocates/webinars'), target=advocacy)
-    pac.move(source=pac.get('/advocates/frequently-asked-questions'), target=advocacy)
     pac.move(source=pac.get('/advocates/edrn-research-highlights'), target=advocacy)
-    for i in (
-        'EDRNBDLApplicantOrientationMeetingApril212016.pdf',
-        'EDRN webinar 6 24.pdf',
-        'EDRN Webinar Feb 2015.pdf',
-        'EDRN Webinar Sep 2014.pdf',
-        'EDRN webinar May 2014.pdf',
-        'EDRN Webinar Feb 2014.pdf',
-        'prostate-collaborative-group-handouts',
-        'edrn-lung-collaborative-group-webinar-handouts',
-        'EDRN_Pt_AdvocateWebinar9222011.mp4',
-        'EDRNPatientAdvocateWebinar9-22-2011vHandout.pdf',
-        'investigator-of-the-month',
-        'newsletter-collection',
-    ):
-        obj = pac.get('/advocates/' + i)
-        pac.move(source=obj, target=advocacy)
 
     pac.delete(obj=pac.get('/advocates'))
 
 
 def installNewsAndEvents(context):
     '''News and events menu'''
-    newsAndEvents = _createFolderWithOptionalDefaultPageView(
+    newsAndEvents = createFolderWithOptionalDefaultPageView(
         context,
         'news-and-events',
         u'News and Events',
         u'Announcements, noteworthy information, and occasions (both special and otherwise) for EDRN.',
-        _getPageText('newsAndEvents')
+        getPageText('newsAndEvents')
     )
     # Collect the newsletters
-    newsletters = _createFolderWithOptionalDefaultPageView(
+    newsletters = createFolderWithOptionalDefaultPageView(
         newsAndEvents,
         'newsletters',
         u'EDRN Newsletter',
@@ -173,7 +140,7 @@ def installNewsAndEvents(context):
     )
     # So we need to edit the page with them and remove their hyperlinks
     bookshelfView = pac.get('/docs/index_html')
-    bookshelfView.text = RichTextValue(_getPageText('bookshelf'), 'text/html', 'text/x-html-safe')
+    bookshelfView.text = RichTextValue(getPageText('bookshelf'), 'text/html', 'text/x-html-safe')
     for i in (
         'EDRNeNewsletters.pdf',
         'EDRNeNewslettersJune2018.pdf',
@@ -189,45 +156,46 @@ def installNewsAndEvents(context):
         pac.move(source=obj, target=newsletters)
 
     # Add the "Prevention Science blogs"
-    _createFolderWithOptionalDefaultPageView(
+    createFolderWithOptionalDefaultPageView(
         newsAndEvents,
         'prevention-science-blogs',
         u'Prevention Science blogs',
         u'A research blog published by the Division of Cancer Prevention.',
-        _getPageText('preventionScienceBlog')
+        getPageText('preventionScienceBlog')
     )
 
     # Meeting registration
-    _createFolderWithOptionalDefaultPageView(
+    createFolderWithOptionalDefaultPageView(
         newsAndEvents,
         'meeting-registration',
         u'Meeting Registration',
         u'How to register for and details about upcoming EDRN meetings.',
-        _getPageText('meetingRegistration')
+        getPageText('meetingRegistration')
     )
 
-    # Upcoming meetings
-    _createFolderWithOptionalDefaultPageView(
+    # Past meetings
+    past = createFolderWithOptionalDefaultPageView(
         newsAndEvents,
         'meeting-reports',
         u'Meeting Reports',
         u'Reports generated from EDRN meetings in the past.',
-        _getPageText('meetingReports')
+        getPageText('meetingReports')
     )
+    pac.move(source=pac.get('/cancer-bioinformatics-workshop'), target=past)
 
 
 def installAboutEDRN(portal):
     '''…'''
-    about = _createFolderWithOptionalDefaultPageView(
+    about = createFolderWithOptionalDefaultPageView(
         portal,
         'about',
         u'About EDRN',
         u'All about the Early Detection Research Network.',
-        _getPageText('about')
+        getPageText('about')
     )
     portlet = StaticPortletAssignment(
         header=u'Organization',
-        text=RichTextValue(_getPageText('aboutPortlet'), 'text/html', 'text/html'),
+        text=RichTextValue(getPageText('aboutPortlet'), 'text/html', 'text/html'),
         omit_border=False
     )
     manager = getUtility(IPortletManager, u'plone.leftcolumn')
@@ -235,7 +203,7 @@ def installAboutEDRN(portal):
     chooser = INameChooser(mapping)
     mapping[chooser.chooseName(None, portlet)] = portlet
 
-    _installImage(
+    installImage(
         about, u'org-chart.png', 'org-chart.png', u'Organizational Chart',
         u'A chart depicting the organizational structure of the Early Detection Research Network.', 'image/png'
     )
@@ -245,28 +213,28 @@ def installAboutEDRN(portal):
     pac.move(source=pac.get('/members-list'), target=about)
     pac.move(source=pac.get('/groups'), target=about)
 
+    # Somthing misfiled from the bookshelf
+    pac.move(
+        source=pac.get('/docs/edrn-pancreas-working-group-meeting'),
+        target=pac.get('/about/groups/g-i-and-other-associated-cancers-research-group')
+    )
+
 
 def install(portal):
     # First, turn on; activate drop-down menus by setting a depth > 1
     registry = getUtility(IRegistry)
     registry['plone.navigation_depth'] = 3
 
-    # Now tune in; that is, rearrange the content so the menus work nicely.
-    #
-    # We'll need a dumping ground for stuff we don't know what to do with
-    misc = ccic(
-        portal, 'Folder', id='misc', title=u'Miscellaneous',
-        description=u'Miscellaneous items that should go elsewhere.', exclude_from_nav=True
-    )
-    pac.move(source=pac.get('/colops/china-edrn'), target=misc)
-    pac.move(source=pac.get('/funding-opportunities'), target=misc)
+    # First pass: archive old stuff
+    from .content_reorg import archiveStuff, archiveBookshelf
+    archive = archiveStuff(portal)
 
     installDataAndResources(portal)
-    installWorkWithEDRN(portal)
+    installWorkWithEDRN(portal, archive)
     installNewsAndEvents(portal)
     installAboutEDRN(portal)
 
-    ### pac.delete(obj=pac.get('/colops'))
+    pac.move(source=pac.get('/colops'), target=archive)
 
     # Drop out! Fix the new ingest paths
     registry['eke.knowledge.interfaces.IPanel.objects'] = [
@@ -279,6 +247,8 @@ def install(portal):
         u'about/groups'
     ]
 
+    archiveBookshelf(portal, archive)
+
     # Misc cleanup
     resources = pac.get('/resources')
     resources.exclude_from_nav = True
@@ -286,5 +256,3 @@ def install(portal):
     about = pac.get('/about-edrn')
     about.exclude_from_nav = True
     about.reindexObject()
-
-
