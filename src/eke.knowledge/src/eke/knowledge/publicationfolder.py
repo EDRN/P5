@@ -106,7 +106,11 @@ class PublicationIngestor(Ingestor):
             path=dict(query='/'.join(context.getPhysicalPath()), depth=1),
         )
         for f in found:
-            del subjectURItoPMIDs[f.identifier]
+            try:
+                del subjectURItoPMIDs[f.identifier]
+            except KeyError:
+                # See https://github.com/EDRN/P5/issues/65
+                pass
         return subjectURItoPMIDs
     def divvy(self, subjectURItoPMIDs):
         subjectURItoPMIDs = subjectURItoPMIDs.items()
