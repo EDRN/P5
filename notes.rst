@@ -101,7 +101,7 @@ To explore::
         --volume ${EDRN_DATA_DIR}/filestorage:/data/filestorage \
         --volume ${EDRN_DATA_DIR}/blobstorage:/data/blobstorage \
         --volume ${EDRN_DATA_DIR}/log:/data/log \
-        --entrypoint /bin/bash \
+        --entrypoint /bin/sh \
         edrn-p5:latest
 
 To run::
@@ -128,7 +128,7 @@ With ZEO Database Server
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Again, you'd do this at the Docker Composition level, but let's try it "by
-hand".  first create a network::
+hand".  First create a network::
 
     docker network create --driver bridge --label 'org.label-schema.name=EDRN P5 Network' edrn-network
 

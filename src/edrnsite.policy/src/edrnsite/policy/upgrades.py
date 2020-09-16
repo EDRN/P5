@@ -35,14 +35,14 @@ data-linktype="image" data-scale="" data-val="{banner}" /></p>
 <li>
     Collaborative Opportunities
     <ul>
-        <li><a href="colops/assoc">Associate Membership</a> Program</li>
+        <li><a href="work-with-edrn/colops/assoc">Associate Membership</a> Program</li>
         <li><a href="colops">Find/Participate in a Collaborative Study</a></li>
         <li><a href="colops/vsp">Propose a Study</a></li>
         <li><a href="colops/edrn-ppp-guidelines">Public-Private Partnerships</a></li>
         <li><a href="colops/request-for-biomarkers-1.pdf/view">Request Biomarkers</a></li>
     </ul>
 </li>
-<li><a href="advocates">Advocacy Groups</a></li>
+<li><a href="/work-with-edrn/advocacy-groups">Advocacy Groups</a></li>
 </ul>
 </div>
 
@@ -81,7 +81,7 @@ def install2020SOWHomePage(setupTool, logger=None):
     if logger is None: logger = logging.getLogger(__name__)
     portal = plone.api.portal.get()
     if 'front-page' in portal.keys():
-        plone.api.content.rename(obj=portal['front-page'], new_id='front-page-old')
+        plone.api.content.delete(obj=portal['front-page'])
     # Shouldn't we use pkg_resources here?
     with open(os.path.join(os.path.dirname(__file__), 'content', 'tentative-banner.png'), 'rb') as f:
         imageData = f.read()
@@ -103,6 +103,12 @@ def install2020SOWHomePage(setupTool, logger=None):
     )
     portal.setDefaultPage(frontPage.id)
     publish(frontPage)
+
+
+def install202SOWMenus(setupTool, logger=None):
+    portal = plone.api.portal.get()
+    from .dropDownMenus import install as installDropDownMenus
+    installDropDownMenus(portal)
 
 
 def dropCachedResourceRegistries(setupTool, logger=None):

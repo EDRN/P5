@@ -65,6 +65,8 @@ echo "👮‍♀️ Adding Manager account to Zope DB; username = «admin», pas
 bin/zope-debug adduser admin ${password}
 echo "🆙 Upgrading Plone"
 bin/zope-debug -O edrn run $PWD/support/upgradePlone.py
+echo "2️⃣ Saving a copy of the post-Plone+pre-EDRN database"
+cp var/filestorage/Data.fs var/post-plone+pre-edrn-upgrade-Data.fs
 echo "🩺 Upgrading EDRN"
 bin/zope-debug -O edrn run $PWD/support/upgradeEDRN.py
 echo "🍽 Ingesting RDF and other data"
