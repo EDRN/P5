@@ -193,15 +193,19 @@ def installAboutEDRN(portal):
         u'All about the Early Detection Research Network.',
         getPageText('about')
     )
-    portlet = StaticPortletAssignment(
-        header=u'Organization',
-        text=RichTextValue(getPageText('aboutPortlet'), 'text/html', 'text/html'),
-        omit_border=False
-    )
-    manager = getUtility(IPortletManager, u'plone.leftcolumn')
-    mapping = getMultiAdapter((about, manager), IPortletAssignmentMapping)
-    chooser = INameChooser(mapping)
-    mapping[chooser.chooseName(None, portlet)] = portlet
+
+    # Turns Out They Didn't Like This
+    # -------------------------------
+    #
+    # portlet = StaticPortletAssignment(
+    #     header=u'Organization',
+    #     text=RichTextValue(getPageText('aboutPortlet'), 'text/html', 'text/html'),
+    #     omit_border=False
+    # )
+    # manager = getUtility(IPortletManager, u'plone.leftcolumn')
+    # mapping = getMultiAdapter((about, manager), IPortletAssignmentMapping)
+    # chooser = INameChooser(mapping)
+    # mapping[chooser.chooseName(None, portlet)] = portlet
 
     installImage(
         about, u'org-chart.png', 'org-chart.png', u'Organizational Chart',
