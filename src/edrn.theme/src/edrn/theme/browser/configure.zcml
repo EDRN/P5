@@ -10,16 +10,6 @@
   <browser:jbot
       directory="overrides"
       layer="edrn.theme.interfaces.IEdrnThemeLayer"
-      />
-
-  <!-- Custom EDRN logo -->
-  <browser:viewlet
-    name='plone.logo'
-    manager='plone.app.layout.viewlets.interfaces.IPortalHeader'
-    class='plone.app.layout.viewlets.common.LogoViewlet'
-    template='logo.pt'
-    layer='edrn.theme.interfaces.IEdrnThemeLayer'
-    permission='zope2.View'
-    />
+  />
 
 </configure>
