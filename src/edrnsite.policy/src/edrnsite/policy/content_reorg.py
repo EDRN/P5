@@ -3,17 +3,8 @@
 '''Drop down menus'''
 
 
-from .setuphandlers import publish
 from plone.api import content as pac
-from plone.app.textfield.value import RichTextValue
 from plone.dexterity.utils import createContentInContainer as ccic
-from plone.namedfile.file import NamedBlobImage
-from plone.portlet.static.static import Assignment as StaticPortletAssignment
-from plone.portlets.interfaces import IPortletManager, IPortletAssignmentMapping
-from plone.registry.interfaces import IRegistry
-from zope.component import getUtility, getMultiAdapter
-from zope.container.interfaces import INameChooser
-import logging, pkg_resources
 
 
 _danReview = u' 🚀 Dan, please review; dan.crichton@jpl.nasa.gov.'
@@ -22,6 +13,7 @@ _christosReview = u' 🔬 Christos, please review; patriotisc@mail.nih.gov.'
 
 def archiveStuff(portal):
     archiveFolder = ccic(portal, 'Folder', id='archive', title=u'Archive', description=u'Archived Items')
+    archiveFolder.exclude_from_nav = True
 
     def archive(path):
         pac.move(source=pac.get(path), target=archiveFolder)

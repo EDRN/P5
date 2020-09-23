@@ -223,6 +223,10 @@ def installAboutEDRN(portal):
         target=pac.get('/about/groups/g-i-and-other-associated-cancers-research-group')
     )
 
+    # Make these items appear on the About EDRN menu
+    pac.get('/about/sites').exclude_from_nav = False
+    pac.get('/about/groups').exclude_from_nav = False
+
 
 def install(portal):
     # First, turn on; activate drop-down menus by setting a depth > 1
