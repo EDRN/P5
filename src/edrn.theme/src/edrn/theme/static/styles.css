@@ -1,10 +1,39 @@
 @charset "utf-8";
 
 body {
+    background-color: #ffffff;
+}
+
+/* This just confuses users */
+.searchSection {
+    display: none !important;
 }
 
 .plone-navbar {
     text-transform: uppercase;
+}
+
+/* Kara wants more contrast; it's "!important" */
+.plone-navbar-nav .current > a,
+.plone-navbar-nav .selected > a,
+.plone-navbar-nav .current > a:hover,
+.plone-navbar-nav .selected > a:hover,
+.plone-navbar-nav .current > a:focus,
+.plone-navbar-nav .selected > a:focus {
+    color: rgb(13, 102, 161) !important;
+    background-color: #ffffff !important;
+}
+.plone-nav li.current label {
+    color: rgb(13, 102, 161);
+}
+.ui-state-active {
+    background: rgb(106, 72, 125) !important;
+}
+.plone-breadcrumb ol > li + li::before {
+    color: black !important;
+}
+#content-core a {
+    border-bottom: 1px solid black !important;
 }
 
 ul#edrn-quicklinks {
