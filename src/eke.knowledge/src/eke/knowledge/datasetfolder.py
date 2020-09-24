@@ -77,7 +77,8 @@ class DatasetIngestor(Ingestor):
             if rv is None or rv.to_object is None: continue
             datasetObj.protocolName = rv.to_object.title
             datasetObj.investigator = rv.to_object.principalInvestigator
-            if datasetObj.investigator.to_object.title:
+            # Why is this extra guard necessary?
+            if datasetObj.investigator.to_object is not None and datasetObj.investigator.to_object.title:
                 datasetObj.investigatorName = datasetObj.investigator.to_object.title
             if rv.to_object.datasets is None: rv.to_object.datasets = []
             rv.to_object.datasets.append(RelationValue(idUtil.getId(datasetObj)))
