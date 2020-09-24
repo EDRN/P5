@@ -21,34 +21,6 @@
 
     <!-- 1001 → 1002 -->
     <genericsetup:upgradeStep
-        title='Reload Registry (1001→1002)'
-        description='Get the new portal version number (and other things) loaded in the Plone Registry'
-        profile='edrnsite.policy:default'
-        handler='.upgrades.reloadRegistry'
-        source='1001' destination='1002' sortkey='10'
-    />
-    <genericsetup:upgradeStep
-        title='Reload Portlets (1001→1002)'
-        description='Hide the quick links portlet at the root of the site'
-        profile='edrnsite.policy:default'
-        handler='.upgrades.reloadPortlets'
-        source='1001' destination='1002' sortkey='11'
-    />
-    <genericsetup:upgradeStep
-        title='New Home Page (1001→1002)'
-        description="Set up the new home page, replacing the current one and its RSS news portlet"
-        profile='edrnsite.policy:default'
-        handler='.upgrades.install2020SOWHomePage'
-        source='1001' destination='1002' sortkey='100'
-    />
-    <genericsetup:upgradeStep
-        title='New Drop Down Menus (1001→1002)'
-        description='Turn on, tune in, and drop down: menus'
-        profile='edrnsite.policy:default'
-        handler='.upgrades.install202SOWMenus'
-        source='1001' destination='1002' sortkey='110'
-    />
-    <genericsetup:upgradeStep
         title='Caching Settings (1001→1002)'
         description='Get rid of obsolete resourceRegistries from plone.app.caching'
         profile='edrnsite.policy:default'
@@ -56,4 +28,35 @@
         source='1001' destination='1002' sortkey='120'
     />
 
+    <!-- 1002 → 1003; saving these for later -->
+<!--
+    <genericsetup:upgradeStep
+        title='Reload Registry (1002→1003)'
+        description='Get the new portal version number (and other things) loaded in the Plone Registry'
+        profile='edrnsite.policy:default'
+        handler='.upgrades.reloadRegistry'
+        source='1002' destination='1003' sortkey='10'
+    />
+    <genericsetup:upgradeStep
+        title='Reload Portlets (1002→1003)'
+        description='Hide the quick links portlet at the root of the site'
+        profile='edrnsite.policy:default'
+        handler='.upgrades.reloadPortlets'
+        source='1002' destination='1003' sortkey='11'
+    />
+    <genericsetup:upgradeStep
+        title='New Home Page (1002→1003)'
+        description="Set up the new home page, replacing the current one and its RSS news portlet"
+        profile='edrnsite.policy:default'
+        handler='.upgrades.install2020SOWHomePage'
+        source='1002' destination='1003' sortkey='100'
+    />
+    <genericsetup:upgradeStep
+        title='New Drop Down Menus (1002→1003)'
+        description='Turn on, tune in, and drop down: menus'
+        profile='edrnsite.policy:default'
+        handler='.upgrades.install202SOWMenus'
+        source='1002' destination='1003' sortkey='110'
+    />
+-->
 </configure>
