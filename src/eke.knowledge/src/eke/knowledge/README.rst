@@ -359,7 +359,7 @@ Ingesting::
     >>> transaction.commit()
     >>> browser.open(portalURL + '/@@ingestRDF')
     >>> browser.contents
-    '...RDF Ingest Report...Objects Created (19)...'
+    '...RDF Ingest Report...Objects Created (21)...'
     >>> len(protocolsFolder.keys())
     2
     >>> keys = protocolsFolder.keys()
