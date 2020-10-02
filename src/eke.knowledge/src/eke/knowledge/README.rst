@@ -17,6 +17,7 @@ First, we shall require a test browser::
     >>> browser.addHeader('Authorization', 'Basic %s:%s' % (SITE_OWNER_NAME, SITE_OWNER_PASSWORD))
     >>> portal = layer['portal']    
     >>> portalURL = portal.absolute_url()
+    >>> import re
 
 We'll also have a second browser that's unprivileged for some later
 demonstrations::
@@ -240,7 +241,7 @@ numbers. Watch what happens when we ingest now::
     >>> publicationsFolder.grantNumbers
     [u'CA214194', u'CA214195']
     >>> browser.open(portalURL + '/@@ingestRDF')
-    >>> len(publicationsFolder.keys()) >= 10
+    >>> 9 <= len(publicationsFolder.keys()) <= 11
     True
     >>> keys = publicationsFolder.keys()
     >>> '28716134-detecting-protein-variants-by-mass' in keys
@@ -358,8 +359,15 @@ Ingesting::
     >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'sites', u'protocols']
     >>> transaction.commit()
     >>> browser.open(portalURL + '/@@ingestRDF')
-    >>> browser.contents
-    '...RDF Ingest Report...Objects Created (21)...'
+
+Normally we'd check for an exact number of created objects but we're relying
+on an unreliable source of data to drive the ingest, so check for a range of
+acceptable values:
+
+    >>> matches = re.search(r'Objects Created \(([0-9]+)\)', browser.contents)
+    >>> count = int(matches.group(1))
+    >>> 19 <= count <= 21
+    True
     >>> len(protocolsFolder.keys())
     2
     >>> keys = protocolsFolder.keys()
@@ -393,8 +401,10 @@ Ingesting::
     >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'sites', u'protocols', u'datasets']
     >>> transaction.commit()
     >>> browser.open(portalURL + '/@@ingestRDF')
-    >>> browser.contents
-    '...RDF Ingest Report...Objects Created (19)...'
+    >>> matches = re.search(r'Objects Created \(([0-9]+)\)', browser.contents)
+    >>> count = int(matches.group(1))
+    >>> 19 <= count <= 21
+    True
     >>> len(dataFolder.keys())
     2
     >>> keys = dataFolder.keys()
