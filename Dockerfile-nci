@@ -39,7 +39,7 @@
 # Basis
 # -----
 #
-# We'd normally just ue plone:5.2.1 but see the "diatribe" above.
+# We'd normally just ue plone:5.2.2 but see the "diatribe" above.
 
 FROM python:2.7.17-alpine3.11
 
@@ -57,9 +57,9 @@ ENV \
     SETUPTOOLS=39.1.0 \
     WHEEL=0.31.1 \
     PLONE_MAJOR=5.2 \
-    PLONE_VERSION=5.2.1 \
-    PLONE_VERSION_RELEASE=Plone-5.2.1-UnifiedInstaller-r2 \
-    PLONE_MD5=42407c0313791d3626dc86e674684efe
+    PLONE_VERSION=5.2.2 \
+    PLONE_VERSION_RELEASE=Plone-5.2.2-UnifiedInstaller \
+    PLONE_MD5=a603eddfd3abb0528f0861472ebac934
 
 
 # Plone and EDRN Setup
@@ -129,6 +129,17 @@ RUN : &&\
     rm -rf /Plone* &&\
     apk del plone-build &&\
     rm -rf /plone/buildout-cache/downloads/* /var/cache/apk/* &&\
+    :
+
+
+# Twit-Lock
+# ---------
+
+RUN : &&\
+    rm \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/SgiImagePlugin.pyc \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/SgiImagePlugin.py \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/SgiImagePlugin.pyo &&\
     :
 
 

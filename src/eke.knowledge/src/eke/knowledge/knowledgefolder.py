@@ -27,7 +27,9 @@ class IKnowledgeFolder(model.Schema):
         title=_(u'RDF Data Sources'),
         description=_(u'URLs to sources of Resource Description Format (RDF) data.'),
         required=False,
-        value_type=schema.URI(
+        # ❌ Plone 5.2.2 problem; this hsould be schema.URI, not schema.TextLine, but causes a stack
+        # trace on edits; see: https://community.plone.org/t/plone-5-2-2-regression-with-schema-uri-based-fields/
+        value_type=schema.TextLine(
             title=_(u'RDF Data Source'),
             description=_(u'URL to a source of Resource Description Format data that mandates the contents of this folder.'),
             required=False,
