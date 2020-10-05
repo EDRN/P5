@@ -28,8 +28,7 @@
         source='1001' destination='1002' sortkey='120'
     />
 
-    <!-- 1002 → 1003; saving these for later -->
-<!--
+
     <genericsetup:upgradeStep
         title='Reload Registry (1002→1003)'
         description='Get the new portal version number (and other things) loaded in the Plone Registry'
@@ -37,6 +36,9 @@
         handler='.upgrades.reloadRegistry'
         source='1002' destination='1003' sortkey='10'
     />
+
+    <!-- 1002 → 1003; saving these for later -->
+<!--
     <genericsetup:upgradeStep
         title='Reload Portlets (1002→1003)'
         description='Hide the quick links portlet at the root of the site'
