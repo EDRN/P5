@@ -171,7 +171,11 @@ class PublicationIngestor(Ingestor):
                     if issue: pub.issue = unicode(issue)
                     volume = medline[u'MedlineCitation'][u'Article'][u'Journal'][u'JournalIssue'].get(u'Volume', None)
                     if volume: pub.volume = unicode(volume)
-                    pub.journal = unicode(medline[u'MedlineCitation'][u'Article'][u'Journal'][u'ISOAbbreviation'])
+                    try:
+                        pub.journal = unicode(medline[u'MedlineCitation'][u'Article'][u'Journal'][u'ISOAbbreviation'])
+                    except KeyError:
+                        _logger.info(u'🤔 No journal with ISOAbbreviation available for pub %s', pubMedID)
+                        pub.journal = u'«unknown»'
                     year = medline[u'MedlineCitation'][u'Article'][u'Journal'][u'JournalIssue'][u'PubDate'].get(
                         u'Year', None
                     )
