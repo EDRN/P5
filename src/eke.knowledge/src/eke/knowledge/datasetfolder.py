@@ -8,6 +8,7 @@ from .base import Ingestor
 from .dataset import IDataset
 from .dublincore import TITLE_URI
 from .knowledgefolder import IKnowledgeFolder
+from .protocol import IProtocol
 from Acquisition import aq_inner
 from Products.Five import BrowserView
 from z3c.relationfield import RelationValue
@@ -61,6 +62,13 @@ class DatasetIngestor(Ingestor):
         context = aq_inner(self.context)
         consequences = super(DatasetIngestor, self).ingest()
         catalog = plone.api.portal.get_tool('portal_catalog')
+
+        # First, clear all protocol-to-dataset relations
+        for i in catalog(object_provides=IProtocol.__identifier__):
+            obj = i.getObject()
+            obj.datasets = []
+
+        # Now we can ingest dataset safely
         for uri, predicates in consequences.statements.iteritems():
             if _bodySystemPredicateURI in predicates:
                 results = catalog(identifier=unicode(uri), object_provides=IDataset.__identifier__)
@@ -69,6 +77,7 @@ class DatasetIngestor(Ingestor):
                     # eCAS doesn't use valid URIs to body systems so we manually extract them
                     organ = urlparse.urlparse(unicode(predicates[_bodySystemPredicateURI][0]))[2].split('/')[-1]
                     dataset.bodySystemName = organ
+
         # Set protocol names & links
         objs = list(consequences.created)
         objs.extend(consequences.updated)
@@ -83,6 +92,7 @@ class DatasetIngestor(Ingestor):
             if rv.to_object.datasets is None: rv.to_object.datasets = []
             rv.to_object.datasets.append(RelationValue(idUtil.getId(datasetObj)))
         portal = plone.api.portal.get()
+
         # Add summary data
         if context.dsSumDataSource:
             context.dataSummary = self.getSummaryData(context.dsSumDataSource)
