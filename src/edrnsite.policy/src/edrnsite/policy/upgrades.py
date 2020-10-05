@@ -123,7 +123,7 @@ def dropCachedResourceRegistries(setupTool, logger=None):
             logger.info('Removing resourceRegistries from %s', key)
             current.remove('resourceRegistries')
             registry[key] = tuple(current)
-        except ValueError:
+        except (ValueError, KeyError):
             logger.info('resourceRegistries not found in %s, skipping', key)
             pass
 
