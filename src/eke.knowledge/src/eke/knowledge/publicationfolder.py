@@ -147,46 +147,50 @@ class PublicationIngestor(Ingestor):
             pubMedIDs = pubInfoDict.keys()
             pubMedIDs.sort()
             # pubMedIDs is a sequence of unicode PubMedIDs
-            _logger.info(u'E-fetching from Entrez %d PubMedIDs', len(pubMedIDs))
-            with contextlib.closing(Entrez.efetch(db='pubmed', retmode='xml', rettype='medline', id=pubMedIDs)) as ef:
-                records = Entrez.read(ef)
-                for i in zip(identifiers, records[u'PubmedArticle']):
-                    identifier, medline = unicode(i[0]), i[1]
-                    pubMedID = unicode(medline[u'MedlineCitation'][u'PMID'])
-                    title = unicode(medline[u'MedlineCitation'][u'Article'][u'ArticleTitle'])
-                    objID = normalize(u'{} {}'.format(pubMedID, title))
-                    if objID in context.keys():
-                        _logger.info(u'Publication %s already exists; skipping', objID)
-                    pub = createContentInContainer(
-                        context,
-                        'eke.knowledge.publication',
-                        id=objID,
-                        identifier=identifier,
-                        title=title,
-                        pubMedID=pubMedID
-                    )
-                    abstract = medline[u'MedlineCitation'][u'Article'].get(u'Abstract', None)
-                    if abstract:
-                        paragraphs = abstract.get(u'AbstractText', [])
-                        if len(paragraphs) > 0:
-                            pub.abstract = u'\n'.join([u'<p>{}</p>'.format(cgi.escape(j)) for j in paragraphs])
-                    self.setAuthors(pub, medline)
-                    issue = medline[u'MedlineCitation'][u'Article'][u'Journal'][u'JournalIssue'].get(u'Issue', None)
-                    if issue: pub.issue = unicode(issue)
-                    volume = medline[u'MedlineCitation'][u'Article'][u'Journal'][u'JournalIssue'].get(u'Volume', None)
-                    if volume: pub.volume = unicode(volume)
-                    try:
-                        pub.journal = unicode(medline[u'MedlineCitation'][u'Article'][u'Journal'][u'ISOAbbreviation'])
-                    except KeyError:
-                        _logger.info(u'🤔 No journal with ISOAbbreviation available for pub %s', pubMedID)
-                        pub.journal = u'«unknown»'
-                    year = medline[u'MedlineCitation'][u'Article'][u'Journal'][u'JournalIssue'][u'PubDate'].get(
-                        u'Year', None
-                    )
-                    if year: pub.year = unicode(year)
-                    if pubInfoDict[pubMedID]: pub.siteID = pubInfoDict[pubMedID]
-                    pub.reindexObject()
-                    created.append(pub)
+            try:
+                _logger.info(u'E-fetching from Entrez %d PubMedIDs', len(pubMedIDs))
+                with contextlib.closing(Entrez.efetch(db='pubmed', retmode='xml', rettype='medline', id=pubMedIDs)) as ef:
+                    records = Entrez.read(ef)
+                    for i in zip(identifiers, records[u'PubmedArticle']):
+                        identifier, medline = unicode(i[0]), i[1]
+                        pubMedID = unicode(medline[u'MedlineCitation'][u'PMID'])
+                        title = unicode(medline[u'MedlineCitation'][u'Article'][u'ArticleTitle'])
+                        objID = normalize(u'{} {}'.format(pubMedID, title))
+                        if objID in context.keys():
+                            _logger.info(u'Publication %s already exists; skipping', objID)
+                        pub = createContentInContainer(
+                            context,
+                            'eke.knowledge.publication',
+                            id=objID,
+                            identifier=identifier,
+                            title=title,
+                            pubMedID=pubMedID
+                        )
+                        abstract = medline[u'MedlineCitation'][u'Article'].get(u'Abstract', None)
+                        if abstract:
+                            paragraphs = abstract.get(u'AbstractText', [])
+                            if len(paragraphs) > 0:
+                                pub.abstract = u'\n'.join([u'<p>{}</p>'.format(cgi.escape(j)) for j in paragraphs])
+                        self.setAuthors(pub, medline)
+                        issue = medline[u'MedlineCitation'][u'Article'][u'Journal'][u'JournalIssue'].get(u'Issue', None)
+                        if issue: pub.issue = unicode(issue)
+                        volume = medline[u'MedlineCitation'][u'Article'][u'Journal'][u'JournalIssue'].get(u'Volume', None)
+                        if volume: pub.volume = unicode(volume)
+                        try:
+                            pub.journal = unicode(medline[u'MedlineCitation'][u'Article'][u'Journal'][u'ISOAbbreviation'])
+                        except KeyError:
+                            _logger.info(u'🤔 No journal with ISOAbbreviation available for pub %s', pubMedID)
+                            pub.journal = u'«unknown»'
+                        year = medline[u'MedlineCitation'][u'Article'][u'Journal'][u'JournalIssue'][u'PubDate'].get(
+                            u'Year', None
+                        )
+                        if year: pub.year = unicode(year)
+                        if pubInfoDict[pubMedID]: pub.siteID = pubInfoDict[pubMedID]
+                        pub.reindexObject()
+                        created.append(pub)
+            except HTTPError as ex:
+                _logger.warning(u'Entrez retreival failed with %d for «%r» but pressing on', ex.getcode(), pubMedIDs)
+                _logger.debug(u'Enterz failed URL was «%s»', ex.geturl())
         return created
     def ingest(self):
         context = aq_inner(self.context)
