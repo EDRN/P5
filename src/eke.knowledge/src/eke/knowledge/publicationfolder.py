@@ -95,8 +95,9 @@ class PublicationIngestor(Ingestor):
                     pubMedIDs = set(record.get('IdList', []))
                     if not pubMedIDs: continue
                     missing |= pubMedIDs - currentPMIDs
-            except urllib2.HTTPError:
-                _logger.info(u'Entrez search failed for «%s» but pressing on', searchTerm)
+            except urllib2.HTTPError as ex:
+                _logger.warning(u'Entrez search failed with %d for «%s» but pressing on', ex.getcode(), searchTerm)
+                _logger.debug(u'Enterz failed URL was «%s»', ex.geturl())
         for newPubMed in missing:
             subjectURItoPMIDs[_edrnGrantNumberURIPrefix + newPubMed] = (newPubMed, u'')
         return subjectURItoPMIDs
