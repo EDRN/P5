@@ -86,14 +86,17 @@ class PublicationIngestor(Ingestor):
 
         for group in divide(grantNumbers):
             searchTerm = u' OR '.join([u'({}[Grant Number])'.format(i) for i in group])
-            # FIXME: This'll break if it returns more than 9999 publications 😅
-            with contextlib.closing(Entrez.esearch(db='pubmed', rettype='medline', retmax=9999, term=searchTerm)) as es:
-                record = Entrez.read(es)
-                if not record: continue
-                pubMedIDs = set(record.get('IdList', []))
-                if not pubMedIDs: continue
-                missing |= pubMedIDs - currentPMIDs
-
+            # #80: PubMed API is really unreliable; try to press on even if it fails
+            try:
+                # FIXME: This'll break if it returns more than 9999 publications 😅
+                with contextlib.closing(Entrez.esearch(db='pubmed', rettype='medline', retmax=9999, term=searchTerm)) as es:
+                    record = Entrez.read(es)
+                    if not record: continue
+                    pubMedIDs = set(record.get('IdList', []))
+                    if not pubMedIDs: continue
+                    missing |= pubMedIDs - currentPMIDs
+            except urllib2.HTTPError:
+                _logger.info(u'Entrez search failed for «%s» but pressing on', searchTerm)
         for newPubMed in missing:
             subjectURItoPMIDs[_edrnGrantNumberURIPrefix + newPubMed] = (newPubMed, u'')
         return subjectURItoPMIDs
