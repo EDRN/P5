@@ -188,7 +188,7 @@ class PublicationIngestor(Ingestor):
                         if pubInfoDict[pubMedID]: pub.siteID = pubInfoDict[pubMedID]
                         pub.reindexObject()
                         created.append(pub)
-            except HTTPError as ex:
+            except urllib2.HTTPError as ex:
                 _logger.warning(u'Entrez retreival failed with %d for «%r» but pressing on', ex.getcode(), pubMedIDs)
                 _logger.debug(u'Enterz failed URL was «%s»', ex.geturl())
         return created
