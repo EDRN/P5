@@ -69,6 +69,10 @@ def reloadViewlets(setupTool, logger=None):
     setupTool.runImportStepFromProfile(PROFILE, 'viewlets')
 
 
+def reloadActions(setupTool, logger=None):
+    setupTool.runImportStepFromProfile(PROFILE, 'actions')
+
+
 def reloadRegistry(setupTool, logger=None):
     setupTool.runImportStepFromProfile(PROFILE, 'plone.app.registry')
 

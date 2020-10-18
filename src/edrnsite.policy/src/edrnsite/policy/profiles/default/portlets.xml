@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <portlets xmlns:i18n='http://xml.zope.org/namespaces/i18n' i18n:domain='edrnsite.policy' purge='False'>
+    <!-- Already present in the database
     <portlet
         addview='portlets.dmccrss'
         description="A portlet that shows RSS from the DMCC's weird feed"
@@ -8,7 +9,38 @@
         <for interface='plone.app.portlets.interfaces.IColumn'/>
         <for interface='plone.app.portlets.interfaces.IDashboard'/>
     </portlet>
-    <assignment purge='True' name='quick-links' category='context' key='/' manager='plone.leftcolumn'
+    -->
+
+    <!-- New in profile version 1003 -->
+    <assignment name='quick-links' category='context' key='/' manager='plone.leftcolumn'
         type='plone.portlet.static.Static' visible='False'>
     </assignment>
+    <assignment name='portlet_static' category='context' key='/' manager='plone.footerportlets'
+        type='plone.portlet.static.Static' visible='True'>
+        <property name='footer'/>
+        <property name='header'>NCI Boilerplate Links</property>
+        <property name='more_url'/>
+        <property name='omit_border'>True</property>
+        <property name='text'><![CDATA[
+<p class='nih-links'>
+    <a href='https://www.hhs.gov/'>U.S. Department of Health and Human Services</a> <span class='nih-link-sep'>|</span>
+    <a href='https://www.nih.gov/'>National Institutes of Health</a> <span class='nih-link-sep'>|</span>
+    <a href='https://www.cancer.gov/'>National Cancer Institute</a> <span class='nih-link-sep'>|</span>
+    <a href='https://www.usa.gov/'>USA.gov</a>
+</p>
+<hr class='nih-slogan-separator' />
+<p class='nih-slogan'>NIH…Turning Discovery into Health®</p>
+        ]]></property>
+    </assignment>
+    <assignment name='footer' category='context' key='/' manager='plone.footerportlets'
+        type='portlets.Classic' visible='False'>
+        <property name='macro'></property>
+        <property name='template'>@@footer</property>
+    </assignment>
+    <assignment name='colophon' category='context' key='/' manager='plone.footerportlets'
+        type='portlets.Classic' visible='True'>
+        <property name='macro'></property>
+        <property name='template'>colophon</property>
+    </assignment>
+
 </portlets>

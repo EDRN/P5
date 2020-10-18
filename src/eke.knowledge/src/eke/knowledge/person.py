@@ -165,6 +165,12 @@ class View(BrowserView):
         for i in results:
             publications.append(i.getObject())  # Any reason we're waking up objects here?
         return publications
+    def email(self):
+        context = aq_inner(self.context)
+        mbox = context.mbox
+        if not mbox: return None
+        if mbox.startswith('mailto:'): mbox = mbox[7:]
+        return u'<a href="mailto:{}">{}</a>'.format(mbox, mbox)
 
 
 @implementer(IVocabularyFactory)

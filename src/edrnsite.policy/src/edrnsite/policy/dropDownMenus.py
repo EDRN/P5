@@ -43,7 +43,7 @@ def installDataAndResources(context):
     pac.move(source=pac.get('/data'), target=dataAndResources)
     pac.move(source=pac.get('/publications'), target=dataAndResources)
     pac.move(source=pac.get('/informatics'), target=dataAndResources)
-    # pac.move(source=pac.get('/resources/sample-reference-sets'), target=dataAndResources)
+    pac.move(source=pac.get('/resources/sample-reference-sets'), target=dataAndResources)
 
     # During development, I'm just doing this instead of the above:
     # pac.delete(obj=pac.get('/biomarkers'), check_linkintegrity=False)
@@ -224,8 +224,10 @@ def installAboutEDRN(portal):
     )
 
     # Make these items appear on the About EDRN menu
-    pac.get('/about/sites').exclude_from_nav = False
-    pac.get('/about/groups').exclude_from_nav = False
+    sites, groups = pac.get('/about/sites'), pac.get('/about/groups')
+    sites.exclude_from_nav = groups.exclude_from_nav = False
+    sites.reindexObject()
+    groups.reindexObject()
 
 
 def install(portal):
@@ -258,9 +260,6 @@ def install(portal):
     archiveBookshelf(portal, archive)
 
     # Misc cleanup
-    resources = pac.get('/resources')
-    resources.exclude_from_nav = True
-    resources.reindexObject()
-    about = pac.get('/about-edrn')
-    about.exclude_from_nav = True
-    about.reindexObject()
+    pac.move(source=pac.get('/resources'), target=archive)
+    pac.move(source=pac.get('/about-edrn'), target=archive)  # Deleting this causes a stack trace
+

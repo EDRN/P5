@@ -33,8 +33,8 @@
                         pas_member context/@@pas_member;">
     <tal:listing condition="batch">
         <div class='small-proviso dataset-summary-report'>
-          <center><u><h4># Datasets by Organ Statistics:</h4></u></center>
-          <center><u><h4 id='bar-chart-important-instructions-that-must-be-read' style='color: rgb(200, 140, 0); font-weight: bold; font-size: 95%;'>Depending on screen size, you may have to scroll horizontally within the graph below to see all organs</h4></u></center>
+          <center><h4># Datasets by Organ Statistics:</h4></center>
+          <center><h4 id='bar-chart-important-instructions-that-must-be-read' style='color: rgb(200, 140, 0); font-weight: bold; font-size: 95%;'>Depending on screen size, you may have to scroll horizontally within the graph below to see all organs</h4></center>
           <span id='analyitcs-display'>
             <iframe width='100%' height='190px' frameborder='0' src='@@dataset_summary_report'>
               Statistics

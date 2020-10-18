@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+    <!-- These are already part of the database
     <object name="user" meta_type="CMF Action Category">
         <object name="dmcc-site" meta_type="CMF Action" i18n:domain="plone" insert-before='*'>
             <property name="title" i18n:translate="">DMCC Site</property>
@@ -26,5 +27,66 @@
         </property>
         <property name="visible">True</property>
         <property name="modal" type="text" purge='True'/>
+    </object>
+    -->
+    <!-- These site_actions are part of profile version 1003 -->
+    <object name='site_actions' meta_type='CMF Action Category' purge='True'>
+        <property name='title'/>
+        <object name='sitemap' meta_type='CMF Action' i18n:domain='plone'>
+            <property name='title' i18n:translate=''>Site Map</property>
+            <property name='description' i18n:translate=''>An overview map of the content on this site.</property>
+            <property name='url_expr'>string:${globals_view/navigationRootUrl}/sitemap</property>
+            <property name='link_target'/>
+            <property name='available_expr'/>
+            <property name='permissions'>
+                <element value='View'/>
+            </property>
+            <property name='visible'>True</property>
+        </object>
+        <object name='disclaimer' meta_type='CMF Action' i18n:domain='plone'>
+            <property name='title' i18n:translate=''>Disclaimer Policy</property>
+            <property name='description' i18n:translate=''>A policy on disclaimers made by this site.</property>
+            <property name='url_expr'>string:https://www.cancer.gov/policies/disclaimer</property>
+            <property name='link_target'/>
+            <property name='available_expr'/>
+            <property name='permissions'>
+                <element value='View'/>
+            </property>
+            <property name='visible'>True</property>
+        </object>
+        <object name='accessibility' meta_type='CMF Action' i18n:domain='plone'>
+            <property name='title' i18n:translate=''>Accessibiltiy</property>
+            <property name='description' i18n:translate=''>Information on accessibility.</property>
+            <property name='url_expr'>string:https://www.cancer.gov/policies/accessibility</property>
+            <property name='link_target'/>
+            <property name='available_expr'/>
+            <property name='permissions'>
+                <element value='View'/>
+            </property>
+            <property name='visible'>True</property>
+        </object>
+        <object name='foia' meta_type='CMF Action' i18n:domain='plone'>
+            <property name='title' i18n:translate=''>FOIA</property>
+            <property name='description' i18n:translate=''>Freedom of Information Act</property>
+            <property name='url_expr'>string:https://www.cancer.gov/policies/foia</property>
+            <property name='link_target'/>
+            <property name='available_expr'/>
+            <property name='permissions'>
+                <element value='View'/>
+            </property>
+            <property name='visible'>True</property>
+        </object>
+        <object name='contact' meta_type='CMF Action' i18n:domain='plone'>
+            <property name='title' i18n:translate=''>Contact EDRN</property>
+            <property name='description' i18n:translate=''>Get in touch with the Early Detection Research Network.</property>
+            <property name='url_expr'>string:${globals_view/navigationRootUrl}/contact-info</property>
+            <property name='link_target'/>
+            <property name='available_expr'/>
+            <property name='permissions'>
+                <element value='View'/>
+            </property>
+            <property name='visible'>True</property>
+            <property name='modal' type='text'/>
+        </object>
     </object>
 </object>

@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <object purge='False'>
+    <!-- These are already in the deatabase:
     <order manager='plone.portaltop' skinname='Plone Default' purge='True'>
         <viewlet name='edrn.dev_warning'/>
         <viewlet name='plone.header'/>
@@ -10,4 +11,9 @@
         <viewlet name='edrn.colophon'/>
         <viewlet name='plone.site_actions'/>
     </order>
+    -->
+
+    <!-- This is for profile version 1003: -->
+
+    
 </object>

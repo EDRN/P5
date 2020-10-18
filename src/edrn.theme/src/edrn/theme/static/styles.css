@@ -2,7 +2,104 @@
 
 body {
     background-color: #ffffff;
+    font-size: 16px; /* Kara 🆙 */
+    font-weight: 400;
 }
+#bmSectionTabs {
+    font-size: 16px !important; /* ibid */
+}
+#bmSectionTabs a {
+    border-bottom: 1px solid black !important;
+}
+#bmSectionTabs a:hover {
+    border-bottom: none !important;
+}
+#bmSectionTabs table {
+    font-size: 16px !important; /* ibid */
+}
+#bmSectionTabs h5 {
+    font-size: 16px !important;
+    text-transform: uppercase !important;
+    margin-left: 10px;
+}
+
+/* Kara: darken visited links */
+a:visited {
+    color: rgb(0, 53, 67);
+}
+
+/* Kara's NCI table style */
+.biomarkerTable th, .sitesByType th, .datasetsTable th, .publicationsTable th, .contact-info th, .person-parts th {
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    padding: 8px;
+    background-color: #17467a;
+}
+.contact-info {
+    border: none;
+}
+.contact-info td {
+    vertical-align: middle !important;
+    padding-left: 1em !important;
+}
+
+/* Kara's redesigned footer */
+#portal-footer .site-actions {
+    text-align: left;
+}
+#portal-footer .site-actions ul li {
+    padding-left: 0;
+    padding-right: 50px;
+}
+#portal-footer > .row {
+    margin-top: 0;
+    padding-top: 12px;
+    padding-bottom: 0
+}
+.doormat {
+    background-color: #1a374c;
+}
+#portal-footer-wrapper, #edrn-colophon {
+    background-color: #0f2b40;
+    color: white;
+}
+#portal-footer a {
+    color: white;
+    font-size: 11pt;
+}
+#edrn-colophon {
+    text-align: right;
+    padding: 10px;
+    font-size: 9pt;
+}
+.colophonWrapper {
+    padding-right: 20px;
+    padding-bottom: 10px;
+}
+.nih-link-sep {
+    padding: 0 0.5em;
+}
+.nih-slogan-separator {
+    border-top: 5px solid #0e2031;
+    overflow: visible;
+    text-align: center;
+    height: 5px;
+    margin-top: -4px;
+    margin-bottom: 4px;
+}
+
+.small-proviso {
+    font-size: 90%;
+    display: none;
+}
+@media (min-width : 768px) {
+    .small-proviso {
+        display: inherit;
+    }
+}
+
+
 
 /* This just confuses users */
 .searchSection {
@@ -11,6 +108,9 @@ body {
 
 .plone-navbar {
     text-transform: uppercase;
+}
+dd {
+    margin-bottom: 3px;
 }
 
 /* Kara wants more contrast; it's "!important" */
@@ -32,8 +132,13 @@ body {
 .plone-breadcrumb ol > li + li::before {
     color: black !important;
 }
+
+/* Kara says this line isn't contrasty enough—even though the hyperlink text itself is *already* a different, contrasting color 🙄 */
 #content-core a {
     border-bottom: 1px solid black !important;
+}
+#content-core a:hover {
+    border-bottom: none !important;
 }
 
 ul#edrn-quicklinks {
@@ -86,29 +191,6 @@ ul#edrn-quicklinks li {
 #q-informatics   a::before { content: '\00a0\e849\00a0'; font-family: "Fontello"; font-size: 150%; }
 #q-nct           a::before { content: '\00a0\e804\00a0'; font-family: "Fontello"; font-size: 150%; }
 
-#portal-footer-wrapper {
-    background-color: #123e58;
-    color: white;
-}
-#portal-footer a {
-    color: white;
-}
-
-.small-proviso {
-    font-size: 90%;
-    display: none;
-}
-@media (min-width : 768px) {
-    .small-proviso {
-        display: inherit;
-    }
-}
-
-#edrn-colophon {
-    text-align: right;
-    padding: 10px;
-    margin: 10px;
-}
 
 .homeGrid {
     display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 10px; grid-auto-rows: minmax(100px, auto);

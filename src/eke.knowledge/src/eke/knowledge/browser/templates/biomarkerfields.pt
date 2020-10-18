@@ -244,7 +244,7 @@
                     </p>
                 </tal:block>
             </div>
-            <div tal:condition='not:bodySystem/viewable'>
+            <div tal:condition='not:bodySystem/viewable' style='margin-top: 16px;'>
                 Organ-specific information for this biomarker is currently being annotated or is under review.
                 You must be logged in or do not have permission to view any additional information. Contact the
                 <a style='text-decoration: underline;' href='mailto:ic-portal@jpl.nasa.gov'>Informatics Center</a>

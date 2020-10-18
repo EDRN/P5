@@ -54,6 +54,8 @@ setup(
         'rdflib==4.2.2',
         'z3c.jbot',
         'z3c.relationfield',
+        # See https://community.plone.org/t/plone-5-2-2-regression-with-schema-uri-based-fields/12938/2
+        'plone.app.z3cform>=3.2.2',
     ],
     extras_require={
         'test': [

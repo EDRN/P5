@@ -33,7 +33,7 @@
                         navigation_root_url context/@@plone_portal_state/navigation_root_url;
                         pas_member context/@@pas_member;">
         <div class='small-proviso biomarker-summary-report' style='padding-left: 200px;'>
-          <center><u><h4>Biomarker Statistics:</h4></u></center>
+          <center><h4>Biomarker Statistics:</h4></center>
           <span id='analyitcs-display'>
             <iframe width='100%' height='190px' frameborder='0' src='@@biomarker_summary_report'>
               Statistics
