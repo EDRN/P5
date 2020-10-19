@@ -193,7 +193,7 @@ ul#edrn-quicklinks li {
 
 
 .homeGrid {
-    display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 10px; grid-auto-rows: minmax(100px, auto);
+    display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 10px; grid-auto-rows: minmax(100px, auto);
     color: white;
 }
 .homeGrid a {
@@ -206,16 +206,20 @@ ul#edrn-quicklinks li {
     padding-left: 1.5rem;
 }
 .homeData {
-    background: rgb(13,102,161);
-    background: linear-gradient(180deg, rgba(13,102,161,1) 0%, rgba(13,102,161,0.85) 100%);
+    background: rgb(17,134,147);
+    background: linear-gradient(135deg, rgba(17,134,147,1) 0%, rgba(17,134,147,0.96) 100%);
 }
 .homeWork {
-    background: rgb(13,102,161);
-    background: linear-gradient(180deg, rgba(13,102,161,1) 0%, rgba(13,102,161,0.85) 100%);
+    background: rgb(14,113,153);
+    background: linear-gradient(135deg, rgba(14,113,153,1) 0%, rgba(14,113,153,0.96) 100%);
 }
 .homeNews {
-    background: rgb(13,102,161);
-    background: linear-gradient(180deg, rgba(13,102,161,1) 0%, rgba(13,102,161,0.85) 100%);
+    background: rgb(14,111,138);
+    background: linear-gradient(135deg, rgba(14,111,138,1) 0%, rgba(14,111,138,0.96) 100%);
+}
+.homeAbout {
+    background: rgb(9,75,118);
+    background: linear-gradient(135deg, rgba(9,75,118,1) 0%, rgba(9,75,118,0.96) 100%);
 }
 
 
@@ -231,7 +235,7 @@ ul#edrn-quicklinks li {
 }
 .dataResource {
     background: rgb(13,102,161);
-    background: linear-gradient(180deg, rgba(13,102,161,1) 0%, rgba(13,102,161,0.85) 100%);
+    background: linear-gradient(180deg, rgba(13,102,161,1) 0%, rgba(13,102,161,0.96) 100%);
 }
 .dataResource h2 a img {
     margin-top: 0;

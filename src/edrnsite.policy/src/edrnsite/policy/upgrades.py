@@ -11,58 +11,83 @@ import logging, plone.api, os
 
 PROFILE = 'profile-' + PACKAGE_NAME + ':default'
 
-_HOME_PAGE_DESC = u'''The Early Detection Research Network (EDRN), an initiative of the National Cancer Institute (NCI), brings together dozens of institutions to help accelerate the translation of biomarker information into clinical applications and to evaluate new ways of testing cancer in its earliest stages and for cancer risk.'''
+_HOME_PAGE_DESC = u''  # Kara hates the text display, but Plone doesn't provide a way to keep metadata but not show it
 _HOME_PAGE_BODY = u'''<p style='text-align: center;'><img alt="Home Page Banner Splash"
 src="resolveuid/{banner}" class="image-inline" title="Home Page Banner Splash"
 data-linktype="image" data-scale="" data-val="{banner}" /></p>
+<?xml version="1.0"?>
 <div class="homeGrid">
-
-<div class="homeData">
-<h2>Data and Resources</h2>
-<ul>
-<li><a href="biomarkers">Biomarkers</a></li>
-<li><a href="protocols">Protocols</a></li>
-<li><a href="data">Data</a></li>
-<li><a href="publications">Publications</a></li>
-<li><a href="informatics">Informatics Tools</a></li>
-<li><a href="resources/sample-reference-sets">Specimen Reference Sets</a></li>
-</ul>
-</div>
-
-<div class="homeWork">
-<h2>Work with EDRN</h2>
-<ul>
-<li>
-    Collaborative Opportunities
+  <div class="homeData">
+    <h2>Data and Resources</h2>
     <ul>
-        <li><a href="work-with-edrn/colops/assoc">Associate Membership</a> Program</li>
-        <li><a href="colops">Find/Participate in a Collaborative Study</a></li>
-        <li><a href="colops/vsp">Propose a Study</a></li>
-        <li><a href="colops/edrn-ppp-guidelines">Public-Private Partnerships</a></li>
-        <li><a href="colops/request-for-biomarkers-1.pdf/view">Request Biomarkers</a></li>
+      <li>
+        <a href="biomarkers">Biomarkers</a>
+      </li>
+      <li>
+        <a href="protocols">Protocols</a>
+      </li>
+      <li>
+        <a href="data">Data</a>
+      </li>
+      <li>
+        <a href="publications">Publications</a>
+      </li>
+      <li>
+        <a href="informatics">Informatics Tools</a>
+      </li>
+      <li>
+        <a href="resources/sample-reference-sets">Specimen Reference Sets</a>
+      </li>
     </ul>
-</li>
-<li><a href="/work-with-edrn/advocacy-groups">Advocacy Groups</a></li>
-</ul>
-</div>
-
-<div class="homeNews">
-<h2>News and Events</h2>
-<ul>
-<li><a href="docs/edrn-enewsletter-april-2019">EDRN Newsletter</a></li>
-<li><a href="https://prevention.cancer.gov/news-and-events/blog">Cancer Prevention Science blogs</a></li>
-<li>
-    Meetings
+  </div>
+  <div class="homeWork">
+    <h2>Work with EDRN</h2>
     <ul>
-        <li>EDRN</li>
-        <li>MCL</li>
-        <li>CIB</li>
-        <li>…</li>
+      <li>
+        Collaborative Opportunities
+        <ul><li><a href="work-with-edrn/colops/assoc">Associate Membership</a> Program</li><li><a href="colops">Find/Participate in a Collaborative Study</a></li><li><a href="colops/vsp">Propose a Study</a></li><li><a href="colops/edrn-ppp-guidelines">Public-Private Partnerships</a></li><li><a href="colops/request-for-biomarkers-1.pdf/view">Request Biomarkers</a></li></ul>
+    </li>
+      <li>
+        <a href="/work-with-edrn/advocacy-groups">Advocacy Groups</a>
+      </li>
     </ul>
-</li>
-</ul>
+  </div>
+  <div class="homeNews">
+    <h2>News and Events</h2>
+    <ul>
+      <li>
+        <a href="docs/edrn-enewsletter-april-2019">EDRN Newsletter</a>
+      </li>
+      <li>
+        <a href="https://prevention.cancer.gov/news-and-events/blog">Prevention Science blogs</a>
+      </li>
+      <li>
+        <a href="https://www.compass.fhcrc.org/meeting/reg_edrn/edrnsc.aspx">36th Meeting Registration</a>
+      </li>
+      <li>
+        <a href="about/groups/steering-committee/35">35th Meeting Reports</a>
+      </li>
+    </ul>
+  </div>
+  <div class="homeAbout">
+    <h2>About EDRN</h2>
+    <ul>
+      <li>
+        <a href="about/highlights">Accomplishments</a>
+      </li>
+      <li>
+        <a href="about/sites">Site List</a>
+      </li>
+      <li>
+        <a href="about/members-list">Member List</a>
+      </li>
+      <li>
+        <a href="about/groups">Groups &amp; Committees</a>
+      </li>
+    </ul>
+  </div>
 </div>
-</div>'''
+'''
 
 
 def reloadViewlets(setupTool, logger=None):
