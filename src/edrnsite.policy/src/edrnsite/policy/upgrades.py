@@ -89,6 +89,35 @@ data-linktype="image" data-scale="" data-val="{banner}" /></p>
 </div>
 '''
 
+_ADMONISHMENTS_DESC = u'''Various warnings, provisos, stipulations, conditions, caveats, notifications of
+domestic and international surveillance, riders, clauses, and qualifications about what logging into this
+site entails and the circumstances of doing so.'''
+_ADMONISHMENTS_BODY = u'''
+  <h1>Important Login Information</h1>
+  <p>Before logging in, please review <em>all</em> of the pertinent information that follows in this section.</p>
+  <h2>Vital Links</h2>
+  <p>The following links may be informative and/or provide utility for changing or recovering your password:</p>
+  <ul>
+    <li>The <a href="https://www.compass.fhcrc.org/enterEDRN/" data-linktype="external" data-val="https://www.compass.fhcrc.org/enterEDRN/">Data Management and Coordinating Center's "secure" website</a></li>
+    <li><a href="https://www.compass.fhcrc.org/edrns/pub/user/resetPwd.aspx?t=pwd&amp;sub=form&amp;w=1&amp;p=3&amp;why=4&amp;are=5&amp;these=6&amp;extra=7&amp;parameters=8&amp;here=questionMark" data-linktype="external" data-val="https://www.compass.fhcrc.org/edrns/pub/user/resetPwd.aspx?t=pwd&amp;sub=form&amp;w=1&amp;p=3&amp;why=4&amp;are=5&amp;these=6&amp;extra=7&amp;parameters=8&amp;here=questionMark">Forgot your password</a>?</li>
+    <li>Need to <a href="https://www.compass.fhcrc.org/edrns/pub/user/changePwd.aspx?t=pwd&amp;sub=form&amp;w=1&amp;p=3&amp;and=4&amp;many=5&amp;extra=6&amp;parameters=7&amp;too=exclamationPoint" data-linktype="external" data-val="https://www.compass.fhcrc.org/edrns/pub/user/changePwd.aspx?t=pwd&amp;sub=form&amp;w=1&amp;p=3&amp;and=4&amp;many=5&amp;extra=6&amp;parameters=7&amp;too=exclamationPoint">change your password</a>?S</li>
+    <li>
+      <a href="https://www.compass.fhcrc.org/edrns/pub/user/application.aspx?t=app&amp;sub=form1&amp;w=1&amp;p=3&amp;q=4&amp;r=5&amp;s=6&amp;extra1=1&amp;extra2=2&amp;extra3=3" data-linktype="external" data-val="https://www.compass.fhcrc.org/edrns/pub/user/application.aspx?t=app&amp;sub=form1&amp;w=1&amp;p=3&amp;q=4&amp;r=5&amp;s=6&amp;extra1=1&amp;extra2=2&amp;extra3=3">Sign up with EDRN</a>
+    </li>
+  </ul>
+  <h2>Biomarker Information</h2>
+  <p>Biomarker information hosted on the public portal includes both published and unpublished research results from the Early Detection Research Network (EDRN). Summary information describing biomarkers and the associated scientific data that are being researched is provided for all biomarkers captured by the program. Access to <em>unpublished</em> biomarker research results under development by the EDRN is currently <em>only</em> available to EDRN members. In this case, members are provided a username and password that will grant them access to specific data that is hosted on the portal.</p>
+  <p>If you are an EDRN member and need a user name and password please complete the <a href="https://www.compass.fhcrc.org/edrns/pub/user/application.aspx?t=app&amp;sub=form1&amp;w=1&amp;p=3&amp;q=4&amp;r=5&amp;s=6&amp;extra1=1&amp;extra2=2&amp;extra3=3" data-linktype="external" data-val="https://www.compass.fhcrc.org/edrns/pub/user/application.aspx?t=app&amp;sub=form1&amp;w=1&amp;p=3&amp;q=4&amp;r=5&amp;s=6&amp;extra1=1&amp;extra2=2&amp;extra3=3">New User Application</a> which is handled by the Data Management and Coordinating Center (DMCC).</p>
+  <h2>US Government Warning</h2>
+  <p>This warning banner provides privacy and security notices consistent with applicable federal laws, directives, and other federal guidance for accessing this Government system, which includes ⑴ this computer network, ⑵ all computers connected to this network, and ⑶ all devices and storage media attached to this network or to a computer on this network.</p>
+  <p>This system is provided for Government-authorized use only. Unauthorized or improper use of this system is prohibited and may result in disciplinary action and/or civil and criminal penalties. Personal use of social media and networking sites on this system is limited as to not interfere with official work duties and is subject to monitoring.</p>
+  <p>By using this system, you understand and consent to the following:</p>
+  <ul>
+    <li>The Government may monitor, record, and audit your system usage, including usage of personal devices and email systems for official duties or to conduct HHS business. Therefore, you have no reasonable expectation of privacy regarding any communication or data transiting or stored on this system. At any time, and for any lawful Government purpose, the government may monitor, intercept, and search and seize any communication or data transiting or stored on this system.</li>
+    <li>Any communication or data transiting or stored on this system may be disclosed or used for any lawful Government purpose.</li>
+  </ul>
+'''
+
 
 def reloadViewlets(setupTool, logger=None):
     setupTool.runImportStepFromProfile(PROFILE, 'viewlets')
@@ -155,6 +184,33 @@ def dropCachedResourceRegistries(setupTool, logger=None):
         except (ValueError, KeyError):
             logger.info('resourceRegistries not found in %s, skipping', key)
             pass
+
+
+def installLoginAdmonishments(setupTool, logger=None):
+    if logger is None: logger = logging.getLogger(__name__)
+    portal = plone.api.portal.get()
+    try:
+        administrivia = portal.unrestrictedTraverse('administrivia')
+    except KeyError:
+        administrivia = createContentInContainer(
+            portal,
+            'Folder',
+            id='administrivia',
+            title=u'Administrivia',
+            description=u'Objects used to support the portal itself.'
+        )
+    if 'login-admonishments' in administrivia.keys():
+        logger.info(u'Already have a login admonishments page, not overwriting it')
+        return
+    admonishments = createContentInContainer(
+        administrivia,
+        'Document',
+        id='login-admonishments',
+        title=u'Login Admonishments',
+        description=_ADMONISHMENTS_DESC,
+        text=RichTextValue(_ADMONISHMENTS_BODY, 'text/html', 'text/x-html-safe')
+    )
+    publish(admonishments)
 
 
 # Boilerplate from paster template; leaving for posterity:

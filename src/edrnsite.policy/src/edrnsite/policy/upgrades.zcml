@@ -65,5 +65,12 @@
         handler='.upgrades.install202SOWMenus'
         source='1002' destination='1003' sortkey='110'
     />
+    <genericsetup:upgradeStep
+        title='Login Admonishments (1002→1003)'
+        description='Add the enormous US Government wall-of-text to the login page'
+        profile='edrnsite.policy:default'
+        handler='.upgrades.installLoginAdmonishments'
+        source='1002' destination='1003' sortkey='120'
+    />
 
 </configure>
