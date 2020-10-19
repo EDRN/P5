@@ -68,7 +68,7 @@ class ISiteFolder(IKnowledgeFolder):
         title=_(u'People RDF Data Sources'),
         description=_(u'URLs to sources of Resource Description Format (RDF) data for people.'),
         required=False,
-        value_type=schema.URI(
+        value_type=schema.TextLine(
             title=_(u'people RDF Data Source'),
             description=_(u'URL to a source of RDF data for people.'),
             required=False,

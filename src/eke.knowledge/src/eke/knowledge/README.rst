@@ -210,7 +210,7 @@ Ingesting::
     >>> publication.volume
     u'51'
     >>> publication.journal
-    u'Clin. Chem.'
+    u'Clin Chem'
     >>> publication.pubMedID
     u'15613711'
     >>> publication.year
@@ -241,7 +241,7 @@ numbers. Watch what happens when we ingest now::
     >>> publicationsFolder.grantNumbers
     [u'CA214194', u'CA214195']
     >>> browser.open(portalURL + '/@@ingestRDF')
-    >>> 9 <= len(publicationsFolder.keys()) <= 11
+    >>> 9 <= len(publicationsFolder.keys()) <= 17
     True
     >>> keys = publicationsFolder.keys()
     >>> '28716134-detecting-protein-variants-by-mass' in keys
