@@ -31,13 +31,6 @@
 
     <!-- 1002 → 1003 -->
     <genericsetup:upgradeStep
-        title='Reload Registry (1002→1003)'
-        description='Get the new portal version number (and other things) loaded in the Plone Registry'
-        profile='edrnsite.policy:default'
-        handler='.upgrades.reloadRegistry'
-        source='1002' destination='1003' sortkey='10'
-    />
-    <genericsetup:upgradeStep
         title='Action! (1002→1003)'
         description='Load actions (especially for the portal footer)'
         profile='edrnsite.policy:default'
@@ -71,6 +64,13 @@
         profile='edrnsite.policy:default'
         handler='.upgrades.installLoginAdmonishments'
         source='1002' destination='1003' sortkey='120'
+    />
+    <genericsetup:upgradeStep
+        title='Reload Registry (1002→1003)'
+        description='Get the new portal version number (and other things) loaded in the Plone Registry'
+        profile='edrnsite.policy:default'
+        handler='.upgrades.reloadRegistry'
+        source='1002' destination='1003' sortkey='900'
     />
 
 </configure>

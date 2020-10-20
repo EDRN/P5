@@ -10,7 +10,7 @@
         </field>
         <value>5.1.0</value>
     </record>
-    <record name='eke.knowledge.interfaces.IPanel.objects' interface='eke.knowledge.interfaces.IPanel' field='objects'>
+    <record name='eke.knowledge.interfaces.IPanel.objects' interface='eke.knowledge.interfaces.IPanel' field='objects' purge='True'>
         <field type='plone.registry.field.List'>
             <description>
                 Paths to objects in the portal that support RDF ingest.
