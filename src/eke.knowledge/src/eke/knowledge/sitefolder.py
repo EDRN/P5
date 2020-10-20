@@ -31,6 +31,7 @@ _surnamePredicateURI = rdflib.URIRef(u'http://xmlns.com/foaf/0.1/surname')
 _middleNamePredicateURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#middleName')
 _givenNamePredicateURI = rdflib.URIRef(u'http://xmlns.com/foaf/0.1/givenname')
 _siteURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#site')
+_employmentPredicateURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#employmentActive')
 _edrnSiteTypes = frozenset((
     u'Biomarker Reference Laboratories',
     u'Biomarker Developmental Laboratories',
@@ -134,6 +135,9 @@ class SiteIngestor(Ingestor):
         personID = getUtility(IIDNormalizer).normalize(personTitle)
         if personID in context:
             context.manage_delObjects([personID])
+            status = predicates.get(_employmentPredicateURI)
+            if status is not None and len(status) > 0 and unicode(status[0]) == u'Former employee':
+                return None
         person = createContentInContainer(
             context,
             'eke.knowledge.person',
@@ -170,7 +174,7 @@ class SiteIngestor(Ingestor):
                 continue
             site = sites[unicode(siteURI)]
             person = self.createPerson(site, uri, predicates)
-            createdPeople[unicode(uri)] = person
+            if person is not None: createdPeople[unicode(uri)] = person
         return createdPeople
     def addInvestigators(self, siteURI, sites, personPredicate, people, sitePredicates, fieldName, multiValued):
         siteURI = unicode(siteURI)
@@ -211,11 +215,15 @@ class SiteIngestor(Ingestor):
         # So we'll do a "best effort":
         personIDs = []
         for personURI in personURIs:
-            p = people[personURI]
             try:
-                personIDs.append(getUtility(IIntIds).getId(p))
+                p = people[personURI]
+                try:
+                    personIDs.append(getUtility(IIntIds).getId(p))
+                except KeyError:
+                    _logger.warn(u'=== Cannot get an intID for person %s', personURI)
+                    pass
             except KeyError:
-                _logger.warn(u'=== Cannot get an intID for person %s', personURI)
+                # This is a person who no longer exists (employmentActive == Former employee)
                 pass
         if multiValued:
             setattr(site, fieldName, [RelationValue(personID) for personID in personIDs])

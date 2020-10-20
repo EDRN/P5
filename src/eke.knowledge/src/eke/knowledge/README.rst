@@ -241,7 +241,7 @@ numbers. Watch what happens when we ingest now::
     >>> publicationsFolder.grantNumbers
     [u'CA214194', u'CA214195']
     >>> browser.open(portalURL + '/@@ingestRDF')
-    >>> 9 <= len(publicationsFolder.keys()) <= 17
+    >>> 9 <= len(publicationsFolder.keys()) <= 25
     True
     >>> keys = publicationsFolder.keys()
     >>> '28716134-detecting-protein-variants-by-mass' in keys
@@ -366,7 +366,7 @@ acceptable values:
 
     >>> matches = re.search(r'Objects Created \(([0-9]+)\)', browser.contents)
     >>> count = int(matches.group(1))
-    >>> 19 <= count <= 21
+    >>> 7 <= count <= 27
     True
     >>> len(protocolsFolder.keys())
     2
@@ -665,8 +665,10 @@ Note that there's RDF ingest for the ``eke.knowledge.collaborationsfolder``::
     >>> registry['eke.knowledge.interfaces.IPanel.objects'] = [u'body-systems', u'diseases', u'publications', u'sites', u'protocols', u'datasets', u'collaborative-groups']
     >>> transaction.commit()
     >>> browser.open(portalURL + '/@@ingestRDF')
-    >>> browser.contents
-    '...Objects Created (37)...'
+    >>> matches = re.search(r'Objects Created \(([0-9]+)\)', browser.contents)
+    >>> count = int(matches.group(1))
+    >>> 30 <= count <= 45
+    True
 
 
 Miscellaneous Resources
