@@ -7,8 +7,8 @@
 '>
     <h1 style='font-weight: bold;'>🚧 Notice!</h1>
     <p>This is <em>not</em> an official version of the portal of the Early Detection Research Network.
-        This version is <a href='https://github.com/EDRN/P5'>🔧 in development</a> and under review
-        by the <a href='mailto:edrn-ic@jpl.nasa.gov'>📧 Informatics Center</a>.
+        This version is <a href='https://github.com/EDRN/P5'>🎬 for public demonstration</a> and review
+        with the <a href='mailto:edrn-ic@jpl.nasa.gov'>📧 Informatics Center</a>.
     </p>
     <p><a href='https://edrn.nci.nih.gov/'>👉 Go to the official, production portal</a></p>
     <p><a href='https://github.com/EDRN/P5/issues/new/choose'>🐛 Report an issue</a> with this (or any EDRN) portal</p>
