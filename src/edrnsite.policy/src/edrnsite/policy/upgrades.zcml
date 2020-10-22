@@ -29,48 +29,48 @@
     />
 
 
-    <!-- 1002 → 1003 -->
+    <!-- 1002 → 1010 -->
     <genericsetup:upgradeStep
         title='Action! (1002→1003)'
         description='Load actions (especially for the portal footer)'
         profile='edrnsite.policy:default'
         handler='.upgrades.reloadActions'
-        source='1002' destination='1003' sortkey='12'
+        source='1003' destination='1010' sortkey='12'
     />
     <genericsetup:upgradeStep
         title='Reload Portlets (1002→1003)'
         description='Hide the quick links portlet at the root of the site; add the new footer portlet'
         profile='edrnsite.policy:default'
         handler='.upgrades.reloadPortlets'
-        source='1002' destination='1003' sortkey='20'
+        source='1003' destination='1010' sortkey='20'
     />
     <genericsetup:upgradeStep
         title='New Home Page (1002→1003)'
         description="Set up the new home page, replacing the current one and its RSS news portlet"
         profile='edrnsite.policy:default'
         handler='.upgrades.install2020SOWHomePage'
-        source='1002' destination='1003' sortkey='100'
+        source='1003' destination='1010' sortkey='100'
     />
     <genericsetup:upgradeStep
         title='New Drop Down Menus (1002→1003)'
         description='Turn on, tune in, and drop down: menus'
         profile='edrnsite.policy:default'
         handler='.upgrades.install202SOWMenus'
-        source='1002' destination='1003' sortkey='110'
+        source='1003' destination='1010' sortkey='110'
     />
     <genericsetup:upgradeStep
         title='Login Admonishments (1002→1003)'
         description='Add the enormous US Government wall-of-text to the login page'
         profile='edrnsite.policy:default'
         handler='.upgrades.installLoginAdmonishments'
-        source='1002' destination='1003' sortkey='120'
+        source='1003' destination='1010' sortkey='120'
     />
     <genericsetup:upgradeStep
         title='Reload Registry (1002→1003)'
         description='Get the new portal version number (and other things) loaded in the Plone Registry'
         profile='edrnsite.policy:default'
         handler='.upgrades.reloadRegistry'
-        source='1002' destination='1003' sortkey='900'
+        source='1003' destination='1010' sortkey='900'
     />
 
 </configure>
