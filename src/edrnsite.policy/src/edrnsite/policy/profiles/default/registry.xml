@@ -29,7 +29,7 @@
             <element>data-and-resources/protocols</element>
             <element>data-and-resources/data</element>
             <element>data-and-resources/biomarkers</element>
-            <element>about/groups</element>
+            <element>about/mission-and-structure/groups</element>
         </value>
     </record>
 </registry>
