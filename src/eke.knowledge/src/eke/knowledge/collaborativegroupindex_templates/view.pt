@@ -94,7 +94,7 @@
                         <!-- TAB: Overview -->
                         <div id='overviewTab'>
                             <p class='arg' i18n:translate='groupLoginAdmonition' tal:condition='isAnon'
-                                tal:define='loginURL string:${context/aq_parent/absolute_url}/login'
+                                tal:define='loginURL string:${context/portal_url}/login'
                                 id='login-please'>
                                 If you are a member of this group,
                                 👉 <a href='#' i18n:name='loginURL' style='font-size: 150%;'

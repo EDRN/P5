@@ -240,4 +240,22 @@ ul#edrn-quicklinks li {
 .dataResource h2 a img {
     margin-top: 0;
 }
-    
+
+
+.aboutEDRNGrid {
+    display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 10px; grid-auto-rows: minmax(100px, auto);
+    color: white;
+}
+.aboutEDRNGrid a {
+    color: white;
+}
+.aboutEDRNGrid > div {
+    padding: 1rem;
+}
+.aboutEDRNTopic {
+    background: rgb(13,102,161);
+    background: linear-gradient(180deg, rgba(13,102,161,1) 0%, rgba(13,102,161,0.96) 100%);
+}
+.aboutEDRNTopic h2 a img {
+    margin-top: 0;
+}

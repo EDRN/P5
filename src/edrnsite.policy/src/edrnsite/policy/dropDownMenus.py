@@ -18,7 +18,6 @@ _logger = logging.getLogger(__name__)
 
 def installDataAndResources(context):
     u'''Set up the "Data and Resources" tab'''
-
     dataAndResources = createFolderWithOptionalDefaultPageView(
         context,
         'data-and-resources',
@@ -131,6 +130,15 @@ def installNewsAndEvents(context):
         u'Announcements, noteworthy information, and occasions (both special and otherwise) for EDRN.',
         getPageText('newsAndEvents')
     )
+
+    # Add an empty webinars folder
+    ccic(
+        newsAndEvents,
+        'Folder',
+        title=u'Webinars',
+        description=u'Web-based seminars.'
+    )
+
     # Collect the newsletters
     newsletters = createFolderWithOptionalDefaultPageView(
         newsAndEvents,
@@ -190,8 +198,56 @@ def installAboutEDRN(portal):
         portal,
         'about',
         u'About EDRN',
-        u'All about the Early Detection Research Network.',
+        u'All the Early Detection Research Network.',
         getPageText('about')
+    )
+    missionAndStructure = createFolderWithOptionalDefaultPageView(
+        about,
+        'mission-and-structure',
+        u'Mission and Structure',
+        u'The goals and composition of the Early Detection Research Network.',
+        getPageText('missionAndStructure')
+    )
+    installImage(
+        missionAndStructure, u'org-chart.png', 'org-chart.png', u'Organizational Chart',
+        u'A chart depicting the organizational structure of the Early Detection Research Network.', 'image/png'
+    )
+    pac.move(source=pac.get('/sites'), target=missionAndStructure)
+    pac.move(source=pac.get('/groups'), target=missionAndStructure)
+    createFolderWithOptionalDefaultPageView(
+        about,
+        'fda-approved-tests-and-devices',
+        u'FDA Approved Tests and Devices',
+        u'Diagnostic tests and devices approved by the Food and Drug Administration.',
+        getPageText('fdaTests')
+    )
+    createFolderWithOptionalDefaultPageView(
+        about,
+        'clia-approved-tests',
+        u'CLIA Approved Tests',
+        u'Tests approved by Clinical Laboratory Improvement Ammendments.',
+        getPageText('cliaTests')
+    )
+    createFolderWithOptionalDefaultPageView(
+        about,
+        'five-phase-approach-for-biomarker-development-and-probe',
+        u'Five-Phase Approach for Biomarker Development and PRoBE',
+        u'The phases through which biomarkers are developed and the prospective, randomized, open-blinded, end-point (PRoBE) study.',
+        getPageText('phases')
+    )
+    createFolderWithOptionalDefaultPageView(
+        about,
+        'informatics-and-data-science',
+        u'Informatics and Data Science',
+        u'The science of information processing, data analytics, and more.',
+        getPageText('informatics')
+    )
+    createFolderWithOptionalDefaultPageView(
+        about,
+        'history-of-the-edrn',
+        u'History of the EDRN',
+        u'How the Early Detection Research Network came to be.',
+        getPageText('history')
     )
 
     # Turns Out They Didn't Like This
@@ -207,24 +263,17 @@ def installAboutEDRN(portal):
     # chooser = INameChooser(mapping)
     # mapping[chooser.chooseName(None, portlet)] = portlet
 
-    installImage(
-        about, u'org-chart.png', 'org-chart.png', u'Organizational Chart',
-        u'A chart depicting the organizational structure of the Early Detection Research Network.', 'image/png'
-    )
-
     pac.move(source=pac.get('/resources/highlights'), target=about)
-    pac.move(source=pac.get('/sites'), target=about)
     pac.move(source=pac.get('/members-list'), target=about)
-    pac.move(source=pac.get('/groups'), target=about)
 
     # Somthing misfiled from the bookshelf
     pac.move(
         source=pac.get('/docs/edrn-pancreas-working-group-meeting'),
-        target=pac.get('/about/groups/g-i-and-other-associated-cancers-research-group')
+        target=pac.get('/about/mission-and-structure/groups/g-i-and-other-associated-cancers-research-group')
     )
 
     # Make these items appear on the About EDRN menu
-    sites, groups = pac.get('/about/sites'), pac.get('/about/groups')
+    sites, groups = pac.get('/about/mission-and-structure/sites'), pac.get('/about/mission-and-structure/groups')
     sites.exclude_from_nav = groups.exclude_from_nav = False
     sites.reindexObject()
     groups.reindexObject()
@@ -233,7 +282,7 @@ def installAboutEDRN(portal):
 def install(portal):
     # First, turn on; activate drop-down menus by setting a depth > 1
     registry = getUtility(IRegistry)
-    registry['plone.navigation_depth'] = 3
+    registry['plone.navigation_depth'] = 2
 
     # First pass: archive old stuff
     from .content_reorg import archiveStuff, archiveBookshelf
@@ -262,4 +311,3 @@ def install(portal):
     # Misc cleanup
     pac.move(source=pac.get('/resources'), target=archive)
     pac.move(source=pac.get('/about-edrn'), target=archive)  # Deleting this causes a stack trace
-
