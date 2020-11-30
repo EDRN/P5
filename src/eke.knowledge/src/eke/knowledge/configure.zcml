@@ -81,17 +81,19 @@
 
     <!-- Site Root Callables -->
     <browser:page
-        class='.datadispatcher.DataDispatcher'
-        for='plone.app.layout.navigation.interfaces.INavigationRoot'
-        name='dataDispatch'
-        permission='zope2.View'
-    />
-    <browser:page
         class='.rdfingestor.RDFIngestor'
         for='plone.app.layout.navigation.interfaces.INavigationRoot'
         name='ingestRDF'
         permission='cmf.ManagePortal'
         template='rdfingestor_templates/rdfingestor.pt'
+    />
+
+    <!-- Anywhere callables -->
+    <browser:page
+        class='.datadispatcher.DataDispatcher'
+        for='*'
+        name='dataDispatch'
+        permission='zope2.View'
     />
 
 

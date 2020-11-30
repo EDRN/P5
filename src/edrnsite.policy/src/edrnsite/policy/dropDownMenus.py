@@ -228,12 +228,17 @@ def installAboutEDRN(portal):
         u'Tests approved by Clinical Laboratory Improvement Ammendments.',
         getPageText('cliaTests')
     )
-    createFolderWithOptionalDefaultPageView(
+    phases = createFolderWithOptionalDefaultPageView(
         about,
         'five-phase-approach-for-biomarker-development-and-probe',
-        u'Five-Phase Approach for Biomarker Development and PRoBE',
-        u'The phases through which biomarkers are developed and the prospective, randomized, open-blinded, end-point (PRoBE) study.',
+        u'Five-Phase Approach for Biomarker Development and PRoBE Study Design',
+        u'The design of the phases through which biomarkers are developed and the prospective, randomized, open-blinded, end-point (PRoBE) study design.',
         getPageText('phases')
+    )
+    installImage(
+        phases, u'pyramid-power.png', 'pyramid-power.png', u'Five Phases of Biomarker Development',
+        u'Five phases of biomarker development depicted as a pyramid with a wide foundation for phase 1 at the bottom and a tiny triangle at the top for phase 5, with phases 2–4 (inclusive) betwixt.',
+        'image/png'
     )
     createFolderWithOptionalDefaultPageView(
         about,

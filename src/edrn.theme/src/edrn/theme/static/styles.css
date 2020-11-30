@@ -109,6 +109,9 @@ a:visited {
 .plone-navbar {
     text-transform: uppercase;
 }
+.plone-navbar .dropdown {
+    text-transform: none;
+}
 dd {
     margin-bottom: 3px;
 }
