@@ -100,7 +100,6 @@
                             </tal:if>
                         </div>
 
-
                         <div style='margin-top: 1em;' tal:define='sites context/involvedInvestigatorSites'>
                             <label for='involvedInvestigatorSite' 
                                 i18n:translate='label_involvedInvestigatorSite'>
