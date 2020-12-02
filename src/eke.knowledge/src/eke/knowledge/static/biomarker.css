@@ -111,6 +111,14 @@ div#biomarker-aliases ul li {
     display:inline;
     margin-right:5px;
 }
+/* https://github.com/EDRN/P5/issues/85 */
+div#biomarker-aliases ul li::after {
+    content: ", ";
+}
+div#biomarker-aliases ul li:last-child::after {
+    content: "";
+}
+
 
 #biomarker-description {
     padding-right: 20px;

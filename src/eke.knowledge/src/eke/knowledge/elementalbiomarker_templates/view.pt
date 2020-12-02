@@ -41,7 +41,7 @@
                                 <h5>Aliases:</h5>
                                 <span class="hint">This biomarker is also known as:</span><br/> 
                                 <ul>
-                                    <li tal:repeat='alias aliases'><span tal:content='alias'>Sydney</span>,</li>
+                                    <li tal:repeat='alias aliases'><span tal:content='alias'>Sydney</span></li>
                                 </ul>
                             </div>
                             <h4 i18n:translate='bm_DescriptionHeading'>Description&#x2026;</h4>
