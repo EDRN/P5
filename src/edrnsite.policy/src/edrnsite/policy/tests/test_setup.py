@@ -32,11 +32,12 @@ class TestSetup(unittest.TestCase):
         from plone.browserlayer import utils
         self.assertIn(IEdrnsitePolicyLayer, utils.registered_layers())
 
-    def test_viewlets(self):
-        '''Make sure the custom viewlet is there'''
-        storage = getUtility(IViewletSettingsStorage)
-        viewlets = list(storage.getOrder(u'plone.portaltop', 'Plone Default'))
-        self.assertEqual(u'edrn.dev_warning', viewlets[0])
+    # No longer relevant, apparently
+    # def test_viewlets(self):
+    #     '''Make sure the custom viewlet is there'''
+    #     storage = getUtility(IViewletSettingsStorage)
+    #     viewlets = list(storage.getOrder(u'plone.portaltop', 'Plone Default'))
+    #     self.assertEqual(u'edrn.dev_warning', viewlets[0])
 
 
 class TestUninstall(unittest.TestCase):
