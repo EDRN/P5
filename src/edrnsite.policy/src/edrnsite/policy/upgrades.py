@@ -2,6 +2,7 @@
 
 from . import PACKAGE_NAME
 from .setuphandlers import publish
+from .utils import installImage
 from plone.app.textfield.value import RichTextValue
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobImage
@@ -18,7 +19,12 @@ data-linktype="image" data-scale="" data-val="{banner}" /></p>
 <?xml version="1.0"?>
 <div class="homeGrid">
   <div class="homeData">
-    <h2>Data and Resources</h2>
+    <h2>
+        <img alt="Scientist working with computerized information standing in for data and resources."
+            src="home-data-and-resources-image/@@images/image/thumb" class="image-left"
+            title="Data and Resources" data-scale="thumb" />
+        Data and Resources
+    </h2>
     <ul>
       <li>
         <a href="biomarkers">Biomarkers</a>
@@ -33,7 +39,7 @@ data-linktype="image" data-scale="" data-val="{banner}" /></p>
         <a href="publications">Publications</a>
       </li>
       <li>
-        <a href="informatics">Informatics Tools</a>
+        <a href="informatics">Informatics</a>
       </li>
       <li>
         <a href="resources/sample-reference-sets">Specimen Reference Sets</a>
@@ -41,19 +47,27 @@ data-linktype="image" data-scale="" data-val="{banner}" /></p>
     </ul>
   </div>
   <div class="homeWork">
-    <h2>Work with EDRN</h2>
+    <h2>
+        <img alt="Scientists working together in a laboratory standing in for working with EDRN."
+            src="home-work-with-edrn-image/@@images/image/thumb" class="image-left"
+            title="Work with EDRN" data-scale="thumb" />
+        Work with EDRN
+    </h2>
     <ul>
       <li>
-        Collaborative Opportunities
-        <ul><li><a href="work-with-edrn/colops/assoc">Associate Membership</a> Program</li><li><a href="colops">Find/Participate in a Collaborative Study</a></li><li><a href="colops/vsp">Propose a Study</a></li><li><a href="colops/edrn-ppp-guidelines">Public-Private Partnerships</a></li><li><a href="colops/request-for-biomarkers-1.pdf/view">Request Biomarkers</a></li></ul>
-    </li>
+        <li><a href="work-with-edrn/colops/assoc">Associate Membership</a> Program</li><li><a href="colops">Find/Participate in a Collaborative Study</a></li><li><a href="colops/vsp">Propose a Study</a></li><li><a href="colops/edrn-ppp-guidelines">Public-Private Partnerships</a></li><li><a href="colops/request-for-biomarkers-1.pdf/view">Request Biomarkers</a></li>
       <li>
         <a href="/work-with-edrn/advocacy-groups">Advocacy Groups</a>
       </li>
     </ul>
   </div>
   <div class="homeNews">
-    <h2>News and Events</h2>
+    <h2>
+        <img alt="Scientists meeting together at a conference table."
+            src="home-news-and-events/@@images/image/thumb" class="image-left"
+            title="News and Events" data-scale="thumb" />
+        News and Events
+    </h2>
     <ul>
       <li>
         <a href="docs/edrn-enewsletter-april-2019">EDRN Newsletter</a>
@@ -70,7 +84,12 @@ data-linktype="image" data-scale="" data-val="{banner}" /></p>
     </ul>
   </div>
   <div class="homeAbout">
-    <h2>About EDRN</h2>
+    <h2>
+        <img alt="Scientists examining things closely with a microscope."
+            src="home-about-edrn-image/@@images/image/thumb" class="image-left"
+            title="About EDRN" data-scale="thumb" />
+        About EDRN
+    </h2>
     <ul>
       <li>
         <a href="about/highlights">Accomplishments</a>
@@ -151,11 +170,18 @@ def install2020SOWHomePage(setupTool, logger=None):
         description=u'A tentative banner image of abstract biomarker research.',
         image=NamedBlobImage(data=imageData, contentType='image/png', filename=u'tentative-banner.png')
     )
+    for ident, fn, ct, title, desc in (
+        ('home-data-and-resources-image', u'nci-sci.jpg', 'image/jpeg', u'Data and Resources Image', u'A scientist using a computer to access scientific data and resources'),
+        ('home-work-with-edrn-image', u'nci-vol-2423-150.jpg', 'image/jpeg', u'Work with EDRN Image', u'Several scientists working together in a laboratory setting.'),
+        ('home-news-and-events', u'nci-vol-3747-150.jpg', 'image/jpeg', u'News and Events Image', u'Scientists meeting together at a conference table to possibly work on news and events.'),
+        ('home-about-edrn-image', u'nci-vol-8000-150.jpg', 'image/jpeg', u'About EDRN Image', u'A pair of scientists examining things closely with a microscope.')
+    ):
+        installImage(portal, fn, ident, title, desc, ct)
     frontPage = createContentInContainer(
         portal,
         'Document',
         id='front-page',
-        title=u'EDRN',
+        title=u'Early Detection Research Network (EDRN)',
         description=_HOME_PAGE_DESC,
         text=RichTextValue(_HOME_PAGE_BODY.format(banner=banner.UID()), 'text/html', 'text/x-html-safe')
     )

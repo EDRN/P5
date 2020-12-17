@@ -2,7 +2,7 @@
 
 '''Drop down menus'''
 
-from .utils import getPageText, installImage, createFolderWithOptionalDefaultPageView
+from .utils import getPageText, installImage, createFolderWithOptionalDefaultPageView, publish
 from plone.api import content as pac
 from plone.app.textfield.value import RichTextValue
 from plone.dexterity.utils import createContentInContainer as ccic
@@ -61,6 +61,8 @@ def installDataAndResources(context):
     pac.move(source=pac.get('/resources/edrnLabCASUserGuide31081716118.pdf'), target=f)
     pac.move(source=pac.get('/resources/core_labcasmetadataversion2.xlsx'), target=f)
     pac.move(source=pac.get('/resources/LabCASAPIs.pdf'), target=f)
+    # https://github.com/EDRN/P5/issues/89 (Gwen's big Micro$oft Word doc)
+    i.exclude_from_nav = False
 
     # HK wants a tools folder
     f = createFolderWithOptionalDefaultPageView(i, 'tools', u'Informatics Tools', u'Utilities for cancer informatics.')
@@ -70,6 +72,11 @@ def installDataAndResources(context):
 
 def installWorkWithEDRN(context, archive):
     '''Set up the "Work with EDRN" tab'''
+
+    # https://github.com/EDRN/P5/issues/89
+    registry = getUtility(IRegistry)
+    registry['plone.nonfolderish_tabs'] = True
+
     workWithEDRN = createFolderWithOptionalDefaultPageView(
         context,
         'work-with-edrn',
@@ -117,8 +124,26 @@ def installWorkWithEDRN(context, archive):
         getPageText('advocacyGroups')
     )
     pac.move(source=pac.get('/advocates/edrn-research-highlights'), target=advocacy)
-
     pac.delete(obj=pac.get('/advocates'))
+
+    # https://github.com/EDRN/P5/issues/89
+    dumbFolder = ccic(
+        workWithEDRN,
+        'Folder',
+        id='the-funding-opportunities-folder',
+        title=u'Funding Opportunities',
+        description=u'Future funding opportunities will be announced here.'
+    )
+    publish(dumbFolder)
+    # https://github.com/EDRN/P5/issues/89
+    dumbLink = ccic(
+        workWithEDRN,
+        'Link',
+        title=u'Find a Sponsor Tool',
+        description=u'Web-based tool that helps you find a collaborator within EDRN.',
+        remoteUrl=u'http://www.compass.fhcrc.org/edrnnci/bin/search/search.asp?t=search&cer=&rd_deny=z0&f32=96p&etc'
+    )
+    publish(dumbLink)
 
 
 def installNewsAndEvents(context):
@@ -129,14 +154,6 @@ def installNewsAndEvents(context):
         u'News and Events',
         u'Announcements, noteworthy information, and occasions (both special and otherwise) for EDRN.',
         getPageText('newsAndEvents')
-    )
-
-    # Add an empty webinars folder
-    ccic(
-        newsAndEvents,
-        'Folder',
-        title=u'Webinars',
-        description=u'Web-based seminars.'
     )
 
     # Collect the newsletters
@@ -167,7 +184,8 @@ def installNewsAndEvents(context):
     createFolderWithOptionalDefaultPageView(
         newsAndEvents,
         'prevention-science-blogs',
-        u'Prevention Science blogs',
+        # https://github.com/EDRN/P5/issues/89
+        u'Cancer Prevention Science Blog',
         u'A research blog published by the Division of Cancer Prevention.',
         getPageText('preventionScienceBlog')
     )
@@ -191,6 +209,16 @@ def installNewsAndEvents(context):
     )
     pac.move(source=pac.get('/cancer-bioinformatics-workshop'), target=past)
 
+    # https://github.com/EDRN/P5/issues/89
+    # Add an empty webinars folder
+    dumbFolder = ccic(
+        newsAndEvents,
+        'Folder',
+        title=u'Webinars',
+        description=u'Web-based seminars; the content to appear here will be published at a later date.'
+    )
+    publish(dumbFolder)
+
 
 def installAboutEDRN(portal):
     '''…'''
@@ -198,7 +226,7 @@ def installAboutEDRN(portal):
         portal,
         'about',
         u'About EDRN',
-        u'All the Early Detection Research Network.',
+        u'About the Early Detection Research Network.',
         getPageText('about')
     )
     missionAndStructure = createFolderWithOptionalDefaultPageView(
@@ -225,14 +253,14 @@ def installAboutEDRN(portal):
         about,
         'clia-approved-tests',
         u'CLIA Approved Tests',
-        u'Tests approved by Clinical Laboratory Improvement Ammendments.',
+        u'Tests approved by Clinical Laboratory Improvement Amendments.',
         getPageText('cliaTests')
     )
     phases = createFolderWithOptionalDefaultPageView(
         about,
-        'five-phase-approach-for-biomarker-development-and-probe',
-        u'Five-Phase Approach for Biomarker Development and PRoBE Study Design',
-        u'The design of the phases through which biomarkers are developed and the prospective, randomized, open-blinded, end-point (PRoBE) study design.',
+        'five-phase-approach-and-probe-study-design',
+        u'Five-Phase Approach and PRoBE Study Design',
+        u'The phases through which biomarkers are developed and the prospective, randomized, open-blinded, end-point (PRoBE) study design.',
         getPageText('phases')
     )
     installImage(
@@ -316,3 +344,6 @@ def install(portal):
     # Misc cleanup
     pac.move(source=pac.get('/resources'), target=archive)
     pac.move(source=pac.get('/about-edrn'), target=archive)  # Deleting this causes a stack trace
+    # What in the heck is this carp
+    pac.delete(obj=pac.get('/FOA-guidelines'), check_linkintegrity=False)
+    pac.delete(obj=pac.get('/EDRN RFA guidelines-v4.pdf'), check_linkintegrity=False)
