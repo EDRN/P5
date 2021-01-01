@@ -23,15 +23,7 @@ import rdflib, plone.api, logging
 
 
 _logger = logging.getLogger(__name__)
-
 _committeeTypePredicateURI = rdflib.URIRef(u'http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#committeeType')
-
-_datasetGroupNameMapping = {
-    u'Breast and Gynecologic Cancers Research Group': u'Breast/GYN',
-    u'G.I. and Other Associated Cancers Research Group': u'GI and Other Associated',
-    u'Lung and Upper Aerodigestive Cancers Research Group': u'Lung and Upper Aerodigestive',
-    u'Prostate and Urologic Cancers Research Group': u'Prostate and Urologic'
-}
 
 
 class ICollaborationsFolder(IKnowledgeFolder):
@@ -62,9 +54,11 @@ class CollaborationsFolderIngestor(Ingestor):
         )
         setattr(groupIndex, attributeName, [RelationValue(idUtil.getId(i.getObject())) for i in results])
     def setDatasets(self, groupIndex):
-        correspondingDatasetGroupName = _datasetGroupNameMapping.get(groupIndex.title.strip())
-        if not correspondingDatasetGroupName: return
-        self._setRelations(groupIndex, 'datasets', IDataset, [correspondingDatasetGroupName])
+        # https://github.com/EDRN/P5/issues/90 — no need for this anymore:
+        #     correspondingDatasetGroupName = _datasetGroupNameMapping.get(groupIndex.title.strip())
+        #     if not correspondingDatasetGroupName: return
+        # We can now use our group name directly:
+        self._setRelations(groupIndex, 'datasets', IDataset, [groupIndex.title.strip()])
     def setBiomarkers(self, groupIndex):
         self._setRelations(groupIndex, 'biomarkers', IBiomarker, [groupIndex.title.strip()])
     def setProtocols(self, groupIndex):
