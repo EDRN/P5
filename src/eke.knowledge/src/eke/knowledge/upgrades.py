@@ -174,6 +174,43 @@ def addGrantNumbers(setupTool, logger=None):
     logger.info(u'Added %d grant numbers to the publications folder; now you just have to do an ingest', num)
 
 
+def redoBodySystemNames(setupTool, logger=None):
+    if logger is None:
+        logger = logging.getLogger(PACKAGE_NAME)
+    logger.info(u'🤪 Redoing «bodySystemName» index')
+
+    catalog = plone.api.portal.get_tool('portal_catalog')
+    catalog.delColumn('bodySystemName')
+    catalog.delIndex('bodySystemName')
+    catalog.addIndex('bodySystemName', 'KeywordIndex')
+    catalog.addColumn('bodySystemName')
+
+    portal = plone.api.portal.get()
+    try:
+        dataFolder = portal.unrestrictedTraverse('data')
+        for objID, obj in dataFolder.items():
+            organs = obj.bodySystemName
+            if organs:
+                organs = organs.split(', ')
+                obj.bodySystemName = organs
+                obj.reindexObject(idxs=['bodySystemName'])
+    except KeyError:
+        logger.warn('🧐 No data folder found, skipping transforming organ names on data')
+
+
+def fixRDFURLs(setupTool, logger=None):
+    if logger is None:
+        logger = logging.getLogger(PACKAGE_NAME)
+    logger.info(u'Fixing some temp ingest paths')
+    portal = plone.api.portal.get()
+    try:
+        siteFolder = portal.unrestrictedTraverse('sites')
+        siteFolder.rdfDataSources = ['https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/sites/@@rdf']
+        siteFolder.peopleDataSources = ['https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/registered-person/@@rdf']
+    except KeyError:
+        logger.warn('🧐 No sites folder found, not fixing its RDF source URLs')
+
+
 # Commented-out from auto-generated code in case we need it some day:
 # from plone.app.upgrade.utils import loadMigrationProfile
 # def reload_gs_profile(context):

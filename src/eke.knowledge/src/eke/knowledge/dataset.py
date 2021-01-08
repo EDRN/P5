@@ -17,7 +17,7 @@ from zope import schema
 
 
 class IDataset(IKnowledgeObject):
-    '''Dataset.'''
+    '''Dataset; actually a LabCAS Collection, not a dataset.'''
     dexteritytextindexer.searchable('custodian')
     custodian = schema.TextLine(
         title=_(u'Custodian'),
@@ -96,16 +96,11 @@ class IDataset(IKnowledgeObject):
         description=_(u'Which group collaborated to help make this science data.'),
         required=False,
     )
-    bodySystem = RelationChoice(
-        title=_(u'Body System'),
-        description=_(u'About what body system (such as an organ) this science data is'),
+    bodySystemName = schema.List(
+        title=_(u'Body System Names'),
+        description=_(u'The names of the body system (such as organs).'),
         required=False,
-        source=CatalogSource(object_provides=IBodySystem.__identifier__)
-    )
-    bodySystemName = schema.TextLine(
-        title=_(u'Body System Name'),
-        description=_(u'The name of the body system (such as an organ).'),
-        required=False,
+        value_type=schema.TextLine(title=_(u'Body System Name'), description=_(u'Name of a single body system (organ).'))
     )
     protocolName = schema.TextLine(
         title=_(u'Protocol Name'),
@@ -132,21 +127,23 @@ class IDataset(IKnowledgeObject):
 
 IDataset.setTaggedValue('predicates', {
     TITLE_URI: ('title', False),
-    u'urn:edrn:DataCustodian': ('custodian', False),
-    u'http://edrn.nci.nih.gov/rdf/schema.rdf#protocol': ('protocol', True),
-    u'http://edrn.nci.nih.gov/rdf/schema.rdf#site': ('sites', True),
-    u'urn:edrn:Author': ('authors', False),
-    u'urn:edrn:GrantSupport': ('grantSupport', False),
-    u'urn:edrn:ResearchSupport': ('researchSupport', False),
-    u'urn:edrn:DataDisclaimer': ('dataDisclaimer', False),
-    u'urn:edrn:StudyBackground': ('studyBackground', False),
-    u'urn:edrn:StudyMethods': ('studyMethods', False),
-    u'urn:edrn:StudyResults': ('studyResults', False),
-    u'urn:edrn:StudyConclusion': ('studyConclusion', False),
-    u'urn:edrn:Date': ('dataUpdateDate', False),
-    u'urn:edrn:CollaborativeGroup': ('collaborativeGroup', False),
-    u'urn:edrn:LeadPI': ('investigatorName', False),
-    u'http://edrn.nci.nih.gov/rdf/schema.rdf#organ': ('bodySystem', True)
+    u'urn:edrn:predicates:protocol': ('protocol', True),
+    u'urn:edrn:predicates:pi': ('investigatorName', False),
+    u'urn:edrn:predicates:collaborativeGroup': ('collaborativeGroup', False),
+    u'urn:edrn:predicates:organ': ('bodySystemName', False)
+
+    # These fields no longer appear in the LabCAS RDF:
+    # u'urn:edrn:DataCustodian': ('custodian', False),
+    # u'http://edrn.nci.nih.gov/rdf/schema.rdf#site': ('sites', True),
+    # u'urn:edrn:Author': ('authors', False),
+    # u'urn:edrn:GrantSupport': ('grantSupport', False),
+    # u'urn:edrn:ResearchSupport': ('researchSupport', False),
+    # u'urn:edrn:DataDisclaimer': ('dataDisclaimer', False),
+    # u'urn:edrn:StudyBackground': ('studyBackground', False),
+    # u'urn:edrn:StudyMethods': ('studyMethods', False),
+    # u'urn:edrn:StudyResults': ('studyResults', False),
+    # u'urn:edrn:StudyConclusion': ('studyConclusion', False),
+    # u'urn:edrn:Date': ('dataUpdateDate', False),
 })
 IDataset.setTaggedValue('fti', 'eke.knowledge.dataset')
-IDataset.setTaggedValue('typeURI', u'http://edrn.nci.nih.gov/rdf/types.rdf#Dataset')
+IDataset.setTaggedValue('typeURI', u'urn:edrn:types:labcas:collection')

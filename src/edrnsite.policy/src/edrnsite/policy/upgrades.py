@@ -239,6 +239,18 @@ def installLoginAdmonishments(setupTool, logger=None):
     publish(admonishments)
 
 
+def setLabcasRDF(setupTool, logger=None):
+    '''Use new RDF for science data ingest, LabCAS 2.0-style'''
+    if logger is None: logger = logging.getLogger(__name__)
+    portal = plone.api.portal.get()
+    try:
+        scienceData = portal.unrestrictedTraverse('data-and-resources/data')
+        logger.info(u'Setting RDF data sources for %r', scienceData)
+        scienceData.rdfDataSources = [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/labcas/@@rdf']
+    except KeyError:
+        logger.info(u'No science data folder found in data-and-resources/data; not updating its RDF URLs')
+
+
 # Boilerplate from paster template; leaving for posterity:
 # from plone.app.upgrade.utils import loadMigrationProfile
 # def reload_gs_profile(context):

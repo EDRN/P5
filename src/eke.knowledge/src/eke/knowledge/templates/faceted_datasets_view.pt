@@ -92,8 +92,10 @@
                       </span>
                     </tal:if>
                   </td>
-                  <td tal:content='item/bodySystemName'>
-                    Anus
+                  <td tal:define='organs item/bodySystemName'>
+                    <span tal:omit-tag='' tal:condition='organs' tal:content='python:", ".join(organs)'>
+                      Anus, Rectum
+                    </span>
                   </td>
                   <td tal:define='pRV python:item.getObject().protocol'>
                     <a href='#' tal:condition='pRV' tal:attributes='href python:pRV.to_object.absolute_url()'

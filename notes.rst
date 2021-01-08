@@ -16,26 +16,10 @@ one to use, apparently.
 For commands below (csh style) and for ``docker-compose.yaml``, first set some
 environment variables::
 
-    setenv EDRN_PORTAL_VERSION 5.0.3
+    setenv EDRN_PORTAL_VERSION 5.1.0
     setenv EDRN_DATA_DIR ${HOME}/Downloads/docker-data/edrn
     setenv EDRN_PUBLISHED_PORT 4135
     mkdir -p ${EDRN_DATA_DIR}/log
-
-..  Note:: On some JPL systems, the Docker daemon and ``docker`` command-line
-    client versions are newer than the ``docker-compose`` version.  As a
-    result, some features used in the ``docker-compose.yaml`` file—like
-    interpolating values from environment variables—may not work.  Be prepared
-    to hand-edit files.
-
-    This may be the case on *other* systems too.
-
-    At least Docker Desktop (2.3.0.3) for macOS gets it right:
-
-    • Engine = 19.03.8
-    • Compose = 1.25.5
-    • Kubernetes = v1.16.5
-    • Notary = 0.6.1
-    • Credential Helper = 0.6.3
 
 
 Using the Dockerfile

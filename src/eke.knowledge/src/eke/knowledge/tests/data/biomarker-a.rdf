@@ -17,7 +17,7 @@
         <bmdb:Alias>Bigo</bmdb:Alias>
         <bmdb:memberOfPanel rdf:resource='http://edrn/bmdb/p1'/>
         <bmdb:AccessGrantedTo rdf:resource='ldap://edrn/groups/g1' />
-        <bmdb:AssociatedDataset rdf:resource='http://edrn.jpl.nasa.gov/ecas/data/dataset/urn:edrn:GSTP1_Methylation'/>
+        <bmdb:AssociatedDataset rdf:resource='https://edrn-labcas.jpl.nasa.gov/labcas-ui/c/index.html?collection_id=GSTP1_Methylation'/>
         <bmdb:indicatorForOrgan rdf:resource='http://edrn/bmdb/a1/o1' />
         <bmdb:hasBiomarkerStudyDatas>
             <rdf:Bag>

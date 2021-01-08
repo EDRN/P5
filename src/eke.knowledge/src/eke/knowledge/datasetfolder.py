@@ -44,16 +44,6 @@ class IDatasetFolder(IKnowledgeFolder):
 class DatasetIngestor(Ingestor):
     def getInterfaceForContainedObjects(self, predicates):
         return IDataset
-    def readRDF(self, url):
-        u'''Read the RDF statements and return s/p/o dict'''
-        unfiltered, filtered = super(DatasetIngestor, self).readRDF(url), {}
-        for subjectURI, predicates in unfiltered.iteritems():
-            titles = predicates.get(_weirdTitleURI, [])
-            if not titles: continue
-            predicates[rdflib.URIRef(TITLE_URI)] = titles
-            predicates[rdflib.RDF.type] = [_datasetTypeURI]
-            filtered[subjectURI] = predicates
-        return filtered
     def getSummaryData(self, source):
         with contextlib.closing(urllib2.urlopen(source)) as bytestring:
             return bytestring.read()
@@ -68,16 +58,6 @@ class DatasetIngestor(Ingestor):
             obj = i.getObject()
             obj.datasets = []
 
-        # Now we can ingest dataset safely
-        for uri, predicates in consequences.statements.iteritems():
-            if _bodySystemPredicateURI in predicates:
-                results = catalog(identifier=unicode(uri), object_provides=IDataset.__identifier__)
-                if len(results) == 1:
-                    dataset = results[0].getObject()
-                    # eCAS doesn't use valid URIs to body systems so we manually extract them
-                    organ = urlparse.urlparse(unicode(predicates[_bodySystemPredicateURI][0]))[2].split('/')[-1]
-                    dataset.bodySystemName = organ
-
         # Set protocol names & links
         objs = list(consequences.created)
         objs.extend(consequences.updated)
@@ -91,13 +71,14 @@ class DatasetIngestor(Ingestor):
                 datasetObj.investigatorName = datasetObj.investigator.to_object.title
             if rv.to_object.datasets is None: rv.to_object.datasets = []
             rv.to_object.datasets.append(RelationValue(idUtil.getId(datasetObj)))
-        portal = plone.api.portal.get()
 
         # Add summary data
         if context.dsSumDataSource:
             context.dataSummary = self.getSummaryData(context.dsSumDataSource)
         else:
             context.dataSummary = u'{}'
+
+        portal = plone.api.portal.get()
         catalog.reindexIndex('identifier', portal.REQUEST)
         return consequences
         # Set bodySystemName, protocolName, piNames manually; bodySystemName done

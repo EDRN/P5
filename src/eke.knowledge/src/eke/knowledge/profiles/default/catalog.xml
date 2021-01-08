@@ -56,7 +56,7 @@
     <column value='specialty'/>
 
     <!-- Organ selector for datasets -->
-    <index name='bodySystemName' meta_type='FieldIndex'>
+    <index name='bodySystemName' meta_type='KeywordIndex'>
         <indexed_attr value='bodySystemName' />
     </index>
     <column value='bodySystemName'/>

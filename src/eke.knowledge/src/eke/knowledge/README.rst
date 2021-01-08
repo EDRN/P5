@@ -403,23 +403,34 @@ Ingesting::
     >>> browser.open(portalURL + '/@@ingestRDF')
     >>> matches = re.search(r'Objects Created \(([0-9]+)\)', browser.contents)
     >>> count = int(matches.group(1))
-    >>> 19 <= count <= 21
+    >>> 19 <= count <= 52
     True
     >>> len(dataFolder.keys())
-    2
+    35
     >>> keys = dataFolder.keys()
     >>> keys.sort()
-    >>> keys
-    ['gstp1-methylation', 'university-of-pittsburg-ovarian-data']
-    >>> dataset = dataFolder['gstp1-methylation']
-    >>> dataset.bodySystemName
-    u'Prostate'
+    >>> keys[0], keys[1]
+    ('analysis-of-pancreatic-cancer-biomarkers-in-plco-set', 'autoantibody-biomarkers')
+    >>> dataset = dataFolder['reproducibility-of-mirna-measurements']
+    >>> organs = list(dataset.bodySystemName)
+    >>> organs.sort()
+    >>> organs
+    [u'Brain', u'Liver', u'Placenta']
 
 And the statistical graphics are back::
 
     >>> browser.open(portalURL + '/datasets/@@dataset_summary_report')
     >>> browser.contents
     '...<style>...<script>...datasetColor...'
+
+We changed the ``bodySystemName`` from ``TextLine`` to ``List`` which may have
+affected the vocabulary::
+
+    >>> from zope.schema.interfaces import IVocabularyFactory
+    >>> vocab = getUtility(IVocabularyFactory, 'eke.knowledge.vocabularies.BodySystemsInDatasets', portal)
+    >>> values = list([i.value for i in vocab(portal)])
+    >>> sorted(values)
+    [u'Bladder', u'Brain', u'Breast', u'Cervix', u'Colon', u'Esophagus', u'Liver', u'Lung', u'NA', u'Ovary', u'Pancreas', u'Placenta', u'Prostate', u'Unknown']
 
 
 Groups
@@ -600,8 +611,8 @@ Just like group spaces, the index page is automatically created::
     [u'Hepatocellular carcinoma Early Detection Strategy study', u'Lung Reference Set A Application:  Edward Hirschowitz - University of Kentucky (2009)']
     >>> groupDatasets = [i.to_object.title for i in groupIndex.datasets]
     >>> groupDatasets.sort()
-    >>> groupDatasets
-    [u'GSTP1 Methylation', u'University of Pittsburg Ovarian Data']
+    >>> groupDatasets[0:2]
+    [u'Analysis of pancreatic cancer biomarkers in PLCO set', u'Autoantibody Biomarkers']
 
 It's also set as the display for the collaborative group::
 
@@ -694,7 +705,7 @@ Ingesting::
     >>> transaction.commit()
     >>> browser.open(portalURL + '/@@ingestRDF')
     >>> browser.contents
-    '...RDF Ingest Report...Objects Created (19)...Objects Updated (22)...'
+    '...RDF Ingest Report...Objects Created (19)...Objects Updated (52)...'
     >>> len(resourcesFolder.keys())
     2
     >>> keys = resourcesFolder.keys()
@@ -1077,6 +1088,6 @@ few values by now::
     >>> groupValues = list(catalog.uniqueValuesFor('collaborativeGroup'))
     >>> groupValues.sort()
     >>> groupValues
-    [u'Breast/GYN', u'G.I. and Other Associated Cancers Research Group', u'Lung and Upper Aerodigestive Cancers Research Group', u'Prostate and Urologic']
+    [u'Breast and Gynecologic Cancers Research Group', u'G.I. and Other Associated Cancers Research Group', u'Lung and Upper Aerodigestive Cancers Research Group', u'Prostate and Urologic Cancers Research Group']
 
 
