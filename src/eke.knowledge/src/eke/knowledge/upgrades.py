@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 
 
 from . import PACKAGE_NAME
@@ -214,6 +214,11 @@ def fixRDFURLs(setupTool, logger=None):
         dataFolder.dsSumDataSource = 'https://edrn.jpl.nasa.gov/cancerdataexpo/static-sources/dataset-summary.json/@@download/file/dataset-summary.json'
     except KeyError:
         logger.warn('🧐 No data folder found, not fixing its summary source URL')
+    try:
+        biomarkerFolder = portal.unrestrictedTraverse('biomarkers')
+        biomarkerFolder.bmSumDataSource = 'https://edrn.jpl.nasa.gov/cancerdataexpo/summarizer-data/biomarker/@@summary'
+    except KeyError:
+        logger.warn('🧐 No biomarkers folder found, not fixing its summary source URL')
 
 
 # Commented-out from auto-generated code in case we need it some day:
