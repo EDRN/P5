@@ -59,7 +59,6 @@ def archiveStuff(portal):
     # Simple moves
     archive('/resources/specimens')
     archive('/resources/informatics-faq')
-    archive('/resources/edrnLabCASUserGuide31081714326.pdf')
     archive('/resources/hybridomas-for-pancreatic-cancer-biomarkers')
     archive('/resources/labcas-documentation')
     archive('/resources/grant-numbers')  # Can't simply delete since /resources default view linsk to it
@@ -90,7 +89,6 @@ def archiveStuff(portal):
     archive('/advocates/newsletter-collection')  # Can't delete, causes stack trace
 
     # Simple deletions
-    delete('/resources/edrnlabcasuserguide02061713408.pdf')
     delete('/about-edrn/edrn-mo-v3-1-0.pdf')
     delete('/advocates/tumor')
     delete('/advocates/proteomics')

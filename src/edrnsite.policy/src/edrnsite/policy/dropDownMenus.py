@@ -37,30 +37,30 @@ def installDataAndResources(context):
         installImage(dataAndResources, fn, ident, title, desc, ct)
 
     # 👉 Okay, big moves:
-    pac.move(source=pac.get('/biomarkers'), target=dataAndResources)
-    pac.move(source=pac.get('/protocols'), target=dataAndResources)
-    pac.move(source=pac.get('/data'), target=dataAndResources)
-    pac.move(source=pac.get('/publications'), target=dataAndResources)
-    pac.move(source=pac.get('/informatics'), target=dataAndResources)
-    pac.move(source=pac.get('/resources/sample-reference-sets'), target=dataAndResources)
+
+    # pac.move(source=pac.get('/biomarkers'), target=dataAndResources)
+    # pac.move(source=pac.get('/protocols'), target=dataAndResources)
+    # pac.move(source=pac.get('/data'), target=dataAndResources)
+    # pac.move(source=pac.get('/publications'), target=dataAndResources)
+    # pac.move(source=pac.get('/informatics'), target=dataAndResources)
+    # pac.move(source=pac.get('/resources/sample-reference-sets'), target=dataAndResources)
 
     # During development, I'm just doing this instead of the above:
-    # pac.delete(obj=pac.get('/biomarkers'), check_linkintegrity=False)
-    # # pac.delete(obj=pac.get('/protocols'), check_linkintegrity=False)  # Can't delete this; causes error
-    # # So for now, delete its contents and move its container
-    # for item in pac.get('/protocols').values():
-    #     pac.delete(obj=item, check_linkintegrity=False)
-    # pac.move(source=pac.get('/protocols'), target=dataAndResources)
-    # pac.delete(obj=pac.get('/data'), check_linkintegrity=False)
-    # pac.delete(obj=pac.get('/publications'), check_linkintegrity=False)
-    # pac.delete(obj=pac.get('/resources/sample-reference-sets'), check_linkintegrity=False)  # Can't delete this either; error
+    pac.delete(obj=pac.get('/biomarkers'), check_linkintegrity=False)
+    # pac.delete(obj=pac.get('/protocols'), check_linkintegrity=False)  # Can't delete this; causes error
+    # So for now, delete its contents and move its container
+    for item in pac.get('/protocols').values():
+        pac.delete(obj=item, check_linkintegrity=False)
+    pac.move(source=pac.get('/protocols'), target=dataAndResources)
+    pac.delete(obj=pac.get('/data'), check_linkintegrity=False)
+    pac.delete(obj=pac.get('/publications'), check_linkintegrity=False)
+    # # pac.delete(obj=pac.get('/resources/sample-reference-sets'), check_linkintegrity=False)  # Can't delete this either; error
 
     # HK wants LabCAS in a sub menu
     i = pac.get('/data-and-resources/informatics')
     f = createFolderWithOptionalDefaultPageView(i, 'labcas', u'LabCAS', u'Laboratory Catalog and Archive System')
     pac.move(source=pac.get('/resources/edrnLabCASUserGuide31081716118.pdf'), target=f)
     pac.move(source=pac.get('/resources/core_labcasmetadataversion2.xlsx'), target=f)
-    pac.move(source=pac.get('/resources/LabCASAPIs.pdf'), target=f)
     # https://github.com/EDRN/P5/issues/89 (Gwen's big Micro$oft Word doc)
     i.exclude_from_nav = False
 
