@@ -27,22 +27,22 @@ data-linktype="image" data-scale="" data-val="{banner}" /></p>
     </h2>
     <ul>
       <li>
-        <a href="biomarkers">Biomarkers</a>
+        <a href="data-and-resources/biomarkers">Biomarkers</a>
       </li>
       <li>
-        <a href="protocols">Protocols</a>
+        <a href="data-and-resources/protocols">Protocols</a>
       </li>
       <li>
-        <a href="data">Data</a>
+        <a href="data-and-resources/data">Data</a>
       </li>
       <li>
-        <a href="publications">Publications</a>
+        <a href="data-and-resources/publications">Publications</a>
       </li>
       <li>
-        <a href="informatics">Informatics</a>
+        <a href="data-and-resources/informatics">Informatics</a>
       </li>
       <li>
-        <a href="resources/sample-reference-sets">Specimen Reference Sets</a>
+        <a href="data-and-resources/sample-reference-sets">Specimen Reference Sets</a>
       </li>
     </ul>
   </div>
@@ -55,9 +55,9 @@ data-linktype="image" data-scale="" data-val="{banner}" /></p>
     </h2>
     <ul>
       <li>
-        <li><a href="work-with-edrn/colops/assoc">Associate Membership</a> Program</li><li><a href="colops">Find/Participate in a Collaborative Study</a></li><li><a href="colops/vsp">Propose a Study</a></li><li><a href="colops/edrn-ppp-guidelines">Public-Private Partnerships</a></li><li><a href="colops/request-for-biomarkers-1.pdf/view">Request Biomarkers</a></li>
+        <li><a href="work-with-edrn/associate-membership-program">Associate Membership</a> Program</li><li><a href="http://www.compass.fhcrc.org/edrnnci/bin/search/search.asp?t=search&cer=&rd_deny=z0&f32=96p&etc">Find a Sponsor</a></li><li><a href="colops/vsp">Propose a Study</a></li><li><a href="colops/edrn-ppp-guidelines">Public-Private Partnerships</a></li><li><a href="colops/request-for-biomarkers-1.pdf/view">Request Biomarkers</a></li>
       <li>
-        <a href="/work-with-edrn/advocacy-groups">Advocacy Groups</a>
+        <a href="work-with-edrn/advocacy-groups">Advocacy Groups</a>
       </li>
     </ul>
   </div>

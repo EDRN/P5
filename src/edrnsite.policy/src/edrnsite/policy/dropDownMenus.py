@@ -84,12 +84,19 @@ def installWorkWithEDRN(context, archive):
         u'Cooperative and collaborative opportunities, funding opportunities, studies, and more.',
         getPageText('workWithEDRN')
     )
-    createFolderWithOptionalDefaultPageView(
+    associateMembershipProgram = createFolderWithOptionalDefaultPageView(
         workWithEDRN,
         'associate-membership-program',
         u'Associate Membership Program',
         u'Please note: the EDRN is suspending the acceptance of applications for Associate Membership categories A and B until further notice. Associate Membership applications category C are still accepted.',
         getPageText('associateMembershipProgram')
+    )
+    createFolderWithOptionalDefaultPageView(
+        associateMembershipProgram,
+        'application-procedure-receipt-dates-and-review',
+        u'Application Procedure, Receipt Dates, and Review',
+        u'Procedures for application, dates for receipt of applications and review criteria.',
+        getPageText('aprdr')
     )
     createFolderWithOptionalDefaultPageView(
         workWithEDRN,
