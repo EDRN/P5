@@ -95,13 +95,13 @@ data-linktype="image" data-scale="" data-val="{banner}" /></p>
         <a href="about/highlights">Accomplishments</a>
       </li>
       <li>
-        <a href="about/sites">Site List</a>
+        <a href="about/mission-and-structure/sites">Site List</a>
       </li>
       <li>
         <a href="about/members-list">Member List</a>
       </li>
       <li>
-        <a href="about/groups">Groups &amp; Committees</a>
+        <a href="about/mission-and-structure/groups">Groups &amp; Committees</a>
       </li>
     </ul>
   </div>
