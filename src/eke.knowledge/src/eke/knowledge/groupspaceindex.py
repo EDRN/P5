@@ -82,7 +82,8 @@ class View(BrowserView):
         return [dict(title=i.Title, description=i.Description, start=i.start, url=i.getURL()) for i in results]
     @memoize
     def membersColumns(self):
-        members = aq_inner(self.context).members
+        # https://github.com/EDRN/P5/issues/98
+        members = [i for i in aq_inner(self.context).members if not i.isBroken()]
         members.sort(lambda a, b: cmp(a.to_object.title, b.to_object.title))
         half = len(members) / 2 + 1
         left, right = members[:half], members[half:]
