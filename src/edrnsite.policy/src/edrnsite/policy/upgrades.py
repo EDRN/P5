@@ -55,7 +55,10 @@ data-linktype="image" data-scale="" data-val="{banner}" /></p>
     </h2>
     <ul>
       <li>
-        <li><a href="work-with-edrn/associate-membership-program">Associate Membership</a> Program</li><li><a href="http://www.compass.fhcrc.org/edrnnci/bin/search/search.asp?t=search&cer=&rd_deny=z0&f32=96p&etc">Find a Sponsor</a></li><li><a href="colops/vsp">Propose a Study</a></li><li><a href="colops/edrn-ppp-guidelines">Public-Private Partnerships</a></li><li><a href="colops/request-for-biomarkers-1.pdf/view">Request Biomarkers</a></li>
+        <li><a href="work-with-edrn/associate-membership-program">Associate Membership</a> Program</li>
+        <li><a href="http://www.compass.fhcrc.org/edrnnci/bin/search/search.asp?t=search&cer=&rd_deny=z0&f32=96p&etc">Find a Sponsor</a></li>
+        <li><a href="work-with-edrn/validation-study-proposals">Propose a Study</a></li>
+        <li><a href="work-with-edrn/public-private-partnerships">Public-Private Partnerships</a></li>
       <li>
         <a href="work-with-edrn/advocacy-groups">Advocacy Groups</a>
       </li>
