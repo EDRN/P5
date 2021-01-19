@@ -82,7 +82,7 @@ data-linktype="image" data-scale="" data-val="{banner}" /></p>
         <a href="https://www.compass.fhcrc.org/meeting/reg_edrn/edrnsc.aspx">36th Meeting Registration</a>
       </li>
       <li>
-        <a href="about/groups/steering-committee/35">35th Meeting Reports</a>
+        <a href="about/mission-and-structure/groups/steering-committee/35">35th Meeting Reports</a>
       </li>
     </ul>
   </div>
@@ -95,7 +95,10 @@ data-linktype="image" data-scale="" data-val="{banner}" /></p>
     </h2>
     <ul>
       <li>
-        <a href="about/highlights">Accomplishments</a>
+        <a href="about/fda-approved-tests-and-devices">FDA-Approved Tests</a>
+      </li>
+      <li>
+        <a href="about/clia-approved-tests">CLIA-Approved Markers</a>
       </li>
       <li>
         <a href="about/mission-and-structure/sites">Site List</a>

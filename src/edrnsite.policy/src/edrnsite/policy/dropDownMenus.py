@@ -36,13 +36,24 @@ def installDataAndResources(context):
     ):
         installImage(dataAndResources, fn, ident, title, desc, ct)
 
-    # 👉 Okay, big moves:
+    # Rewrite this oage:
+    # pac.delete(obj=pac.get('/informatics'), check_linkintegrity=False)  # Can't delete, causes error
+    createFolderWithOptionalDefaultPageView(
+        dataAndResources,
+        'informatics',
+        u'Informatics',
+        u"The EDRN provides a comprehensive informatics activity which includes a number of tools and an integrated knowledge environment for capturing, managing, integrating, and sharing results from across EDRN's cancer biomarker research network.",
+        getPageText('informatics2')
+    )
+    faq = pac.get('/resources/informatics-faq')
+    faq.exclude_from_nav = True
+    pac.move(source=faq, target=dataAndResources)
 
+    # 👉 Okay, big moves:
     pac.move(source=pac.get('/biomarkers'), target=dataAndResources)
     pac.move(source=pac.get('/protocols'), target=dataAndResources)
     pac.move(source=pac.get('/data'), target=dataAndResources)
     pac.move(source=pac.get('/publications'), target=dataAndResources)
-    pac.move(source=pac.get('/informatics'), target=dataAndResources)
     pac.move(source=pac.get('/resources/sample-reference-sets'), target=dataAndResources)
 
     # During development, I'm just doing this instead of the above:
@@ -68,6 +79,9 @@ def installDataAndResources(context):
     f = createFolderWithOptionalDefaultPageView(i, 'tools', u'Informatics Tools', u'Utilities for cancer informatics.')
     pac.move(source=pac.get('/resources/secretome'), target=f)
     pac.move(source=pac.get('/resources/microrna'), target=f)
+
+    # Link check #91
+    pac.move(source=pac.get('/docs/cde'), target=dataAndResources)
 
 
 def installWorkWithEDRN(context, archive):
@@ -130,7 +144,9 @@ def installWorkWithEDRN(context, archive):
         u'Information for cancer patients and their advocates.',
         getPageText('advocacyGroups')
     )
-    pac.move(source=pac.get('/advocates/edrn-research-highlights'), target=advocacy)
+    # What happened to these? /advocates is now empty aside from index_html
+    # pac.move(source=pac.get('/advocates/edrn-research-highlights'), target=advocacy)
+    # pac.move(source=pac.get('/advocates/frequently-asked-questions'), target=advocacy)
     pac.delete(obj=pac.get('/advocates'))
 
     # https://github.com/EDRN/P5/issues/89
@@ -303,7 +319,6 @@ def installAboutEDRN(portal):
     # chooser = INameChooser(mapping)
     # mapping[chooser.chooseName(None, portlet)] = portlet
 
-    pac.move(source=pac.get('/resources/highlights'), target=about)
     pac.move(source=pac.get('/members-list'), target=about)
 
     # Somthing misfiled from the bookshelf
@@ -327,6 +342,8 @@ def install(portal):
     # First pass: archive old stuff
     from .content_reorg import archiveStuff, archiveBookshelf
     archive = archiveStuff(portal)
+    pac.move(source=pac.get('/resources/highlights'), target=archive)
+    pac.move(source=pac.get('/informatics'), target=archive)
 
     installDataAndResources(portal)
     installWorkWithEDRN(portal, archive)

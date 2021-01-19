@@ -266,10 +266,14 @@ class SiteIngestor(Ingestor):
                 continue
             try:
                 site.piName = people[unicode(predicates[_piURI][0])].title
+            except (KeyError, IndexError):
+                # We tried
+                site.piName = None
+            try:
                 site.piObjectID = people[unicode(predicates[_piURI][0])].id
             except (KeyError, IndexError):
                 # We tried
-                pass
+                site.piObjectID = None
             # While we're here, set the siteID
             site.dmccSiteID = urlparse.urlparse(siteURI)[2].split(u'/')[-1]
             # While we're here, set the de-normalized people fields
@@ -445,16 +449,19 @@ class View(KnowledgeFolderView):
                 continue
             if memberType not in sites:
                 sites[memberType] = []
-            sites[memberType].append(dict(
-                title=i.Title,
-                description=i.Description,
-                investigator=i.piName,
-                piObjectID=i.piObjectID,
-                organs=i.organs,
-                proposal=i.proposal,
-                url=i.getURL(),
-                specialty=i.specialty
-            ))
+
+            # Retired PIs: don't include them if the piName or piObjectID are missing
+            if i.piName and i.piObjectID:
+                sites[memberType].append(dict(
+                    title=i.Title,
+                    description=i.Description,
+                    investigator=i.piName,
+                    piObjectID=i.piObjectID,
+                    organs=i.organs,
+                    proposal=i.proposal,
+                    url=i.getURL(),
+                    specialty=i.specialty
+                ))
         return sites
     @memoize
     def subfolders(self):

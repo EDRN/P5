@@ -144,6 +144,11 @@ dd {
     border-bottom: none !important;
 }
 
+#content-core dd {
+    margin-bottom: 1rem;
+    padding-left: 3.5rem;
+}
+
 ul#edrn-quicklinks {
     margin-top: 0px;
 }

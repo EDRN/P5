@@ -46,10 +46,12 @@
 
                     <div tal:define='chair context/chair|nothing'>
                         <label for='field-chair' i18n:translate='label_chair'>Chair:</label>
-                        <span id='field-chair' tal:condition='chair' tal:content='chair/to_object/title'>
+                        <span id='field-chair' tal:condition='python:chair is not None and not chair.isBroken()'
+                            tal:content='chair/to_object/title'>
                             Chairface Chippendale
                         </span>
-                        <span id='field-chair' tal:condition='not:chair' i18n:translate='noChair'>
+                        <span id='field-chair' tal:condition='python:chair is None or chair.isBroken()'
+                            i18n:translate='noChair'>
                             No chair found
                         </span>
                     </div>
