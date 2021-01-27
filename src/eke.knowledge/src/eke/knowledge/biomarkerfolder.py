@@ -98,6 +98,14 @@ _organNameToCollaborativeGroupName = {
     u'Rectum': u'G.I. and Other Associated Cancers Research Group'
 }
 
+_defaultPrivateBiomarkerAdmonition = u'''
+Organ-specific information for this biomarker is currently being annotated or is "under review".
+Logging in may give you privileges to view additional information.
+Contact the
+<a href='mailto:ic-portal@jpl.nasa.gov'>Informatics Center</a>
+if you believe you should have access to this biomarker.
+'''
+
 
 def flatten(l):
     u'''Flatten a list.'''
@@ -140,6 +148,12 @@ class IBiomarkerFolder(IKnowledgeFolder):
         title=_(u'Disclaimer'),
         description=_(u'Legal disclaimer to display on Biomarker Folder pages.'),
         required=False,
+    )
+    privateBiomarkerAdmonition = schema.Text(
+        title=_(u'Private Biomarker Admonition'),
+        description=_(u'Message to display for biomarkers that are not yet public.'),
+        required=True,
+        default=_defaultPrivateBiomarkerAdmonition
     )
 
 
