@@ -50,7 +50,7 @@
         <table class='listing datasetsTable'>
           <thead>
             <tr>
-              <th i18n:translate='ekeKnowledgeTableHeadingDataset'>Dataset</th>
+              <th i18n:translate='ekeKnowledgeTableHeadingDataset'>Collection</th>
               <th i18n:translate='ekeKnowledgeTableHeadingPIs'>PI</th>
               <th i18n:translate='ekeKnowledgeTableHeadingOrgan'>Organ</th>
               <th i18n:translate='ekeKnowledgeTableHeadingProtocol'>Associated Protocol</th>
