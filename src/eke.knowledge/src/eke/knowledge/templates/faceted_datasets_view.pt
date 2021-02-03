@@ -32,14 +32,38 @@
                         navigation_root_url context/@@plone_portal_state/navigation_root_url;
                         pas_member context/@@pas_member;">
     <tal:listing condition="batch">
-        <div class='small-proviso dataset-summary-report'>
-          <center><h4># Datasets by Organ Statistics:</h4></center>
-          <center><h4 id='bar-chart-important-instructions-that-must-be-read' style='color: rgb(200, 140, 0); font-weight: bold; font-size: 95%;'>Depending on screen size, you may have to scroll horizontally within the graph below to see all organs</h4></center>
-          <span id='analyitcs-display'>
+
+        <div style='display: none;' id='discplineByCollection'
+          data-abscissa='[0]' data-ordinate='["unknown"]'
+          tal:attributes='
+            data-abscissa context/view/disciplineByCollectionAbscissa;
+            data-ordinate context/view/disciplineByCollectionOrdinate;
+          '></div>
+        <div id='put-graphic-here-maybe'></div>
+
+        <div class='small-proviso dataset-summary-report' style='text-align: center;'>
+          <div class='datasetSummaryGrid'>
+            <div class='datasetSummaryCard'>
+              <p class='cardCategory'># Collections</p>
+              <p class='cardStatistic' tal:content='context/numberCollections|string:0'>123</p>
+            </div>
+            <div class='datasetSummaryCard'>
+              <p class='cardCategory'># Datasets</p>
+              <p class='cardStatistic' tal:content='context/numberDatasets|string:0'>456</p>
+            </div>
+            <div class='datasetSummaryCard'>
+              <p class='cardCategory'># Files</p>
+              <p class='cardStatistic' tal:content='context/numberFiles|string:0'>789</p>
+            </div>
+          </div>
+          <div id='analyitcs-display'>
+            <img src='${context/absolute_url}/stats.png/@@images/image.png'/>
+<!-- 
             <iframe width='100%' height='190px' frameborder='0' src='@@dataset_summary_report'>
               Statistics
             </iframe>
-          </span>
+ -->
+          </div>
         </div>
         
     <!-- KLUDGE: "listingBar" this text MUST appear in the faceted results.  eea.facetednavigation
@@ -115,6 +139,24 @@
 
         <div metal:use-macro="context/batch_macros/macros/navigation" />
         <script type='text/javascript'>
+          //var sentinel = $("#sentinel").attr("data-value");
+          //var data = [{
+          //  values:       $("#disciplineByCollection").attr("data-abscissa"),
+          //  text:         $("#disciplineByCollection").attr("data-ordinate"),
+          //  textposition: "inside",
+          //  type:         "pie"
+          //}];
+          //var layout = {
+          //  margin: {t: 0, b: 0},
+          //  height: 200,
+          //  showlegend: false
+          //};
+          //var display = {
+          //  displayModeBar: false,
+          //  responsize: true
+          //}
+          //var disciplineByCollection = $("#discplineByCollection").attr("data-value");
+          //Plotly.newPlot("put-graphic-here", data, layout, display);
           $("#bar-chart-important-instructions-that-must-be-read").effect("highlight", {}, 999);
         </script>
     </tal:listing>

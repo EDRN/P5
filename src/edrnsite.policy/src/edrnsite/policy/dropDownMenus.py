@@ -52,7 +52,7 @@ def installDataAndResources(context):
     # 👉 Okay, big moves:
     pac.move(source=pac.get('/biomarkers'), target=dataAndResources)
     pac.move(source=pac.get('/protocols'), target=dataAndResources)
-    pac.move(source=pac.get('/data'), target=dataAndResources)
+    dataFolder = pac.move(source=pac.get('/data'), target=dataAndResources)
     pac.move(source=pac.get('/publications'), target=dataAndResources)
     pac.move(source=pac.get('/resources/sample-reference-sets'), target=dataAndResources)
 
@@ -82,6 +82,12 @@ def installDataAndResources(context):
 
     # Link check #91
     pac.move(source=pac.get('/docs/cde'), target=dataAndResources)
+
+    # Stat graphics #102
+    installImage(
+        dataFolder, u'stats.png', 'stats.png', u'LabCAS Statistics',
+        u'Three pie charts showing the breakdwon of products in the Laboratory Catalog Archive System.', 'image/png'
+    )
 
 
 def installWorkWithEDRN(context, archive):

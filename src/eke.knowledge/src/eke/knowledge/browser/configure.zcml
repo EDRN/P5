@@ -13,10 +13,20 @@
     />
 
     <!-- Publish static files -->
-    <plone:static
-        name="eke.knowledge"
-        type="plone"
-        directory="static"
+    <browser:resourceDirectory
+        name='eke.knowledge'
+        directory='static'
+        layer='eke.knowledge.interfaces.IEkeKnowledgeLayer'
+    />
+
+    <!-- Customize faceted navigation -->
+    <browser:page
+        for='eea.facetednavigation.interfaces.IFacetedNavigable'
+        name='facetednavigation_view'
+        class='eea.facetednavigation.browser.app.view.FacetedContainerView'
+        permission='zope2.View'
+        template='templates/faceted-view.pt'
+        layer='eke.knowledge.interfaces.IEkeKnowledgeLayer'
     />
 
     <!-- Control panel -->

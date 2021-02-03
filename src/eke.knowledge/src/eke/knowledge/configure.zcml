@@ -69,7 +69,6 @@
         permission='zope2.View'
     />
 
-
     <!-- Static resources -->
     <browser:resourceDirectory name='eke.knowledge' directory='static'/>
 
@@ -203,7 +202,12 @@
         name='summary'
         permission='zope2.View'
     />
-
+    <browser:page
+        class='.datasetfolder.DatasetFolderView'
+        for='.datasetfolder.IDatasetFolder'
+        name='view'
+        permission='zope2.View'
+    />
 
     <!-- Disease -->
     <browser:page

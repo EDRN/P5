@@ -1,0 +1,16 @@
+@charset "utf-8";
+
+.datasetSummaryGrid {
+    display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 10px; grid-auto-rows: minmax(100px, auto);
+}
+.datasetSummaryGrid > div {
+    padding: 1rem;
+}
+.datasetSummaryCard {
+    background: rgb(252,252,252);
+    background: linear-gradient(0deg, rgba(252,252,252,0.17270658263305327) 0%, rgba(244,244,244,1) 100%);
+}
+.cardStatistic {
+    font-size: 140%;
+    font-weight: bold;
+}

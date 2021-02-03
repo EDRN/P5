@@ -49,7 +49,14 @@
         description="Upgrade eke.knowledge by fixing the Sites folder's RDF source URLs."
         profile='eke.knowledge:default'
         handler='.upgrades.fixRDFURLs'
-        source='1001' destination='1002' sortkey='10'
+        source='1001' destination='1002' sortkey='20'
+    />
+    <genericsetup:upgradeStep
+        title='Fix RDF URLs'
+        description="Upgrade eke.knowledge by reloading content types."
+        profile='eke.knowledge:default'
+        handler='.upgrades.reloadTypes'
+        source='1001' destination='1002' sortkey='30'
     />
 
 </configure>
