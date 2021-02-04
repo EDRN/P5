@@ -3,12 +3,14 @@
 
 from . import PACKAGE_NAME
 from .knowledgeobject import IKnowledgeObject
+from .biomarker import IPhasedObject, IBiomarker
 from .utils import publish
 from eea.facetednavigation.interfaces import ICriteria
 from eea.facetednavigation.layout.interfaces import IFacetedLayout
 from plone.app.dexterity.behaviors.exclfromnav import IExcludeFromNavigation
 from plone.dexterity.utils import createContentInContainer
 from zope.component import getMultiAdapter
+from Acquisition import aq_parent
 import logging, plone.api
 
 
@@ -20,6 +22,42 @@ def reloadTypes(setupTool, logger=None):
         logger = logging.getLogger(PACKAGE_NAME)
     logger.info(u'Reloading content types')
     setupTool.runImportStepFromProfile(PROFILE, 'typeinfo')
+
+
+def reloadCatalog(setupTool, logger=None):
+    if logger is None:
+        logger = logging.getLogger(PACKAGE_NAME)
+    logger.info(u'Reloading catalog')
+    setupTool.runImportStepFromProfile(PROFILE, 'catalog')
+
+
+def stupidPhases(setupTool, logger=None):
+    # For https://github.com/EDRN/P5/issues/105
+    _phases = {
+        u'One': u'1',
+        u'Two': u'2',
+        u'Three': u'3',
+        u'Four': u'4',
+        u'Five': u'5'
+    }
+    if logger is None:
+        logger = logging.getLogger(PACKAGE_NAME)
+    catalog = plone.api.portal.get_tool('portal_catalog')
+    results = catalog(object_provides=IBiomarker.__identifier__)
+    for i in results:
+        obj = i.getObject()
+        obj.phases = []
+    results = catalog(object_provides=IPhasedObject.__identifier__)
+    for i in results:
+        obj = i.getObject()
+        newPhase = _phases.get(obj.phase)
+        if newPhase is not None:
+            obj.phase = newPhase
+            biomarker = aq_parent(obj)
+            currentPhases = set(biomarker.phases)
+            currentPhases.add(newPhase)
+            biomarker.phases = list(currentPhases)
+            biomarker.reindexObject(idxs=['phases'])
 
 
 def reindexSearchableTextForKnowledgeObjects(setupTool, logger=None):
@@ -47,6 +85,34 @@ def publishDiseaseFolders(setupTool, logger=None):
         publish(df)
     except KeyError:
         logger.warn('No diseases folder found under resources, so cannot publish it; skipping')
+
+
+def addPhaseFacet(setupTool, logger=None):
+    # For https://github.com/EDRN/P5/issues/105
+    if logger is None:
+        logger = logging.getLogger(PACKAGE_NAME)
+    portal = plone.api.portal.get()
+    if 'biomarkers' not in portal.keys():
+        logger.info(u'No biomarkers folder found, so not altering any facets')
+        return
+    biomarkers = portal['biomarkers']
+    subtyper = getMultiAdapter((biomarkers, portal.REQUEST), name=u'faceted_subtyper')
+    if not subtyper.is_faceted and not subtyper.can_enable:
+        logger.info(u'The biomarkers folder is not faceted and cannot *be* faceted, so not doing anything with it')
+        return
+    criteria = ICriteria(biomarkers)
+    criteria.add(
+        'checkbox', 'bottom', 'default',
+        title=u'Phase',
+        hidden=False,
+        index='phases',
+        operator='or',
+        vocabulary=u'eke.knowledge.vocabularies.Phases',
+        count=False,
+        maxitems=6,
+        sortreversed=False,
+        hidezerocount=False
+    )
 
 
 def changeFacets(setupTool, logger=None):

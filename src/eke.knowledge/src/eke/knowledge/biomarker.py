@@ -9,6 +9,7 @@ from .knowledgeobject import IKnowledgeObject
 from .protocol import IProtocol
 from .publication import IPublication
 from .resource import IResource
+from .utils import generateVocabularyFromIndex
 from Acquisition import aq_inner
 from collective import dexteritytextindexer
 from plone.app.vocabularies.catalog import CatalogSource
@@ -16,7 +17,9 @@ from plone.memoize.view import memoize
 from Products.Five import BrowserView
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
+from zope.interface import implementer
 from zope.interface import Interface
+from zope.schema.interfaces import IVocabularyFactory
 import plone.api
 
 CURATED_SECTIONS = {
@@ -178,6 +181,21 @@ class IBiomarker(IKnowledgeObject, IResearchedObject, IQualityAssuredObject):
         description=_(u'The biomarker annotation that indicates the number of affected protein function sites.'),
         required=False,
     )
+    phases = schema.List(
+        title=_(u'Phases'),
+        description=_(u'Multiple phases of biomarker research of the contained body systems.'),
+        value_type=schema.TextLine(
+            title=_(u'Phase'),
+            description=_(u'Single phase of biomarker research')
+        )
+    )
+
+
+@implementer(IVocabularyFactory)
+class PhasesVocabulary(object):
+    u'''Vocabulary for biomarker phases'''
+    def __call__(self, context):
+        return generateVocabularyFromIndex('phases', context)
 
 
 class IBiomarkerBodySystem(IKnowledgeObject, IResearchedObject, IPhasedObject, IQualityAssuredObject):
@@ -271,6 +289,18 @@ def updateIndicatedBodySystems(context, event):
         organs.sort()
         biomarker.indicatedBodySystems = organs
         biomarker.reindexObject(idxs=['indicatedBodySystems'])
+
+
+def updatePhases(context, event):
+    if not IBiomarkerBodySystem.providedBy(context): return  # This should never happen but I'm defensive—er, paranoid.
+    biomarker = context.aq_parent
+    phases = set()
+    for objID, biomarkerBodySystem in biomarker.contentItems():
+        phase = biomarkerBodySystem.phase
+        if phase is not None and phase:
+            phases.add(phase)
+    biomarker.phases = list(phases)
+    biomarker.reindexObject(idxs=['phases'])
 
 
 class BiomarkerView(BrowserView):

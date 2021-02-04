@@ -115,4 +115,10 @@
         <indexed_attr value='memberType' />
     </index>
 
+    <!-- New biomarker phases faceted selector -->
+    <index name='phases' meta_type='KeywordIndex'>
+        <indexed_attr value='phases' />
+    </index>
+    <column value='phases'/>
+
 </object>

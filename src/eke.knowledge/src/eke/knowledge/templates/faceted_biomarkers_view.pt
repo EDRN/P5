@@ -53,6 +53,7 @@
               <th i18n:translate='ekeKnowledgeTableHeadingBiomarker'>Biomarker</th>
               <th i18n:translate='ekeKnowledgeTableHeadingType'>Type</th>
               <th i18n:translate='ekeKnowledgeTableHeadingOrgans'>Organ(s)</th>
+              <th i18n:translate='ekeKnowledgeTableHeadingPhases'>Phase(s)</th>
             </tr>
           </thead>
           <tbody metal:define-slot='entries'>
@@ -89,6 +90,11 @@
                   <td tal:define='organs item/indicatedBodySystems'>
                       <span tal:condition='organs' tal:replace='python:u", ".join(organs)'>
                         Anus, Rectum
+                      </span>
+                  </td>
+                  <td tal:define='phases item/phases'>
+                      <span tal:condition='phases' tal:replace='python:u", ".join(phases)'>
+                        1, 4
                       </span>
                   </td>
                 </tr>

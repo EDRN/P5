@@ -38,25 +38,46 @@
         source='1000' destination='1001' sortkey='50'
     />
     <genericsetup:upgradeStep
-        title='Redo bodySystemName index'
+        title='Redo bodySystemName index 1002'
         description='Upgrade eke.knowledge by transforming bodySystemName from FieldIndex to KeywordIndex'
         profile='eke.knowledge:default'
         handler='.upgrades.redoBodySystemNames'
         source='1001' destination='1002' sortkey='10'
     />
     <genericsetup:upgradeStep
-        title='Fix RDF URLs'
+        title='Fix RDF URLs 1002'
         description="Upgrade eke.knowledge by fixing the Sites folder's RDF source URLs."
         profile='eke.knowledge:default'
         handler='.upgrades.fixRDFURLs'
         source='1001' destination='1002' sortkey='20'
     />
     <genericsetup:upgradeStep
-        title='Fix RDF URLs'
+        title='Content types 1002'
         description="Upgrade eke.knowledge by reloading content types."
         profile='eke.knowledge:default'
         handler='.upgrades.reloadTypes'
         source='1001' destination='1002' sortkey='30'
+    />
+    <genericsetup:upgradeStep
+        title='Catalog 1002'
+        description="Upgrade eke.knowledge by reloading the portal catalog."
+        profile='eke.knowledge:default'
+        handler='.upgrades.reloadCatalog'
+        source='1001' destination='1002' sortkey='39'
+    />
+    <genericsetup:upgradeStep
+        title='Numeric Phases 1002'
+        description="Upgrade eke.knowledge by changing biomarker phases to integers."
+        profile='eke.knowledge:default'
+        handler='.upgrades.stupidPhases'
+        source='1001' destination='1002' sortkey='40'
+    />
+    <genericsetup:upgradeStep
+        title='Biomarker phase facet 1002'
+        description="Upgrade eke.knowledge by adding a phase facet to the biomarkers page."
+        profile='eke.knowledge:default'
+        handler='.upgrades.addPhaseFacet'
+        source='1001' destination='1002' sortkey='50'
     />
 
 </configure>

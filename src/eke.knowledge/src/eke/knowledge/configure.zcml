@@ -130,9 +130,17 @@
         for='.biomarker.IBiomarkerBodySystem zope.container.interfaces.IObjectAddedEvent'
         handler='.biomarker.updateIndicatedBodySystems'
     />
+    <subscriber
+        for='.biomarker.IBiomarkerBodySystem zope.container.interfaces.IObjectModifiedEvent'
+        handler='.biomarker.updatePhases'
+    />
     <utility
         factory='.biomarkerfolder.BodySystemsInBiomarkersVocabulary'
         name='eke.knowledge.vocabularies.BodySystemsInBiomarkers'
+    />
+    <utility
+        factory='.biomarker.PhasesVocabulary'
+        name='eke.knowledge.vocabularies.Phases'
     />
 
     <!-- Body Systems (Organs) -->
