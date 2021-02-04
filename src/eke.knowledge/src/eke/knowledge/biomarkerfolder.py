@@ -4,7 +4,7 @@ u'''Biomarker folder'''
 
 from . import _
 from .base import Ingestor
-from .biomarker import IBiomarker, IBiomarkerBodySystem, IBodySystemStudy, IStudyStatistics
+from .biomarker import IBiomarker, IBiomarkerBodySystem, IBodySystemStudy, IStudyStatistics, updatePhases
 from .biomarkerpanel import IBiomarkerPanel
 from .bodysystem import IBodySystem
 from .elementalbiomarker import IElementalBiomarker
@@ -24,7 +24,7 @@ from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
-import logging, plone.api, rdflib, uuid, contextlib, urllib2
+import logging, plone.api, rdflib, uuid, contextlib, urllib2, transaction
 
 _logger = logging.getLogger(__name__)
 
@@ -405,6 +405,13 @@ class BiomarkerIngestor(Ingestor):
         self.addOrganSpecificInformation(newBiomarkers, organSpecificStatements)
         if context.bmSumDataSource:
             context.dataSummary = self.getSummaryData(context.bmSumDataSource)
+        # Set organ phases on each biomarker
+        transaction.commit()
+        results = catalog(object_provides=IBiomarkerBodySystem.__identifier__)
+        for i in results:
+            obj = i.getObject()
+            updatePhases(obj, None)
+        # Done
         publish(context)
         return IngestConsequences(newBiomarkers.values(), [], [])
 
