@@ -327,6 +327,7 @@ class BiomarkerIngestor(Ingestor):
                     biomarkerBodySystem.cliaCertification = True
                 elif certificationURI == _fdaCeritificationURI:
                     biomarkerBodySystem.fdaCertification = True
+            biomarkerBodySystem.reindexObject()
     def getSummaryData(self, source):
         # This could be refactored with several other *folder.py files
         with contextlib.closing(urllib2.urlopen(source)) as bytestring:
@@ -405,12 +406,15 @@ class BiomarkerIngestor(Ingestor):
         self.addOrganSpecificInformation(newBiomarkers, organSpecificStatements)
         if context.bmSumDataSource:
             context.dataSummary = self.getSummaryData(context.bmSumDataSource)
-        # Set organ phases on each biomarker
+        # Set organ phases on each biomarker; I would do a catalog query here except
+        # querying for object_provides=IBiomarkerBodySystem.__identifier__ gives noting
+        # and even doing getFolderContents on the context gives nothing
         transaction.commit()
-        results = catalog(object_provides=IBiomarkerBodySystem.__identifier__)
-        for i in results:
-            obj = i.getObject()
-            updatePhases(obj, None)
+        for biomarkerID in context.keys():
+            biomarker = context[biomarkerID]
+            for bodySystemID in biomarker.keys():
+                biomarkerBodySystem = biomarker[bodySystemID]
+                updatePhases(biomarkerBodySystem, None)
         # Done
         publish(context)
         return IngestConsequences(newBiomarkers.values(), [], [])

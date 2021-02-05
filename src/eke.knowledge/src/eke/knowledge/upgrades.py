@@ -282,7 +282,7 @@ def fixRDFURLs(setupTool, logger=None):
         logger.warn('🧐 No data folder found, not fixing its summary source URL')
     try:
         biomarkerFolder = portal.unrestrictedTraverse('biomarkers')
-        biomarkerFolder.bmSumDataSource = 'https://edrn.jpl.nasa.gov/cancerdataexpo/summarizer-data/biomarker/@@summary'
+        biomarkerFolder.bmSumDataSource = 'https://edrn.jpl.nasa.gov/cancerdataexpo/static-sources/phased.json/@@download/file/phased.json'
     except KeyError:
         logger.warn('🧐 No biomarkers folder found, not fixing its summary source URL')
 
