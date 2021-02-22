@@ -184,6 +184,7 @@ class IBiomarker(IKnowledgeObject, IResearchedObject, IQualityAssuredObject):
     phases = schema.List(
         title=_(u'Phases'),
         description=_(u'Multiple phases of biomarker research of the contained body systems.'),
+        required=False,
         value_type=schema.TextLine(
             title=_(u'Phase'),
             description=_(u'Single phase of biomarker research')

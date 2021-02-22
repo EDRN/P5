@@ -103,12 +103,12 @@ class IDatasetFolder(IKnowledgeFolder):
     )
 
 
-class DatasetFolderView(BrowserView):
-    # Testing methods used to figure stuff out
-    def disciplineByCollectionAbscissa(self):
-        return json.dumps([1, 3, 5])
-    def disciplineByCollectionOrdinate(self):
-        return json.dumps(['alpha', 'beta', 'gamma'])
+# class DatasetFolderView(BrowserView):
+#     # Testing methods used to figure stuff out
+#     def disciplineByCollectionAbscissa(self):
+#         return json.dumps([1, 3, 5])
+#     def disciplineByCollectionOrdinate(self):
+#         return json.dumps(['alpha', 'beta', 'gamma'])
 
 
 class DatasetIngestor(Ingestor):

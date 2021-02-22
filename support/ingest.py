@@ -14,7 +14,10 @@ from Testing import makerequest
 from zope.component import getUtility
 from zope.component.hooks import setSite
 from zope.globalrequest import setRequest
-import sys, logging, transaction, plone.api, csv, codecs, os, os.path
+import sys, logging, transaction, plone.api, csv, codecs, os, os.path, ssl
+
+
+ssl._create_default_https_context = ssl._create_unverified_context
 
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)-8s %(message)s')

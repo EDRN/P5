@@ -36,8 +36,8 @@
         <div style='display: none;' id='discplineByCollection'
           data-abscissa='[0]' data-ordinate='["unknown"]'
           tal:attributes='
-            data-abscissa context/view/disciplineByCollectionAbscissa;
-            data-ordinate context/view/disciplineByCollectionOrdinate;
+            data-abscissa context/view/disciplineByCollectionAbscissa|nothing;
+            data-ordinate context/view/disciplineByCollectionOrdinate|nothing;
           '></div>
         <div id='put-graphic-here-maybe'></div>
 

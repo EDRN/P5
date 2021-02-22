@@ -107,8 +107,11 @@ RUN : &&\
     buildDeps="gcc bzip2-dev musl-dev libjpeg-turbo-dev openjpeg-dev pcre-dev openssl-dev tiff-dev libxml2-dev libxslt-dev zlib-dev openldap-dev cyrus-sasl-dev libffi-dev" &&\
     apk add --virtual plone-build $buildDeps &&\
     : These stay &&\
-    runDeps="openjpeg@edge libldap libsasl libjpeg-turbo tiff libxml2 libxslt lynx netcat-openbsd libstdc++@edge libgcc@edge sqlite-libs@edge poppler-utils@edge rsync wv su-exec bash" &&\
+    runDeps="krb5-libs@edge openjpeg@edge libldap libsasl libjpeg-turbo tiff libxml2 libxslt lynx netcat-openbsd libstdc++@edge libgcc@edge sqlite-libs@edge poppler-utils@edge rsync wv su-exec bash" &&\
     apk add $runDeps &&\
+    :
+
+RUN : &&\
     : Get, check, and extract Plone &&\
     wget -q -O Plone.tgz https://launchpad.net/plone/$PLONE_MAJOR/$PLONE_VERSION/+download/$PLONE_VERSION_RELEASE.tgz &&\
     echo "$PLONE_MD5  Plone.tgz" | md5sum -c - &&\
@@ -120,6 +123,9 @@ RUN : &&\
     rm -rf /plone/instance/src/*/{var,bin,develop-eggs,parts} &&\
     : Install buildout, setuptools, and pip at specific versions &&\
     pip --quiet install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT wheel==$WHEEL urllib3==$URLLIB3 &&\
+    :
+
+RUN : &&\
     cd /plone/instance &&\
     buildout &&\
     buildout -c docker.cfg &&\

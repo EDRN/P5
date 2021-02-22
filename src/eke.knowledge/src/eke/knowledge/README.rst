@@ -785,6 +785,7 @@ These folders contain biomarkers (both elemental and panel)::
     >>> browser.getControl(name='form.widgets.qaState').value = u'Excellent'
     >>> browser.getControl(name='form.widgets.datasets').value = u'data-1\ndata-2'
     >>> browser.getControl(name='form.widgets.title').value = u'Sticky Biomarker'
+    >>> browser.getControl(name='form.widgets.phases').value = u'Phase One\nPhase Three'
     >>> browser.getControl(name='form.widgets.description').value = u'Careful, this one is sticky.'
     >>> browser.getControl(name='form.widgets.identifier').value = u'urn:biomarker:sticky'
     >>> browser.getControl(name='form.buttons.save').click()
