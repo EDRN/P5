@@ -86,7 +86,7 @@ def installDataAndResources(context):
     # Stat graphics #102
     installImage(
         dataFolder, u'stats.png', 'stats.png', u'LabCAS Statistics',
-        u'Three pie charts showing the breakdwon of products in the Laboratory Catalog Archive System.', 'image/png'
+        u'Three pie charts showing the breakdown of products in the Laboratory Catalog Archive System.', 'image/png'
     )
 
 

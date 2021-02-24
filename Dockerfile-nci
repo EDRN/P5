@@ -107,22 +107,95 @@ RUN : &&\
     buildDeps="gcc bzip2-dev musl-dev libjpeg-turbo-dev openjpeg-dev pcre-dev openssl-dev tiff-dev libxml2-dev libxslt-dev zlib-dev openldap-dev cyrus-sasl-dev libffi-dev" &&\
     apk add --virtual plone-build $buildDeps &&\
     : These stay &&\
-    runDeps="openjpeg@edge libldap libsasl libjpeg-turbo tiff libxml2 libxslt lynx netcat-openbsd libstdc++@edge libgcc@edge sqlite-libs@edge poppler-utils@edge rsync wv su-exec bash" &&\
+    runDeps="krb5-libs@edge openjpeg@edge libldap@edge libsasl libjpeg-turbo tiff libxml2 libxslt lynx netcat-openbsd libstdc++@edge libgcc@edge sqlite-libs@edge poppler-utils@edge rsync wv su-exec bash" &&\
     apk add $runDeps &&\
+    :
+
+RUN : &&\
     : Get, check, and extract Plone &&\
     wget -q -O Plone.tgz https://launchpad.net/plone/$PLONE_MAJOR/$PLONE_VERSION/+download/$PLONE_VERSION_RELEASE.tgz &&\
     echo "$PLONE_MD5  Plone.tgz" | md5sum -c - &&\
     tar -xzf Plone.tgz &&\
     cp -r ./$PLONE_VERSION_RELEASE/base_skeleton/* /plone/instance/ &&\
-    cp ./$PLONE_VERSION_RELEASE/buildout_templates/buildout.cfg /plone/instance/buildout-base.cfg &&\
+    cp /plone/instance/etc/versions/release-5.2.3-versions.cfg /plone/instance &&\
+    rm -rf \
+        /plone/buildout-cache/eggs/plone.staticresources-1.3.2-py2.7.egg \
+        /plone/buildout-cache/eggs/Zope-4.5.1-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.recipe.zope2instance-6.7.5-py2.7.egg \
+        /plone/buildout-cache/eggs/zope.interface-5.0.2-py2.7-linux-x86_64.egg \
+        /plone/buildout-cache/eggs/Products.MailHost-4.9-py2.7.egg \
+        /plone/buildout-cache/eggs/calmjs.parse-1.2.4-py2.7.egg \
+        /plone/buildout-cache/eggs/icalendar-4.0.6-py2.7.egg \
+        /plone/buildout-cache/eggs/mockup-3.2.2-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.api-1.10.2-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.caching-2.0.6-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.content-3.8.6-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.contentlisting-2.0.2-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.contentrules-4.1.4-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.contenttypes-2.1.10-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.dexterity-2.6.5-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.discussion-3.4.2-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.event-3.2.7-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.iterate-3.3.14-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.layout-3.4.4-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.linkintegrity-3.3.13-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.locales-5.1.24-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.multilingual-5.6.1-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.portlets-4.4.5-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.registry-1.7.6-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.textfield-1.3.4-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.theming-4.1.4-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.upgrade-2.0.34-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.vocabularies-4.2.0-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.widgets-3.0.4-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.workflow-4.0.2-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.z3cform-3.2.2-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.behavior-1.3.2-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.contentrules-2.0.10-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.dexterity-2.9.7-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.keyring-3.1.2-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.outputfilters-4.0.1-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.portlet.collection-3.3.3-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.protect-4.1.5-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.resource-2.1.2-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.restapi-6.2.0-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.resourceeditor-3.0.2-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.schemaeditor-3.0.1-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.stringinterp-1.3.2-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.subrequest-1.9.2-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.supermodel-1.6.2-py2.7.egg \
+        /plone/buildout-cache/eggs/plonetheme.barceloneta-2.1.9-py2.7.egg \
+        /plone/buildout-cache/eggs/Products.CMFDiffTool-3.3.1-py2.7.egg \
+        /plone/buildout-cache/eggs/Products.CMFFormController-4.1.2-py2.7.egg \
+        /plone/buildout-cache/eggs/Products.CMFPlacefulWorkflow-2.0.2-py2.7.egg \
+        /plone/buildout-cache/eggs/Plone-5.2.2-py2.7.egg \
+        /plone/buildout-cache/eggs/Products.CMFPlone-5.2.2-py2.7.egg \
+        /plone/buildout-cache/eggs/Products.CMFUid-3.0.2-py2.7.egg \
+        /plone/buildout-cache/eggs/Products.ExtendedPathIndex-4.0.0-py2.7.egg \
+        /plone/buildout-cache/eggs/Products.ExternalEditor-3.0-py2.7.egg \
+        /plone/buildout-cache/eggs/Products.GenericSetup-2.0.2-py2.7.egg \
+        /plone/buildout-cache/eggs/Products.isurlinportal-1.1.0-py2.7.egg \
+        /plone/buildout-cache/eggs/Products.MimetypesRegistry-2.1.7-py2.7.egg \
+        /plone/buildout-cache/eggs/Products.PluggableAuthService-2.4-py2.7.egg \
+        /plone/buildout-cache/eggs/Products.PortalTransforms-3.1.8-py2.7.egg \
+        /plone/buildout-cache/eggs/Products.Sessions-4.6-py2.7.egg \
+        /plone/buildout-cache/eggs/z3c.form-3.7.0-py2.7.egg \
+        /plone/buildout-cache/eggs/plone.app.relationfield-2.0.2-py2.7.egg \
+        /plone/buildout-cache/eggs/z3c.jbot-0.8-py2.7.egg &&\
+    sed -e 's/5\.2\.2/5.2.3/g' ./$PLONE_VERSION_RELEASE/buildout_templates/buildout.cfg > /plone/instance/buildout-base.cfg &&\
     : Clean up anything copied from our src dirs &&\
     find /plone/instance/src -name '*.py[co]' -exec rm -f '{}' + &&\
     rm -rf /plone/instance/src/*/{var,bin,develop-eggs,parts} &&\
     : Install buildout, setuptools, and pip at specific versions &&\
     pip --quiet install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT wheel==$WHEEL urllib3==$URLLIB3 &&\
+    :
+
+RUN : &&\
     cd /plone/instance &&\
     buildout &&\
     buildout -c docker.cfg &&\
+    : apk ghetto-up &&\
+    find /plone/buildout-cache/eggs/plone.staticresources-1.4.1-py2.7.egg/plone/staticresources/static -type f -exec sed -i -e 's/1\.10\.16/1.10.22/g' '{}' \; &&\
     ln -s /data/filestorage/ /plone/instance/var/filestorage &&\
     ln -s /data/blobstorage /plone/instance/var/blobstorage &&\
     chown -R edrn:edrn /plone /data &&\
@@ -139,7 +212,11 @@ RUN : &&\
     rm \
         /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/SgiImagePlugin.pyc \
         /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/SgiImagePlugin.py \
-        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/SgiImagePlugin.pyo &&\
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/SgiImagePlugin.pyo \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/TiffImagePlugin.pyo \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/PcxImagePlugin.py \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/PcxImagePlugin.pyc \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/PcxImagePlugin.pyo &&\
     :
 
 
