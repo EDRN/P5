@@ -236,7 +236,7 @@ function dashboard(id, fData){
         }
         
         function getLegend(d,aD){ // Utility function to compute percentage.
-            return d3.format("%")(d.freq/d3.sum(aD.map(function(v){ return v.freq; })));
+            return (100*d.freq/d3.sum(aD.map(function(v){ return v.freq; }))).toFixed(2)+"%";
         }
 
         return leg;
