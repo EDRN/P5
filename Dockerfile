@@ -109,6 +109,8 @@ RUN : &&\
     : These stay &&\
     runDeps="krb5-libs@edge openjpeg@edge libldap@edge libsasl libjpeg-turbo tiff libxml2 libxslt lynx netcat-openbsd libstdc++@edge libgcc@edge sqlite-libs@edge poppler-utils@edge rsync wv su-exec bash" &&\
     apk add $runDeps &&\
+    cp /plone/instance/etc/certs/EntrustPublic_Intermediate.crt /usr/local/share/ca-certificates &&\
+    update-ca-certificates &&\
     :
 
 RUN : &&\
