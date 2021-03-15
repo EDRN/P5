@@ -54,7 +54,7 @@ services:
         depends_on:
             - edrn-db
             - edrn-memory-cache
-        restart: on-failure
+        restart: unless-stopped
         stop_grace_period: 23s
         labels:
             org.label-schema.name: EDRN Public Portal Zope/Plone

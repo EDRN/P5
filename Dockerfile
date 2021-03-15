@@ -107,7 +107,7 @@ RUN : &&\
     buildDeps="gcc bzip2-dev musl-dev libjpeg-turbo-dev openjpeg-dev pcre-dev openssl-dev tiff-dev libxml2-dev libxslt-dev zlib-dev openldap-dev cyrus-sasl-dev libffi-dev" &&\
     apk add --virtual plone-build $buildDeps &&\
     : These stay &&\
-    runDeps="krb5-libs@edge openjpeg@edge libldap@edge libsasl libjpeg-turbo tiff libxml2 libxslt lynx netcat-openbsd libstdc++@edge libgcc@edge sqlite-libs@edge poppler-utils@edge rsync wv su-exec bash" &&\
+    runDeps="curl krb5-libs@edge openjpeg@edge libldap@edge libsasl libjpeg-turbo tiff libxml2 libxslt lynx netcat-openbsd libstdc++@edge libgcc@edge sqlite-libs@edge poppler-utils@edge rsync wv su-exec bash" &&\
     apk add $runDeps &&\
     cp /plone/instance/etc/certs/EntrustPublic_Intermediate.crt /usr/local/share/ca-certificates &&\
     update-ca-certificates &&\
@@ -231,7 +231,7 @@ VOLUME      /data
 EXPOSE      8080
 USER        edrn:edrn
 WORKDIR     /plone/instance
-HEALTHCHECK --interval=1m --timeout=5s --start-period=1m CMD nc -z -w5 127.0.0.1 8080 || exit 1
+HEALTHCHECK --interval=5m --timeout=2m --start-period=1m CMD curl --fail --retry 6 --max-time 5 --retry-delay 10 --retry-max-time 60 http://127.0.0.1:8080/ || sh -c 'killall5 -TERM && (sleep 10; killall5 -KILL)'
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD        ["start"]
 
