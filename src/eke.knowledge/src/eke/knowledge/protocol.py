@@ -329,6 +329,11 @@ class IProtocol(IKnowledgeObject):
         description=_(u'Name of the principal investigator.'),
         required=False,
     )
+    piURL = schema.TextLine(
+        title=_(u'PI URL'),
+        description=_(u'URL to the principal investigator.'),
+        required=False,
+    )
     dexteritytextindexer.searchable('protocolID')
     protocolID = schema.TextLine(
         title=_(u'Protocol ID'),
@@ -342,6 +347,8 @@ class IProtocol(IKnowledgeObject):
         required=False,
         source=CatalogSource(object_provides=IPerson.__identifier__)
     )
+
+
     investigatorIdentifiers = schema.List(
         title=_(u'Investigator Identifiers'),
         description=_(u'RDF subject URIs of investigators who participate in this protocol'),

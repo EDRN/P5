@@ -79,5 +79,13 @@
         handler='.upgrades.addPhaseFacet'
         source='1001' destination='1002' sortkey='50'
     />
+    <genericsetup:upgradeStep
+        title='Facet search on Protocols 1003'
+        description="Upgrade eke.knowledge by putting a faceted search view on the protocols page."
+        profile='eke.knowledge:default'
+        handler='.upgrades.addFacetsToProtocols'
+        source='1002' destination='1003' sortkey='10'
+    />
+
 
 </configure>

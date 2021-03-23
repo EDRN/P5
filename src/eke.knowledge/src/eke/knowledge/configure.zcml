@@ -45,6 +45,12 @@
 
     <!-- Faceted navigation -->
     <faceted:view
+        name='faceted_protocols_view'
+        template='templates/faceted_protocols_view.pt'
+        title='Faceted Protocols View'
+        permission='zope2.View'
+    />
+    <faceted:view
         name='faceted_publications_view'
         template='templates/faceted_publications_view.pt'
         title='Faceted Publications View'

@@ -115,6 +115,51 @@ def addPhaseFacet(setupTool, logger=None):
     )
 
 
+def addFacetsToProtocols(setupTool, logger=None):
+    # https://github.com/EDRN/P5/issues/114
+    if logger is None:
+        logger = logging.getLogger(PACKAGE_NAME)
+    protocols = plone.api.content.get(path='/data-and-resources/protocols')
+    if protocols is None:
+        logger.info(u'No protocols page found, so cannot apply faceted navigation to it')
+        return
+    portal = plone.api.portal.get()
+    request = portal.REQUEST
+    subtyper = getMultiAdapter((protocols, request), name=u'faceted_subtyper')
+    if subtyper.is_faceted:
+        logger.info(u'Protocols page is already faceted')
+        return
+    if not subtyper.can_enable:
+        logger.info(u'Cannot put facets on protocols page; sorry')
+        return
+    subtyper.enable()
+    criteria = ICriteria(protocols)
+    for cid in criteria.keys():
+        criteria.delete(cid)
+    criteria.add('resultsperpage', 'bottom', 'default', title='Results per page', hidden=False, start=0, end=60, step=20,
+        default=20)
+    criteria.add(
+        'checkbox', 'bottom', 'default',
+        title='Portal Type',
+        hidden=True,
+        index='portal_type',
+        operator='or',
+        vocabulary=u'eea.faceted.vocabularies.FacetedPortalTypes',
+        default=[u'eke.knowledge.protocol'],
+        count=False,
+        maxitems=0,
+        sortreversed=False,
+        hidezerocount=False
+    )
+    criteria.add('text', 'top', 'default', title=u'Search', hidden=False, index='SearchableText',
+        wildcard=True, count=False, onlyallelements=True)
+    criteria.add('sorting', 'bottom', 'default', title=u'Sort on', hidden=True, default='sortable_title')
+    IFacetedLayout(protocols).update_layout('faceted_protocols_view')
+    catalog = plone.api.portal.get_tool('portal_catalog')
+    catalog.addIndex('piURL', 'KeywordIndex')
+    catalog.addColumn('piURL')
+
+
 def changeFacets(setupTool, logger=None):
     # For https://github.com/EDRN/P5/issues/23
     if logger is None:

@@ -89,6 +89,10 @@
         <indexed_attr value='piName' />
     </index>
     <column value='piName'/>
+    <index name='piURL' meta_type='FieldIndex'>
+        <indexed_attr value='piURL' />
+    </index>
+    <column value='piURL'/>
 
     <!-- Display of biomarkerType on biomarker listing -->
     <index name='biomarkerType' meta_type='FieldIndex'>

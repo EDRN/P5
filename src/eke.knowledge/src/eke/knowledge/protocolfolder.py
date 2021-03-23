@@ -141,6 +141,8 @@ class ProtocolIngestor(Ingestor):
                         site = results[0].getObject()
                         p.piName = site.piName
                         p.principalInvestigator = site.principalInvestigator
+                        if not site.principalInvestigator.isBroken() and site.principalInvestigator.to_object is not None:
+                            p.piURL = site.principalInvestigator.to_object.absolute_url()
                 # Compute description
                 for predicateName in _descriptionPredicates:
                     values = predicates.get(predicateName, [])
