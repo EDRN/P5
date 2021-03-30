@@ -56,8 +56,8 @@
               <p class='cardStatistic' tal:content='context/numberFiles|string:0'>789</p>
             </div>
           </div>
-          <div id='analyitcs-display'>
-            <img src='${context/absolute_url}/stats.png/@@images/image.png'/>
+          <div id='analytics-display'>
+            <img src='${context/absolute_url}/stats.png/@@images/image.png' alt='Statistical graph'/>
 <!-- 
             <iframe width='100%' height='190px' frameborder='0' src='@@dataset_summary_report'>
               Statistics
