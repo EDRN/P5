@@ -1,17 +1,18 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 
 from . import PACKAGE_NAME
-from .knowledgeobject import IKnowledgeObject
 from .biomarker import IPhasedObject, IBiomarker
+from .knowledgeobject import IKnowledgeObject
 from .utils import publish
+from Acquisition import aq_parent
 from eea.facetednavigation.interfaces import ICriteria
 from eea.facetednavigation.layout.interfaces import IFacetedLayout
 from plone.app.dexterity.behaviors.exclfromnav import IExcludeFromNavigation
 from plone.dexterity.utils import createContentInContainer
+from plone.namedfile.file import NamedBlobImage
 from zope.component import getMultiAdapter
-from Acquisition import aq_parent
-import logging, plone.api
+import logging, plone.api, pkg_resources
 
 
 PROFILE = 'profile-' + PACKAGE_NAME + ':default'
@@ -112,6 +113,32 @@ def addPhaseFacet(setupTool, logger=None):
         maxitems=6,
         sortreversed=False,
         hidezerocount=False
+    )
+
+
+def _installImage(context, fn, ident, title, desc, contentType):
+    imageData = pkg_resources.resource_stream(__name__, u'static/' + fn).read()
+    return createContentInContainer(
+        context,
+        'Image',
+        id=ident,
+        title=title,
+        description=desc,
+        image=NamedBlobImage(data=imageData, contentType=contentType, filename=fn)
+    )
+
+
+def addGraphicsToProtocols(setupTool, logger=None):
+    # https://github.com/EDRN/P5/issues/114
+    if logger is None:
+        logger = logging.getLogger(PACKAGE_NAME)
+    protocols = plone.api.content.get(path='/data-and-resources/protocols')
+    if protocols is None:
+        logger.info(u'No protocols page found, so cannot add graphics to it')
+        return
+    _installImage(
+        protocols, u'protocol-stats.png', 'stats.png', u'Protocol Statistics Charts',
+        u'These charts show the breakdown of protocols in EDRN.', 'image/png'
     )
 
 

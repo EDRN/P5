@@ -86,6 +86,20 @@
         handler='.upgrades.addFacetsToProtocols'
         source='1002' destination='1003' sortkey='10'
     />
+    <genericsetup:upgradeStep
+        title='Reload Content types 1003'
+        description='Upgrade eke.knowledge to allow images in protocol folders by redoing GS content info.'
+        profile='eke.knowledge:default'
+        handler='.upgrades.reloadTypes'
+        source='1002' destination='1003' sortkey='20'
+    />
+    <genericsetup:upgradeStep
+        title='Statistical graphics on Protocols 1003'
+        description="Upgrade eke.knowledge by putting a stat grahps on the protocols page."
+        profile='eke.knowledge:default'
+        handler='.upgrades.addGraphicsToProtocols'
+        source='1002' destination='1003' sortkey='21'
+    />
 
 
 </configure>
