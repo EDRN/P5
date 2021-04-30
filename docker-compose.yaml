@@ -50,7 +50,8 @@ services:
             EDRN_PUBLISHED_PORT:
             ZEO_ADDRESS: edrn-db:8080
             ZEO_SHARED_BLOB_DIR: 'on'
-            ZEO_PACK_KEEP_OLD: 'off'
+            # https://github.com/plone/plone.docker/issues/160
+            ZEO_PACK_KEEP_OLD: 'false'
         depends_on:
             - edrn-db
             - edrn-memory-cache
@@ -92,7 +93,8 @@ services:
         environment:
             # Empty settings inherit values from the host's environment
             EDRN_PORTAL_VERSION:
-            ZEO_PACK_KEEP_OLD: 'off'
+            # https://github.com/plone/plone.docker/issues/160
+            ZEO_PACK_KEEP_OLD: 'false'
         restart: always
         stop_grace_period: 13s
         labels:

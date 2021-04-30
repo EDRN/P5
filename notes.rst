@@ -213,6 +213,23 @@ To debug (i.e., start a shell in the ``edrn-portal`` service)::
     docker-compose --project-name edrn exec edrn-portal /bin/bash
 
 
+Cron Jobs
+=========
+
+To keep the database down to a reasonable size, this should be run periodically::
+
+    docker-compose --project-name edrn exec edrn-db /plone/instance/bin/zeopack
+
+To refresh the content database via the "RDF ingest", visit this URL periodically::
+
+    https://PUBLIC_HOSTNAME/@@ingestRDF
+
+passing HTTP Basic Authentiction credentials for a manager-level user. This
+will trigger the "RDF ingest", sync'ing all content with the various external
+databases.
+
+
+
 RDF for LabCAS
 ==============
 
