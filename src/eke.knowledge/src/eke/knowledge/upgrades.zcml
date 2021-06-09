@@ -100,6 +100,13 @@
         handler='.upgrades.addGraphicsToProtocols'
         source='1002' destination='1003' sortkey='21'
     />
+    <genericsetup:upgradeStep
+        title='Search FAQs 1003'
+        description="Upgrade eke.knowledge by putting adding a FAQ on searching."
+        profile='eke.knowledge:default'
+        handler='.upgrades.addSearchFAQ'
+        source='1002' destination='1003' sortkey='21'
+    />
 
 
 </configure>

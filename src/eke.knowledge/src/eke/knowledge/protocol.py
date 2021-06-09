@@ -370,8 +370,7 @@ IProtocol.setTaggedValue('predicates', {
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#aims': ('aims', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#analyticMethod': ('analyticMethod', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#blinding': ('blinding', False),
-    # Need to somehow map from simple numeric like "174" to an RDF URI for an IDisease
-    # u'http://edrn.nci.nih.gov/rdf/schema.rdf#cancerType': ('cancerTypes', True),
+    u'http://edrn.nci.nih.gov/rdf/schema.rdf#cancerType': ('cancerTypes', True),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#comments': ('comments', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#dataSharingPlan': ('inSituDataSharingPlan', False),
     u'http://edrn.nci.nih.gov/rdf/schema.rdf#startDate': ('startDate', False),

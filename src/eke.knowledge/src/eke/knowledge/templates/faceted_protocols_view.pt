@@ -41,8 +41,12 @@
         <div id='put-graphic-here-maybe'></div>
 
         <div class='small-proviso protocol-summary-charts' style='text-align: center;'>
+          <p>Not sure what to search for above? Check the
+              <a tal:attributes='href string:${navigation_root_url}/search-faq'>Search FAQ</a>.
+          </p>
           <div id='analytics-display'>
-            <img src='${context/absolute_url}/stats.png/@@images/image.png' alt='Statistical graph'/>
+            <img src='${context/absolute_url}/stats.png/@@images/image.png'
+              alt='Summaries of EDRN protocol information may be obtained through searches and related features.'/>
 <!-- 
             <iframe width='100%' height='190px' frameborder='0' src='@@dataset_summary_report'>
               Statistics

@@ -9,6 +9,7 @@ from Acquisition import aq_parent
 from eea.facetednavigation.interfaces import ICriteria
 from eea.facetednavigation.layout.interfaces import IFacetedLayout
 from plone.app.dexterity.behaviors.exclfromnav import IExcludeFromNavigation
+from plone.app.textfield.value import RichTextValue
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobImage
 from zope.component import getMultiAdapter
@@ -16,6 +17,7 @@ import logging, plone.api, pkg_resources
 
 
 PROFILE = 'profile-' + PACKAGE_NAME + ':default'
+_SEARCH_FAQ = u'''<p>This text is TBD and can be changed any time. It is <em>not</em> tied to software.</p>'''
 
 
 def reloadTypes(setupTool, logger=None):
@@ -346,17 +348,37 @@ def fixRDFURLs(setupTool, logger=None):
         siteFolder.rdfDataSources = ['https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/sites/@@rdf']
         siteFolder.peopleDataSources = ['https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/registered-person/@@rdf']
     except KeyError:
-        logger.warn('🧐 No sites folder found, not fixing its RDF source URLs')
+        logger.warn(u'🧐 No sites folder found, not fixing its RDF source URLs')
     try:
         dataFolder = portal.unrestrictedTraverse('data')
         dataFolder.dsSumDataSource = 'https://edrn.jpl.nasa.gov/cancerdataexpo/static-sources/dataset-summary.json/@@download/file/dataset-summary.json'
     except KeyError:
-        logger.warn('🧐 No data folder found, not fixing its summary source URL')
+        logger.warn(u'🧐 No data folder found, not fixing its summary source URL')
     try:
         biomarkerFolder = portal.unrestrictedTraverse('biomarkers')
         biomarkerFolder.bmSumDataSource = 'https://edrn.jpl.nasa.gov/cancerdataexpo/static-sources/phased.json/@@download/file/phased.json'
     except KeyError:
-        logger.warn('🧐 No biomarkers folder found, not fixing its summary source URL')
+        logger.warn(u'🧐 No biomarkers folder found, not fixing its summary source URL')
+
+
+def addSearchFAQ(setupTool, logger=None):
+    if logger is None:
+        logger = logging.getLogger(PACKAGE_NAME)
+    logger.info(u'Adding the search FAQ')
+    portal = plone.api.portal.get()
+    if 'search-faq' in portal.keys():
+        logger.info('We already have a search FAQ, so skipping adding a new one')
+        return
+    faq = createContentInContainer(
+        portal,
+        'Document',
+        id='search-faq',
+        title=u'Search FAQ',
+        description=u'Tips and tricks on getting the most out of searching on the EDRN site.',
+        text=RichTextValue(_SEARCH_FAQ, 'text/html', 'text/x-html-safe'),
+        exclude_from_nav=True
+    )
+    faq.reindexObject()
 
 
 # Commented-out from auto-generated code in case we need it some day:
