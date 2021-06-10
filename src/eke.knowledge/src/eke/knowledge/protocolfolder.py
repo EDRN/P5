@@ -23,7 +23,7 @@ _descriptionPredicates = (
     dublincore.DESCRIPTION_URI,
     rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#objective'),
     rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#aims'),
-    rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#outcome')
+    rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#outcome'),
 )
 _siteURIPrefix = u'http://edrn.nci.nih.gov/data/sites/'
 _canonicalGroupNames = {
@@ -141,7 +141,7 @@ class ProtocolIngestor(Ingestor):
                         site = results[0].getObject()
                         p.piName = site.piName
                         p.principalInvestigator = site.principalInvestigator
-                        if not site.principalInvestigator.isBroken() and site.principalInvestigator.to_object is not None:
+                        if site.principalInvestigator is not None and not site.principalInvestigator.isBroken() and site.principalInvestigator.to_object is not None:
                             p.piURL = site.principalInvestigator.to_object.absolute_url()
                 # Compute description
                 for predicateName in _descriptionPredicates:
@@ -151,6 +151,13 @@ class ProtocolIngestor(Ingestor):
                         if value:
                             p.description = value
                             break
+                # Add more to the description
+                if p.fieldOfResearch:
+                    p.description = p.description + u'; ' + p.fieldOfResearch
+                if p.collaborativeGroup:
+                    p.description = p.description + u'; ' + u', '.join(p.collaborativeGroup)
+                if p.cancerTypes:
+                    p.description = p.description + u'; ' + u', '.join([i.to_object.title for i in p.cancerTypes])
                 # And the involved sites
                 self.setInvolvedInvestigatorSites(p, protocolToInvolvedSites)
         return consequences

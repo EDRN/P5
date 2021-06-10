@@ -131,6 +131,7 @@ class IProtocol(IKnowledgeObject):
         description=_(u'The design type of this protocol.'),
         required=False,
     )
+    dexteritytextindexer.searchable('fieldOfResearch')
     fieldOfResearch = schema.Text(
         title=_(u'Fields of Research'),
         description=_(u'No one knows what is really supposed to go here.'),
