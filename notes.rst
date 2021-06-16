@@ -218,7 +218,7 @@ Cron Jobs
 
 To keep the database down to a reasonable size, this should be run periodically::
 
-    docker-compose --project-name edrn exec edrn-db /plone/instance/bin/zeopack
+    env EDRN_DATA_DIR=<appropriate-setting-here> docker-compose --file <path-to-edrn-docker-compose.yaml-file> --project-name edrn exec edrn-db /plone/instance/bin/zeopack
 
 To refresh the content database via the "RDF ingest", visit this URL periodically::
 

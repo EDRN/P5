@@ -71,6 +71,9 @@
     bother displaying any of the widgets.  But we want the widgets displayed always.  P.O.S.
     -->
         <code style='display: none;'>listingBar</code>
+        <div style='text-align: center;'>
+          <div metal:use-macro="context/batch_macros/macros/navigation" />
+        </div>
         <table class='listing datasetsTable'>
           <thead>
             <tr>
@@ -136,8 +139,9 @@
           </tal:entry>
         </tbody>
       </table>
-
+      <div style='text-align: center;'>
         <div metal:use-macro="context/batch_macros/macros/navigation" />
+      </div>
         <script type='text/javascript'>
           //var sentinel = $("#sentinel").attr("data-value");
           //var data = [{

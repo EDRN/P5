@@ -59,7 +59,11 @@
     checks to see of "listingBar" is present and, if not, assumes there are too few results to
     bother displaying any of the widgets.  But we want the widgets displayed always.  P.O.S.
     -->
-        <code style='display: none;'>listingBar</code>    <tal:listing condition="batch">
+        <code style='display: none;'>listingBar</code>    
+        <tal:listing condition="batch">
+        <div style='text-align: center;'>
+          <div metal:use-macro="context/batch_macros/macros/navigation" />
+        </div>
         <table class='listing protocolsTable'>
           <thead>
             <tr>
@@ -90,15 +94,16 @@
                     </a>
                   </td>
                   <td tal:content='protocol_description' style='padding-right: 1em;'>
-                    Ethyl methane sulfonate is an alkylating agent and a potent mutagen; it created a virus so lethal the subject was dead before he left the table.
+                    Ethyl methane sulfonate is an alkylating agent and a potent mutagen; it created a
+                    virus so lethal the subject was dead before he left the table.
                   </td>
                   <td>
-                    <tal condition='piName'>
-                      <tal condition='piURL'>
+                    <tal:if condition='piName'>
+                      <tal:if condition='piURL'>
                         <a href='#' tal:attributes='href piURL' tal:content='piName'>Eldon Tyrell</a>
-                      </tal>
+                      </tal:if>
                       <span tal:condition='not:piURL' tal:omit-tag='' tal:content='piName'>Eldon Tyrell</span>
-                    </tal>
+                    </tal:if>
                   </td>
                 </tr>
               </metal:block>
@@ -106,8 +111,9 @@
           </tal:entry>
         </tbody>
       </table>
-
+      <div style='text-align: center;'>
         <div metal:use-macro="context/batch_macros/macros/navigation" />
+      </div>
     </tal:listing>
     <metal:empty metal:define-slot="no_items_in_listing">
         <p class="discreet"

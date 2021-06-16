@@ -381,6 +381,36 @@ def addSearchFAQ(setupTool, logger=None):
     faq.reindexObject()
 
 
+def addProtocolFacets(setupTool, logger=None):
+    if logger is None:
+        logger = logging.getLogger(PACKAGE_NAME)
+    portal = plone.api.portal.get()
+    try:
+        protocols = portal.unrestrictedTraverse('data-and-resources/protocols')
+        criteria = ICriteria(protocols)
+        criteria.add(
+            'checkbox', 'bottom', 'default',
+            title=u'Principal Investigator',
+            hidden=False,
+            index='piName',
+            operator='or',
+            vocabulary=u'eke.knowledge.vocabularies.PrincipalInvestigatorsWithProtocols',
+            count=False,
+            maxitems=8,
+            sortreversed=False,
+            hidezerocount=False
+        )
+        # This should get rid of "Results per Page"
+        criteria.delete('c0')
+        # So we can add it back
+        criteria.add(
+            'resultsperpage', 'bottom', 'default', title='Results per page', hidden=False,
+            start=0, end=60, step=5, default=10
+        )
+    except KeyError:
+        logger.warn(u'🧐 No protocols folder found, so not modifying facets')
+
+
 # Commented-out from auto-generated code in case we need it some day:
 # from plone.app.upgrade.utils import loadMigrationProfile
 # def reload_gs_profile(context):

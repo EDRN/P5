@@ -10,10 +10,15 @@ from Acquisition import aq_inner
 from collective import dexteritytextindexer
 from knowledgeobject import IKnowledgeObject
 from plone.app.vocabularies.catalog import CatalogSource
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize.view import memoize
 from Products.Five import BrowserView
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
+from zope.component import getUtility
+from zope.interface import implementer
+from zope.schema.interfaces import IVocabularyFactory
+from zope.schema.vocabulary import SimpleVocabulary
 import plone.api
 
 
@@ -425,3 +430,24 @@ class View(BrowserView):
             return protocolID < EDRN_PROTOCOL_ID_LIMIT
         except ValueError:
             return False
+
+
+@implementer(IVocabularyFactory)
+class PrincipalInvestigatorsVocabulary(object):
+    u'''Vocabulary for PIs in Protocols'''
+    def __call__(self, context):
+        normalizer = getUtility(IIDNormalizer)
+        catalog = plone.api.portal.get_tool('portal_catalog')
+        results = catalog(path=dict(query='/'.join(context.getPhysicalPath()), depth=1))
+        items, terms = {}, []
+        for i in results:
+            if i.piName:
+                piName = i.piName.decode('utf-8')
+                token = normalizer.normalize(piName)
+                items[token] = piName
+        tokens = items.keys()
+        tokens.sort()
+        for token in tokens:
+            title = items[token]
+            terms.append(SimpleVocabulary.createTerm(title, token, title))
+        return SimpleVocabulary(terms)

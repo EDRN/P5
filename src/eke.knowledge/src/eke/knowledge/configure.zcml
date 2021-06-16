@@ -281,6 +281,11 @@
         for='.protocolfolder.IProtocolFolder'
         provides='.interfaces.IIngestor'
     />
+    <utility
+        factory='.protocol.PrincipalInvestigatorsVocabulary'
+        name='eke.knowledge.vocabularies.PrincipalInvestigatorsWithProtocols'
+    />
+
 
 
     <!-- Publication -->
