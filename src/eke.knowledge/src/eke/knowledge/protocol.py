@@ -6,6 +6,7 @@ from .dublincore import TITLE_URI, DESCRIPTION_URI
 from .person import IPerson
 from .publication import IPublication
 from .site import ISite
+from .utils import generateVocabularyFromIndex
 from Acquisition import aq_inner
 from collective import dexteritytextindexer
 from knowledgeobject import IKnowledgeObject
@@ -101,6 +102,17 @@ class IProtocol(IKnowledgeObject):
             source=CatalogSource(object_provides=IDisease.__identifier__)
         )
     )
+    dexteritytextindexer.searchable('cancerTypeNames')
+    cancerTypeNames = schema.List(
+        title=_(u'Cancer Type Names'),
+        description=_(u'Names of the cancer types de-normalized from the "cancer types" relationship.'),
+        required=False,
+        default=[],
+        value_type=schema.TextLine(
+            title=_(u'Cancer Type Name'),
+            description=_(u'A name of a cancer type de-normalized from the "cancer types" relationship.')
+        )
+    )
     comments = schema.Text(
         title=_(u'Comments'),
         description=_(u'Any commentary from insightful to invective about this protocol.'),
@@ -137,7 +149,7 @@ class IProtocol(IKnowledgeObject):
         required=False,
     )
     dexteritytextindexer.searchable('fieldOfResearch')
-    fieldOfResearch = schema.Text(
+    fieldOfResearch = schema.TextLine(
         title=_(u'Fields of Research'),
         description=_(u'No one knows what is really supposed to go here.'),
         required=False,
@@ -451,3 +463,25 @@ class PrincipalInvestigatorsVocabulary(object):
             title = items[token]
             terms.append(SimpleVocabulary.createTerm(title, token, title))
         return SimpleVocabulary(terms)
+
+
+@implementer(IVocabularyFactory)
+class FieldOfResearchVocabulary(object):
+    u'''Vocabulary for fields of research in protocols'''
+    def __call__(self, context):
+        return generateVocabularyFromIndex('fieldOfResearch', context)
+
+
+@implementer(IVocabularyFactory)
+class CancerTypeNamesVocabulary(object):
+    u'''Vocabulary for names of cancer types in protocols'''
+    def __call__(self, context):
+        return generateVocabularyFromIndex('cancerTypeNames', context)
+
+
+def updateCancerTypeNames(context, event):
+    u'''Keep the de-normalized ``cancerTypeNames`` in sync with the relation list ``cancerTypes``.'''
+    if not IProtocol.providedBy(context): return  # This should never happen but I'm defensive—er, paranoid.
+    cancerTypes = context.cancerTypes if context.cancerTypes is not None else []
+    context.cancerTypeNames = list(set([i.to_object.title for i in cancerTypes if not i.isBroken()]))
+    context.reindexObject(idxs=['cancerTypeNames'])

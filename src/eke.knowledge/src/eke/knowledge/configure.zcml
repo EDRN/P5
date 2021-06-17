@@ -285,8 +285,22 @@
         factory='.protocol.PrincipalInvestigatorsVocabulary'
         name='eke.knowledge.vocabularies.PrincipalInvestigatorsWithProtocols'
     />
-
-
+    <utility
+        factory='.protocol.FieldOfResearchVocabulary'
+        name='eke.knowledge.vocabularies.FieldOfResearch'
+    />
+    <utility
+        factory='.protocol.CancerTypeNamesVocabulary'
+        name='eke.knowledge.vocabularies.CancerTypeNames'
+    />
+    <subscriber
+        for='.protocol.IProtocol zope.container.interfaces.IObjectModifiedEvent'
+        handler='.protocol.updateCancerTypeNames'
+    />
+    <subscriber
+        for='.protocol.IProtocol zope.container.interfaces.IObjectAddedEvent'
+        handler='.protocol.updateCancerTypeNames'
+    />
 
     <!-- Publication -->
     <browser:page
@@ -345,5 +359,11 @@
         template='sitefolder_templates/view.pt'
     />
 
+
+    <!-- Miscellaneous utilities -->
+    <utility
+        factory='.utils.CollaborativeGroupVocabulary'
+        name='eke.knowledge.vocabularies.CollaborativeGroups'
+    />
 
 </configure>

@@ -11,9 +11,10 @@ from z3c.relationfield import RelationValue
 from zope import schema
 from zope.component import getUtility
 from zope.event import notify
-from zope.interface import Invalid
+from zope.interface import implementer, Invalid
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectModifiedEvent
+from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
 import plone.api, logging
 
@@ -34,6 +35,13 @@ class IngestConsequences(object):
             len(self.deleted),
             len(self.statements)
         )
+
+
+@implementer(IVocabularyFactory)
+class CollaborativeGroupVocabulary(object):
+    u'''Vocabulary for names of collaborative groups'''
+    def __call__(self, context):
+        return generateVocabularyFromIndex('collaborativeGroup', context)
 
 
 # Functions

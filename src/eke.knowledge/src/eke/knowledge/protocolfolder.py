@@ -153,11 +153,9 @@ class ProtocolIngestor(Ingestor):
                             break
                 # Add more to the description
                 if p.fieldOfResearch:
-                    p.description = p.description + u'; ' + p.fieldOfResearch
+                    p.description = p.description + u' … ' + p.fieldOfResearch
                 if p.collaborativeGroup:
-                    p.description = p.description + u'; ' + u', '.join(p.collaborativeGroup)
-                if p.cancerTypes:
-                    p.description = p.description + u'; ' + u', '.join([i.to_object.title for i in p.cancerTypes])
+                    p.description = p.description + u' … ' + u', '.join(p.collaborativeGroup)
                 # And the involved sites
                 self.setInvolvedInvestigatorSites(p, protocolToInvolvedSites)
         return consequences

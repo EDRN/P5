@@ -38,6 +38,12 @@
     </index>
     <column value='collaborativeGroup' />
 
+    <!-- Facets on disease types -->
+    <index name='cancerTypeNames' meta_type='KeywordIndex'>
+        <indexed_attr value='cancerTypeNames' />
+    </index>
+    <column value='cancerTypeNames' />
+
     <!-- Display of protocols on people -->
     <index name='investigatorIdentifiers' meta_type='KeywordIndex'>
         <indexed_attr value='investigatorIdentifiers'/>
@@ -93,6 +99,10 @@
         <indexed_attr value='piURL' />
     </index>
     <column value='piURL'/>
+    <index name='fieldOfResearch' meta_type='FieldIndex'>
+        <indexed_attr value='fieldOfResearch' />
+    </index>
+    <column value='fieldOfResearch'/>
 
     <!-- Display of biomarkerType on biomarker listing -->
     <index name='biomarkerType' meta_type='FieldIndex'>

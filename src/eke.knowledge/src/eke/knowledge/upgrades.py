@@ -389,7 +389,7 @@ def addProtocolFacets(setupTool, logger=None):
         protocols = portal.unrestrictedTraverse('data-and-resources/protocols')
         criteria = ICriteria(protocols)
         criteria.add(
-            'checkbox', 'bottom', 'default',
+            'checkbox', 'left', 'default',
             title=u'Principal Investigator',
             hidden=False,
             index='piName',
@@ -397,6 +397,42 @@ def addProtocolFacets(setupTool, logger=None):
             vocabulary=u'eke.knowledge.vocabularies.PrincipalInvestigatorsWithProtocols',
             count=False,
             maxitems=8,
+            sortreversed=False,
+            hidezerocount=False
+        )
+        criteria.add(
+            'checkbox', 'left', 'default',
+            title=u'Field of Research',
+            hidden=False,
+            index='fieldOfResearch',
+            operator='or',
+            vocabulary=u'eke.knowledge.vocabularies.FieldOfResearch',
+            count=False,
+            maxitems=20,
+            sortreversed=False,
+            hidezerocount=False
+        )
+        criteria.add(
+            'checkbox', 'left', 'default',
+            title=u'Collaborative Group',
+            hidden=False,
+            index='collaborativeGroup',
+            operator='or',
+            vocabulary=u'eke.knowledge.vocabularies.CollaborativeGroups',
+            count=False,
+            maxitems=10,
+            sortreversed=False,
+            hidezerocount=False
+        )
+        criteria.add(
+            'checkbox', 'left', 'default',
+            title=u'Cancer Type',
+            hidden=False,
+            index='cancerTypeNames',
+            operator='or',
+            vocabulary=u'eke.knowledge.vocabularies.CancerTypeNames',
+            count=False,
+            maxitems=10,
             sortreversed=False,
             hidezerocount=False
         )
