@@ -67,7 +67,9 @@ services:
     # Zope Enterprise Objects (ZEO) database server
     edrn-db:
         container_name: edrn-db
-        image: nutjob4life/edrn-p5:${EDRN_PORTAL_VERSION-latest}
+        # image: nutjob4life/edrn-p5:${EDRN_PORTAL_VERSION-latest}
+        # image: plone:5.2.2-alpine
+        image: nutjob4life/edrn-p5:latest
         command: zeo
         volumes:
             -
@@ -96,6 +98,8 @@ services:
             # https://github.com/plone/plone.docker/issues/160
             ZEO_PACK_KEEP_OLD: 'false'
         restart: always
+        healthcheck:
+            disable: true
         stop_grace_period: 13s
         labels:
             org.label-schema.name: Database
