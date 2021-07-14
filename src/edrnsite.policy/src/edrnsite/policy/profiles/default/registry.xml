@@ -8,8 +8,9 @@
             </description>
             <default>«unknown»</default>
         </field>
-        <value>5.1.0</value>
+        <value>5.1.1</value>
     </record>
+<!-- This is already enabled in production but I'm keeping a copy here for posterity or if we ever need to change
     <record name='eke.knowledge.interfaces.IPanel.objects' interface='eke.knowledge.interfaces.IPanel' field='objects' purge='True'>
         <field type='plone.registry.field.List'>
             <description>
@@ -32,4 +33,5 @@
             <element>about/mission-and-structure/groups</element>
         </value>
     </record>
+ -->
 </registry>

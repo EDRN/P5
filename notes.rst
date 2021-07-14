@@ -16,7 +16,7 @@ one to use, apparently.
 For commands below (csh style) and for ``docker-compose.yaml``, first set some
 environment variables::
 
-    setenv EDRN_PORTAL_VERSION 5.1.0
+    setenv EDRN_PORTAL_VERSION 5.1.1
     setenv EDRN_DATA_DIR ${HOME}/Downloads/docker-data/edrn
     setenv EDRN_PUBLISHED_PORT 4135
     mkdir -p ${EDRN_DATA_DIR}/log
