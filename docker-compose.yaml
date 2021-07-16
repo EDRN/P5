@@ -3,6 +3,7 @@
 #
 # Sample Docker Composition to support the EDRN Portal, power level 5.
 
+---
 
 # Services
 # --------
@@ -69,7 +70,7 @@ services:
         container_name: edrn-db
         # image: nutjob4life/edrn-p5:${EDRN_PORTAL_VERSION-latest}
         # image: plone:5.2.2-alpine
-        image: nutjob4life/edrn-p5:latest
+        image: edrn-p5:latest
         command: zeo
         volumes:
             -
@@ -100,6 +101,7 @@ services:
         restart: always
         healthcheck:
             disable: true
+            test: ["NONE"]
         stop_grace_period: 13s
         labels:
             org.label-schema.name: Database
@@ -138,5 +140,6 @@ networks:
 # ----
 #
 # Only thing we have here is some Docker Compose metadata.
-version: '3.7'
+version: '3.8'
 
+...

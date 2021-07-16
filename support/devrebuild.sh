@@ -58,7 +58,7 @@ rsync -c --progress $opsHost:$opsDir/filestorage/Data.fs var/filestorage
 #
 # You'll also have to manually add your own Zope "Manager" user.
 #
-# exit 0
+exit 0
 
 password=`openssl rand -hex 16`
 echo "👮‍♀️ Adding Manager account to Zope DB; username = «admin», password = «${password}»"
