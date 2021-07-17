@@ -49,9 +49,10 @@ FROM python:2.7.17-alpine3.11
 #
 # The urllib3 is to get around a Twit-lock security flag
 # And urllib3 1.25.7 → 1.25.9 is another Twit-lock security flag
+# And urllib3 1.25.9 → 1.26.6 for yet another Twit-lock security issue
 
 ENV \
-    URLLIB3=1.25.9 \
+    URLLIB3=1.26.6 \
     PIP=9.0.3 \
     ZC_BUILDOUT=2.12.1 \
     SETUPTOOLS=39.1.0 \
@@ -59,7 +60,8 @@ ENV \
     PLONE_MAJOR=5.2 \
     PLONE_VERSION=5.2.2 \
     PLONE_VERSION_RELEASE=Plone-5.2.2-UnifiedInstaller \
-    PLONE_MD5=a603eddfd3abb0528f0861472ebac934
+    PLONE_MD5=a603eddfd3abb0528f0861472ebac934 \
+    UNDERSCORE_TARBALL=https://github.com/jashkenas/underscore/archive/refs/tags/1.12.1.tar.gz
 
 
 # Plone and EDRN Setup
@@ -212,13 +214,37 @@ RUN : &&\
 
 RUN : &&\
     rm \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/BlpImagePlugin.pyc \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/BlpImagePlugin.py \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/BlpImagePlugin.pyo \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/IcnsImagePlugin.pyc \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/IcnsImagePlugin.py \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/IcnsImagePlugin.pyo \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/IcoImagePlugin.pyc \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/IcoImagePlugin.py \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/IcoImagePlugin.pyo \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/FliImagePlugin.pyc \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/FliImagePlugin.py \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/FliImagePlugin.pyo \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/Jpeg2KImagePlugin.pyc \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/Jpeg2KImagePlugin.py \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/Jpeg2KImagePlugin.pyo \
         /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/SgiImagePlugin.pyc \
         /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/SgiImagePlugin.py \
         /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/SgiImagePlugin.pyo \
         /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/TiffImagePlugin.pyo \
         /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/PcxImagePlugin.py \
         /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/PcxImagePlugin.pyc \
-        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/PcxImagePlugin.pyo &&\
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/PcxImagePlugin.pyo \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/EpsImagePlugin.py \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/EpsImagePlugin.pyc \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/EpsImagePlugin.pyo &&\
+        apk add apk-tools@edge busybox@edge &&\
+        curl --silent --location $UNDERSCORE_TARBALL | tar x -f - -C /tmp -z underscore-1.12.1/underscore.js underscore-1.12.1/underscore-min.js &&\
+        cp /tmp/underscore-1.12.1/underscore-min.js /plone/buildout-cache/eggs/plone.staticresources-1.4.1-py2.7.egg/plone/staticresources/static/components/underscore &&\
+        cp /tmp/underscore-1.12.1/underscore.js /plone/buildout-cache/eggs/plone.staticresources-1.4.1-py2.7.egg/plone/staticresources/static/components/underscore &&\
+        cp /tmp/underscore-1.12.1/underscore.js /plone/buildout-cache/eggs/plone.staticresources-1.4.1-py2.7.egg/plone/staticresources/static/components/backbone.paginator/examples/libs &&\
+        rm -rf /tmp/underscore-1.12.1 &&\
     :
 
 
