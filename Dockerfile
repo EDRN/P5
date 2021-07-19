@@ -56,6 +56,7 @@ ENV \
     PIP=9.0.3 \
     ZC_BUILDOUT=2.12.1 \
     SETUPTOOLS=39.1.0 \
+    PIP=19.2 \
     WHEEL=0.31.1 \
     PLONE_MAJOR=5.2 \
     PLONE_VERSION=5.2.2 \
@@ -245,6 +246,7 @@ RUN : &&\
     cp /tmp/underscore-1.12.1/underscore.js /plone/buildout-cache/eggs/plone.staticresources-1.4.1-py2.7.egg/plone/staticresources/static/components/underscore &&\
     cp /tmp/underscore-1.12.1/underscore.js /plone/buildout-cache/eggs/plone.staticresources-1.4.1-py2.7.egg/plone/staticresources/static/components/backbone.paginator/examples/libs &&\
     rm -rf /tmp/underscore-1.12.1 &&\
+    /usr/local/bin/pip install --upgrade pip==$PIP &&\
     :
 
 

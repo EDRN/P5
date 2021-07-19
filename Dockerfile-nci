@@ -53,7 +53,7 @@ FROM python:2.7.17-alpine3.11
 
 ENV \
     URLLIB3=1.26.6 \
-    PIP=9.0.3 \
+    PIP=19.2 \
     ZC_BUILDOUT=2.12.1 \
     SETUPTOOLS=39.1.0 \
     WHEEL=0.31.1 \
@@ -245,6 +245,7 @@ RUN : &&\
         cp /tmp/underscore-1.12.1/underscore.js /plone/buildout-cache/eggs/plone.staticresources-1.4.1-py2.7.egg/plone/staticresources/static/components/underscore &&\
         cp /tmp/underscore-1.12.1/underscore.js /plone/buildout-cache/eggs/plone.staticresources-1.4.1-py2.7.egg/plone/staticresources/static/components/backbone.paginator/examples/libs &&\
         rm -rf /tmp/underscore-1.12.1 &&\
+        /usr/local/bin/pip install --upgrade pip==$PIP &&\
     :
 
 
