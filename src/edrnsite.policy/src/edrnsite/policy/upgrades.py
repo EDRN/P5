@@ -8,7 +8,7 @@ from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobImage
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
-import logging, plone.api, os
+import logging, plone.api, os, pkg_resources
 
 PROFILE = 'profile-' + PACKAGE_NAME + ':default'
 
@@ -255,6 +255,29 @@ def setLabcasRDF(setupTool, logger=None):
         scienceData.rdfDataSources = [u'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/labcas/@@rdf']
     except KeyError:
         logger.info(u'No science data folder found in data-and-resources/data; not updating its RDF URLs')
+
+
+def installContactInformation(setupTool, logger=None):
+    '''Set up a new contact page.'''
+    if logger is None: logger = logging.getLogger(__name__)
+    portal = plone.api.portal.get()
+    try:
+        administrivia = portal.unrestrictedTraverse('administrivia')
+        if 'contact-us' in administrivia.keys():
+            logger.info(u'The administriva folder already has a contact-us page; not adding a new one')
+            return
+        with pkg_resources.resource_stream(__name__, 'content/pages/contact.html') as f:
+            contactUs = createContentInContainer(
+                administrivia,
+                'Document',
+                id='contact-us',
+                title=u'Contact Us',
+                description=u'Division of Cancer Prevention (DCP), NCI',
+                text=RichTextValue(f.read().decode('utf-8'), 'text/html', 'text/x-html-safe')
+            )
+            publish(contactUs)
+    except KeyError:
+        logger.info(u'There is no administriva folder so I cannot add a contact-us page; skipping it')
 
 
 # Boilerplate from paster template; leaving for posterity:

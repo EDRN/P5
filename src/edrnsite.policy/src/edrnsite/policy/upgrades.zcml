@@ -89,5 +89,28 @@
         source='1010' destination='1011' sortkey='100'
     />
 
+    <!-- 1011 → 1012 -->
+    <genericsetup:upgradeStep
+        title='Reload Registry (1011→1012)'
+        description='Get the new portal version number (and other things) loaded in the Plone Registry'
+        profile='edrnsite.policy:default'
+        handler='.upgrades.reloadRegistry'
+        source='1011' destination='1012' sortkey='100'
+    />
+    <genericsetup:upgradeStep
+        title='Reload Portlets (1011→1012)'
+        description='Remake the footer portlet'
+        profile='edrnsite.policy:default'
+        handler='.upgrades.reloadPortlets'
+        source='1011' destination='1012' sortkey='110'
+    />
+    <genericsetup:upgradeStep
+        title='Add contact page (1011→1012)'
+        description='Install the new contact us page'
+        profile='edrnsite.policy:default'
+        handler='.upgrades.installContactInformation'
+        source='1011' destination='1012' sortkey='110'
+    />
+
 
 </configure>

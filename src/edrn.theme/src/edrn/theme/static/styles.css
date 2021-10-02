@@ -44,8 +44,216 @@ a:visited {
     padding-left: 1em !important;
 }
 
-/* Kara's redesigned footer */
-#portal-footer .site-actions {
+/* Kara's redesigned footer, but DCEG style */
+
+#portal-footer-wrapper {
+    background:  url(++resource++edrn.theme/heaxgon-molecular-structure-footer.png) no-repeat 100% 0, linear-gradient(45deg, #4659a5, #2f779d);
+    padding:  1em 0px;
+    color: #fff;
+    font-family: Noto Sans,Century Gothic,Arial,sans-serif;
+    text-align: left;
+    -webkit-font-smoothing: antialiased;
+}
+#portal-footer-wrapper a {
+    color: #fff;
+}
+.show-for-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+}
+.site-footer * {
+    color: #fff;
+    font-family: Noto Sans,Century Gothic,Arial,sans-serif;
+    text-align: left;
+    -webkit-font-smoothing: antialiased;
+}
+.site-footer__container {
+    width: 100%;
+    max-width: 62.5em;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+.site-footer__header {
+    text-align: left;
+}
+.site-footer__header h1 {
+    font-weight: bold;
+    font-size: 30px;
+}
+.site-footer h2 {
+    font-size: 1.2em;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin-bottom: 1em;
+    line-height: 1.215em;
+}
+.site-footer__header h1 span {
+    font-family: Montserrat,Avant Garde,Arial,sans-serif;
+    display: block;
+    font-size: 18px;
+}
+.site-footer__nav {
+    display: flex;
+    flex-direction: column;
+    margin: 1em auto;
+}
+.site-footer__nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    line-height: 1.5;
+    margin-left: 0;
+    margin-bottom: 1.25em;
+    list-style: none;
+    padding-inline-start: 0;
+    overflow-wrap: normal;
+    padding: 0;
+    vertical-align: baseline;
+}
+.site-footer__icons ul {
+    flex-direction: row;
+}
+.site-footer__icons li {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.site-footer a {
+    font-weight: 700;
+}
+.site-footer__nav li {
+    line-height: 1.3em;
+    margin-bottom: 1em;
+}
+.site-footer__icons .icon.govdelivery {
+    width: 1.5em;
+    height: 1.5em;
+    display: inline-block;
+    background-position: 6.89655% 35.75515%;
+    background-image: url(++resource++edrn.theme/svg-sprite-blue.svg);
+    background-size: 10.625em 110.8125em;
+}
+.site-footer__icons .icon.twitter {
+    width: 1.3125em;
+    height: 1.09531em;
+    background-position: 6.75676% 82.58881%;
+    display: inline-block;
+    background-image: url(++resource++edrn.theme/svg-sprite-blue.svg);
+    background-size: 10.625em 110.8125em;
+}
+.site-footer__agencies {
+    width: auto;
+    align-self: center;
+    font-size: 0.8em;
+}
+.site-footer__agencies ul {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.5;
+    list-style: none;
+    padding-inline-start: 0;
+}
+.site-footer__agencies li:after {
+    content: "";
+    display: block;
+    margin: 10px auto;
+    width: 1px;
+    height: 1px;
+    background: hsla(0,0%,100%,0.6);
+}
+.site-footer__agencies li:last-child:after {
+    display: none;
+}
+.site-footer__tagline {
+    display: block;
+    width: 95%;
+    align-self: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+.site-footer__tagline h4 {
+    font-weight: 400;
+    text-align: center;
+}
+@media only screen and (min-width: 641px) {
+    .site-footer__header {
+        margin: 0.9375em;
+    }
+    .site-footer__nav {
+        max-width: 100%;
+        margin: 0.9375em;
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+    .site-footer__nav div {
+        flex: 1;
+        padding-right: 1.1em;
+    }
+    .site-footer__icons {
+        max-width: 100%;
+    }
+    .site-footer__nav * {
+        color: #fff;
+        font-family: Noto Sans,Century Gothic,Arial,sans-serif;
+        -webkit-font-smoothing: antialiased;
+        text-align: left;
+    }
+    .site-footer__icons li {
+        margin: 6px 11px 6px 0;
+    }
+    .site-footer__agencies ul {
+        flex-flow: row wrap;
+        justify-content: center;
+        max-width: 640px;
+        padding-inline-start: 0;
+    }
+    .site-footer__agencies li:after {
+        content: "";
+        display: inline-block;
+        position: relative;
+        top: 1px;
+        margin: 0 10px;
+        width: 1;
+        height: 12px;
+        background: hsla(0,0%,100%,0.6);
+    }
+    .site-footer__agencies li:not(:last-child):after {
+        display: inline-block;
+    }
+}
+@media only screen and (min-width: 1025px){
+    .site-footer {
+        background-position: 130% 150px
+    }
+    .site-footer__nav div {
+        flex-basis: 20%;
+        margin-right: 2%;
+        padding-right: 10px
+    }
+    .site-footer__agencies ul {
+        max-width: none;
+    }
+    .site-footer__agencies li:not(:last-child):after {
+        display: inline-block
+    }
+}
+@media only screen and (min-width: 1441px) {
+    .site-footer__container{
+        max-width: 1200px
+    }
+}/*#portal-footer .site-actions {
     text-align: left;
 }
 #portal-footer .site-actions ul li {
@@ -68,15 +276,6 @@ a:visited {
     color: white;
     font-size: 11pt;
 }
-#edrn-colophon {
-    text-align: right;
-    padding: 10px;
-    font-size: 9pt;
-}
-.colophonWrapper {
-    padding-right: 20px;
-    padding-bottom: 10px;
-}
 .nih-link-sep {
     padding: 0 0.5em;
 }
@@ -87,6 +286,18 @@ a:visited {
     height: 5px;
     margin-top: -4px;
     margin-bottom: 4px;
+}
+*/
+
+
+#edrn-colophon {
+    text-align: right;
+    padding: 10px;
+    font-size: 9pt;
+}
+.colophonWrapper {
+    padding-right: 20px;
+    padding-bottom: 10px;
 }
 
 .small-proviso {
@@ -271,3 +482,5 @@ ul#edrn-quicklinks li {
 .aboutEDRNTopic h2 a img {
     margin-top: 0;
 }
+
+.
