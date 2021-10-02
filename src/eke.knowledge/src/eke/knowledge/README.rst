@@ -241,7 +241,7 @@ numbers. Watch what happens when we ingest now::
     >>> publicationsFolder.grantNumbers
     [u'CA214194', u'CA214195']
     >>> browser.open(portalURL + '/@@ingestRDF')
-    >>> 9 <= len(publicationsFolder.keys()) <= 25
+    >>> 9 <= len(publicationsFolder.keys()) <= 45
     True
     >>> keys = publicationsFolder.keys()
     >>> '28716134-detecting-protein-variants-by-mass' in keys
@@ -375,8 +375,8 @@ acceptable values:
     >>> keys
     ['279-lung-reference-set-a-application-edward', '316-hepatocellular-carcinoma-early-detection']
     >>> protocol = protocolsFolder['279-lung-reference-set-a-application-edward']
-    >>> protocol.description
-    u'Sticky'
+    >>> protocol.description.startswith(u'Sticky')
+    True
 
 
 Science Data
