@@ -4,6 +4,7 @@ from . import PACKAGE_NAME
 from .setuphandlers import publish
 from .utils import installImage
 from plone.app.textfield.value import RichTextValue
+from plone.app.viewletmanager.interfaces import IViewletSettingsStorage
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobImage
 from plone.registry.interfaces import IRegistry
@@ -278,6 +279,18 @@ def installContactInformation(setupTool, logger=None):
             publish(contactUs)
     except KeyError:
         logger.info(u'There is no administriva folder so I cannot add a contact-us page; skipping it')
+
+
+def hidePathBar(setupTool, logger=None):
+    if logger is None: logger = logging.getLogger(__name__)
+    skin, storage = setupTool.getCurrentSkinName(), getUtility(IViewletSettingsStorage)
+    hidden = list(storage.getHidden(u'plone.abovecontent', skin))
+    if u'plone.path_bar' not in hidden:
+        logger.info(u'The Plone breadcrumbs is enabled so hiding it.')
+        hidden.append(u'plone.path_bar')
+        storage.setHidden(u'plone.abovecontent', skin, hidden)
+    else:
+        logger.info(u'The Plone breadcrumbs is already hidden.')
 
 
 # Boilerplate from paster template; leaving for posterity:

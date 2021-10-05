@@ -109,7 +109,14 @@
         description='Install the new contact us page'
         profile='edrnsite.policy:default'
         handler='.upgrades.installContactInformation'
-        source='1011' destination='1012' sortkey='110'
+        source='1011' destination='1012' sortkey='120'
+    />
+    <genericsetup:upgradeStep
+        title='Hide the path bar (1011→1012)'
+        description='People cannot figure what this second "home" button is so just get rid of the breadcrumbs'
+        profile='edrnsite.policy:default'
+        handler='.upgrades.hidePathBar'
+        source='1011' destination='1012' sortkey='130'
     />
 
 
