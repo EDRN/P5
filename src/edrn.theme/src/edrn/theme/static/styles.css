@@ -483,4 +483,8 @@ ul#edrn-quicklinks li {
     margin-top: 0;
 }
 
-.
+/* #110 */
+
+.glyphicon.link-https {
+    display: none;
+}
