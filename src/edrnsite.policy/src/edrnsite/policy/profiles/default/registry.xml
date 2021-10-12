@@ -27,20 +27,272 @@
     <!-- Fix broken fonts that Plone mysteriously introduced for no reason
     See: https://community.plone.org/t/fonts-fail-to-load-after-plone-registry-rebuild/3116/3
     -->
-    <records prefix='plone.bundles/plone' interface='Products.CMFPlone.interfaces.IBundleRegistry'>
-        <value key='merge_with'></value>
-    </records>
-
-    <records prefix='plone.bundles/plone-logged-in' interface='Products.CMFPlone.interfaces.IBundleRegistry'>
-        <value key='merge_with'></value>
-    </records>
-
-    <records prefix='plone.bundles/resourceregistry' interface='Products.CMFPlone.interfaces.IBundleRegistry'>
-        <value key='merge_with'></value>
-    </records>
-    <records prefix='plone.bundles/thememapper' interface='Products.CMFPlone.interfaces.IBundleRegistry'>
-        <value key='merge_with'></value>
-    </records>
+  <record name="plone.bundles/captchapolicy.merge_with" interface="Products.CMFPlone.interfaces.resources.IBundleRegistry" field="merge_with">
+    <field type="plone.registry.field.Choice">
+      <default></default>
+      <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">In production mode, bundles are merged together to reduce the quantity of JS and CSS resources loaded by the browser. Choose 'default' if this bundle must be available for all the visitors, choose 'logged-in' if it must be available for logged-in users only, or leave it empty if it must not be merged.</description>
+      <required>False</required>
+      <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Merge with</title>
+      <values>
+        <element></element>
+        <element>default</element>
+        <element>logged-in</element>
+      </values>
+    </field>
+    <value></value> <!-- 👈 REPLACED with EMPTY value, hope this was correct -->
+  </record>
+  <record name="plone.bundles/faceted-edit.merge_with" interface="Products.CMFPlone.interfaces.resources.IBundleRegistry" field="merge_with">
+    <field type="plone.registry.field.Choice">
+      <default></default>
+      <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">In production mode, bundles are merged together to reduce the quantity of JS and CSS resources loaded by the browser. Choose 'default' if this bundle must be available for all the visitors, choose 'logged-in' if it must be available for logged-in users only, or leave it empty if it must not be merged.</description>
+      <required>False</required>
+      <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Merge with</title>
+      <values>
+        <element></element>
+        <element>default</element>
+        <element>logged-in</element>
+      </values>
+    </field>
+    <value></value>
+  </record>
+  <record name="plone.bundles/faceted-jquery.merge_with" interface="Products.CMFPlone.interfaces.resources.IBundleRegistry" field="merge_with">
+    <field type="plone.registry.field.Choice">
+      <default></default>
+      <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">In production mode, bundles are merged together to reduce the quantity of JS and CSS resources loaded by the browser. Choose 'default' if this bundle must be available for all the visitors, choose 'logged-in' if it must be available for logged-in users only, or leave it empty if it must not be merged.</description>
+      <required>False</required>
+      <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Merge with</title>
+      <values>
+        <element></element>
+        <element>default</element>
+        <element>logged-in</element>
+      </values>
+    </field>
+    <value></value>
+  </record>
+  <record name="plone.bundles/faceted-view.merge_with" interface="Products.CMFPlone.interfaces.resources.IBundleRegistry" field="merge_with">
+    <field type="plone.registry.field.Choice">
+      <default></default>
+      <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">In production mode, bundles are merged together to reduce the quantity of JS and CSS resources loaded by the browser. Choose 'default' if this bundle must be available for all the visitors, choose 'logged-in' if it must be available for logged-in users only, or leave it empty if it must not be merged.</description>
+      <required>False</required>
+      <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Merge with</title>
+      <values>
+        <element></element>
+        <element>default</element>
+        <element>logged-in</element>
+      </values>
+    </field>
+    <value></value>
+  </record>
+  <record name="plone.bundles/filemanager.merge_with" interface="Products.CMFPlone.interfaces.resources.IBundleRegistry" field="merge_with">
+    <field type="plone.registry.field.Choice">
+      <default></default>
+      <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">In production mode, bundles are merged together to reduce the quantity of JS and CSS resources loaded by the browser. Choose 'default' if this bundle must be available for all the visitors, choose 'logged-in' if it must be available for logged-in users only, or leave it empty if it must not be merged.</description>
+      <required>False</required>
+      <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Merge with</title>
+      <values>
+        <element></element>
+        <element>default</element>
+        <element>logged-in</element>
+      </values>
+    </field>
+    <value></value>
+  </record>
+  <record name="plone.bundles/jqueryui.merge_with" interface="Products.CMFPlone.interfaces.resources.IBundleRegistry" field="merge_with">
+    <field type="plone.registry.field.Choice">
+      <default></default>
+      <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">In production mode, bundles are merged together to reduce the quantity of JS and CSS resources loaded by the browser. Choose 'default' if this bundle must be available for all the visitors, choose 'logged-in' if it must be available for logged-in users only, or leave it empty if it must not be merged.</description>
+      <required>False</required>
+      <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Merge with</title>
+      <values>
+        <element></element>
+        <element>default</element>
+        <element>logged-in</element>
+      </values>
+    </field>
+    <value></value>
+  </record>
+  <record name="plone.bundles/plone-base.merge_with" interface="Products.CMFPlone.interfaces.resources.IBundleRegistry" field="merge_with">
+    <field type="plone.registry.field.Choice">
+      <default></default>
+      <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">In production mode, bundles are merged together to reduce the quantity of JS and CSS resources loaded by the browser. Choose 'default' if this bundle must be available for all the visitors, choose 'logged-in' if it must be available for logged-in users only, or leave it empty if it must not be merged.</description>
+      <required>False</required>
+      <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Merge with</title>
+      <values>
+        <element></element>
+        <element>default</element>
+        <element>logged-in</element>
+      </values>
+    </field>
+    <value></value> <!-- 👈 REPLACED with EMPTY value, hope this was correct -->
+  </record>
+  <record name="plone.bundles/plone-datatables.merge_with" interface="Products.CMFPlone.interfaces.resources.IBundleRegistry" field="merge_with">
+    <field type="plone.registry.field.Choice">
+      <default></default>
+      <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">In production mode, bundles are merged together to reduce the quantity of JS and CSS resources loaded by the browser. Choose 'default' if this bundle must be available for all the visitors, choose 'logged-in' if it must be available for logged-in users only, or leave it empty if it must not be merged.</description>
+      <required>False</required>
+      <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Merge with</title>
+      <values>
+        <element></element>
+        <element>default</element>
+        <element>logged-in</element>
+      </values>
+    </field>
+    <value></value> <!-- 👈 REPLACED with EMPTY value, hope this was correct -->
+  </record>
+  <record name="plone.bundles/plone-editor-tools.merge_with" interface="Products.CMFPlone.interfaces.resources.IBundleRegistry" field="merge_with">
+    <field type="plone.registry.field.Choice">
+      <default></default>
+      <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">In production mode, bundles are merged together to reduce the quantity of JS and CSS resources loaded by the browser. Choose 'default' if this bundle must be available for all the visitors, choose 'logged-in' if it must be available for logged-in users only, or leave it empty if it must not be merged.</description>
+      <required>False</required>
+      <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Merge with</title>
+      <values>
+        <element></element>
+        <element>default</element>
+        <element>logged-in</element>
+      </values>
+    </field>
+    <value>logged-in</value>
+  </record>
+  <record name="plone.bundles/plone-fontello.merge_with" interface="Products.CMFPlone.interfaces.resources.IBundleRegistry" field="merge_with">
+    <field type="plone.registry.field.Choice">
+      <default></default>
+      <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">In production mode, bundles are merged together to reduce the quantity of JS and CSS resources loaded by the browser. Choose 'default' if this bundle must be available for all the visitors, choose 'logged-in' if it must be available for logged-in users only, or leave it empty if it must not be merged.</description>
+      <required>False</required>
+      <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Merge with</title>
+      <values>
+        <element></element>
+        <element>default</element>
+        <element>logged-in</element>
+      </values>
+    </field>
+    <value></value> <!-- 👈 REPLACED with EMPTY value, hope this was correct -->
+  </record>
+  <record name="plone.bundles/plone-glyphicons.merge_with" interface="Products.CMFPlone.interfaces.resources.IBundleRegistry" field="merge_with">
+    <field type="plone.registry.field.Choice">
+      <default></default>
+      <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">In production mode, bundles are merged together to reduce the quantity of JS and CSS resources loaded by the browser. Choose 'default' if this bundle must be available for all the visitors, choose 'logged-in' if it must be available for logged-in users only, or leave it empty if it must not be merged.</description>
+      <required>False</required>
+      <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Merge with</title>
+      <values>
+        <element></element>
+        <element>default</element>
+        <element>logged-in</element>
+      </values>
+    </field>
+    <value></value> <!-- 👈 REPLACED with EMPTY value, hope this was correct -->
+  </record>
+  <record name="plone.bundles/plone-legacy.merge_with" interface="Products.CMFPlone.interfaces.resources.IBundleRegistry" field="merge_with">
+    <field type="plone.registry.field.Choice">
+      <default></default>
+      <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">In production mode, bundles are merged together to reduce the quantity of JS and CSS resources loaded by the browser. Choose 'default' if this bundle must be available for all the visitors, choose 'logged-in' if it must be available for logged-in users only, or leave it empty if it must not be merged.</description>
+      <required>False</required>
+      <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Merge with</title>
+      <values>
+        <element></element>
+        <element>default</element>
+        <element>logged-in</element>
+      </values>
+    </field>
+    <value></value> <!-- 👈 REPLACED with EMPTY value, hope this was correct -->
+  </record>
+  <record name="plone.bundles/plone-logged-in.merge_with" interface="Products.CMFPlone.interfaces.resources.IBundleRegistry" field="merge_with">
+    <field type="plone.registry.field.Choice">
+      <default></default>
+      <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">In production mode, bundles are merged together to reduce the quantity of JS and CSS resources loaded by the browser. Choose 'default' if this bundle must be available for all the visitors, choose 'logged-in' if it must be available for logged-in users only, or leave it empty if it must not be merged.</description>
+      <required>False</required>
+      <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Merge with</title>
+      <values>
+        <element></element>
+        <element>default</element>
+        <element>logged-in</element>
+      </values>
+    </field>
+    <value>logged-in</value>
+  </record>
+  <record name="plone.bundles/plone-moment.merge_with" interface="Products.CMFPlone.interfaces.resources.IBundleRegistry" field="merge_with">
+    <field type="plone.registry.field.Choice">
+      <default></default>
+      <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">In production mode, bundles are merged together to reduce the quantity of JS and CSS resources loaded by the browser. Choose 'default' if this bundle must be available for all the visitors, choose 'logged-in' if it must be available for logged-in users only, or leave it empty if it must not be merged.</description>
+      <required>False</required>
+      <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Merge with</title>
+      <values>
+        <element></element>
+        <element>default</element>
+        <element>logged-in</element>
+      </values>
+    </field>
+    <value></value> <!-- 👈 REPLACED with EMPTY value, hope this was correct -->
+  </record>
+  <record name="plone.bundles/plone-tinymce.merge_with" interface="Products.CMFPlone.interfaces.resources.IBundleRegistry" field="merge_with">
+    <field type="plone.registry.field.Choice">
+      <default></default>
+      <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">In production mode, bundles are merged together to reduce the quantity of JS and CSS resources loaded by the browser. Choose 'default' if this bundle must be available for all the visitors, choose 'logged-in' if it must be available for logged-in users only, or leave it empty if it must not be merged.</description>
+      <required>False</required>
+      <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Merge with</title>
+      <values>
+        <element></element>
+        <element>default</element>
+        <element>logged-in</element>
+      </values>
+    </field>
+    <value>logged-in</value>
+  </record>
+  <record name="plone.bundles/plone.merge_with" interface="Products.CMFPlone.interfaces.resources.IBundleRegistry" field="merge_with">
+    <field type="plone.registry.field.Choice">
+      <default></default>
+      <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">In production mode, bundles are merged together to reduce the quantity of JS and CSS resources loaded by the browser. Choose 'default' if this bundle must be available for all the visitors, choose 'logged-in' if it must be available for logged-in users only, or leave it empty if it must not be merged.</description>
+      <required>False</required>
+      <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Merge with</title>
+      <values>
+        <element></element>
+        <element>default</element>
+        <element>logged-in</element>
+      </values>
+    </field>
+    <value></value> <!-- 👈 REPLACED with EMPTY value, hope this was correct -->
+  </record>
+  <record name="plone.bundles/resourceregistry.merge_with" interface="Products.CMFPlone.interfaces.resources.IBundleRegistry" field="merge_with">
+    <field type="plone.registry.field.Choice">
+      <default></default>
+      <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">In production mode, bundles are merged together to reduce the quantity of JS and CSS resources loaded by the browser. Choose 'default' if this bundle must be available for all the visitors, choose 'logged-in' if it must be available for logged-in users only, or leave it empty if it must not be merged.</description>
+      <required>False</required>
+      <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Merge with</title>
+      <values>
+        <element></element>
+        <element>default</element>
+        <element>logged-in</element>
+      </values>
+    </field>
+    <value></value>
+  </record>
+  <record name="plone.bundles/thememapper.merge_with" interface="Products.CMFPlone.interfaces.resources.IBundleRegistry" field="merge_with">
+    <field type="plone.registry.field.Choice">
+      <default></default>
+      <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">In production mode, bundles are merged together to reduce the quantity of JS and CSS resources loaded by the browser. Choose 'default' if this bundle must be available for all the visitors, choose 'logged-in' if it must be available for logged-in users only, or leave it empty if it must not be merged.</description>
+      <required>False</required>
+      <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Merge with</title>
+      <values>
+        <element></element>
+        <element>default</element>
+        <element>logged-in</element>
+      </values>
+    </field>
+    <value></value>
+  </record>
+  <record name="plone.bundles/yafowil.merge_with" interface="Products.CMFPlone.interfaces.resources.IBundleRegistry" field="merge_with">
+    <field type="plone.registry.field.Choice">
+      <default></default>
+      <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">In production mode, bundles are merged together to reduce the quantity of JS and CSS resources loaded by the browser. Choose 'default' if this bundle must be available for all the visitors, choose 'logged-in' if it must be available for logged-in users only, or leave it empty if it must not be merged.</description>
+      <required>False</required>
+      <title xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="plone" ns0:translate="">Merge with</title>
+      <values>
+        <element></element>
+        <element>default</element>
+        <element>logged-in</element>
+      </values>
+    </field>
+    <value></value>
+  </record>
 
 
 <!-- This is already enabled in production but I'm keeping a copy here for posterity or if we ever need to change
