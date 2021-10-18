@@ -197,7 +197,11 @@ def install2020SOWHomePage(setupTool, logger=None):
 
 
 def install202SOWMenus(setupTool, logger=None):
+    if logger is None: logger = logging.getLogger(__name__)
     portal = plone.api.portal.get()
+    if 'resources' not in portal:
+        logger.info('No resources in this portal so this must be a stripped down version, skipping 202SOWMenus')
+        return
     from .dropDownMenus import install as installDropDownMenus
     installDropDownMenus(portal)
 
