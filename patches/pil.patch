@@ -1,0 +1,11 @@
+--- /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/ImageColor.py.orig
++++ /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/ImageColor.py
+@@ -32,6 +32,8 @@
+     :param color: A color string
+     :return: ``(red, green, blue[, alpha])``
+     """
++    if len(color) > 100:
++        raise ValueError("color specifier is too long")
+     color = color.lower()
+ 
+     rgb = colormap.get(color, None)

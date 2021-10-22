@@ -53,10 +53,9 @@ FROM python:2.7.17-alpine3.11
 
 ENV \
     URLLIB3=1.26.6 \
-    PIP=9.0.3 \
+    PIP=19.2 \
     ZC_BUILDOUT=2.12.1 \
     SETUPTOOLS=39.1.0 \
-    PIP=19.2 \
     WHEEL=0.31.1 \
     PLONE_MAJOR=5.2 \
     PLONE_VERSION=5.2.2 \
@@ -91,6 +90,7 @@ RUN : &&\
 COPY --chown=edrn:edrn buildout.cfg docker.cfg /plone/instance/
 COPY --chown=edrn:edrn etc /plone/instance/etc
 COPY --chown=edrn:edrn src /plone/instance/src
+COPY --chown=edrn:edrn patches /plone/instance/patches
 COPY docker-initialize.py docker-entrypoint.sh /
 
 
@@ -107,7 +107,7 @@ RUN : &&\
     : More Twit-lock &&\
     apk del tiff &&\
     : We will uninstall these later &&\
-    buildDeps="gcc bzip2-dev musl-dev libjpeg-turbo-dev openjpeg-dev pcre-dev openssl-dev tiff-dev libxml2-dev libxslt-dev zlib-dev openldap-dev cyrus-sasl-dev libffi-dev" &&\
+    buildDeps="patch gcc bzip2-dev musl-dev libjpeg-turbo-dev openjpeg-dev pcre-dev openssl-dev tiff-dev libxml2-dev libxslt-dev zlib-dev openldap-dev cyrus-sasl-dev libffi-dev" &&\
     apk add --virtual plone-build $buildDeps &&\
     : These stay &&\
     runDeps="curl krb5-libs@edge openjpeg@edge libldap@edge libsasl libjpeg-turbo tiff libxml2 libxslt lynx netcat-openbsd libstdc++@edge libgcc@edge sqlite-libs@edge poppler-utils@edge rsync wv su-exec bash" &&\
@@ -205,8 +205,6 @@ RUN : &&\
     ln -s /data/blobstorage /plone/instance/var/blobstorage &&\
     chown -R edrn:edrn /plone /data &&\
     rm -rf /Plone* &&\
-    apk del plone-build &&\
-    rm -rf /plone/buildout-cache/downloads/* /var/cache/apk/* &&\
     :
 
 
@@ -239,14 +237,20 @@ RUN : &&\
         /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/PcxImagePlugin.pyo \
         /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/EpsImagePlugin.py \
         /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/EpsImagePlugin.pyc \
-        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/EpsImagePlugin.pyo &&\
-    apk add apk-tools@edge busybox@edge &&\
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/EpsImagePlugin.pyo \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/ImageColor.pyc \
+        /plone/buildout-cache/eggs/Pillow-6.2.2-py2.7-linux-x86_64.egg/PIL/ImageColor.pyo &&\
+    patch -p0 </plone/instance/patches/pil.patch &&\
+    apk del plone-build &&\
+    apk add apk-tools@edge busybox@edge ncurses-libs@edge ncurses-terminfo-base@edge &&\
     curl --silent --location $UNDERSCORE_TARBALL | tar x -f - -C /tmp -z underscore-1.12.1/underscore.js underscore-1.12.1/underscore-min.js &&\
     cp /tmp/underscore-1.12.1/underscore-min.js /plone/buildout-cache/eggs/plone.staticresources-1.4.1-py2.7.egg/plone/staticresources/static/components/underscore &&\
     cp /tmp/underscore-1.12.1/underscore.js /plone/buildout-cache/eggs/plone.staticresources-1.4.1-py2.7.egg/plone/staticresources/static/components/underscore &&\
     cp /tmp/underscore-1.12.1/underscore.js /plone/buildout-cache/eggs/plone.staticresources-1.4.1-py2.7.egg/plone/staticresources/static/components/backbone.paginator/examples/libs &&\
     rm -rf /tmp/underscore-1.12.1 &&\
     /usr/local/bin/pip install --upgrade pip==$PIP &&\
+    rm -rf /plone/instance/patches &&\
+    rm -rf /plone/buildout-cache/downloads/* /var/cache/apk/* &&\
     :
 
 
