@@ -154,10 +154,10 @@ class ProtocolIngestor(Ingestor):
                             p.description = value
                             break
                 # Add more to the description
-                if p.fieldOfResearch:
-                    p.description = p.description + u' … ' + p.fieldOfResearch
+                if p.fieldOfResearch and p.fieldOfResearch != u'UNKNOWN':
+                    p.description += p.description + u' … ' + p.fieldOfResearch
                 if p.collaborativeGroup:
-                    p.description = p.description + u' … ' + u', '.join(p.collaborativeGroup)
+                    p.description += u' … (Collaborative Groups: ' + u', '.join(p.collaborativeGroup) + u')'
                 # And the involved sites
                 self.setInvolvedInvestigatorSites(p, protocolToInvolvedSites)
         return consequences
