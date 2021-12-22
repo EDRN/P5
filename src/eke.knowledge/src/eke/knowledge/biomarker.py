@@ -226,7 +226,7 @@ class IBiomarkerBodySystem(IKnowledgeObject, IResearchedObject, IPhasedObject, I
     )
 
 
-class IBodySystemStudy(IKnowledgeObject, IResearchedObject):
+class IBodySystemStudy(IKnowledgeObject, IResearchedObject, IPhasedObject):
     '''Study-specific information on a biomarker's effects on a single organ.'''
     protocol = RelationChoice(
         title=_(u'Study'),
@@ -300,6 +300,10 @@ def updatePhases(context, event):
         phase = biomarkerBodySystem.phase
         if phase is not None and phase:
             phases.add(phase)
+        for studyObjID, bodySystemStudy in biomarkerBodySystem.contentItems():
+            phase = bodySystemStudy.phase
+            if phase is not None and phase:
+                phases.add(phase)
     biomarker.phases = list(phases)
     biomarker.reindexObject(idxs=['phases'])
 

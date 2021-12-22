@@ -107,6 +107,11 @@
                                     i18n:translate='bm_noAbstractText' class='discreet'>
                                     No abstract available.
                                 </p>
+                                <p>
+                                    <label>Biomarker Phase:</label>
+                                    <span tal:condition='study/obj/phase' tal:replace='study/obj/phase'>45</span>
+                                    <sapn tal:condition='not:study/obj/phase'>not available</sapn>
+                                </p>
                                 <p tal:condition='study/obj/protocol/to_object/description'
                                     tal:content='study/obj/protocol/to_object/description'>
                                     You can lorem my ipsum any time, sit amet.
