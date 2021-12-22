@@ -102,7 +102,7 @@
                         <div tal:repeat='study studies' class='studyBox'>
                             <div class="studyBoxTop"><div></div></div>
                             <div class="studyBoxContent">
-                                <h4 tal:content='study/name'>In Search of Lost Time</h4>
+                                <h4 tal:content='study/name' style='font-weight: bold;'>In Search of Lost Time</h4>
                                 <p tal:condition='not:study/obj/protocol/to_object/description'
                                     i18n:translate='bm_noAbstractText' class='discreet'>
                                     No abstract available.
