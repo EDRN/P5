@@ -239,7 +239,7 @@
                             <p><label for='forms'>Associated Forms:</label></p>
                             <iframe name='forms' src='#' width='1000' height='500'
                                 style='border: 1px dotted rgb(70,70,70);'
-                                sandbox='allow-top-navigation'
+                                sandbox='allow-top-navigation allow-popups'
                                 tal:attributes='src string:https://www.compass.fhcrc.org/vs/pub/files/jpl/JPLFormsList.aspx?pi=${view/protocolID}'/>
                         </div>
                     </div>
