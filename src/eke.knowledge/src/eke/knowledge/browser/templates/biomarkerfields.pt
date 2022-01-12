@@ -45,17 +45,8 @@
             <div class='attributebox bodySysAttributes'>
                 <div class='attributebox-top'><div></div></div>
                 <div class='attributebox-content'>
-                    <h3 i18n:translate='bm_AttributesHdr'>Attributes</h3>
-                    <table>
-                        <tr>
-                            <th i18n:translate='bm_phaseLabel'>Phase:</th>
-                            <td tal:content='bodySystem/obj/phase'>2</td>
-                        </tr>
-                        <tr>
-                            <th i18n:translate='bm_qaStateLabel'>QA State:</th>
-                            <td tal:content='bodySystem/obj/qaState'>Under Review</td>
-                        </tr>
-                    </table>
+                    <label>QA State for <span tal:replace='bodySystem/name'>Anus</span>:</label>
+                    <span tal:content='bodySystem/obj/qaState'>Under Close Scrutify</span>
                 </div>
                 <div class='attributebox-bottom'><div></div></div>
             </div>
