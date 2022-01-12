@@ -126,7 +126,7 @@ class ProtocolIngestor(Ingestor):
                 # to split those into an actual list of ``n`` items and also fix the group names.
                 cbs = p.collaborativeGroup
                 if cbs is not None and len(cbs) == 1:
-                    p.collaborativeGroup = [_canonicalGroupNames.get(i.strip(), u'Unknown') for i in cbs[0].split(u',')]
+                    p.collaborativeGroup = [_canonicalGroupNames.get(i.strip(), u'«not specified»') for i in cbs[0].split(u',')]
                 elif cbs is None:
                     p.collaborativeGroup = []
                 # Set project flag
@@ -155,7 +155,7 @@ class ProtocolIngestor(Ingestor):
                             break
                 # Add more to the description
                 if p.fieldOfResearch and p.fieldOfResearch != u'UNKNOWN':
-                    p.description += p.description + u' … ' + p.fieldOfResearch
+                    p.description += u' … ' + p.fieldOfResearch
                 if p.collaborativeGroup:
                     p.description += u' … (Collaborative Groups: ' + u', '.join(p.collaborativeGroup) + u')'
                 # And the involved sites
