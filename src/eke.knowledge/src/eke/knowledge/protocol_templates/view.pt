@@ -205,11 +205,11 @@
                             <label for='biomarkers' i18n:translate='label_biomarkers'>
                                 Biomarkers:
                             </label>
-                            <p class='discreet' i18n:translate='proto_noBiomarkers' tal:condition='not:context/biomarkers'>
+                            <p class='discreet' i18n:translate='proto_noBiomarkers' tal:condition='not:view/biomarkers'>
                                 There are currently no biomarkers annotated for this protocol.
                             </p>
-                            <ul tal:condition='context/biomarkers'>
-                                <li tal:repeat='biomarker context/biomarkers'>
+                            <ul tal:condition='view/biomarkers'>
+                                <li tal:repeat='biomarker view/biomarkers'>
                                     <a href='#' title='Wow, a biomarker. Cool.' tal:content='biomarker/to_object/title'
                                         tal:attributes='href biomarker/to_object/absolute_url; title biomarker/to_object/description;'>
                                         Biosmelly-14-3-3-thetacrap

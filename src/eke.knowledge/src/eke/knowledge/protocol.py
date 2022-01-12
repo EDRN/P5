@@ -442,6 +442,12 @@ class View(BrowserView):
             return protocolID < EDRN_PROTOCOL_ID_LIMIT
         except ValueError:
             return False
+    @memoize
+    def biomarkers(self):
+        context = aq_inner(self.context)
+        biomarkers = list(context.biomarkers)
+        biomarkers.sort(lambda a, b: cmp(a.to_object.title, b.to_object.title))
+        return biomarkers
 
 
 @implementer(IVocabularyFactory)
