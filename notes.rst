@@ -278,29 +278,73 @@ Python Setup
 ============
 
 When attempting to build this site (or any of its components under ``src``),
-use Python 2.7 with the following packages pre-installed::
+use a Python 2.7 virtual environment with the following packages
+pre-installed::
 
-• ``setuptools==38.5.1``
+• ``setuptools==39.1.0``
 • ``pip==18.1``
-• ``wheel-0.32.2``
+• ``wheel-0.31.1``
+• ``buildout-2.12.1``
+• ``AccessControl==4.3``
+• ``Acquisition==4.7``
+• ``biopython==1.73``
+• ``cffi==1.14.5``
+• ``ExtensionClass==4.5.1``
+• ``lxml[cssselect]==4.6.3``
+• ``MarkupSafe==1.1.1``
+• ``numpy==1.16.3``
+• ``Persistence==3.0``
+• ``pillow==6.2.2``
+• ``pyrsistent==0.15.7``
+• ``pyScss==1.3.7``
+• ``python-ldap==3.2.0``
+• ``PyYAML==5.3.1``
+• ``scandir==1.10.0``
+• ``simplejson==3.17.0``
+• ``zodbpickle==2.0.0``
+• ``zope.component==4.6.2``
+• ``zope.container==4.4.0``
+• ``zope.hookable==5.0.1``
+• ``zope.interface==5.2.0``
+• ``zope.keyreference==4.2.0``
+• ``zope.lifecycleevent==4.3``
+• ``zope.location==4.2``
+• ``zope.processlifetime==2.3.0``
+• ``zope.processlifetime==2.3.0``
+• ``zope.proxy==4.3.5``
+• ``zope.proxy==4.3.5``
+• ``zope.proxy>=4.3.0``
+• ``zope.ptresource==4.2.0``
+• ``zope.publisher==5.2.1``
+• ``zope.ramcache==2.3``
+• ``zope.schema==6.0.0``
+• ``zope.security==5.1.1``
+• ``zope.security==5.1.1``
+• ``zope.sendmail==5.1``
+• ``zope.site==4.4.0``
+• ``zope.tal==4.4``
+• ``zope.traversing==4.4.1``
 
+Then, with that Python, run::
 
-Notes
------
-
-``p5pyp2.7`` aliased to ``~/Documents/Development/python2.7/bin/python2.7``
-which is the Python environment as described above.
-
-To build::
-
-    p5py2.7 bootstrap.py -c dev.cfg
+    python bootstrap.py --allow-site-packages --config-file dev.cfg --buildout-version=2.12.1
     bin/buildout -c dev.cfg
+
+And cross your fingers 🤞
+
+Populate the whole site:
+
     bin/zope-debug run support/admin.py root root
     bin/zope-debug run support/createEDRNSite.py root root
     bin/zope-debug run support/ldap-password.py 'LDAP-PASSWORD-HERE'
     env ZEXP_EXPORTS=/path/to/zexp-exports-dir bin/zope-debug run support/loadZEXPFiles.py root root
     bin/zope-debug fg
     curl http://localhost:6468/edrn
+
+
+Hotfix 20220128
+
+zope.interface 5.2.0 → 5.4.0
 
 
 
