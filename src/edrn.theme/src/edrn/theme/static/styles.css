@@ -488,3 +488,25 @@ ul#edrn-quicklinks li {
 .glyphicon.link-https {
     display: none;
 }
+
+/* #150 */
+
+.datasetSummaryGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    grid-auto-rows: minmax(100px, auto);
+}
+.datasetSummaryCard {
+    background-color: rgb(230, 240, 211);
+    border-radius: 4px;
+}
+.cardCategory {
+    padding-top: 2rem;
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+.cardStatistic {
+    font-weight: bold;
+    font-size: 1.825rem;
+}
