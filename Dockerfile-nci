@@ -191,6 +191,9 @@ RUN : &&\
     : Clean up anything copied from our src dirs &&\
     find /plone/instance/src -name '*.py[co]' -exec rm -f '{}' + &&\
     rm -rf /plone/instance/src/*/{var,bin,develop-eggs,parts} &&\
+    :
+
+RUN : &&\
     : Install buildout, setuptools, and pip at specific versions &&\
     pip --quiet install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT wheel==$WHEEL urllib3==$URLLIB3 &&\
     :
