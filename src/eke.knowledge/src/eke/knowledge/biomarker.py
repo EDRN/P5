@@ -297,9 +297,11 @@ def updatePhases(context, event):
     biomarker = context.aq_parent
     phases = set()
     for objID, biomarkerBodySystem in biomarker.contentItems():
-        phase = biomarkerBodySystem.phase
-        if phase is not None and phase:
-            phases.add(phase)
+        # #152: don't use the phase on the organ anymore; just on the organ-study relationship.
+        # For #152 we comment out the next 3 lines:
+        # phase = biomarkerBodySystem.phase
+        # if phase is not None and phase:
+        #     phases.add(phase)
         for studyObjID, bodySystemStudy in biomarkerBodySystem.contentItems():
             phase = bodySystemStudy.phase
             if phase is not None and phase:
