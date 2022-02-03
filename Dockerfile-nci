@@ -198,11 +198,23 @@ RUN : &&\
 RUN : &&\
     cd /plone/instance &&\
     buildout &&\
+    :
+
+RUN : &&\
     buildout -c docker.cfg &&\
+    :
+
+RUN : &&\
     : apk ghetto-up &&\
     find /plone/buildout-cache/eggs/plone.staticresources-1.4.1-py2.7.egg/plone/staticresources/static -type f -exec sed -i -e 's/1\.10\.16/1.10.22/g' '{}' \; &&\
+    :
+
+RUN : &&\
     ln -s /data/filestorage/ /plone/instance/var/filestorage &&\
     ln -s /data/blobstorage /plone/instance/var/blobstorage &&\
+    :
+
+RUN : &&\
     chown -R edrn:edrn /plone /data &&\
     rm -rf /Plone* &&\
     :
