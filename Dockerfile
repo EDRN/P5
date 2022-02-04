@@ -204,6 +204,7 @@ RUN : &&\
     :
 
 RUN : &&\
+    cd /plone/instance &&\
     buildout -c docker.cfg &&\
     :
 
