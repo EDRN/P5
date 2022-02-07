@@ -109,6 +109,9 @@ RUN : &&\
     : We will uninstall these later &&\
     buildDeps="patch gcc bzip2-dev musl-dev libjpeg-turbo-dev openjpeg-dev pcre-dev openssl-dev tiff-dev libxml2-dev libxslt-dev zlib-dev cyrus-sasl-dev libffi-dev" &&\
     apk add --virtual plone-build $buildDeps &&\
+    :
+
+RUN : &&\
     : These stay &&\
     runDeps="curl krb5-libs@edge openjpeg@edge openldap-dev libldap@edge libsasl libjpeg-turbo tiff libxml2 libxslt lynx netcat-openbsd libstdc++@edge libgcc@edge sqlite-libs@edge poppler-utils@edge rsync wv su-exec bash" &&\
     apk add $runDeps &&\
@@ -189,6 +192,9 @@ RUN : &&\
         /plone/buildout-cache/eggs/z3c.jbot-0.8-py2.7.egg &&\
     sed -e 's/5\.2\.2/5.2.3/g' ./$PLONE_VERSION_RELEASE/buildout_templates/buildout.cfg > /plone/instance/buildout-base.cfg &&\
     : Clean up anything copied from our src dirs &&\
+    :
+
+RUN : &&\
     find /plone/instance/src -name '*.py[co]' -exec rm -f '{}' + &&\
     rm -rf /plone/instance/src/*/{var,bin,develop-eggs,parts} &&\
     :
