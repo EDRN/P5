@@ -306,6 +306,12 @@ def updatePhases(context, event):
             phase = bodySystemStudy.phase
             if phase is not None and phase:
                 phases.add(phase)
+        # However, if we got no phases from the organ-studies, then we go ahead and add the organ phases, since 
+        # an organ-only phase is better than no phase.
+        if len(phases) == 0:
+            phase = biomarkerBodySystem.phase
+            if phase is not None:
+                phases.add(phase)
     biomarker.phases = list(phases)
     biomarker.reindexObject(idxs=['phases'])
 
