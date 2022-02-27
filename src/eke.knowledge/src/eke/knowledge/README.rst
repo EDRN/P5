@@ -1004,8 +1004,6 @@ OK that's enough. RDF is the order of the day::
     u'Lung Reference Set A Application:  Edward Hirschowitz - University of Kentucky (2009)'
     >>> s1.decisionRule
     u'A sample decision rule'
-    >>> s1.phase
-    u'1'
     >>> for i in s1.objectIds():
     ...     stats = s1[i]
     ...     stats.sensitivity in (u'1.0', u'6.0')
