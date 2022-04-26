@@ -33,6 +33,7 @@
                         <li><a href='#studiesTab' i18n:translate='bm_StudiesTab'>Studies</a></li>
                         <li><a href='#publicationsTab' i18n:translate='bm_PublicationsTab'>Publications</a></li>
                         <li><a href='#resourcesTab' i18n:translate='bm_ResourcesTab'>Resources</a></li>
+                        <li><a href='#datasetsTab' i18n:translate='bm_DatasetsTab'>Data Collections</a></li>
                     </ul>
 
                     <!-- BASICS =================================================================================== -->
@@ -51,9 +52,6 @@
                                 incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
                                 exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                             </p>
-                            <div metal:use-macro='context/@@commonBiomarker/macros/datasets'>
-                                Datasets
-                            </div>
                         </div><!-- end colLeftContent -->
                         <div class='attributebox bmAttributes'>
                             <div class='attributebox-content'>
@@ -184,6 +182,17 @@
                                     </a>
                                 </li>
                             </ul>
+                        </div>
+                    </div>
+                    <!-- DATASETS ================================================================================ -->
+                    <div id='datasetsTab' tal:define='approvedViewable python:view.viewable("Datasets");'>
+                        <div metal:use-macro='context/@@unacceptedBiomarker/macros/unacceptedBiomarker'>
+                            Log in to view this section, if necessary.
+                        </div>
+                        <div tal:condition='approvedViewable'>
+                            <div metal:use-macro='context/@@commonBiomarker/macros/datasets'>
+                                Data Collections
+                            </div>
                         </div>
                     </div>
 

@@ -128,4 +128,13 @@
         source='1012' destination='1013' sortkey='100'
     />
 
+    <!-- 1013 → 1014 -->
+    <genericsetup:upgradeStep
+        title='Reload Registry (1013→1014)'
+        description='Get the new portal version number etc. loaded into the Plone Registry'
+        profile='edrnsite.policy:default'
+        handler='.upgrades.reloadRegistry'
+        source='1013' destination='1014' sortkey='100'
+    />
+
 </configure>

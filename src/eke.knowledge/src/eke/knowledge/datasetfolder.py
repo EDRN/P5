@@ -6,7 +6,6 @@ u'''EKE Knowledge: Dataset Folder'''
 from . import _
 from .base import Ingestor
 from .dataset import IDataset
-from .dublincore import TITLE_URI
 from .knowledgefolder import IKnowledgeFolder
 from .protocol import IProtocol
 from Acquisition import aq_inner

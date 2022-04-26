@@ -4,7 +4,6 @@
 # No longer for Plone 5?
 
 from . import _
-from .bodysystem import IBodySystem
 from .dublincore import TITLE_URI
 from .person import IPerson
 from .protocol import IProtocol
