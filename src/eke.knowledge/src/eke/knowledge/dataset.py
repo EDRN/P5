@@ -117,6 +117,15 @@ class IDataset(IKnowledgeObject):
         description=_(u'Principal investigator investigating this data.'),
         source=CatalogSource(object_provides=IPerson.__identifier__)
     )
+    accessGroups = schema.List(
+        title=_(u'Access Groups'),
+        description=_(u'Groups that are allowed access to this collection.'),
+        required=False,
+        value_type=schema.TextLine(
+            title=_(u'Access Group'),
+            description=_(u'A single URI identifying a group that may access a collection.')
+        )
+    )
     # collaborativeGroupUID = schema.TextLine(
     #     title=_(u'Collaborative Group UID'),
     #     description=_(u'Unique ID of the collaborative group that produced this dataset.'),
@@ -129,7 +138,8 @@ IDataset.setTaggedValue('predicates', {
     u'urn:edrn:predicates:protocol': ('protocol', True),
     u'urn:edrn:predicates:pi': ('investigatorName', False),
     u'urn:edrn:predicates:collaborativeGroup': ('collaborativeGroup', False),
-    u'urn:edrn:predicates:organ': ('bodySystemName', False)
+    u'urn:edrn:predicates:organ': ('bodySystemName', False),
+    u'urn:edrn:predicates:ownerPrincipal': ('accessGroups', False),
 
     # These fields no longer appear in the LabCAS RDF:
     # u'urn:edrn:DataCustodian': ('custodian', False),

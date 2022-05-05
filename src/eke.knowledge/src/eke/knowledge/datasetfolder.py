@@ -8,11 +8,12 @@ from .base import Ingestor
 from .dataset import IDataset
 from .knowledgefolder import IKnowledgeFolder
 from .protocol import IProtocol
+from .utils import publish, retract
 from Acquisition import aq_inner
 from Products.Five import BrowserView
 from z3c.relationfield import RelationValue
 from zope import schema
-from zope.component import getUtility
+from zope.component import getUtility, getMultiAdapter
 from zope.interface import implementer
 from zope.intid.interfaces import IIntIds
 from zope.schema.interfaces import IVocabularyFactory
@@ -118,6 +119,8 @@ class DatasetIngestor(Ingestor):
     # --virtual-time-budget=10000 --window-size=1280,500 --no-sandbox --headless --screenshot \
     #  https://edrn-labcas.jpl.nasa.gov/labcas-ui/a/index.html
 
+    _publicGroup = 'All EDRN'
+
     def getInterfaceForContainedObjects(self, predicates):
         return IDataset
 
@@ -167,6 +170,7 @@ class DatasetIngestor(Ingestor):
         idUtil = getUtility(IIntIds)
         context = aq_inner(self.context)
         consequences = super(DatasetIngestor, self).ingest()
+        request = plone.api.portal.get().REQUEST
         self.updateStatistics(consequences.statements)
 
         catalog = plone.api.portal.get_tool('portal_catalog')
@@ -189,6 +193,18 @@ class DatasetIngestor(Ingestor):
                 datasetObj.investigatorName = datasetObj.investigator.to_object.title
             if rv.to_object.datasets is None: rv.to_object.datasets = []
             rv.to_object.datasets.append(RelationValue(idUtil.getId(datasetObj)))
+
+            # And set permissions, etc.
+            if datasetObj.accessGroups is None:
+                datasetObj.accessGroups = []
+            groupNames = set([i.split(',')[0][3:] for i in datasetObj.accessGroups])
+            if self._publicGroup in groupNames:
+                publish(datasetObj)
+            else:
+                retract(datasetObj)
+            sharing = getMultiAdapter((datasetObj, request), name=u'sharing')
+            settings = [dict(type='group', roles=[u'Reader'], id=i) for i in groupNames]
+            sharing.update_role_settings(settings)
 
         # Add summary data (soon to be unusued)
         if context.dsSumDataSource:
@@ -225,6 +241,6 @@ class DatasetSummary(BrowserView):
             return u'{}'
         data = json.loads(context.dataSummary)
         if u'Liver, Placenta, Brain' in data:
-            data[u'Liver etc.']  = data[u'Liver, Placenta, Brain']
+            data[u'Liver etc.'] = data[u'Liver, Placenta, Brain']
             del data[u'Liver, Placenta, Brain']
         return json.dumps(data)

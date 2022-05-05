@@ -66,18 +66,26 @@ def generateVocabularyFromIndex(indexName, context=None):
     return SimpleVocabulary(terms)
 
 
-def publish(context, workflowTool=None):
-    u'''Publish ``context`` item and all of its children with the ``workflowTool``, unless the ``workflowTool``
-    is None, in which case we'll look it up ourselves.'''
+def transit_workflow(context, action, workflowTool=None):
     try:
         if workflowTool is None: workflowTool = getUtility(IWorkflowTool)
-        workflowTool.doActionFor(context, action='publish')
+        workflowTool.doActionFor(context, action=action)
         context.reindexObject()
     except WorkflowException:
         pass
     if IFolderish.providedBy(context):
         for itemID, subItem in context.contentItems():
-            publish(subItem, workflowTool)
+            transit_workflow(subItem, action, workflowTool)
+
+
+def publish(context, workflowTool=None):
+    u'''Publish ``context`` item and all of its children with the ``workflowTool``, unless the ``workflowTool``
+    is None, in which case we'll look it up ourselves.'''
+    transit_workflow(context, 'publish', workflowTool)
+
+
+def retract(context, workflowTool=None):
+    transit_workflow(context, 'retract', workflowTool)
 
 
 def setValue(obj, fti, iface, predicate, predicateMap, values):
