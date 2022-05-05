@@ -119,7 +119,7 @@ class DatasetIngestor(Ingestor):
     # --virtual-time-budget=10000 --window-size=1280,500 --no-sandbox --headless --screenshot \
     #  https://edrn-labcas.jpl.nasa.gov/labcas-ui/a/index.html
 
-    _publicGroup = 'All EDRN'
+    _publicGroup = 'All Users'
 
     def getInterfaceForContainedObjects(self, predicates):
         return IDataset
