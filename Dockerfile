@@ -107,13 +107,13 @@ RUN : &&\
     : More Twit-lock &&\
     apk del tiff &&\
     : We will uninstall these later &&\
-    buildDeps="patch gcc bzip2-dev musl-dev libjpeg-turbo-dev openjpeg-dev pcre-dev openssl-dev tiff-dev libxml2-dev libxslt-dev zlib-dev cyrus-sasl-dev libffi-dev" &&\
+    buildDeps="patch gcc bzip2-dev musl-dev libjpeg-turbo-dev openjpeg-dev pcre-dev openssl-dev@edge tiff-dev libxml2-dev@edge libxslt-dev@edge zlib-dev@edge cyrus-sasl-dev libffi-dev" &&\
     apk add --virtual plone-build $buildDeps &&\
     :
 
 RUN : &&\
     : These stay &&\
-    runDeps="curl krb5-libs@edge openjpeg@edge openldap-dev libldap@edge libsasl libjpeg-turbo tiff libxml2 libxslt lynx netcat-openbsd libstdc++@edge libgcc@edge sqlite-libs@edge poppler-utils@edge rsync wv su-exec bash" &&\
+    runDeps="curl krb5-libs@edge openjpeg@edge openldap-dev@edge libldap@edge libsasl libjpeg-turbo tiff libxml2@edge libxslt@edge lynx netcat-openbsd libstdc++@edge libgcc@edge sqlite-libs@edge poppler-utils@edge rsync wv su-exec bash freetype@edge openssl@edge zlib@edge" &&\
     apk add $runDeps &&\
     cp /plone/instance/etc/certs/EntrustPublic_Intermediate.crt /usr/local/share/ca-certificates &&\
     update-ca-certificates &&\
