@@ -117,6 +117,7 @@ RUN : &&\
     apk add $runDeps &&\
     cp /plone/instance/etc/certs/EntrustPublic_Intermediate.crt /usr/local/share/ca-certificates &&\
     update-ca-certificates &&\
+    echo 'INPUT ( libldap.so )' > /usr/lib/libldap_r.so &&\
     :
 
 RUN : &&\
