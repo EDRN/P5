@@ -113,7 +113,7 @@ RUN : &&\
 
 RUN : &&\
     : These stay &&\
-    runDeps="curl krb5-libs@edge openjpeg@edge openldap-dev@edge libldap@edge libsasl libjpeg-turbo tiff libxml2@edge libxslt@edge lynx netcat-openbsd libstdc++@edge libgcc@edge sqlite-libs@edge poppler-utils@edge rsync wv su-exec bash freetype@edge openssl@edge zlib@edge" &&\
+    runDeps="curl krb5-libs@edge openjpeg@edge openldap-dev libldap libsasl libjpeg-turbo tiff libxml2@edge libxslt@edge lynx netcat-openbsd libstdc++@edge libgcc@edge sqlite-libs@edge poppler-utils@edge rsync wv su-exec bash freetype@edge openssl@edge zlib@edge" &&\
     apk add $runDeps &&\
     cp /plone/instance/etc/certs/EntrustPublic_Intermediate.crt /usr/local/share/ca-certificates &&\
     update-ca-certificates &&\
