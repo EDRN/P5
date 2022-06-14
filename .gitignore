@@ -24,3 +24,4 @@ _build
 group-export
 sk-rebuild.sh
 quick-directory
+src/collective.exportimport
