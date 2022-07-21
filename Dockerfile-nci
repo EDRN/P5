@@ -107,7 +107,7 @@ RUN : &&\
     : More Twit-lock &&\
     apk del tiff &&\
     : We will uninstall these later &&\
-    buildDeps="patch gcc bzip2-dev musl-dev libjpeg-turbo-dev openjpeg-dev pcre-dev openssl-dev tiff-dev libxml2-dev libxslt-dev zlib-dev cyrus-sasl-dev libffi-dev" &&\
+    buildDeps="patch gcc bzip2-dev musl-dev libjpeg-turbo-dev openjpeg-dev pcre-dev openssl-dev tiff-dev libxml2-dev libxslt-dev zlib-dev cyrus-sasl-dev libffi-dev git" &&\
     apk add --virtual plone-build $buildDeps &&\
     :
 
