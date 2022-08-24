@@ -69,6 +69,8 @@ echo "2️⃣ Saving a copy of the post-Plone+pre-EDRN database"
 cp var/filestorage/Data.fs var/post-plone+pre-edrn-upgrade-Data.fs
 echo "🩺 Upgrading EDRN"
 bin/zope-debug -O edrn run $PWD/support/upgradeEDRN.py
+echo "🚢 Exporting content for Wagtail"
+bin/zope-debug -O edrn run $PWD/support/export-to-wagtail.py
 echo "🍽 Ingesting RDF and other data"
 bin/zope-debug -O edrn run $PWD/support/ingest.py
 echo "🏁 Done! You can now start a debug Zope instance with «bin/zope-debug fg»."
