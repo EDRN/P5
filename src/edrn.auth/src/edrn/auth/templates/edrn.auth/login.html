@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load edrn_auth_tags i18n edrnsite_content_tags %}
+{% block content %}
+    <div class='row m-3 mb-4'>
+        <div class='col'>
+            <h1>Log In</h1>
+
+            <p class='lead'>
+                One EDRN account. Many possible destinations.
+            </p>
+            <p>
+                Your EDRN username and password give you access to several resources. Where would you like to log into today?
+            </p>
+
+            {% if form.errors %}
+                <p>{% trans "Your username and password didn't match. Please try again." %}</p>
+            {% endif %}
+
+            {% if next and request.user.is_authenticated %}
+                <p>{% trans "Your account doesn't have access to this page. To proceed, please log in with an account that has access." %}</p>
+            {% endif %}
+
+            <div class='row mb-3'>
+                <div class='col-lg-12'>
+                    <div class='accordion' id='login-accordion'>
+                        <div class='accordion-item'>
+                            <h2 class='accordion-header' id='login-portal-header'>
+                                <button class='accordion-button' type='button' data-bs-toggle='collapse'
+                                    data-bs-target='#login-portal-target' aria-expanded='false'
+                                    aria-controls='login-portal-target'>
+                                    <i class="pe-2 fs-1 bi bi-door-open"></i> I want to log in here, to the EDRN public portal
+                                </button>
+                            </h2>
+                            <div id='login-portal-target'
+                                class='accordion-collapse collapse {% if form.errors %}show{% endif %}'
+                                aria-labelledby='login-portal-header' data-bs-parent='#login-accordion'>
+                                <div class='accordion-body'>
+                                    <p>
+                                        Logging in here—to the EDRN public portal—may afford you access to
+                                        additional biomarker and scientific data. Also, if you have the
+                                        appropriate permissions, you can edit the pages, images, and files
+                                        on this site. Use your EDRN username and password in the below form
+                                        to log in.
+                                    </p>
+                                    <form method="post" action="{% url 'wagtailcore_login' %}" class='mb-4'>
+                                        {% csrf_token %}
+                                        {{ form.as_p }}
+                                        <input type="submit" value="{% trans "Log in" %}" class="button" />
+                                        <input type="hidden" name="next" value="{{ next }}" />
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class='accordion-item'>
+                            <h2 class='accordion-header' id='login-dmcc-header'>
+                                <button class='accordion-button' type='button' data-bs-toggle='collapse'
+                                    data-bs-target='#login-dmcc-target' aria-expanded='false'
+                                    aria-controls='login-dmcc-target'>
+                                    <i class="pe-2 fs-1 bi bi-unlock"></i> I want to log into the DMCC's "secure" website
+                                </button>
+                            </h2>
+                            <div id='login-dmcc-target' class='accordion-collapse collapse'
+                                aria-labelledby='login-dmcc-header' data-bs-parent='#login-accordion'>
+                                <div class='accordion-body'>
+                                    <p>
+                                        The Data Management and Coordinating Center provides a "secure" website
+                                        where you can get a lot of the same information here on the EDRN portal.
+                                        But you can also update information and find some other unique tools.
+                                        Additionally, you can change your EDRN password (whether you've forgotten
+                                        it or not) there—or request a new account.
+                                    </p>
+                                    <p>
+                                        <a class='btn btn-outline-primary btn-lg'
+                                            href='https://www.compass.fhcrc.org/enterEDRN/?param=plin&amp;p=3&amp;why=4&amp;extra=71.3'>
+                                            <i class='bi bi-box-arrow-up-right'></i> Take me there!
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class='accordion-item'>
+                            <h2 class='accordion-header' id='login-labcas-header'>
+                                <button class='accordion-button' type='button' data-bs-toggle='collapse'
+                                    data-bs-target='#login-labcas-target' aria-expanded='false'
+                                    aria-controls='login-labcas-target'>
+                                    <i class="pe-2 fs-1 bi bi-activity"></i> I want to log into LabCAS
+                                </button>
+                            </h2>
+                            <div id='login-labcas-target' class='accordion-collapse collapse'
+                                aria-labelledby='login-labcas-header' data-bs-parent='#login-accordion'>
+                                <div class='accordion-body'>
+                                    <p>
+                                        The EDRN Laboratory Catalog and Archive Service (LabCAS) has both
+                                        public and access-controlled scientific data. Logging in with your
+                                        EDRN username and password may give you access to additional data.
+                                    </p>
+                                    <p>
+                                        <a class='btn btn-outline-primary btn-lg'
+                                            href='https://edrn-labcas.jpl.nasa.gov/'>
+                                            <i class='bi bi-box-arrow-up-right'></i> Take me there!    
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            {% edrn_boilerplate 'login-admonitions' %}
+        </div>
+    </div>
+{% endblock %}
+{# -*- Django HTML -*- #}

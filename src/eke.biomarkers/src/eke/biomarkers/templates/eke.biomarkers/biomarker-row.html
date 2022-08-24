@@ -1,0 +1,8 @@
+{% load biomarker_filters %}
+<tr>
+    <td><a href='{{biomarker.url}}'>{{biomarker.title}}</a></td>
+    <td>{{biomarker.biomarker_type}}</td>
+    <td>{{biomarker|organs_for_biomarker|join:", "}}</td>
+    <td>{{biomarker|phases_for_biomarker|join:", "}}</td>
+</tr>
+{# -*- Django HTML -*- #}

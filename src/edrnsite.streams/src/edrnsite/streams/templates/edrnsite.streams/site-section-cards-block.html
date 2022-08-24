@@ -1,0 +1,11 @@
+{% load wagtailcore_tags %}
+{# 🔮 TODO: caching #}
+<div class='row justify-content-center'>
+    {% for card in self.cards %}
+        {# maybe add w-25, w-50, w-75, to this div class or maybe even make that configurable #}
+        <div class='site-section-card col-md-6 d-flex align-items-stretch{% if not forloop.first %} mt-4 mt-md-0{% endif %}'>
+            {% include_block card %}
+        </div>
+    {% endfor %}
+</div>
+{# -*- Django HTML -*- #}

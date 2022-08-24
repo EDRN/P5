@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:ns1="http://edrn.nci.nih.gov/rdf/schema.rdf#"
+  xmlns:ns2="http://purl.org/dc/terms/"
+  xmlns:ns3="http://edrn.nci.nih.gov/rdf/types.rdf#"
+>
+  <ns3:Site rdf:about='urn:site:a'>
+    <ns2:title>Alpha Site</ns2:title>
+  </ns3:Site>
+  <ns3:Site rdf:about='urn:site:b'>
+    <ns2:title>Bravo™ Site</ns2:title>
+  </ns3:Site>
+  <ns3:Site rdf:about="http://edrn.nci.nih.gov/data/sites/880">
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4152"/>
+    <ns1:memberType>Associate Member B2 - Protocol/Project Funded</ns1:memberType>
+    <ns1:fwa> FWA00003566        </ns1:fwa>
+    <ns1:pi rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4440"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4155"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4770"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4440"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4757"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4151"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4153"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4154"/>
+    <ns1:coi rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4047"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4047"/>
+    <ns1:abbrevName>IU</ns1:abbrevName>
+    <ns1:url rdf:resource='https://google.com/'/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4298"/>
+    <ns2:title>Indiana University </ns2:title>
+    <ns1:fundStart>4/1/2018 12:00:00 AM</ns1:fundStart>
+    <ns1:fundEnd>4/1/2018 12:00:00 AM</ns1:fundEnd>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4433"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4821"/>
+    <ns1:sponsor rdf:resource='urn:site:b'/>
+  </ns3:Site>
+  <ns3:Site rdf:about="http://edrn.nci.nih.gov/data/sites/723">
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3235"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3142"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3549"/>
+    <ns1:fundStart>8/1/2012 12:00:00 AM</ns1:fundStart>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3238"/>
+    <ns2:title>Mercy Physicians of Oklahoma</ns2:title>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3233"/>
+    <ns1:fundEnd>8/1/2012 12:00:00 AM</ns1:fundEnd>
+    <ns1:fwa>FWA00016549         </ns1:fwa>
+    <ns1:sponsor>
+      <ns3:Site rdf:about="http://edrn.nci.nih.gov/data/sites/87">
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2824"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3788"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2835"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3852"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1367"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2728"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3514"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3725"/>
+        <ns1:url rdf:resource="http://www.cancer.gov/"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2144"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3431"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4517"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2314"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2739"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3301"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1015"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3580"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2894"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4518"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1494"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2527"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3536"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1721"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2025"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3300"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2313"/>
+        <ns1:pi rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1015"/>
+        <ns1:memberType>National Cancer Institute</ns1:memberType>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2484"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4228"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4325"/>
+        <ns2:title>National Cancer Institute</ns2:title>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2169"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3320"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1033"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4431"/>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4232"/>
+        <ns1:abbrevName>NCI</ns1:abbrevName>
+        <ns1:fwa>FWA00005897         </ns1:fwa>
+        <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2371"/>
+      </ns3:Site>
+    </ns1:sponsor>
+    <ns1:pi rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3142"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3234"/>
+    <ns1:abbrevName>Mercy Physicians of Oklahoma</ns1:abbrevName>
+    <ns1:memberType>Non-EDRN Site</ns1:memberType>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3635"/>
+  </ns3:Site>
+
+  <ns3:Site rdf:about="http://edrn.nci.nih.gov/data/sites/5">
+    <ns1:abbrevName>FHCRC</ns1:abbrevName>
+    <ns1:coi rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1025"/>
+    <ns1:coi rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2970"/>
+    <ns1:coi rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3582"/>
+    <ns1:coi rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3867"/>
+    <ns1:coi rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4284"/>
+    <ns1:coi rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4525"/>
+    <ns1:copi rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1392"/>
+    <ns1:copi rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4460"/>
+    <ns1:fundEnd>3/31/2021 12:00:00 AM</ns1:fundEnd>
+    <ns1:fundStart>4/1/2016 12:00:00 AM</ns1:fundStart>
+    <ns1:fwa>FWA00001920         </ns1:fwa>
+    <ns1:memberType>Data Management and Coordinating Center</ns1:memberType>
+    <ns1:pi rdf:resource="http://edrn.nci.nih.gov/data/registered-person/993"/>
+    <ns1:program>The key for the Early Detection Research Network (EDRN)&amp;#39;s success lies in good communication among scientists in multiple disciplines; efficient evaluation and prioritization of promising biomarkers; and rigorous validation studies to demonstrate their clinical utility. The overall aims of the proposed renewal of the Data Management and Coordinating Center (DMCC) are to (i) provide coordination of EDRN in order to enhance communication and collaboration among EDRN investigators and with general scientific communities; (ii) coordinate EDRN validation studies; (iii) disseminate cancer biomarker information to broader scientific communities and the public; and (iv) mange the EDRN Core funds. Under the direction of the EDRN Steering Committee, the DMCC will 1) perform network coordination and promote collaborations among scientific investigators by providing support for EDRN meetings and workshops, developing and maintaining EDRN secure websites and listservs, producing and maintaining all EDRN documents, and maintaining the online review system for applications submitted to the EDRN; 2) support EDRN validation studies by developing and maintaining validation study data management systems; working with EDRN investigator on study design, protocol development, data forms, and study manuals; coordinating and monitoring studies; tracking specimens; and performing QA/QC and study evaluation; 3) work with the NCI and JPL to provide informatics resources for the EDRN Secure Web site for data security, data warehousing, and data sharing, and a Public Web site for dissemination; and 4) work closely with the EDRN SC and the NCI Project Coordinator and FHCRC OSR to timely activate the core funds after the EDRN SC approval and ensure the compliance of all regulatory requirements for sub-award management.</ns1:program>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1025"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1147"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1273"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1277"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1278"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1386"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1388"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1389"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1392"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1530"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/159"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1690"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1695"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1820"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1836"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1853"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1906"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/1942"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2276"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2326"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2333"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2356"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2375"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2483"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2516"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2604"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2755"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2819"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2822"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2859"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/29"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2960"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/2970"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3042"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3099"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3127"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3210"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3350"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3352"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3365"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3374"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/34"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3404"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3410"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3430"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3435"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3441"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3451"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3482"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3517"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3555"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3567"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3569"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3582"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3623"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3630"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3631"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3656"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3667"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3674"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3691"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3703"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3729"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3844"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3867"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/3875"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4032"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4106"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4107"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4130"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4225"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4284"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4290"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4318"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4345"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4372"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4385"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4417"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4459"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4460"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4525"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4537"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4553"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4588"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4616"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4753"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4774"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4792"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/4863"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/51"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/65"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/705"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/738"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/753"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/762"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/83"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/86"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/909"/>
+    <ns1:staff rdf:resource="http://edrn.nci.nih.gov/data/registered-person/993"/>
+    <ns1:url rdf:resource="https://www.fredhutch.org/"/>
+    <ns2:title>Fred Hutchinson Cancer Research Center</ns2:title>
+  </ns3:Site>
+
+
+</rdf:RDF>

@@ -1,0 +1,134 @@
+@charset "UTF-8";
+
+/* NCI Digital Style Guide January 2022 */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Noto+Sans&display=swap');
+
+body {
+    font-family: "Noto Sans", "Century Gothic", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+    color: #454545;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: Montserrat, "Avant Garde", Arial, sans-serif;
+    font-weight: 700;
+    color: #606060;
+}
+h1 {
+    font-size: 28px;
+    line-height: 30.8px;
+}
+h2 {
+    font-size: 23px;
+    line-height: 28px;
+}
+h3 {
+    font-size: 20px;
+    line-height: 25px;
+}
+h4 {
+    font-size: 18px;
+    line-height: 24px;
+}
+h5 {
+    font-size: 16px;
+    line-height: 21px;
+}
+h6 {
+    font-size: 16px;
+    line-height: 18px;
+}
+a {
+    color: #00527d;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+a.dropdown-item:hover, a.dropdown-toggle:hover {
+    text-decoration: none;
+}
+
+/* Card styles */
+.aqua {
+    color: white;
+    background: rgb(17,134,147);
+    background: linear-gradient(135deg, rgba(17,134,147,1) 0%, rgba(17,134,147,0.96) 100%);
+}
+.cerulean {
+    color: white;
+    background: rgb(14,113,153);
+    background: linear-gradient(135deg, rgba(14,113,153,1) 0%, rgba(14,113,153,0.96) 100%);
+}
+.teal {
+    color: white;
+    background: rgb(14,111,138);
+    background: linear-gradient(135deg, rgba(14,111,138,1) 0%, rgba(14,111,138,0.96) 100%);
+}
+.cyan {
+    color: white;
+    background: rgb(9,75,118);
+    background: linear-gradient(135deg, rgba(9,75,118,1) 0%, rgba(9,75,118,0.96) 100%);
+}
+.navy {
+    color: white;
+    background: rgb(13,102,161);
+    background: linear-gradient(180deg, rgba(13,102,161,1) 0%, rgba(13,102,161,0.96) 100%);
+}
+.aqua a, .cerulean a, .teal a, .cyan a, .navy a {
+    color: white;
+}
+.aqua h4, .cerulean h4, .teal h4, .cyan h4, .navy h4, .aqua h3, .cerulean h3, .teal h3, .cyan h3, .navy h3, .aqua h2, .cerulean h2, .teal h2, .cyan h2, .navy h2 {
+    color: white;
+}
+.carousel-caption h1 {
+    color: white;
+    font-size: 200%;
+    text-shadow: 2px 2px 4px brown;
+}
+ .carousel-caption h2 {
+    color: white;
+    font-size: 120%;
+    text-shadow: 2px 2px 4px brown;
+ }
+.site-footer {
+    color: white;
+    font-family: "Noto Sans", "Century Gothic", Arial,sans-serif;
+    text-align: left;
+    -webkit-font-smoothing: antialiased;
+}
+.site-footer p {
+    font-family: "Noto Sans", "Century Gothic", Arial, sans-serif !important;
+}
+.site-footer h5, .site-footer h6 {
+    color: white;
+}
+li.footer-inline-item:after {
+    content: "";
+    width: 1;
+    height: 12px;
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    background: hsla(0,0%,100%,0.6);
+}
+.edrn-footer-menu-heading {
+    text-transform: uppercase;
+    font-weight: normal;
+}
+.nci-navbar {
+    background: rgb(239,236,235);
+    background: linear-gradient(180deg, rgba(239,236,235,1) 0%, rgba(241,239,238,1) 100%);
+    text-transform: uppercase;
+}
+.nav-link, .navbar-brand {
+    font-size: 16px;
+    color: black;
+}
+thead {
+    background-color: rgb(198, 238, 238);
+}
+.site-section-card h3, .site-section-card h3, .site-section-card h2 {
+    text-transform: uppercase;
+}

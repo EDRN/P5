@@ -1,0 +1,15 @@
+{% load knowledge_filters %}
+<div class='mb-2'>
+    <h6>Principal Investigator</h6>
+    {% if pis %}
+        <input class='form-control' list='pi-list-options' name='pi' placeholder='Type a PI name…'/>
+        <datalist id='pi-list-options'>
+            {% for pi in pis %}
+                <option value='{{pi}}'/>
+            {% endfor %}
+        </datalist>
+    {% else %}
+        <small>There are no PIs!</small>
+    {% endif %}
+</div>
+{# -*- Django HTML -*- #}

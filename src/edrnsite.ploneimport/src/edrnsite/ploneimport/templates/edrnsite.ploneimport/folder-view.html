@@ -1,0 +1,8 @@
+<ul>
+    {% for item in children %}
+        <li><a href='{{item.item_id}}'>{{item.title}}</a></li>
+    {% empty %}
+        <li>There are no items in this folder.</li>
+    {% endfor %}
+</ul>
+{# -*- Django HTML -*- #}

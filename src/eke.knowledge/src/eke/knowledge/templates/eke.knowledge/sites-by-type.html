@@ -1,0 +1,43 @@
+{% load knowledge_filters %}
+<div>
+    <table class='table'>
+        <thead>
+            <tr>
+                <th scope='col'>Site</th>
+                <th scope='col'>Investigator</th>
+                {% if show_organs %}<th scope='col'>Organ</th>{% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for proposal_group in proposal_groups %}
+                {% for site in proposal_group.sites %}
+                    <tr>
+                        <td><a href='{{site.url}}'>{{site.title}}</a></td>
+                        <td><a href='{{site.pi.url}}'>{{site.pi.title}}</a></td>
+                        {% if show_organs %}<td>{{site.organs|knowledge_value_joined}}</td>{% endif %}
+                    </tr>
+                {% endfor %}
+                {% if proposal_group.specialty %}
+                    <tr>
+                        <td colspan='{% if show_organs %}3{% else %}2{% endif %}'>
+                            <button class='btn btn-sm btn-outline-secondary text-nowrap' type='button'
+                                data-bs-toggle='collapse' data-bs-target='#{{proposal_group.cid}}' aria-expanded='false'
+                                aria-controls='{{proposal_group.cid}}'>Read Summary</button>
+                            <div class='collapse' id='{{proposal_group.cid}}'>
+                                <p class='card card-body'>{{proposal_group.specialty|safe}}</p>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan='{% if show_organs %}3{% else %}2{% endif %}'>
+                            <small>(No summary available)</small>
+                        </td>
+                    </tr>
+                {% endif %}
+
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{# -*- Django HTML -*- #}

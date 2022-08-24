@@ -1,0 +1,28 @@
+{
+   "folders" : [
+      {
+         "file_exclude_patterns" : [
+            ".DS_Store",
+            "*.py[cod]",
+            ".*.cfg",
+            "bootstrap.py",
+            "*.sublime-*",
+            "ops.cfg",
+            "bootstrap.min.css",
+            "bootstrap.bundle.min.js"
+         ],
+         "folder_exclude_patterns" : [
+            "bin",
+            "__pycache__",
+            "dist",
+            ".eggs",
+            "venv",
+            "media",
+            "build",
+            "./static",
+            "xxx"
+         ],
+         "path" : "."
+      }
+   ]
+}

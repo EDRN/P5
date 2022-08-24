@@ -1,0 +1,15 @@
+{% if page.get_ancestors|length > 1 %}
+    <div class='container mt-3'>
+        <nav aria-label='breadcrumb'>
+            <ol class='breadcrumb'>
+                {% for p in page.get_ancestors %}
+                    {% if p.is_root == False %}
+                        <li class='breadcrumb-item'><a href='{{p.url}}'>{{p.title}}</a></li>
+                    {% endif %}
+                {% endfor %}
+                <li class='breadcrumb-item active'>{{page.title}}</li>
+            </ol>
+        </nav>
+    </div>
+{% endif %}
+{# -*- Django HTML -*- #}

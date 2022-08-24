@@ -1,0 +1,50 @@
+<tr>
+    <td><a href='{{data_collection.url}}'>{{data_collection.title}}</a></td>
+    <td>
+        {% if data_collection.generating_protocol %}
+            {% if data_collection.generating_protocol.leadInvestigatorSite %}
+                {% if data_collection.generating_protocol.leadInvestigatorSite.pi %}
+                    <a href='{{data_collection.generating_protocol.leadInvestigatorSite.pi.url}}'>
+                        {{data_collection.generating_protocol.leadInvestigatorSite.pi.title}}
+                    </a>
+                {% else %}
+                    <a href='{{data_collection.generating_protocol.leadInvestigatorSite.url}}'>
+                        {{data_collection.generating_protocol.leadInvestigatorSite.title}}
+                    </a>
+                {% endif %}
+            {% else %}
+                {% if data_collection.generating_protocol.investigator_name %}
+                    {{data_collection.generating_protocol.investigator_name}}
+                {% else %}
+                    <small>(Unknown)</small>
+                {% endif %}
+            {% endif %}
+        {% else %}
+            <small>(Unknown)</small>
+        {% endif %}
+    </td>
+    <td>
+        <ul class='list-inline'>
+            {% for organ in data_collection.associated_organs.all %}
+                <li>{{organ}}</li>
+            {% empty %}
+                <li class='small'>(No organs)</li>
+            {% endfor %}
+        </ul>
+    </td>
+    <td>
+        {% if data_collection.generating_protocol %}
+            <a href='{{data_collection.generating_protocol.url}}'>{{data_collection.generating_protocol.title}}</a>
+        {% else %}
+            <small>(Unknown)</small>
+        {% endif %}
+    </td>
+    <td>
+        {% if data_collection.collaborative_group %}
+            {{data_collection.collaborative_group}}
+        {% else %}
+            <small>(Unknown)</small>
+        {% endif %}
+    </td>
+</tr>
+{# -*- Django HTML -*- #}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+  xmlns:ns1="http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+>
+  <ns1:ExternalResource rdf:about="http://www.uniprot.org/uniprot/Q8NCM2">
+    <ns1:Description>UniProtKP/Swiss-Prot entry for human KCNH5</ns1:Description>
+  </ns1:ExternalResource>
+  <ns1:ExternalResource rdf:about="http://www.omim.org/entry/190000">
+    <ns1:Description>OMIM entry for human TF</ns1:Description>
+  </ns1:ExternalResource>
+  <ns1:ExternalResource rdf:about="https://www.ncbi.nlm.nih.gov/gene/3827">
+    <ns1:Description>NCBI Gene entry for human KNG1</ns1:Description>
+  </ns1:ExternalResource>
+  <ns1:ExternalResource rdf:about='http://yahoo.com/'>
+    <ns1:Description>A web index</ns1:Description>
+  </ns1:ExternalResource>
+</rdf:RDF>

@@ -1,0 +1,50 @@
+<h2>Import Login Information</h2>
+
+<p>Before logging in, you are obligated to review all of the pertinent information that follows in this section. It contains significant stipulations, conditions, provisos, warnings, and caveats as well as the terms of use, riders, qualifications, and clauses entailed with the use of this website and the circumstances of doing so.</p>
+
+<h3>Vital Links</h3>
+
+<p>The following links may be informative and/or provide utility for changing or recovering your password:</p>
+
+<ul>
+    <li>
+        <a href='https://www.compass.fhcrc.org/edrns/pub/user/resetPwd.aspx?t=pwd&sub=form&w=1&p=3&why=4&are=5&these=6&extra=7&parameters=8&here=questionMark'>
+            Forgot your password?
+        </a>
+    </li>
+    <li>
+        Need to <a href='https://www.compass.fhcrc.org/edrns/pub/user/changePwd.aspx?t=pwd&sub=form&w=1&p=3&and=4&many=5&extra=6&parameters=7&too=exclamationPoint'>change your password</a>?
+    </li>
+    <li>
+        <a href='https://www.compass.fhcrc.org/edrns/pub/user/application.aspx?t=app&sub=form1&w=1&p=3&q=4&r=5&s=6&extra1=1&extra2=2&extra3=3'>Sign up with EDRN</a>
+    </li>
+    <li>
+        See also the <a href='#us-government-warning'>US Government Warning</a> (below)
+    </li>
+</ul>
+
+<h3>Biomarker Information</h3>
+
+<p>Biomarker information hosted on the public portal includes both published and unpublished research results from the Early Detection Research Network (EDRN). Summary information describing biomarkers and the associated scientific data that are being researched is provided for all biomarkers captured by the program. Access to unpublished biomarker research results under development by the EDRN is currently only available to EDRN members. In this case, members are provided a username and password that will grant them access to specific data that is hosted on the portal.
+</p>
+
+<p>If you are an EDRN member and need access and do not already have a username and password, please complete the <a href='https://www.compass.fhcrc.org/edrns/pub/user/application.aspx?t=app&sub=form1&w=1&p=3&q=4&r=5&s=6&extra1=1&extra2=2&extra3=3'>New User Application</a> which is handled by the Data Management and Coordinating Center (DMCC).
+</p>
+
+<h3>Scientific Data</h3>
+
+<p>Scientific data (including but not limited to instrument output, images, microscopic slides, annotated and unannotated datasets, collections of data, individual computer files and other electronic documents, non-electronic products, scientific conclusions, calibrated and uncalibrated research, and the like) may appear on this website or may be linked from this site. Such data may result from published and unpublished research from the Early Detection Research Network (EDRN). Summaries and/or full scientific data is undergoing constant research and refinement and access to unpublished data may require authorization and is available only to EDRN members. In these cases members are provided a username and password that will grant access to such data within this website, the EDRN portal, and linked websites, such as LabCAS. Scientific data is by its very nature dynamic and may change over time. The data is not better than the original sources from which they were derived in terms of (but not limited to) accuracy, precision, and scale, and these (and other) factors may vary across data collections and sets of data.
+</p>
+
+<p>If you are an EDRN member and need a user name and password please complete the <a href='https://www.compass.fhcrc.org/edrns/pub/user/application.aspx?t=app&sub=form1&w=1&p=3&q=4&r=5&s=6&extra1=1&extra2=2&extra3=3'>New User Application</a> which is handled by the Data Management and Coordinating Center (DMCC).
+</p>
+
+<p>No warranty is made by the Early Detection Research Network, the National Cancer Institute, the National Institutes of Health, or the US Department of Health and Human Services for the use of data or data linked to externally by this site, express or implied. These organizations assume no responsibility for errors or omissions. Accuracy, reliability, relevancy, timeliness, utility, and completeness of these data is hereby disclaimed. In no event shall any of these organizations have any liability whatsoever for payment of any consequential, incidental, indirect, special, or tort damages of any kind, including—but not limited to—any loss of profits arising out of the use or reliance on scientific data or arising out of the delivery, installation, operation, or support by these organizations.</p>
+
+<h3><a name='us-government-warning'>US Government Warning</a></h3>
+
+<p>This warning banner provides privacy and security notices consistent with applicable federal laws, directives, and other federal guidance for accessing this Government system, which includes ⑴ this computer network, ⑵ all computers connected to this network, and ⑶ all devices and storage media attached to this network or to a computer on this network.
+</p>
+
+<p>This system is provided for Government-authorized use only. Unauthorized or improper use of this system is prohibited and may result in disciplinary action and/or civil and criminal penalties. Personal use of social media and networking sites on this system is limited as to not interfere with official work duties and is subject to monitoring.
+</p>

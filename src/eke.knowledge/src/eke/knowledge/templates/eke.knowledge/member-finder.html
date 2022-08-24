@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags static knowledge_tags %}
+
+{% block title %}Member Finder{% endblock title %}
+
+{% block content %}
+    <div class='row mt-3'>
+        <div class='col-auto'>
+            <h1>Member Finder</h1>
+        </div>
+    </div>
+
+    <div class='row mt-3'>
+        <form class='col-md-3 col-sm-4 mb-3' id='facets'>
+
+            {% member_finder_pis %}
+            {% member_finder_sites %}
+            {% member_finder_member_types %}
+            <a href='{% url "find-members" %}' class='btn btn-primary btn-small'>Reset</a>
+
+        </form>
+        <div class='col-md-9 col-sm-8'>
+            <div id='searchCont'>
+                <small>Please select some criteria to find members.</small>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block extra_js %}
+    <script src='{% static "eke.knowledge/js/jquery.deserialize.js" %}'></script>
+    <script src='{% static "eke.knowledge/js/jquery.facets.js" %}'></script>
+    <script>
+        $(document).ready(function() {
+            $('form#facets').facets({
+                URLParams: [{name: 'ajax', value: 'true'}],
+                preAJAX: function() {
+                    // Validation can occur here apparently
+                    return true;
+                }
+            });
+        });
+    </script>
+{% endblock extra_js %}
+
+{# -*- Django HTML -*- #}

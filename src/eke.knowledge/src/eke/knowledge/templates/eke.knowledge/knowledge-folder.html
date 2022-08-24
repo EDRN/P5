@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags wagtailmetadata_tags %}
+{% block metadata_tags %}
+    {{block.super}}
+    {% meta_tags %}
+{% endblock metadata_tags %}
+{# 🔮 TODO: caching #}
+{% block content %}
+    <div class='row'>
+        <div class='col-md-12'>
+            <h1>{{page.title}}</h1>
+        </div>
+    </div>
+    {% if request.user.is_superuser %}
+        <div class='row mb-3'>
+            <div class='col'>
+                <button class='btn btn-sm btn-outline-secondary text-nowrap' type='button'
+                    data-bs-toggle='collapse' data-bs-target='#rdf-sources' aria-expanded='false'
+                    aria-controls='rdf-sources'>RDF Sources</button>
+                <div class='collapse' id='rdf-sources'>
+                    <ul class='list-inline'>
+                        {% for rdf_source in page.rdf_sources.all %}
+                            <li class='list-inline-item'>
+                                {% if rdf_source.active %}
+                                    <i class='bi-check-circle'></i>
+                                {% else %}
+                                    <i class='bi-circle'></i>
+                                {% endif %}
+                                <a href='{{rdf_source.url}}'>{{rdf_source.name}}</a>
+                            </li>
+                        {% empty %}
+                            <li class='list-inline-item'>This folder has no RDF sources.</li>
+                        {% endfor %}
+                        <li class='list-inline-item small'>(This appears to super users only.)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {% block knowledge_content %}
+        <div class='row'>
+            <h3>Contents</h3>
+            {% if knowledge_empty %}
+                <small>There are no knowledge objects in this folder.</small>
+            {% else %}
+                <ul class='list-unstyled'>
+                    {% for obj in knowledge_objects %}
+                        <li><a href='{{obj.url}}'>{{obj.title}}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    {% endblock knowledge_content %}
+{% endblock content %}
+{# -*- Django HTML -*- #}

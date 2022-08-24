@@ -1,0 +1,10 @@
+<div class='mb-2'>
+    <h6>{{label}}</h6>
+    <select name='{{vocab_name}}' class='form-select'>
+        <option value=''>{{label}}</option>
+        {% for term in terms %}
+            <option value='{{term}}'>{{term}}</option>
+        {% endfor %}
+    </select>
+</div>
+{# -*- Django HTML -*- #}

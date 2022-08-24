@@ -1,0 +1,23 @@
+{% comment %}
+    🎨 EDRN Theme: main menu handling.
+
+    This is a custom template for Wagtail Menus that helps make menus actually work.
+{% endcomment %}
+{# 🔮 TODO: caching #}
+{% load menu_tags %}
+{% spaceless %}
+    {% if menu_heading %}
+        <h6 class='edrn-footer-menu-heading'>{{menu_heading|safe}}</h6>
+    {% endif %}
+    {% if menu_items %}
+        <ul class='nav flex-column'>
+            {% for item in menu_items %}
+                <li class='nav-item mb-2 {{item.active_class}}'>
+                    <a class='nav-link p-0 text-light' href='{{item.href}}'>{{item.text}}</a>
+                    {% if item.has_children_in_menu %}{% sub_menu item %}{% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endspaceless %}
+{# -*- Django HTML -*- #}

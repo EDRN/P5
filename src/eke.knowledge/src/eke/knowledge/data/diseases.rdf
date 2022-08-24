@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+  xmlns:ns1="http://edrn.nci.nih.gov/rdf/types.rdf#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:ns2="http://purl.org/dc/terms/"
+  xmlns:ns3="http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#"
+>
+
+  <ns1:Disease rdf:about="http://edrn.nci.nih.gov/data/diseases/182">
+    <ns3:icd10>C55.</ns3:icd10>
+    <ns2:title>Malignant neoplasm of uterus</ns2:title>
+    <ns3:icd9>182</ns3:icd9>
+    <ns3:bodySystemsAffected rdf:resource="http://edrn.nci.nih.gov/data/body-systems/29"/>
+    <ns3:bodySystemsAffected rdf:resource="http://edrn.nci.nih.gov/data/body-systems/16"/>
+    <ns3:bodySystemsAffected rdf:resource="http://edrn.nci.nih.gov/data/body-systems/31"/>
+    <ns3:booger rdf:resource="http://edrn.nci.nih.gov/data/body-systems/32"/>
+    <ns2:description>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</ns2:description>
+  </ns1:Disease>
+
+  <ns1:Disease rdf:about="http://edrn.nci.nih.gov/data/diseases/6">
+    <ns2:title>Malignant neoplasm of colon</ns2:title>
+    <ns3:bodySystemsAffected rdf:resource="http://edrn.nci.nih.gov/data/body-systems/4"/>
+    <ns3:icd10>C18.</ns3:icd10>
+    <ns3:icd9>153</ns3:icd9>
+  </ns1:Disease>
+
+</rdf:RDF>

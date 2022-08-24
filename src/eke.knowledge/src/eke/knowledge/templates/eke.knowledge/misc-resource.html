@@ -1,0 +1,12 @@
+{% extends 'eke.knowledge/knowledge-object.html' %}
+{# 🔮 TODO: caching #}
+
+{% block knowledge_content %}
+
+    <div class='col-md-12'>
+        <a href='{{page.identifier}}'><i class='bi-box-arrow-up-right'></i> Visit this resource</a>
+        <small>(will take you off site and possibly nowhere as some of these resources are not maintained)</small>
+    </div>
+
+{% endblock knowledge_content %}
+{# -*- Django HTML -*- #}

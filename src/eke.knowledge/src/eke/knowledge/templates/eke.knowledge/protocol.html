@@ -1,0 +1,120 @@
+{% extends 'eke.knowledge/knowledge-object.html' %}
+{# 🔮 TODO: caching #}
+{% block knowledge_description %}{% endblock %}
+{% block knowledge_content %}
+
+    <div class='row'>
+        <div class='col-lg-9'>
+            <dl>
+                {% if page.abbreviation %}
+                    <dt>Abbreviated Name</dt>
+                    <dd>{{page.abbreviation}}</dd>
+                {% endif %}
+                <dt>Lead Investigator</dt>
+                <dd>
+                    {% if page.leadInvestigatorSite %}
+                        <a href='{{page.leadInvestigatorSite.pi.url}}'>{{page.leadInvestigatorSite.pi.title}}</a> —
+                        <a href='{{page.leadInvestigatorSite.url}}'>{{page.leadInvestigatorSite.title}}</a>
+                    {% else %}
+                        <small>No lead investigator</small>
+                    {% endif %}
+                </dd>
+                <dt>Coordinating Investigator</dt>
+                <dd>
+                    {% if page.coordinatingInvestigatorSite %}
+                        <a href='{{page.coordinatingInvestigatorSite.pi.url}}'>
+                            {{page.coordinatingInvestigatorSite.pi.title}}
+                        </a> —
+                        <a href='{{page.coordinatingInvestigatorSite.url}}'>
+                            {{page.coordinatingInvestigatorSite.title}}
+                        </a>
+                    {% else %}
+                        <small>No coordinating investigator</small>
+                    {% endif %}
+                </dd>
+                <dt>Involved Investigators</dt>
+                <dd>
+                    <ul class='list-unstyled'>
+                        {% for site in page.involvedInvestigatorSites.all %}
+                            <li>
+                                <a href='{{site.pi.url}}'>{{site.pi.title}}</a> —
+                                <a href='{{site.url}}'>{{site.title}}</a>
+                            </li>
+                        {% empty %}
+                            <li class='small'>No involved investigators</li>
+                        {% endfor %}
+                    </ul>
+                </dd>
+            </dl>
+
+            <h2>Abstact</h2>
+            <p>{{page.description|safe}}</p>
+
+            <h2>Aims</h2>
+            <p>{{page.aims|safe}}</p>
+
+            <h2>Analytic Method</h2>
+            <p>{{page.analyticMethod|safe}}</p>
+
+            {% if page.comments %}
+                <h3>Comments</h3>
+                <p>{{page.comments|safe}}</p>
+            {% endif %}
+
+            <h2>Biomarkers</h2>
+            <ul>
+                {% for bm in biomarkers %}
+                    <li><a href='{{bm.url}}'>{{bm.title}}</a></li>
+                {% empty %}
+                    <li class='small'>This protocol hasn't produced any biomarkers at all</li>
+                {% endfor %}
+            </ul>
+
+            <h2>Data Collections</h2>
+            <ul>
+                {% for dc in data_collections %}
+                    <li><a href='{{dc.identifier}}'>{{dc.title}}</a></li>
+                {% empty %}
+                    <li class='small'>This protocol has generated absolutely no scientific data at all</li>
+                {% endfor %}
+            </ul>
+
+
+        </div>
+        <div class='col-lg-3'>
+            {% if page.isProject %}
+                <h5><span class='badge bg-dark'><i class='bi-award'></i> Team Project</span></h5>
+            {% endif %}
+            {% if nonEDRNProtocol %}
+                <h5><span class='badge bg-secondary'><i class='bi-asterisk'></i>  Non-EDRN Protocol</span></h5>
+            {% endif %}
+            <dl>
+                <dt>Protocol ID</dt>
+                <dd>{{page.protocolID}}</dd>
+                <dt>Field of Research</dt>
+                <dd>{{page.fieldOfResearch}}</dd>
+                <dt>Collaborative Groups</dt>
+                <dd>
+                    <ul class='list-unstyled'>
+                        {% for cg in page.collaborativeGroups.all %}
+                            <li>{{cg.value}}</li>
+                        {% endfor %}
+                    </ul>
+                </dd>
+                {% if page.phasedStatus %}
+                    <dt>Phased Status</dt>
+                    <dd>{{page.phasedStatus}}</dd>
+                {% endif %}
+            </dl>
+        </div>
+    </div>
+
+    <div class='row auto'>
+        <h4>Associated Forms</h4>
+        <iframe name='forms' width='1000' height='500' style='border: 1px dotted rgb(70,70,70);'
+            sandbox='allow-top-navigation allow-popups'
+            src='https://www.compass.fhcrc.org/vs/pub/files/jpl/JPLFormsList.aspx?pi={{page.protocolID}}'/>
+    </div>
+
+{% endblock knowledge_content %}
+{# -*- Django HTML -*- #}

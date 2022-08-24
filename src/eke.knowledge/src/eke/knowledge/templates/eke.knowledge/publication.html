@@ -1,0 +1,35 @@
+{% extends 'eke.knowledge/knowledge-object.html' %}
+{# 🔮 TODO: caching #}
+
+{% block knowledge_content %}
+
+    <div class='row'>
+        <div class='col-lg-9'>
+            <h2>Abstact</h2>
+            {% autoescape off %}
+                {{page.abstract}}
+            {% endautoescape %}
+        </div>
+        <div class='col-lg-3'>
+            <h5>Authors</h5>
+            <ul class='list-inline'>
+                {% for author in page.authors.all %}
+                    <li class='list-inline-item'>{{author.value}}</li>
+                {% empty %}
+                    <li class='list-inline-item small'>(None specified)</li>
+                {% endfor %}
+            </ul>
+            <h5>Pub Med ID</h5>
+            <div class='mb-3'>
+                {% if page.pubMedID %}
+                    <a href='https://pubmed.ncbi.nlm.nih.gov/{{page.pubMedID}}'>{{page.pubMedID}}</a>
+                {% else %}
+                    <small>(Not specified)</small>
+                {% endif %}
+            </div>
+            <h5>Appears In</h5>
+            {{appearance}}
+        </div>
+    </div>
+{% endblock knowledge_content %}
+{# -*- Django HTML -*- #}

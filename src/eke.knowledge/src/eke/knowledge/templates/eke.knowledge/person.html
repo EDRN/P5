@@ -1,0 +1,122 @@
+{% extends 'eke.knowledge/knowledge-object.html' %}
+{% load knowledge_tags wagtailimages_tags %}
+{# 🔮 TODO: caching #}
+
+{% block knowledge_content %}
+
+    <div class='row'>
+        <div class='col-lg-9'>
+            <h3>Open Protocols</h3>
+            {% if opened %}
+                <table class='table'>
+                    <thead><tr><th>Protocol Name</th><th>Biomarkers</th><th>Datasets</th></tr></thead>
+                    <tbody>
+                        {% for protocol in opened %}
+                            <tr>
+                                <td><a href='{{protocol.url}}'>{{protocol.title}}</a></td>
+                                <td>{% protocol_counts protocol 'biomarkers' %}</td>
+                                <td>{% protocol_counts protocol 'data' %}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <small>This person has no open protocols at the present moment.</small>
+            {% endif %}
+
+            <h3>Closed Protocols</h3>
+            {% if closed %}
+                <table class='table'>
+                    <thead><tr><th>Protocol Name</th><th>Biomarkers</th><th>Datasets</th></tr></thead>
+                    <tbody>
+                        {% for protocol in closed %}
+                            <tr>
+                                <td><a href='{{protocol.url}}'>{{protocol.title}}</a></td>
+                                <td>{% protocol_counts protocol 'biomarkers' %}</td>
+                                <td>{% protocol_counts protocol 'data' %}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <small>This person has no closed protocols at the present moment.</small>
+            {% endif %}
+
+            <h3>Publications</h3>
+            {% if publications %}
+                <table class='table'>
+                    <thead><tr><th>Publication Name</th><th>PubMed ID</th><th>Journal</th></tr></thead>
+                    <tbody>
+                        {% for pub in publications %}
+                            <tr>
+                                <td><a href='{{pub.url}}'>{{pub.title}}</a></td>
+                                <td><a href='https://pubmed.ncbi.nlm.nih.gov/{{pub.pubMedID}}'>{{pub.pubMedID}}</a></td>
+                                <td>{{pub.journal}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <small>This person hasn't made any publications that the EDRN is aware of.</small>
+            {% endif %}
+
+            <small>
+                To update protocols, publications, biomarkers, or science data, please contact the
+                <a href='mailto:ic-portal@jpl.nasa.gvo'>Informatics Center</a>.
+            </small>
+
+        </div>
+        <div class='col-lg-3'>
+            <dl>
+                <dd>
+                    {% if page.photo %}
+                        {% image page.photo max-300x400 as the_photo %}
+                        <img src='{{the_photo.url}}' class='' alt='Photograph of {{page.title}}'/>
+                    {% else %}
+                        <img src='{{page.large_gravatar_url}}' alt='Photograph of {{page.title}}'/>
+                    {% endif %}
+                </dd>
+                <dt>Email</dt>
+                <dd>
+                    {% if page.mbox %}
+                        <code>{{page.mbox|urlize}}</code>
+                    {% else %}
+                        <small>No email set</small>
+                    {% endif %}
+                </dd>
+                {% if page.fax %}
+                    <dt>Fax</dt>
+                    <dd>{{page.fax}}</dd>
+                {% endif %}
+                <dt>Person ID</dt>
+                <dd>
+                    {% if page.personID %}
+                        <code>{{page.personID}}</code>
+                    {% else %}
+                        <small>
+                            No code was assigned by the DMCC to identify this person; this may be the
+                            case for non-EDRN people
+                        </small>
+                    {% endif %}
+                </dd>
+                <dt>EDRN Title</dt>
+                <dd>{{page.edrnTitle}}</dd>
+                {% if account_name %}
+                    <dt>Account Name</dt>
+                    <dd>
+                        <code>{{account_name}}</code>
+                        <small>(This is visible to staff and super users only)</small>
+                    </dd>
+                {% endif %}
+                <dt>Note</dt>
+                <dd class='small'>
+                    To update contact information, please visit the
+                    <a href='https://www.compass.fhcrc.org/enterEDRN?param=sec1&amp;extra_param=fhc73&amp;c=1'>
+                        Data Management and Coordinating Center
+                    </a>.
+                </dd>
+            </dl>
+        </div>
+    </div>
+{% endblock knowledge_content %}
+{# -*- Django HTML -*- #}

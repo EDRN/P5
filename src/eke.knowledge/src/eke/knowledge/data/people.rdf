@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:ns1="http://xmlns.com/foaf/0.1/"
+  xmlns:ns2="http://edrn.nci.nih.gov/rdf/types.rdf#"
+  xmlns:ns3="http://edrn.nci.nih.gov/rdf/schema.rdf#"
+  xmlns:ns4="http://www.w3.org/2001/vcard-rdf/3.0#"
+>
+  <ns2:Person rdf:about="http://edrn.nci.nih.gov/data/registered-person/4440">
+    <ns1:accountName>zsaeed</ns1:accountName>
+    <ns1:givenname>Zeb</ns1:givenname>
+    <ns1:mbox rdf:resource="mailto:zisaeed@iupui.edu"/>
+    <ns1:phone>317-515-0485</ns1:phone>
+    <ns1:surname>Saeed</ns1:surname>
+    <ns3:degree1>M.D.</ns3:degree1>
+    <ns3:edrnTitle>EDRN Associate Member</ns3:edrnTitle>
+    <ns3:employmentActive>Current employee</ns3:employmentActive>
+    <ns3:mailingAddress>1600 Pennsylvania Av NW</ns3:mailingAddress>
+    <ns3:mailingCity>washington</ns3:mailingCity>
+    <ns3:mailingCountry>U.S.A.</ns3:mailingCountry>
+    <ns3:mailingPostalCode>20500</ns3:mailingPostalCode>
+    <ns3:mailingState>DC</ns3:mailingState>
+    <ns3:secureSiteRole>EDRN Associate Member</ns3:secureSiteRole>
+    <ns3:shippingAddress2>1120 W. Michigan Street, CL365</ns3:shippingAddress2>
+    <ns3:shippingAddress>Indiana University (Assoc. Member)</ns3:shippingAddress>
+    <ns3:shippingCity>Indianapolis</ns3:shippingCity>
+    <ns3:shippingCountry>U.S.A.</ns3:shippingCountry>
+    <ns3:shippingPostalCode>46202</ns3:shippingPostalCode>
+    <ns3:shippingState>IN</ns3:shippingState>
+    <ns3:site rdf:resource="http://edrn.nci.nih.gov/data/sites/880"/>
+  </ns2:Person>
+  <ns2:Person rdf:about="http://edrn.nci.nih.gov/data/registered-person/4155">
+    <ns1:accountName>sschmidt</ns1:accountName>
+    <ns1:givenname>Suzette</ns1:givenname>
+    <ns1:mbox rdf:resource="mailto:suschmid@iu.edu"/>
+    <ns1:phone>317-948-8104</ns1:phone>
+    <ns1:surname>Schmidt</ns1:surname>
+    <ns3:degree1>R.N.</ns3:degree1>
+    <ns3:employmentActive>Current employee</ns3:employmentActive>
+    <ns3:mailingAddress>First St SE</ns3:mailingAddress>
+    <ns3:mailingCity>Washington</ns3:mailingCity>
+    <ns3:mailingCountry>U.S.A.</ns3:mailingCountry>
+    <ns3:mailingPostalCode>20004</ns3:mailingPostalCode>
+    <ns3:mailingState>DC</ns3:mailingState>
+    <ns3:shippingAddress2>550 N. University Blvd., Suite 1634</ns3:shippingAddress2>
+    <ns3:shippingAddress>Indiana University (Assoc. Member)</ns3:shippingAddress>
+    <ns3:shippingCity>Indianapolis</ns3:shippingCity>
+    <ns3:shippingCountry>U.S.A.</ns3:shippingCountry>
+    <ns3:shippingPostalCode>46202</ns3:shippingPostalCode>
+    <ns3:shippingState>IN</ns3:shippingState>
+    <ns3:site rdf:resource="http://edrn.nci.nih.gov/data/sites/880"/>
+  </ns2:Person>
+  <ns2:Person rdf:about="http://edrn.nci.nih.gov/data/registered-person/993">
+    <ns1:accountName>zfeng</ns1:accountName>
+    <ns1:givenname>Ziding</ns1:givenname>
+    <ns1:img rdf:resource="https://edrn.jpl.nasa.gov/cancerdataexpo/staff-photographs/piPhoto81.gif"/>
+    <ns1:mbox rdf:resource="mailto:zfeng@fredhutch.org"/>
+    <ns1:phone>206-667-6038</ns1:phone>
+    <ns1:salutation>Dr.</ns1:salutation>
+    <ns1:surname>Feng</ns1:surname>
+    <ns3:degree1>Ph.D.</ns3:degree1>
+    <ns3:edrnTitle>EDRN Principal Investigator</ns3:edrnTitle>
+    <ns3:employmentActive>Current employee</ns3:employmentActive>
+    <ns3:mailingAddress>1 First St NE</ns3:mailingAddress>
+    <ns3:mailingCity>Washington</ns3:mailingCity>
+    <ns3:mailingCountry>U.S.A.</ns3:mailingCountry>
+    <ns3:mailingPostalCode>20543</ns3:mailingPostalCode>
+    <ns3:mailingState>DC</ns3:mailingState>
+    <ns3:secureSiteRole>EDRN Principal Investigator</ns3:secureSiteRole>
+    <ns3:shippingAddress2>Fred Hutchinson Cancer Research Center</ns3:shippingAddress2>
+    <ns3:shippingAddress>Fred Hutchinson Cancer Research Center</ns3:shippingAddress>
+    <ns3:shippingCity>Seattle</ns3:shippingCity>
+    <ns3:shippingCountry>U.S.A.</ns3:shippingCountry>
+    <ns3:shippingPostalCode>98109-1024</ns3:shippingPostalCode>
+    <ns3:shippingState>WA</ns3:shippingState>
+    <ns3:site rdf:resource="http://edrn.nci.nih.gov/data/sites/5"/>
+    <ns3:specialty>Statistical Methods In Cancer</ns3:specialty>
+    <ns4:fax>206-667-5964</ns4:fax>
+  </ns2:Person>
+</rdf:RDF>

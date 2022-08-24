@@ -1,0 +1,11 @@
+<tr>
+    <td><a href='{{publication.url}}'>{{publication.title}}</a></td>
+    <td>
+        {% if publication.year %}
+            {{publication.year}}
+        {% else %}
+            (Unknown year)
+        {% endif %}
+    </td>
+</tr>
+{# -*- Django HTML -*- #}

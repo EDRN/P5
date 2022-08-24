@@ -1,0 +1,69 @@
+{% load knowledge_filters humanize wagtailadmin_tags %}
+<section class='panel summary nice-padding'>
+    <div style='display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 1rem;
+        grid-auto-rows: minmax(100px, auto);'>
+        <div>
+            <h2 class='title-wrapper'>EDRN Ingest Controls</h2>
+            {% if last_ingest_start %}
+                <dl>
+                    <dt>Last started</dt>
+                    <dd>{{last_ingest_start|naturaltime}}</dd>
+                    <dt>Duration</dt>
+                    <dd>{{last_ingest_duration|friendly_duration}}</dd>
+                    <dt>Ingest running</dt>
+                    <dd>
+                        <a href='#' class='button button-small {% if ingest_running %}yes{% else %}no{% endif %}'>
+                            {% if ingest_running %}yes{% else %}no{% endif %}
+                        </a>
+                    </dd>
+                </dl>
+            {% else %}
+                <p class='help-block help-warning'>
+                    Ingest status unknown; site content may be out of date!
+                </p>
+            {% endif %}
+            {# 🔮 TODO: put a warning here if the last ingest is too old #}
+            <div>
+                <a href='{% url "start_full_ingest" %}' class='button button-longrunning' role='button'
+                    {% if ingest_running %}disabled{% endif %}>Full Ingest</a>
+            </div>
+
+            <h2 class='title-wrapper'>Other EDRN Controls</h2>
+            <div>
+                {# 🔮 TODO: find a better place for these buttons? #}
+                <a href='{% url "reindex_all_content" %}' class='button button-longrunning' role='button'>Reindex Content</a>
+                <a href='{% url "sync_ldap_groups" %}' class='button button-longrunning' role='button'>Sync LDAP Groups</a>
+                <a href='{% url "clear_caches" %}' class='button button-longrunning' role='button'>Clear Caches</a>
+            </div>
+
+        </div>
+        <div>
+            <h2 class='title-wrapper'>Ingest Status</h2>
+            <table class='listing' summary='Knowledge Folder Status'>
+                <thead>
+                    <tr>
+                        <th>Folder</th>
+                        <th>Enabled</th>
+                        <th>Order</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for folder in knowledge_folders %}
+                        <tr>
+                            <td><a href='{% url "wagtailadmin_explore" folder.id %}'>{{folder.title}}</a></td>
+                            <td>
+                                {% if folder.ingest %}✔{% else %}⤫{% endif %}
+                            </td>
+                            <td>{{folder.ingest_order}}</td>
+                        </tr>                    
+                    {% empty %}
+                        <tr>
+                            <td colspan='3'>There are no knowledge folders!</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{# -*- Django HTML -*- #}

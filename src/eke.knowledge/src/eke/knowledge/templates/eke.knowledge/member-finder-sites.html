@@ -1,0 +1,15 @@
+{% load knowledge_filters %}
+<div class='mb-2'>
+    <h6>Institution</h6>
+    {% if sites %}
+        <input class='form-control' list='site-list-options' name='site' placeholder='Type a site name…'/>
+        <datalist id='site-list-options'>
+            {% for site in sites %}
+                <option value='{{site}}'/>
+            {% endfor %}
+        </datalist>
+    {% else %}
+        <small>There are no sites!</small>
+    {% endif %}
+</div>
+{# -*- Django HTML -*- #}

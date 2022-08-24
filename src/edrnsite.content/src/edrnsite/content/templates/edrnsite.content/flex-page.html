@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags cache wagtailmetadata_tags %}
+{% block metadata_tags %}
+    {{block.super}}
+    {% meta_tags %}
+{% endblock metadata_tags %}
+{% block content %}
+    <div class='row'>
+        <div class='col-md-8 offset-md-0'>
+            <h1 class='cc-inner-title'>{{page.title}}</h1>
+        </div>
+    </div>
+    {% if not request.is_preview %}
+        {# 1 hour #}
+        {% cache 3600 flex-page-stream page.id %}
+            {% for block in page.body %}
+                {% include_block block %}
+            {% endfor %}
+        {% endcache %}
+    {% else %}
+        {# preview #}
+        {% for block in page.body %}
+            {% include_block block %}
+        {% endfor %}
+    {% endif %}
+{% endblock content %}
+{# -*- Django HTML -*- #}

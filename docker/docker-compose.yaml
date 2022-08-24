@@ -1,0 +1,245 @@
+# Docker Composition for EDRN Portal
+# ==================================
+#
+# A set of composed services to run the EDRN Portal.
+
+---
+
+# Services
+# --------
+#
+
+services:
+    # HTTPS proxy frontend
+    # ~~~~~~~~~~~~~~~~~~~~
+    #
+    # Gives an encrypted entrypoint to the whole kit 'n kaboodle on EDRN_TLS_PORT or 4134
+    tls-termination:
+        image: nasapds/proxycrypt:1.0.2
+        profiles:
+            -   tls-proxy
+        environment:
+            PROXY_URL: http://portal:8000/
+            CERT_CN: ${CERT_CN:-edrn-docker.jpl.nasa.gov}
+        ports:
+            -
+                target: 443
+                published: ${EDRN_TLS_PORT:-4134}
+                protocol: tcp
+                mode: host
+        depends_on:
+            -   portal
+        networks:
+            -   lattice
+            -   default
+
+    # EDRN Wagtail-based Portal
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~
+    #
+    # Nominally on port 8000, published to ${EDRN_PUBLISHED_TLS_PORT} or 8080.
+    # For a TLS endpoint, enable the profile `tls-proxy` and use portal 4134.
+    portal:
+        image: ${EDRN_IMAGE_OWNER-ncidockerhub.nci.nih.gov/edrn/}edrn-portal:${EDRN_VERSION:-6.0.0}
+        volumes:
+            -
+                type: bind
+                source: ${EDRN_DATA_DIR:-/local/content/edrn}/media
+                target: /app/media
+            -
+                type: bind
+                source: ${EDRN_DATA_DIR:-/local/content/edrn}/static
+                target: /app/static
+        ports:
+            -
+                target: 8000
+                published: ${EDRN_PUBLISHED_PORT:-8080}
+                protocol: tcp
+                mode: host
+        networks:
+            -   lattice
+            -   default
+        environment:
+            AWS_ACCESS_KEY_ID:
+            AWS_SECRET_ACCESS_KEY:
+            CSRF_TRUSTED_ORIGINS:
+            FORCE_SCRIPT_NAME:
+            LDAP_BIND_PASSWORD:
+            POSTGRES_PASSWORD:
+            SIGNING_KEY:
+            ELASTICSEARCH_URL: http://search:9200
+            DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@db/edrn
+            LDAP_BIND_DN: ${LDAP_BIND_DN:-uid=service,dc=edrn,dc=jpl,dc=nasa,dc=gov}
+            ALLOWED_HOSTS: ${ALLOWED_HOSTS:-.jpl.nasa.gov,.nci.nih.gov,.cancer.gov,localhost}
+            STATIC_URL: ${STATIC_URL:-/static/}
+            MEDIA_URL: ${MEDIA_URL:-/media/}
+            BASE_URL: ${BASE_URL:-https://edrn.nci.nih.gov/}
+            MQ_URL: redis://cache
+            CACHE_URL: redis://cache
+            DJANGO_SETTINGS_MODULE: edrnsite.policy.settings.ops
+        depends_on:
+            -   db
+            -   cache
+            -   search
+            -   worker
+        restart: unless-stopped
+        stop_grace_period: 23s
+        labels:
+            org.label-schema.name: EDRN Public Portal
+            org.label-schema.description: >
+                Wagtail serving the CMS for the Early Detection Research Network's public portal.
+
+    # EDRN Database
+    # ~~~~~~~~~~~~~
+    #
+    # Port 5432, non-published.
+    db:
+        image: postgres:14.4-alpine3.16
+        volumes:
+            -
+                type: bind
+                source: ${EDRN_DATA_DIR:-/local/content/edrn}/postgresql
+                target: /var/lib/postgresql/data
+        networks:
+            -   lattice
+        environment:
+            POSTGRES_PASSWORD:
+        restart: on-failure
+        stop_grace_period: 13s
+        labels:
+            org.label-schema.name: EDRN Content DB
+            org.label-schema.description: PostgreSQL database serving the EDRN portal.
+
+
+    # Cache and Message Broker
+    # ~~~~~~~~~~~~~~~~~~~~~~~~
+    #
+    # Port 6379, not published.
+    cache:
+        image: redis:7.0.4-alpine3.16
+        networks:
+            -   lattice
+        restart: on-failure
+        labels:
+            org.label-schema.name: EDRN Cache and Message Broker
+            org.label-schema.description: Message queue and in-memory cache
+
+    # Search Engine
+    # ~~~~~~~~~~~~~
+    #
+    # Ports 9200 and 9300, not published.
+    search:
+        image: elasticsearch:7.17.5
+        # :crystal-ball-emoji: TODO: user ID 500/26013 issue … do we need a custom elasticsearch image?
+        volumes:
+            -
+                type: volume
+                source: elasticdata
+                target: /usr/share/elasticsearch/data
+        networks:
+            -   lattice
+        environment:
+            node.name: search
+            discovery.type: single-node
+            xpack.security.enabled: 'false'
+        ulimits:
+            nofile:
+                soft: 1048576
+                hard: 1048576
+            nproc:
+                soft: 65535
+                hard: 65535
+            memlock:
+                # Disable swapping
+                soft: -1
+                hard: -1
+        restart: on-failure
+        labels:
+            org.label-schema.name: EDRN Search Engine
+            org.label-schema.description: Text indexing, ranking, faceting, and discovery capabilities for EDRN site.
+
+
+    # EDRN Worker
+    # ~~~~~~~~~~~
+    #
+    # A "celery" instance that handles background tasks; does not listen on any port.
+    # Worker processes run Django functions so it needs all the same env vars as `portal`.
+    worker:
+        image: ${EDRN_IMAGE_OWNER-ncidockerhub.nci.nih.gov/edrn/}edrn-portal:${EDRN_VERSION:-6.0.0}
+        entrypoint: ['/usr/bin/django-admin', 'worker']
+        volumes:
+            -
+                type: bind
+                source: ${EDRN_DATA_DIR:-/local/content/edrn}/media
+                target: /app/media
+        networks:
+            -   lattice
+        environment:
+            POSTGRES_PASSWORD:
+            LDAP_BIND_PASSWORD:
+            SIGNING_KEY:
+            AWS_ACCESS_KEY_ID:
+            AWS_SECRET_ACCESS_KEY:
+            FORCE_SCRIPT_NAME:
+            ELASTICSEARCH_URL: http://search:9200
+            DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@db/edrn
+            LDAP_BIND_DN: ${LDAP_BIND_DN:-uid=service,dc=edrn,dc=jpl,dc=nasa,dc=gov}
+            ALLOWED_HOSTS: ${ALLOWED_HOSTS:-.jpl.nasa.gov,.nci.nih.gov,.cancer.gov}
+            STATIC_URL: ${STATIC_URL:-/static/}
+            MEDIA_URL: ${MEDIA_URL:-/media/}
+            BASE_URL: ${BASE_URL:-https://edrn.nci.nih.gov/}
+            MQ_URL: redis://cache
+            CACHE_URL: redis://cache
+            DJANGO_SETTINGS_MODULE: edrnsite.policy.settings.ops
+        depends_on:
+            -   db
+            -   cache
+        healthcheck:
+            disable: true
+            test: ['NONE']
+        restart: unless-stopped
+        stop_grace_period: 23s
+        labels:
+            org.label-schema.name: EDRN Worker
+            org.label-schema.description: >
+                Celery distributed task queue to handle portal background tasks
+
+
+# Volumes
+# -------
+#
+# Thankfully, this is pretty simple.
+
+volumes:
+    elasticdata:
+        driver: local
+        labels:
+            org.label-schema.name: EDRN Portal Search Engine Data
+            org.label-schema.description: >
+                Indexes and other data for Elasticsearch for full-text indexing and ranking on the EDRN site.
+
+
+# Networks
+# --------
+#
+# Thankfully, this is also pretty simple.
+
+networks:
+    lattice:
+        driver: bridge
+        external: false
+        labels:
+            org.label-schema.name: EDRN Portal Lattice Network
+            org.label-schema.description: >
+                Internal bridge network so the services that comprise the EDRN Public Portal may communicate.
+
+
+# Misc
+# ----
+#
+# Only thing we have here is some Docker Compose metadata.
+
+version: '3.9'
+
+...
+
+# -*- mode: YAML; tab-width: 4 -*-

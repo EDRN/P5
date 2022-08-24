@@ -1,0 +1,2 @@
+# A higher-level .gitignore is ignoring `static`, but here in the EKE, we **Want** `static`!
+!static

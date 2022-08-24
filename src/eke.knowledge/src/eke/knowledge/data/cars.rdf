@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='utf-8'?>
+<rdf:RDF
+    xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+    xmlns:dc='http://purl.org/dc/terms/'
+    xmlns:types='urn:cars:rdf:types:'
+    xmlns:preds='urn:cars:rdf:predicates:'>
+    <types:Car rdf:about='urn:cars:objects:0'>
+        <dc:title>Sean's Old Honda</dc:title>
+        <dc:description>This is Sean's old Honda CR-V, bought used with his suspicious ex-wife, from a Honda dealer
+            in McKinney, Texas, USA. He preferred the older Honda with the side-swinging rear door instead of
+            the new one which has the hatchback style door
+        </dc:description>
+        <preds:make>Honda</preds:make>
+        <preds:model>CR-V</preds:model>
+        <preds:year>2010</preds:year>
+        <preds:condition>fair</preds:condition>
+        <preds:color>red</preds:color>
+        <preds:price>1000</preds:price>
+    </types:Car>
+    <types:Car rdf:about='urn:cars:objects:1'>
+        <dc:title>Beloved BMW</dc:title>
+        <preds:make>BMW</preds:make>
+        <preds:model>M3</preds:model>
+        <preds:year>1998</preds:year>
+        <preds:condition>used</preds:condition>
+        <preds:color>silver</preds:color>
+        <preds:price>12345</preds:price>
+    </types:Car>
+    <types:Car rdf:about='urn:cars:objects:2'>
+        <dc:title>Heist-Mobile</dc:title>
+        <preds:make>Mini</preds:make>
+        <preds:model>Cooper</preds:model>
+        <preds:year>2010</preds:year>
+        <preds:condition>new</preds:condition>
+        <preds:color>red</preds:color>
+        <preds:price>21312</preds:price>
+    </types:Car>
+    <types:Car rdf:about='urn:cars:objects:3'>
+        <dc:title>Zoom Zoom™</dc:title>
+        <preds:make>Audi</preds:make>
+        <preds:model>A4</preds:model>
+        <preds:year>2003</preds:year>
+        <preds:condition>like_new</preds:condition>
+        <preds:color>blue</preds:color>
+        <preds:price>6500</preds:price>
+    </types:Car>
+    <types:Car rdf:about='urn:cars:objects:4'>
+        <dc:title>Ex-Mobile</dc:title>
+        <preds:make>Audi</preds:make>
+        <preds:model>Q7</preds:model>
+        <preds:year>2007</preds:year>
+        <preds:condition>new</preds:condition>
+        <preds:color>silver</preds:color>
+        <preds:price>14500</preds:price>
+    </types:Car>
+    <types:Car rdf:about='urn:cars:objects:5'>
+        <dc:title>Mrs Meuldener's Car</dc:title>
+        <preds:make>BMW</preds:make>
+        <preds:model>325i</preds:model>
+        <preds:year>2002</preds:year>
+        <preds:condition>really_used</preds:condition>
+        <preds:color>white</preds:color>
+        <preds:price>4000</preds:price>
+    </types:Car>
+    <types:Car rdf:about='urn:cars:objects:6'>
+        <dc:title>The Thing</dc:title>
+        <preds:make>Mini</preds:make>
+        <preds:model>Clubman</preds:model>
+        <preds:year>2010</preds:year>
+        <preds:condition>really_used</preds:condition>
+        <preds:color>black</preds:color>
+        <preds:price>29</preds:price>
+    </types:Car>
+    <types:Car rdf:about='urn:cars:objects:7'>
+        <dc:title>Dad Mobile</dc:title>
+        <preds:make>Cadillac</preds:make>
+        <preds:model>El Dorado</preds:model>
+        <preds:year>1997</preds:year>
+        <preds:condition>really_used</preds:condition>
+        <preds:color>green</preds:color>
+        <preds:price>15</preds:price>
+    </types:Car>
+    <types:Car rdf:about='urn:cars:objects:8'>
+        <dc:title>The Compensator®</dc:title>
+        <preds:make>Maserati</preds:make>
+        <preds:model>Spyder</preds:model>
+        <preds:year>2012</preds:year>
+        <preds:condition>new</preds:condition>
+        <preds:color>silver</preds:color>
+        <preds:price>45000</preds:price>
+    </types:Car>
+    <types:Car rdf:about='urn:cars:objects:9'>
+        <dc:title>Rust on Wheels</dc:title>
+        <preds:make>Chevrolet</preds:make>
+        <preds:model>Avalanche</preds:model>
+        <preds:year>2004</preds:year>
+        <preds:condition>used</preds:condition>
+        <preds:color>black</preds:color>
+        <preds:price>3200</preds:price>
+    </types:Car>
+    <types:Car rdf:about='urn:cars:objects:10'>
+        <dc:title>Germanic Tribe Carrier</dc:title>
+        <preds:make>BMW</preds:make>
+        <preds:model>Z4</preds:model>
+        <preds:year>2003</preds:year>
+        <preds:condition>used</preds:condition>
+        <preds:color>silver</preds:color>
+        <preds:price>1675</preds:price>
+    </types:Car>
+    <types:Car rdf:about='urn:cars:objects:11'>
+        <dc:title>Not a German Lemon</dc:title>
+        <preds:make>Audi</preds:make>
+        <preds:model>A8</preds:model>
+        <preds:year>2014</preds:year>
+        <preds:condition>new</preds:condition>
+        <preds:color>white</preds:color>
+        <preds:price>17500</preds:price>
+    </types:Car>
+</rdf:RDF>

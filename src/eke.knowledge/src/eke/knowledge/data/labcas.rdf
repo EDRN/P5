@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+  xmlns:ns1="urn:edrn:predicates:"
+  xmlns:ns2="urn:edrn:types:labcas:"
+  xmlns:ns3="http://purl.org/dc/terms/"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+>
+  <ns2:collection rdf:about="https://edrn-labcas.jpl.nasa.gov/labcas-ui/c/index.html?collection_id=Barrett's_Esophagus_Methylation_Profile_Dataset">
+    <ns1:collaborativeGroup>G.I. and Other Associated Cancers Research Group</ns1:collaborativeGroup>
+    <ns1:organ>Esophagus</ns1:organ>
+    <ns1:organ>Breast</ns1:organ>
+    <ns1:organ>Anus</ns1:organ>
+    <ns1:organ>Pancreas</ns1:organ>
+    <ns1:pi>Stephen J. Meltzer, MD</ns1:pi>
+    <ns3:title>Barrett's Esophagus Methylation Profile Dataset</ns3:title>
+    <ns1:protocol rdf:resource="http://edrn.nci.nih.gov/data/protocols/402"/>
+  </ns2:collection>
+  <ns2:collection rdf:about="https://edrn-labcas.jpl.nasa.gov/labcas-ui/c/index.html?collection_id=Basophile">
+    <ns1:protocol rdf:resource="http://edrn.nci.nih.gov/data/protocols/99999"/>
+    <ns1:pi>David Tabb</ns1:pi>
+    <ns1:organ>Anus</ns1:organ>
+    <ns3:title>Basophile</ns3:title>
+  </ns2:collection>
+  <ns2:statistics rdf:about="https://edrn-labcas.jpl.nasa.gov/data-access-api/files">
+    <ns1:cardinality>436619</ns1:cardinality>
+  </ns2:statistics>
+  <ns2:statistics rdf:about="https://edrn-labcas.jpl.nasa.gov/data-access-api/collections">
+    <ns1:cardinality>40</ns1:cardinality>
+  </ns2:statistics>
+  <ns2:statistics rdf:about="https://edrn-labcas.jpl.nasa.gov/data-access-api/datasets">
+    <ns1:cardinality>29575</ns1:cardinality>
+  </ns2:statistics>
+</rdf:RDF>

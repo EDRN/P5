@@ -1,4 +1,2 @@
-graft src/edrn
-graft docs
-include *.rst
-global-exclude *.pyc
+graft src
+recursive-include src *.html *.css *.js *.txt

@@ -1,0 +1,16 @@
+<tr>
+    <td><a href='{{protocol.url}}'>{{protocol.title}}</a></td>
+    <td>{{protocol.description}}</td>
+    <td>
+        {% if protocol.leadInvestigatorSite %}
+            {% if protocol.leadInvestigatorSite.pi %}
+                <a href='{{protocol.leadInvestigatorSite.pi.url}}'>{{protocol.leadInvestigatorSite.pi.title}}</a>
+            {% else %}
+                <a href='{{protocol.leadInvestigatorSite.url}}'>{{protocol.leadInvestigatorSite.title}}</a>
+            {% endif %}
+        {% else %}
+            <small>(No PI)</small>
+        {% endif %}
+    </td>
+</tr>
+{# -*- Django HTML -*- #}

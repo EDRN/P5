@@ -1,0 +1,3 @@
+graft src
+recursive-include src *.html *.txt
+

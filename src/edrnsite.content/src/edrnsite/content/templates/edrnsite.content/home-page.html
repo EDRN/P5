@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags cache wagtailmetadata_tags %}
+{% block metadata_tags %}
+    {{block.super}}
+    {% meta_tags %}
+{% endblock metadata_tags %}
+{% block content %}
+    {% if not request.is_preview %}
+        {# 1 day #}
+        {% cache 86400 home-page-stream page.id %}
+            {% for block in page.body %}
+                {% include_block block %}
+            {% endfor %}
+        {% endcache %}
+    {% else %}
+        {# preview #}
+        {% for block in page.body %}
+            {% include_block block %}
+        {% endfor %}
+    {% endif %}
+{% endblock content %}
+{# -*- Django HTML -*- #}

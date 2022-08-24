@@ -1,0 +1,17 @@
+{% load biomarker_tags %}
+{% if visible %}
+    <div class='row'>
+        <div class='col-lg-12'>
+            <ul class='list-unstyled'>
+                {% for prot in protocols %}
+                    <li><a href='{{prot.url}}'>{{prot.title}}</a></li>
+                {% empty %}
+                    <li class='small'>No protocols/studies were specified for this biomarker.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% else %}
+    {% private_biomarker %}
+{% endif %}
+{# -*- Django HTML -*- #}

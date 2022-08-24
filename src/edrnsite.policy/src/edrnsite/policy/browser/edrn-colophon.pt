@@ -1,5 +1,0 @@
-<div id='edrn-colophon' i18n:domain='edrnsite.policy'>
-    <div class='colophonWrapper' i18n:translate='version'>
-        Version&#x00a0;<span i18n:name='edrnPortalVersion' tal:content='view/version'>1.2.3</span>
-    </div>
-</div>

@@ -1,6 +1,0 @@
-<div metal:define-macro='unacceptedBiomarker'>
-    <p class='unacceptedBiomarkerAdmonishment' tal:condition='not:approvedViewable' 
-        tal:content='structure context/privateBiomarkerAdmonition'>
-        Private blah blah.
-    </p>
-</div>

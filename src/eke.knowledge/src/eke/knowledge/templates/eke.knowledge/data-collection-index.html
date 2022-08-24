@@ -1,0 +1,83 @@
+{% extends 'eke.knowledge/knowledge-folder.html' %}
+{# 🔬 Data Collection Index #}
+{# 🔮 TODO: caching #}
+{% load wagtailcore_tags knowledge_tags plotly_dash static edrnsite_content_tags %}
+{{% block extra_css %}
+    {% plotly_header %}
+{% endblock %}
+{% block knowledge_content %}
+
+    {% edrn_boilerplate 'hidden-data-notice' %}
+
+    {% if knowledge_empty %}
+        <div class='row'>
+            <small>There are no data collections in this folder.</small>
+        </div>
+    {% else %}
+        <div class='row'>
+            {% for statistic in statistics %}
+                <div class='col-sm-4'>
+                    <div class='card'>
+                        <div class='card-body text-center'>
+                            <h6 class='card-title'>{{statistic.title}}</h6>
+                            <div class='card-text'>{{statistic.cardinality}}</div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class='row'>
+            {% plotly_direct name='ScienceDataDashboard' %}
+        </div>
+        <form class='row g-3' action='{% pageurl page %}' method='GET'>
+            <div class='col-md-2'>
+                <label for='searchTerms' class='form-label'>Search data collections:</label>
+            </div>
+            <div class='col-md-9'>
+                <input id='searchTerms' class='form-control form-control-sm' type='text' name='query'
+                    {% if query %}
+                        value='{{query}}'
+                    {% else %}
+                        placeholder='Search terms…'
+                    {% endif %}
+                    aria-label='Search terms…'
+                />
+            </div>
+            <div class='col-md-1'>
+                <input type='submit' value='Search'/>
+            </div>
+        </form>
+        <div class='row'>
+            <form class='col-md-3 col-sm-4' id='facets'>
+                {% faceted_vocab_checks 'organ' %}
+            </form>
+            <div class='col-md-9 col-sm-8 mt-3'>
+                <table summary='Science Data Collections' class='table'>
+                    <thead>
+                        <tr><th>Title</th><th>PI</th><th>Organ</th><th>Protocol</th><th>Collaborative Group</th></tr>
+                    </thead>
+                    <tbody id='searchCont'>
+                        {% faceted_results %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+{% endblock knowledge_content %}
+{% block extra_js %}
+    <script src='{% static "eke.knowledge/js/jquery.deserialize.js" %}'></script>
+    <script src='{% static "eke.knowledge/js/jquery.facets.js" %}'></script>
+    <script>
+        $(document).ready(function() {
+            $('form#facets').facets({
+                URLParams: [{name: 'ajax', value: 'true'}],
+                preAJAX: function() {
+                    // Validation can occur here apparently
+                    return true;
+                }
+            });
+        });
+    </script>
+    {% plotly_footer %}
+{% endblock extra_js %}
+{# -*- Django HTML -*- #}

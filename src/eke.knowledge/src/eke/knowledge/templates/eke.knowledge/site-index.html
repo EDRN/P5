@@ -1,0 +1,77 @@
+{% extends 'eke.knowledge/knowledge-folder.html' %}
+{% load wagtailcore_tags plotly_dash edrn_site_tags %}
+{# 🔮 TODO: caching #}
+{% block extra_css %}
+    {% plotly_header %}
+{% endblock %}
+{% block knowledge_content %}
+
+    <div class='row'>
+        <div class='col-auto'>
+            <p>
+                <i class='bi bi-patch-check'></i> Also try the <a href='{% url "find-members" %}'>member finder</a>.
+            </p>
+        </div>
+    </div>
+
+    <div class='row mb-3'>
+        {% plotly_direct name='SitesChart' %}
+    </div>
+
+    {% if knowledge_empty %}
+        <p>(There are no sites.)</p>
+    {% else %}
+        <ul>
+            <li><a href='#bdls'>Biomarker Developmental Laboratories</a></li>
+            <li><a href='#brls'>Biomarker Reference Laboratories</a></li>
+            <li><a href='#cvcs'>Clinical Validation Centers</a></li>
+            <li><a href='#dmcc'>Data Management and Coordinating Center</a></li>
+            <li><a href='#ic'>Informatics Center</a></li>
+            <li><a href='#nci'>National Cancer Institute</a></li>
+            <li><a href='#assoc'>Associate Members</a></li>
+            <li><a href='#spore'>SPOREs</a></li>
+            <li><a href='#nonEDRN'>Non-EDRN Sites</a></li>
+        </ul>
+
+        <h2><a name='bdls'>Biomarker Developmental Laboratories</a></h2>
+        {% biomarker_developmental_laboratories bdls %}
+
+        <h2><a name='brls'>Biomarker Reference Laboratories</a></h2>
+        {% edrn_sites_by_type brls True %}
+
+        <h2><a name='cvcs'>Clinical Validation Centers</a></h2>
+        {% edrn_sites_by_type cvcs True %}
+
+        <h2><a name='dmcc'>Data Management and Coordinating Center</a></h2>
+        {% edrn_sites_by_type dmccs False %}
+
+        <h2><a name='dmcc'>Informatics Center</a></h2>
+        {% edrn_sites_by_type ics False %}
+
+        <h2><a name='nci'>National Cancer Institute</a></h2>
+        {% edrn_sites_by_type ncis False %}
+
+        <h2><a name='assoc'>Associate Members</a></h2>
+        <p>This section lists associate EDRN members.</p>
+
+        <h3>Associate Member A — EDRN Funded</h3>
+        {% edrn_sites_by_type typeA False %}
+
+        <h3>Associate Member B</h3>
+        {% edrn_sites_by_type typeB False %}
+
+        <h3>Associate Member C</h3>
+        {% edrn_sites_by_type typeC False %}
+
+        <h2><a name='spore'>SPOREs</a></h2>
+        {% edrn_sites_by_type spore False %}
+
+        <h2><a name='nonEDRN'>Non-EDRN Sites</a></h2>
+        {% edrn_sites_by_type non False %}
+
+    {% endif %}
+{% endblock knowledge_content %}
+{% block extra_js %}
+    {% plotly_footer %}
+{% endblock extra_js %}
+{# -*- Django HTML -*- #}

@@ -11,6 +11,7 @@ assignees: nutjob4life
 
 Put a clear and concise description of what the bug is here. 
 
+
 ## 📜 How To Reproduce
 
 Put steps to reproduce the behavior here, **including URLs**, such as
@@ -19,20 +20,18 @@ Put steps to reproduce the behavior here, **including URLs**, such as
 3. Scroll down to `…`
 4. See the error at `…` 💥
 
-❗️ Mention if the bug appears:
-- [ ] When logged in
-- [ ] When not logged in
-
-or possibly *all* the time!
+❗️ Mention if the bug appears if you're logged in or not—or possibly *all* the time!
 
 
 ## 🔎 Expected Behavior
 
 Replace this with what you thought *should* happen.
 
+
 ## 🖼 Screenshots
 
 If you have any screenshots that help, attach them.
+
 
 ## 🕵️‍♀️ Extra Details
 

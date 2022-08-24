@@ -1,0 +1,69 @@
+{% extends 'eke.knowledge/knowledge-object.html' %}
+{% load biomarker_tags %}
+{# 🔮 TODO: caching #}
+
+{% block knowledge_content %}
+    {% block knowledge_description %}{% endblock %}
+
+    <div class='row'>
+        <div class='col-lg-12'>
+            <ul class='nav nav-pills mb-3' id='biomarker-sections-nav' role='tablist'>
+                <li class='nav-item' role='presentation'>
+                    <button class='nav-link active' id='basics-tab' data-bs-toggle='pill'
+                        data-bs-target='#basics-section' type='button' role='tab' aria-controls='basics-section'
+                        aria-selected='true'>Basics</button>
+                </li>
+                <li class='nav-item' role='presentation'>
+                    <button class='nav-link' id='organs-tab' data-bs-toggle='pill'
+                        data-bs-target='#organs-section' type='button' role='tab' aria-controls='organs-section'
+                        aria-selected='false'>Organs</button>
+                </li>
+                <li class='nav-item' role='presentation'>
+                    <button class='nav-link' id='studies-tab' data-bs-toggle='pill'
+                        data-bs-target='#studies-section' type='button' role='tab' aria-controls='studies-section'
+                        aria-selected='false'>Studies</button>
+                </li>
+                <li class='nav-item' role='presentation'>
+                    <button class='nav-link' id='pubs-tab' data-bs-toggle='pill'
+                        data-bs-target='#pubs-section' type='button' role='tab' aria-controls='pubs-section'
+                        aria-selected='false'>Publications</button>
+                </li>
+                <li class='nav-item' role='presentation'>
+                    <button class='nav-link' id='resources-tab' data-bs-toggle='pill'
+                        data-bs-target='#resources-section' type='button' role='tab' aria-controls='resources-section'
+                        aria-selected='false'>Resources</button>
+                </li>
+                <li class='nav-item' role='presentation'>
+                    <button class='nav-link' id='datacollections-tab' data-bs-toggle='pill'
+                        data-bs-target='#datacollections-section' type='button' role='tab'
+                        aria-controls='datacollections-section' aria-selected='false'>Data Collections</button>
+                </li>
+            </ul>
+
+            <div class='tab-content p-3' id='biomarker-sections'>
+                <div class='tab-pane fade show active' id='basics-section' role='tabpanel'
+                    aria-labelledby='basics-tab'>
+                    {% biomarker_basics %}
+                </div>
+                <div class='tab-pane fade' id='organs-section' role='tabpanel' aria-labelledby='organs-tab'>
+                    {% biomarker_organs %}
+                </div>
+                <div class='tab-pane fade' id='studies-section' role='tabpanel' aria-labelledby='studies-tab'>
+                    {% biomarker_studies %}
+                </div>
+                <div class='tab-pane fade' id='pubs-section' role='tabpanel' aria-labelledby='pubs-tab'>
+                    {% biomarker_publications %}
+                </div>
+                <div class='tab-pane fade' id='resources-section' role='tabpanel' aria-labelledby='resources-tab'>
+                    {% biomarker_resources %}
+                </div>
+                <div class='tab-pane fade' id='datacollections-section' role='tabpanel'
+                    aria-labelledby='datacollections-tab'>
+                    {% biomarker_datacollections %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock knowledge_content %}
+{# -*- Django HTML -*- #}

@@ -1,0 +1,29 @@
+{% extends 'eke.knowledge/knowledge-object.html' %}
+{# 🚗 Car view #}
+{# 🔮 TODO: caching #}
+
+{% block knowledge_content %}
+    <div class='row'>
+        <div class='col-lg-3'>
+            <dl>
+                <dt>Make</dt>
+                <dd>{{page.make}}</dd>
+                <dt>Model</dt>
+                <dd>{{page.model}}</dd>
+                <dt>Year</dt>
+                <dd>{{page.year}}</dd>
+            </dl>
+        </div>
+        <div class='col-lg-3'>
+            <dl>
+                <dt>Color</dt>
+                <dd>{{page.color}}</dd>
+                <dt>Condition</dt>
+                <dd>{{page.condition}}</dd>
+                <dt>Price</dt>
+                <dd>${{page.price}}</dd>
+            </dl>
+        </div>
+    </div>
+{% endblock knowledge_content %}
+{# -*- Django HTML -*- #}

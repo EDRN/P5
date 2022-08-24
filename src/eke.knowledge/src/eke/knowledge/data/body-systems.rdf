@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+  xmlns:ns1="http://edrn.nci.nih.gov/rdf/types.rdf#"
+  xmlns:ns2="http://purl.org/dc/terms/"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+>
+  <ns1:BodySystem rdf:about="http://edrn.nci.nih.gov/data/body-systems/29">
+    <ns2:title>Stomach</ns2:title>
+  </ns1:BodySystem>
+  <ns1:BodySystem rdf:about="http://edrn.nci.nih.gov/data/body-systems/16">
+    <ns2:title>Lung</ns2:title>
+  </ns1:BodySystem>
+  <ns1:BodySystem rdf:about="http://edrn.nci.nih.gov/data/body-systems/4">
+    <ns2:title>Brain</ns2:title>
+  </ns1:BodySystem>
+  <ns1:BodySystem rdf:about="http://edrn.nci.nih.gov/data/body-systems/31">
+    <ns2:title>Throat</ns2:title>
+  </ns1:BodySystem>
+  <ns1:BodySystem rdf:about="http://edrn.nci.nih.gov/data/body-systems/12">
+    <ns2:title>Hypopharynx</ns2:title>
+  </ns1:BodySystem>
+  <ns1:BodySystem rdf:about="http://edrn.nci.nih.gov/data/body-systems/15">
+    <ns2:title>Liver</ns2:title>
+  </ns1:BodySystem>
+  <ns1:BodySystem rdf:about="http://edrn.nci.nih.gov/data/body-systems/27">
+    <ns2:title>Rectum</ns2:title>
+  </ns1:BodySystem>
+  <ns1:BodySystem rdf:about="http://edrn.nci.nih.gov/data/body-systems/32">
+    <ns2:title>Thyroid</ns2:title>
+  </ns1:BodySystem>
+  <ns1:BodySystem rdf:about="http://edrn.nci.nih.gov/data/body-systems/25">
+    <ns2:title>Pancreas</ns2:title>
+  </ns1:BodySystem>
+  <ns1:BodySystem rdf:about="http://edrn.nci.nih.gov/data/body-systems/5">
+    <ns2:title>Breast</ns2:title>
+  </ns1:BodySystem>
+  <ns1:BodySystem rdf:about="http://edrn.nci.nih.gov/data/body-systems/10">
+    <ns2:title>Esophagus</ns2:title>
+  </ns1:BodySystem>
+</rdf:RDF>

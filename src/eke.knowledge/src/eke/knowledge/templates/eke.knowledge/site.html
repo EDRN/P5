@@ -1,0 +1,80 @@
+{% extends 'eke.knowledge/knowledge-object.html' %}
+{# 🔮 TODO: caching #}
+
+{% block knowledge_content %}
+
+    <div class='row'>
+        <div class='col-lg-9'>
+            <dl>
+                <dt>Member Type</dt>
+                <dd>{{page.memberType}}</dd>
+                <dt>Home Page</dt>
+                <dd>
+                    {% if page.homePage %}
+                        <code><a href='{{page.homePage}}'>{{page.homePage}}</a></code>
+                    {% else %}
+                        <small>Not set</small>
+                    {% endif %}
+                </dd>
+                {% if showSponsor %}
+                    <dt>Sponsor</dt>
+                    <dd><a href='{{page.sponsor.url}}'>{{page.sponsor.title}}</a></dd>
+                {% endif %}
+            </dl>
+            <h3>People</h3>
+            <dl class='row'>
+                <dt class='col-sm-4'>Principal Investigator</dt>
+                <dd class='col-sm-8'><a href='{{page.pi.url}}'>{{page.pi.title}}</a></dd>
+                <dt class='col-sm-4'>Co-Principal Investigators</dt>
+                <dd class='col-sm-8'>
+                    <ul class='list-unstyled'>
+                        {% for copi in page.coPIs.all %}
+                            <li><a href='{{copi.url}}'>{{copi.title}}</a></li>
+                        {% empty %}
+                            <li><small>None specified</small></li>
+                        {% endfor %}
+                    </ul>
+                </dd>
+                <dt class='col-sm-4'>Co-Investigators</dt>
+                <dd class='col-sm-8'>
+                    <ul class='list-unstyled'>
+                        {% for coi in page.coIs.all %}
+                            <li><a href='{{coi.url}}'>{{coi.title}}</a></li>
+                        {% empty %}
+                            <li><small>None specified</small></li>
+                        {% endfor %}
+                    </ul>
+                </dd>
+                <dt class='col-sm-4'>Investigators</dt>
+                <dd class='col-sm-8'>
+                    <ul class='list-unstyled'>
+                        {% for investigator in page.investigators.all %}
+                            <li><a href='{{investigator.url}}'>{{investigator.title}}</a></li>
+                        {% empty %}
+                            <li><small>None specified</small></li>
+                        {% endfor %}
+                    </ul>
+                </dd>
+            </dl>
+        </div>
+        <div class='col-lg-3'>
+            <dl>
+                <dt>Abbreviation</dt>
+                <dd>{{page.abbreviation}}</dd>
+                <dt>DMCC Site ID</dt>
+                <dd>{{page.dmccSiteID}}</dd>
+            </dl>
+            <h6>Staff</h6>
+            <ul class='list-unstyled'>
+                {% for person in staff %}
+                    <li>
+                        <a href='{{person.url}}'>{{person.title}}</a>
+                    </li>
+                {% empty %}
+                    <li><small>This site has no staff at all.</small></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock knowledge_content %}
+{# -*- Django HTML -*- #}

@@ -1,0 +1,2 @@
+<p class='small'><em>Note:</em> Not all information may be displayed. Logging in
+may list additional data depending on roles and privileges.</p>

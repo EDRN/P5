@@ -1,0 +1,16 @@
+{% load knowledge_filters %}
+<div class='mb-2'>
+    <h6>Member Type</h6>
+    {% if types %}
+        {% for term in types %}
+            <div class='form-check'>
+                <input class='form-check-input' type='checkbox' name='member-type' id='facet-{{term|slugify}}'
+                    value='{{term}}'/>
+                <label class='form-check-label' for='facet-{{term|slugify}}'>{{term}}</label>
+            </div>
+        {% endfor %}
+    {% else %}
+        <small>There are no types!</small>
+    {% endif %}
+</div>
+{# -*- Django HTML -*- #}

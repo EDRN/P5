@@ -1,0 +1,19 @@
+{% if authenticated %}
+    {% if name %}
+        <div class='small'>Hello, {{name}}</div>
+    {% else %}
+        <div class='small'>You're logged in</div>
+    {% endif %}
+{% endif %}
+<ul class='list-inline'>
+    {# Removed since we're trying the new single login page which goes to multiple destinations #}
+    {# <li class='list-inline-item'><a href='{{dmcc}}'>DMCC Site</a></li> #}
+    {% if authenticated %}
+        <li class='list-inline-item'><a href='{{logout}}'>Log out</a></li>
+    {% else %}
+        <li class='list-inline-item'>
+            <a href='{{login}}'>Log in</a>
+        </li>
+    {% endif %}
+</ul>
+{# -*- Django HTML -*- #}

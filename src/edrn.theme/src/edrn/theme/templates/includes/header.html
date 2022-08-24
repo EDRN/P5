@@ -1,0 +1,49 @@
+{% load menu_tags wagtailcore_tags static edrn_auth_tags cache %}
+{# 🔮 TODO: caching #}
+{% wagtail_site as current_site %}
+<header class='container'>
+    <div class='row'>
+        <div class='col col-sm-10'>
+            <h1 class='display-1'>
+                {# Cache for 7 days #}
+                {% cache 604800 global-header-brand %}
+                    <a href='{{current_site.root_page.url}}'>
+                        <img
+                            class='img-fluid'
+                            alt='Logo of the Early Detection Research Network, part of the National Cancer Institute'
+                            src='{% static "edrn.theme/images/luggage-tag.png" %}'
+                        />
+                    </a>
+                {% endcache %}
+            </h1>
+        </div>
+        <div class='col col-sm-2 align-self-end mb-3'>
+            {% edrn_personal_links %}
+        </div>
+    </div>
+</header>
+{# Cache for 1 day #}
+{% cache 86400 global-header-navigation %}
+    <nav class='navbar navbar-expand-lg navbar nci-navbar'>
+        <div class='container'>
+            <a class='navbar-brand' href='{{current_site.root_page.url}}'>Home</a>
+            <button class='navbar-toggler' type='button' data-bs-toggle='collapse'
+                data-bs-target='#navbarSupportedContent' aria-controls='navbarSupportedContent'
+                aria-expanded='false' aria-label='Toggle navigation'>
+                <span class='navbar-toggler-icon'></span>
+            </button>
+            <div class='collapse navbar-collapse' id='navbarSupportedContent'
+                data-hover='dropdown' data-animations='fadeInDown'>
+                {% main_menu add_sub_menus_inline=False apply_active_classes=True template='edrn.theme/menus/main_menu.html' %}
+                <form class='d-flex' action='{% url "search" %}' method='GET'>
+                    <label for='query' class='visually-hidden'>Search</label>
+                    <input class='form-control me-2' name='query' type='search' placeholder='search' aria-label='Search'
+                        aria-required='true'>
+                    <button class='btn btn-outline-dark' type='submit'><i class='bi bi-search'></i><span
+                        class='visually-hidden-focusable'>Search</span></button>
+                </form>
+            </div>
+        </div>
+    </nav>
+{% endcache %}
+{# -*- Django HTML -*- #}

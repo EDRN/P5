@@ -1,0 +1,19 @@
+{% load knowledge_filters  %}
+<div class='mb-2'>
+    <h6>{{label}}</h6>
+    {% for term in terms %}
+        <div class='form-check'>
+            <input class='form-check-input' type='checkbox' name='{{vocab_name}}' id='facet-{{term|slugify}}'
+                value='{{term}}'/>
+            <label class='form-check-label' for='facet-{{term|slugify}}'>{{term}}</label>
+            {% comment %}
+            🔮 Possible display of counts on facets:
+            <input class='form-check-input' type='checkbox' name='{{vocab_name}}' id='facet-{{term.label|slugify}}'
+                value='{{term.label}}'/>
+            <label class='form-check-label' for='facet-{{term.label|slugify}}'>{{term.label}} ({{term.count}})</label>
+            {% endcomment %}
+
+        </div>
+    {% endfor %}
+</div>
+{# -*- Django HTML -*- #}

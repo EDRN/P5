@@ -1,0 +1,20 @@
+{% extends "wagtailadmin/login.html" %}
+{% block branding_login %}
+    Sign into EDRN
+{% endblock %}
+{% block above_login %}
+<div class='help-block help-info'>
+    <p><strong>👉 Notice:</strong> This is the editor's login interface for the EDRN portal.</p>
+    <p>Perhaps you're looking for
+        <a  href='{% url "wagtailcore_login" %}?next=/'>standard user login page</a>?
+    </p>
+</div>
+{% endblock %}
+{% block below_login %}
+<p>This warning banner provides privacy and security notices consistent with applicable federal laws, directives, and other federal guidance for accessing this Government system, which includes ⑴ this computer network, ⑵ all computers connected to this network, and ⑶ all devices and storage media attached to this network or to a computer on this network.
+</p>
+
+<p>This system is provided for Government-authorized use only. Unauthorized or improper use of this system is prohibited and may result in disciplinary action and/or civil and criminal penalties. Personal use of social media and networking sites on this system is limited as to not interfere with official work duties and is subject to monitoring.
+</p>
+{% endblock %}
+{# -*- Django HTML -*- #}

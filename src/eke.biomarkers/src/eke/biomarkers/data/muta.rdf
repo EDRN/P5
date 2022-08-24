@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+  xmlns:ns1="urn:edrn:predicates:"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:ns2="urn:edrn:types:biomarkers:"
+>
+  <ns2:mutation rdf:about="urn:edrn:objects:biomarkers:mutation:APG1">
+    <ns1:geneName>CENPC</ns1:geneName>
+    <ns1:affectedProtFuncSiteCount>3</ns1:affectedProtFuncSiteCount>
+    <ns1:mutationCount>78</ns1:mutationCount>
+    <ns1:cancerDOCount>22</ns1:cancerDOCount>
+    <ns1:pubmedIDcount>6</ns1:pubmedIDcount>
+    <ns1:uniprotAccession>Q03188</ns1:uniprotAccession>
+  </ns2:mutation>
+</rdf:RDF>

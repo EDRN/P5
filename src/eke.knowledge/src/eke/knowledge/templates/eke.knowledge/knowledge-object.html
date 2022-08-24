@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags wagtailmetadata_tags %}
+{% block metadata_tags %}
+    {{block.super}}
+    {% meta_tags %}
+{% endblock metadata_tags %}
+{# 🔮 TODO: caching #}
+{% block content %}
+    <div class='row'>
+        <div class='col-md-12 pt-3'>
+            <h1>{{page.title}}</h1>
+        </div>
+    </div>
+    {% if request.user.is_superuser %}
+        <div class='row'>
+            <div class='col-md-2'>
+                <label class='small' for='rdf'>
+                    RDF Subject URI:
+                </label>
+            </div>
+            <div class='col-md-10'>
+                <code id='rdf'>{{page.identifier}}</code>
+                <small>(This appears to super users only.)</small>
+            </div>
+        </div>
+    {% endif %}
+    {% block knowledge_description %}
+        {% if page.description %}
+            <div class='row pt-2'>
+                <div class='col-md-12'>
+                    {{page.description}}
+                </div>
+            </div>
+        {% endif %}
+    {% endblock knowledge_description %}
+    <div class='row py-3'>
+        {% block knowledge_content %}{% endblock knowledge_content %}
+    </div>
+{% endblock content %}
+{# -*- Django HTML -*- #}

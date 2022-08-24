@@ -1,0 +1,38 @@
+{% comment %}
+    🎨 EDRN Theme: sub menu handling.
+
+    This is a custom template for sub menus for Wagtail Menus that helps make menus actually work.
+{% endcomment %}
+{# 🔮 TODO: caching #}
+{% load menu_tags edrn_theme_filters %}
+{% if menu_items %}
+	{% spaceless %}
+		<ul class='dropdown-menu' aria-labelledby='ddtoggle_{{parent_page.pk}}'>
+			{% for item in menu_items|edrn_sorted_menu %}
+				{# item.has_children_in_menu seems to be always False, even when we really do have sub-sub pages 🤷‍♀️ #}
+				<li class='{{item.active_class}} {% if item.has_children_in_menu %}dropdown{% endif %}'>
+					<a
+						href='{{item.href}}'
+						{% if item.has_children_in_menu %}
+							id='ddtoggle_{{item.pk}}'
+							class='dropdown-item dropdown-toggle'
+							data-bs-toggle='dropdown'
+							aria-expanded='false'
+						{% else %}
+							class='dropdown-item'
+						{% endif %}
+					>
+						{{item.text}}
+					</a>
+
+					{# item.has_children_in_menu seems to be always False, even when we really do have sub-sub pages 🤷‍♀️ #}
+		            {% if item.has_children_in_menu %}
+		                {% sub_menu item template=current_template %}
+		            {% endif %}
+
+				</li>
+			{% endfor %}
+		</ul>
+	{% endspaceless %}
+{% endif %}
+{# -*- Django HTML -*- #}

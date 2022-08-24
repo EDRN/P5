@@ -1,0 +1,19 @@
+{% load wagtailimages_tags %}
+{# 🔮 TODO: caching #}
+<div class='carousel slide mt-3 mb-3' data-bs-ride='carousel'>
+    <div class='carousel-inner'>
+        {% for item in self.media %}
+            <div class='carousel-item {% if forloop.first %}active{% endif %}'>
+                {% image item.image max-1420x331 as i %}
+                <img src='{{i.url}}' alt='{{i.alt}}' class='d-block w-100'/>
+                {% if item.label or item.media %}
+                    <div class='carousel-caption d-none d-md-block'>
+                        {% if item.label %}<h1>{{item.label}}</h1>{% endif %}
+                        {% if item.caption %}<h2>{{item.caption}}</h2>{% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{# -*- Django HTML -*- #}

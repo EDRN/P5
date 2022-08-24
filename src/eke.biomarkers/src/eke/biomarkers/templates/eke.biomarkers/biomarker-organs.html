@@ -1,0 +1,120 @@
+{% load biomarker_tags %}
+<div class='row'>
+    <div class='col-lg-12'>
+        {% if organs %}
+            <div class='d-flex align-items-start'>
+                <div class='nav flex-column nav-pills me-4 pe-3' id='organs-tabs' role='tablist'
+                    aria-oreintation='vertical'>
+                    {% for organ_id, organ, visible in organs %}
+                        <button class='nav-link {% if forloop.first %}active{% endif %}'
+                            id='organ-{{organ_id}}-tab' data-bs-toggle='pill' type='button' role='tab'
+                            data-bs-target='#organ-{{organ_id}}-section'
+                            aria-selected='{% if forloop.first %}true{% else %}false{% endif %}'
+                        >
+                            {{organ.title}}
+                        </button>
+                    {% endfor %}
+                </div>
+                <div class='tab-content ml-3' id='organs-sections'>
+                    {% for organ_id, organ, visible in organs %}
+                        <div class='tab-pane fade {% if forloop.first %}show active{% endif %}' role='tabpanel'
+                            id='organ-{{organ_id}}-section' aria-labelledby='organ-{{organ_id}}-tab'>
+
+                            <dl>
+                                <dt>Certifications</dt>
+                                <dd>
+                                    <ul class='list-inline'>
+                                        {% for certification in organ.biomarker_bodysystem_certifications.all %}
+                                            <li class='list-inline-item'>
+                                                {% biomarker_certification certification %}
+                                            </li>
+                                        {% empty %}
+                                            <li class='list-inline-item small'>None</li>
+                                        {% endfor %}
+                                    </ul>
+                                </dd>
+                                <dt>QA State for {{organ.title}}</dt>
+                                <dd>{{organ.qa_state}}</dd>
+                            </dl>
+
+                            {% if visible %}
+                                <h5>Organ-Specific Notes</h5>
+                                {% if organ.description %}
+                                    <p>{{organ.description}}</p>
+                                {% else %}
+                                    <p class='small'>
+                                        No description was provided for this biomarker-organ relationship.
+                                    </p>
+                                {% endif %}
+                                {% if organ.performance_comment %}
+                                    <h6>Performance Comment</h6>
+                                    <p>{{organ.performance_comment}}</p>
+                                {% else %}
+                                    <p class='small'>No performance comment made.</p>
+                                {% endif %}
+
+                                {% if supplemental_visible %}
+                                    <h5>Supporting Study Data</h5>
+                                    {% for study in organ.sorted_studies %}
+                                        {% organ_study_card study %}
+                                    {% empty %}
+                                        <p>No studies specified for this organ on this biomarker.</p>
+                                    {% endfor %}
+
+                                    <h5 class='mt-3'>{{organ}}-Specific Protocols</h5>
+                                    <ul class='list-unstyled'>
+                                        {% for prot in organ.sorted_protocols %}
+                                            <li><a href='{{prot.url}}'>{{prot.title}}</a></li>
+                                        {% empty %}
+                                            <li class='small'>
+                                                No organ-level protocols specified for {{organ|lower}}.
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+
+                                    <h5>{{organ}}-Specific Publications</h5>
+                                    <ul class='list-unstyled'>
+                                        {% for pub in organ.sorted_publications %}
+                                            <li><a href='{{pub.url}}'>{{pub.title}}</a></li>
+                                        {% empty %}
+                                            <li class='small'>
+                                                No organ-level publications were listed for {{organ|lower}}.
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+
+                                    <h5>{{organ}}-Specific Resources</h5>
+                                    <ul class='list-unstyled'>
+                                        {% for res in organ.sorted_resources %}
+                                            <li><a href='{{res.identifier}}'>{{res.title}}</a></li>
+                                        {% empty %}
+                                            <li class='small'>
+                                                No organ-level resources werr given for {{organ|lower}}.
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+
+                                {% else %}
+                                    <small>
+                                        Additional supplemental information available only to users who log in
+                                        with correct permissions.
+                                    </small>
+                                {% endif %}
+
+                            {% else %}
+                                {% private_biomarker %}
+                            {% endif %}
+
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <div class='small'>
+                <i class='bi bi-info-circle'></i> No organ-specific information exists for this biomarker.
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{# -*- Django HTML -*- #}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:ns1="http://edrn.nci.nih.gov/rdf/schema.rdf#"
+  xmlns:ns2="http://purl.org/dc/terms/"
+  xmlns:ns3="http://edrn.nci.nih.gov/rdf/types.rdf#"
+>
+  <ns3:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/2662">
+    <ns1:journal>Clinical Cancer Research</ns1:journal>
+    <ns1:pmid>30617132</ns1:pmid>
+    <ns1:pubURL rdf:resource="http://clincancerres.aacrjournals.org/"/>
+    <ns1:site rdf:resource="http://edrn.nci.nih.gov/data/sites/797"/>
+    <ns1:volume>25</ns1:volume>
+    <ns1:year>1995</ns1:year>
+    <ns2:creator>Drake RR</ns2:creator>
+    <ns2:creator>Gao C</ns2:creator>
+    <ns2:creator>Liu Y</ns2:creator>
+    <ns2:creator>Maitra A</ns2:creator>
+    <ns2:creator>Partyka K</ns2:creator>
+    <ns2:creator>Staal B</ns2:creator>
+    <ns2:title>The sTRA Plasma Biomarker: Blinded Validation of Improved Accuracy Over CA19-9 in Pancreatic Cancer Diagnosis</ns2:title>
+  </ns3:Publication>
+  <ns3:Publication rdf:about="http://edrn.nci.nih.gov/data/pubs/1909">
+    <ns1:journal>Cancer research</ns1:journal>
+    <ns1:pmid>20663908</ns1:pmid>
+    <ns1:pubURL rdf:resource="http://cancerres.aacrjournals.org/"/>
+    <ns1:site rdf:resource="http://edrn.nci.nih.gov/data/sites/605"/>
+    <ns1:volume>70</ns1:volume>
+    <ns1:year>2010</ns1:year>
+    <ns2:creator>Jia Z</ns2:creator>
+    <ns2:creator>McClelland M</ns2:creator>
+    <ns2:creator>Mercola D</ns2:creator>
+    <ns2:creator>Sawyers A</ns2:creator>
+    <ns2:creator>Xia XQ</ns2:creator>
+    <ns2:creator>Yao H</ns2:creator>
+    <ns2:title>In silico estimates of tissue components in surgical samples based on expression profiling data</ns2:title>
+  </ns3:Publication>
+  <ns3:Publication rdf:about="urn:edrn:test:pubs:12345">
+    <ns1:pmid>20663908</ns1:pmid>
+  </ns3:Publication>
+</rdf:RDF>

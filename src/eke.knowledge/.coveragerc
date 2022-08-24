@@ -1,6 +1,0 @@
-[report]
-include =
-    src/eke/*
-omit =
-    */test*
-    */upgrades/*

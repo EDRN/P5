@@ -1,0 +1,73 @@
+{# 🔮 TODO: caching #}
+{% if settings.edrnsitecontrols.Informatics.in_development %}
+    <div class='container py-3 px-3 mb-3 rounded shadow'
+        style='background: linear-gradient(133deg, rgba(233,235,208,1) 0%, rgba(255,254,198,1) 48%);'>
+        <div class='row'>
+            <div class='col-md-3'>
+                <h1><i class='bi-cone-striped'></i> Notice</h1>
+            </div>
+            <div class='col-md-9'>
+                <p>
+                    This is <em>not</em> an official version of the portal of the Early Detection
+                    Research Network. This version is for <a
+                    href='https://github.com/EDRN/P5'>public demonstration</a> and review with the
+                    <a href='mailto:edrn-ic@jpl.nasa.gov'>Informatics Center</a> and our partners
+                    around the country. This demo site is for an application that is developed by
+                    JPL but <strong>will not ultimately be hosted at JPL</strong>. It will
+                    eventually be run and open to the public at the National Cancer Institute at
+                    <code>edrn.nci.nih.gov</code>.
+                </p>
+<!--
+    Update from Rojeh: the URS number is *not* a clearance number, and that's what we need to
+    display on the site. On top of that, the clearance number needs to go into the footer, not
+    up here.
+
+                <p>
+                    <strong>WARNING:</strong> This website is APPROVED FOR DEVELOPMENT ONLY. It is PROVISIONALLY
+                    endorsed for review and consumption by the Jet Propulsion Laboratory Unlimited Review System
+                    UNDER A SPECIFIC approval number, namely,
+                    <a href='https://urs.jpl.nasa.gov/URLWebsiteAuthorConditionallyApproved=616236'>URS306503</a>.
+                    This is NOT A FINAL CLEARANCE nor is it INTENDED TO BE. The Jet Propulsion Laboratory
+                    DOES NOT APPROVE this website for PROMULGATING, EXHIBITING, or otherwise IMPLYING any
+                    association with official Jet Propulsion Laboratory or National Aeronautic and Space
+                    Administration statements of public policy, position, promulgation, prospect, prostheses,
+                    or other form of platform or record, whether express or implied, including but not limited
+                    to tort, representation, fitness for a particular purpose, nor any other use, means, outcomes,
+                    utilities, branding, statements of fact, hypotheses, statements of fiction, or otherwise.
+                    The association of the domain <code>.jpl.nasa.gov</code> is entirely coincidental, and the
+                    reader is hereby cautioned, warned, advised, forborne, exhorted, and counseled that this is
+                    purely an illustrative web-based application that shall be eventually hosted elsewhere.
+                </p>
+                <p>
+                    Visitors to this site have no expectation of privacy and that the United States Government
+                    may, at its discretion, monitor and record all website interactions, keystrokes, data sent,
+                    data received, 'cookies', zoom preferences, light versus dark mode choices, and any and
+                    all other data. Visitors acknowledge that all telecommunications, networking, or information
+                    processing systems (including, without being limited to, files, e-mail messages, and
+                    voicemail and facsimile system transmissions) may be archived, recorded, and used for legal
+                    purposes against those self-same visitors for any reason whatsoever.
+                </p>
+                <p>
+                    This computer is funded by the United States Government and operated
+                    by the California Institute of Technology in support of ongoing
+                    U.S. Government programs and activities.  If you are not authorized
+                    access to this system, disconnect now. As said before, users of this system have no
+                    expectation of privacy.  By continuing, you consent to your keystrokes
+                    and data content being monitored vehemently and with extreme attention to detail.
+                </p>
+-->                
+                <p>
+                    <i class='bi-play-fill'></i><a href='https://edrn.nci.nih.gov/'>
+                        Go to the current production portal
+                    </a>
+                </p>
+                <p>
+                    <i class='bi-bug-fill'></i><a href='https://github.com/EDRN/P5/issues/new/choose'>
+                        Report an issue
+                    </a> with this (or any) EDRN portal
+                </p>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{# -*- Django HTML -*- #}

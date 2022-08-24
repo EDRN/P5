@@ -1,0 +1,20 @@
+{% extends "wagtailadmin/userbar/base.html" %}
+{% load static %}
+{% block branding_logo %}
+    <div style='display: none'>
+        <svg>
+            <defs>
+                {% include "wagtailadmin/icons/wagtail.svg" %}
+                {% include "wagtailadmin/icons/folder-open-inverse.svg" %}
+                {% include "wagtailadmin/icons/edit.svg" %}
+                {% include "wagtailadmin/icons/plus.svg" %}
+                {% include "wagtailadmin/icons/tick.svg" %}
+                {% include "wagtailadmin/icons/cross.svg" %}
+            </defs>
+        </svg>
+    </div>
+    <img alt='Logo of the National Institutes of Health' src='{% static "edrn.theme/images/nih.png" %}'
+        class='wagtail-userbar-icon' style='width: 45px;'
+    />
+{% endblock %}
+{# -*- Django HTML -*- #}

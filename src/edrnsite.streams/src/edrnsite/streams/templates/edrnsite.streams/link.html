@@ -1,0 +1,8 @@
+{% load wagtailcore_tags edrnsite_streams_tags %}
+{# 🔮 TODO: caching #}
+{% if self.internal_page %}
+    <a href='{{self.internal_page.url}}'>{{self.link_text}}</a>
+{% elif self.external_link %}
+    <a href='{{self.external_link}}'>{% mark_external_link self.external_link %}{{self.link_text}}</a>
+{% endif %}
+{# -*- Django HTML -*- #}

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+  xmlns:ns1="http://edrn.nci.nih.gov/rdf/schema.rdf#"
+  xmlns:ns2="http://purl.org/dc/terms/"
+  xmlns:ns3="http://edrn.nci.nih.gov/rdf/types.rdf#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+>
+  <ns3:ProtocolSiteSpecific rdf:about="http://edrn.nci.nih.gov/data/protocols/site-specific/331-880">
+    <ns1:irbApprovalNeeded>Exempt</ns1:irbApprovalNeeded>
+    <ns1:reportingStage>Statistical Analysis Stage</ns1:reportingStage>
+    <ns1:animalSubjectTrainingReceived>Not Required</ns1:animalSubjectTrainingReceived>
+    <ns1:siteRole>Discovery</ns1:siteRole>
+    <ns1:irbNumber>11-806 (Fox Chase)/11974 (UKansas)</ns1:irbNumber>
+    <ns1:humanSubjectTrainingReceived>Yes</ns1:humanSubjectTrainingReceived>
+  </ns3:ProtocolSiteSpecific>
+  <ns3:ProtocolSiteSpecific rdf:about="http://edrn.nci.nih.gov/data/protocols/site-specific/331-723">
+    <ns1:siteRole>Analysis Lab</ns1:siteRole>
+    <ns1:irbApprovalNeeded>Required</ns1:irbApprovalNeeded>
+    <ns1:animalSubjectTrainingReceived>Not Required</ns1:animalSubjectTrainingReceived>
+    <ns1:reportingStage>Retrospective Sample Identification Stage</ns1:reportingStage>
+    <ns1:irbNumber>IRB# 02-840</ns1:irbNumber>
+    <ns1:humanSubjectTrainingReceived>Yes</ns1:humanSubjectTrainingReceived>
+  </ns3:ProtocolSiteSpecific>
+  <ns3:ProtocolSiteSpecific rdf:about="http://edrn.nci.nih.gov/data/protocols/site-specific/331-709">
+    <ns1:animalSubjectTrainingReceived>Not Required</ns1:animalSubjectTrainingReceived>
+    <ns1:irbApprovalNeeded>Required</ns1:irbApprovalNeeded>
+    <ns1:irbNumber>FWA00000063</ns1:irbNumber>
+    <ns1:reportingStage>Retrospective Sample Identification Stage</ns1:reportingStage>
+    <ns1:siteRole>Specimen Contributing Site</ns1:siteRole>
+    <ns1:humanSubjectTrainingReceived>Yes</ns1:humanSubjectTrainingReceived>
+    <ns1:irbNotes>Per email from Jackie Dahlgren 12/22/2016, this site is no longer involved in this study. RM</ns1:irbNotes>
+  </ns3:ProtocolSiteSpecific>
+  <ns3:ProtocolSiteSpecific rdf:about="http://edrn.nci.nih.gov/data/protocols/site-specific/331-743">
+    <ns1:reportingStage>Retrospective Sample Identification Stage</ns1:reportingStage>
+    <ns1:animalSubjectTrainingReceived>Not Required</ns1:animalSubjectTrainingReceived>
+    <ns1:irbNotes>Jeffrey Prichard became PI for Geisinger in July, 2014, replacing Azadeh Stark, who is now the PI at Henry Ford</ns1:irbNotes>
+    <ns1:irbNumber>7476</ns1:irbNumber>
+    <ns1:siteRole>Specimen Contributing Site</ns1:siteRole>
+    <ns1:irbApprovalNeeded>Required</ns1:irbApprovalNeeded>
+    <ns1:humanSubjectTrainingReceived>Yes</ns1:humanSubjectTrainingReceived>
+  </ns3:ProtocolSiteSpecific>
+  <ns3:Protocol rdf:about="http://edrn.nci.nih.gov/data/protocols/402">
+    <ns1:analyticMethod>Our main BBD protocol argues that in order to be useful a biomarker should have a TPR/FPR ratio of at least 2.0, where TPR is the marker’s sensitivity and FPR is 1-specificity.</ns1:analyticMethod>
+    <ns1:dataSharingPlan>Follow the EDRN guidelines</ns1:dataSharingPlan>
+    <ns1:startDate>Mar 31 2015 12:00AM</ns1:startDate>
+    <ns1:estimatedFinishDate>Aug  5 2015 12:00AM</ns1:estimatedFinishDate>
+    <ns1:projectFlag>Protocol</ns1:projectFlag>
+    <ns1:coordinatingInvestigatorSite rdf:resource="http://edrn.nci.nih.gov/data/sites/5"/>
+    <ns1:outcome>This study is ongoing.</ns1:outcome>
+    <ns1:fieldOfResearch>Proteomics</ns1:fieldOfResearch>
+    <ns1:eligibilityCriteria>see BBD protocol</ns1:eligibilityCriteria>
+    <ns1:inSituDataSharingPlan>Yes</ns1:inSituDataSharingPlan>
+    <ns1:cancerType rdf:resource="http://edrn.nci.nih.gov/data/diseases/174"/>
+    <ns1:leadInvestigatorSite rdf:resource="http://edrn.nci.nih.gov/data/sites/880"/>
+    <ns1:objective>We propose a pre-validation study for markers that could predict the likelihood of invasive breast cancer following a tissue diagnosis of benign breast pathology (any diagnosis that is less severe than carcinoma in situ). The study is designed to test the utility of a series of markers that were shown to have some predictive value by immunohistochemical staining in other cohorts. These markers include the proliferation associated antigen KI-67, EZH2, PTGS2 (COX2), ALDH1, CDKN2A (p16), HYAL1, MMP1, CEACAM6, and TP53. In addition, we propose analyzing two markers that comprise part of the DCIS Oncotype panel, GSTM1 and progesterone receptor (PR). The study will occur in two EDRN clinical validation center (CVC) laboratories, namely Duke and University of Kansas, and utilize specimens from Northwestern University and Geisinger Health System that have been identified and are either already sectioned or waiting to be sectioned. Results will be scored and returned to the DMCC to determine whether any of the markers or combinations of these markers may have sufficient value to proceed to a second stage validation with large numbers of samples from Geisenger Health Systems and the Henry Ford Hospital.
+</ns1:objective>
+    <ns1:finalSampleSize>See BBD protocol</ns1:finalSampleSize>
+    <ns1:plannedSampleSize>60 cases, 120 controls</ns1:plannedSampleSize>
+    <ns1:collaborativeGroupText>Breast and Gynecologic Cancers Research                  </ns1:collaborativeGroupText>
+    <ns2:title>BBD Reference Set Application: Jeffery Marks-Duke (2015)</ns2:title>
+    <ns2:description>This is a pretty nice one.</ns2:description>
+    <ns1:bmName>KI-67, EZH2, PTGS2 (COX2), ALDH1, CDKN2A (p16), HYAL1, MMP1, CEACAM6, and TP53.</ns1:bmName>
+    <ns1:hasOtherRelationship>
+      <ns3:Protocol rdf:about="http://edrn.nci.nih.gov/data/protocols/331">
+        <ns1:comments>Funky! 😜</ns1:comments>
+        <ns1:collaborativeGroupText>Breast and Gynecologic Cancers Research                  </ns1:collaborativeGroupText>
+        <ns1:finalSampleSize>Ongoing</ns1:finalSampleSize>
+        <ns1:dataSharingPlan>Follow the EDRN guidelines.  Data will not become available until the reference set is depleted</ns1:dataSharingPlan>
+        <ns1:startDate>Aug 13 2010 12:00AM</ns1:startDate>
+        <ns1:cancerType rdf:resource="http://edrn.nci.nih.gov/data/diseases/174"/>
+        <ns1:bmName>&amp;#149;   BRCA1 (PC)
+&amp;#149;   p16 (PC)
+&amp;#149;   APC (PC)
+&amp;#149;   RASSF1A (PC)
+&amp;#149;   HIN1 (PC)
+&amp;#149;   EZH2 (JM)
+&amp;#149;   CEACAM6 (AG/JM, Poola)
+&amp;#149;   MMP1 (JM, Poola)
+&amp;#149;   TP53 (JM)
+&amp;#149;   HYAL1(JM, Poola)
+&amp;#149;   ALDH1 (JM)
+&amp;#149;   Periplakin, Epiplakin and Desmuslin (AG)
+&amp;#149;   Vitronectin and alpha-5-integrin (AG)
+&amp;#149;   IQGAP2 (AG)
+&amp;#149;   C5, C8G, C9 (AG)
+&amp;#149;   Mucin1 (AG)
+&amp;#149;   Glutathione S-transferase Mu1 and Mu3 (AG)
+&amp;#149;   ALDH16A1 (AG)
+</ns1:bmName>
+        <ns1:outcome>Ongoing</ns1:outcome>
+        <ns1:phasedStatus>1</ns1:phasedStatus>
+        <ns1:analyticMethod>The performance of each biomarker tested will be undertaken in three steps: 
+
+A.   Relative Risks Associated with Biomarker Values
+1.    Cox regression will be used. Time measured from BBD diagnosis.
+2.    Relative risks beyond those conferred by other predictors including age, family history, and histology will be examined.
+3.    Separate models will be fit for ADH versus UH versus NP if there are sufficient numbers; Analyses will be combined with stratification if appropriate.
+
+B.   Capacity for Discrimination between Cases and Controls
+1.   Primary comparison groups: subjects who developed invasive breast cancer by 7 years versus controls who are alive and without cancer at 7 years after BBD
+2.   Secondary comparison groups: incident DCIS, invasive cancer after 7 years
+3.   ROC curves will be used to compare cases with primary controls. Calculations are complicated because they must handle varying follow-up and the quota method of selecting non-cases
+4.   Separate ROCs for BBD with and without atypia will be estimated if possible and compared. We will compare ROC curves for different biomarkers
+5.   We will develop a combination biomarker score based on markers that appear to perform well using Cox regression. We will calculate its ROC curve and compare with ROC for best individual biomarker
+
+C.   Absolute Risk of IBC for Individual Decision Making
+1.   Calculate individual risk of IBC .5-7.0 years after BBD with and without biomarker
+2.   Compare risk distributions. How many people classified as high risk (&amp;#062;.75%X4.5) with and without the biomarker
+3.   Calculate risk distributions for subjects who develop IBC by 7 years (cases) and for subjects alive without IBC by 7years (controls)
+4.   Of subjects who develop IBC by 7 years, how many classified as high risk? This is the sensitivity (TPR)
+5.   Of subjects who are alive without IBC by 7 years, how many classified as low risk? This is the specificity (1-FPR)
+6.   Calculate the standardized net benefit that combines TPR and FPR into a single index
+7.   Compare for different biomarkers and for the most discriminating biomarker combination</ns1:analyticMethod>
+        <ns1:leadInvestigatorSite rdf:resource="http://edrn.nci.nih.gov/data/sites/202"/>
+        <ns2:title>Benign Breast Disease Team Project</ns2:title>
+        <ns2:description>This is a another nice one.</ns2:description>
+        <ns1:fieldOfResearch>Proteomics</ns1:fieldOfResearch>
+        <ns1:projectFlag>Project</ns1:projectFlag>
+        <ns1:eligibilityCriteria>Identification of eligible subjects:
+Each participating CVC will utilize a registry of women who have had breast surgery for benign breast disease at the CVC hospital/cancer center in the time period 1 January 1994 through 31 December 2004.  Cases of atypical ductal hyperplasia (ADH) that meet the inclusion-exclusion criteria will be given a unique EDRN-VSIMS number. 
+Study Cohort Inclusion Criteria:
+1.Diagnosis of BBD with atypia (ADH).
+2.Formalin-fixed archival tissue (preferably excisional biopsy or core biopsy) sufficient for 2 or more tissue sections.
+3.Adequate follow-up information to determine subsequent cancer status (IBC yes-no).
+4.Clinical information sufficient to determine race, family history of breast cancer, mammography history and breast surgery history, and clinical management and outcome of patients developing IBC.
+Study Cohort Exclusion Criteria:
+1.Women age &amp;#060; 40 or &amp;#062; 70 at the time of first BBD breast biopsy.
+2.Women with diagnosed concurrent invasive breast cancer, DCIS, invasive lobular carcinoma or lobular carcinoma in situ.
+3.Women with insufficient clinical information to determine subsequent breast health history including mammography status and invasive breast carcinoma.
+4.Women who had only FNA or in whom the pathology bloc contains insufficient material for at least two cut sections.
+ 
+</ns1:eligibilityCriteria>
+        <ns1:fieldOfResearch>Other, Specify</ns1:fieldOfResearch>
+        <ns1:inSituDataSharingPlan>Yes</ns1:inSituDataSharingPlan>
+        <ns1:abbreviatedName>BBD Benign Breast</ns1:abbreviatedName>
+        <ns1:protocolType>Reference Set</ns1:protocolType>
+        <ns1:plannedSampleSize>90 incident IBC cases from women with atypia (ADH) and 180 non-IBC control subjects matched 2 controls to 1 case: 1)Atypical ductal hyperplasia (ADH), 2)Age at date of ADH diagnosis (w/in 2yrs), 3)Months to time of IBC diagnosis (w/in 6 mo) and 4)Family history of breast cancer (yes vs no)</ns1:plannedSampleSize>
+        <ns1:estimatedFinishDate>Jun 13 2013 12:00AM</ns1:estimatedFinishDate>
+        <ns1:blinding>Samples will be analyzed in a blinded fashion</ns1:blinding>
+        <ns1:objective>To identify women diagnosed with atypical ductal hyperplasia (ADH) who are at increased risk of developing invasive breast cancer (IBC) and who might benefit from risk reduction with the use of chemoprevention agents such as Tamoxifen.  (Note:  A companion protocol will study women with DCIS and their risk for invasive breast cancer.)</ns1:objective>
+        <ns1:aims>Biomarkers expressed in benign breast disease tissue of women who progresse to invasive breast cancer are quantitatively and/or qualitatively different from those expressed in tissue of matched women who do not progress to invasive breast cancer.  A nested case-control design will be used to determine if available proteomic and methylation biomarkers predict risk for future invasive cancer (IBC).  Women with ADH who are disease-free will be matched 2:1 to women with ADH who progress to IBC.</ns1:aims>
+        <ns1:coordinatingInvestigatorSite rdf:resource="http://edrn.nci.nih.gov/data/sites/5"/>
+        <ns1:secureOutcome>Ongoing</ns1:secureOutcome>
+      </ns3:Protocol>
+    </ns1:hasOtherRelationship>
+    <ns1:blinding>All analysis is done in a blinded fashion</ns1:blinding>
+    <ns1:abbreviatedName>BBD Ref Set App: Marks (2015)</ns1:abbreviatedName>
+    <ns1:aims>We propose that two of the highest value markers based on published data (KI-67 and EZH2) will be performed by both Duke and Kansas.</ns1:aims>
+    <ns1:protocolType>Reference Set</ns1:protocolType>
+  </ns3:Protocol>
+  <ns3:Protocol rdf:about='http://edrn.nci.nih.gov/data/protocols/9999'>
+    <ns2:title>Watch Out for This One</ns2:title>
+    <ns1:abbreviatedName>WOfTO</ns1:abbreviatedName>
+  </ns3:Protocol>
+</rdf:RDF>
