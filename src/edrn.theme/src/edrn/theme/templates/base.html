@@ -38,6 +38,9 @@
         {% block extra_css %}
             {# Override this in content templates #}
         {% endblock extra_css %}
+        {% block header_scripts %}
+            {# Override this in content tempaltes #}
+        {% endblock header_scripts %}
         {% edrn_analytics 'h' %}
     </head>
     <body class='{% block body_class %}{% endblock body_class %}'>
