@@ -172,6 +172,20 @@ class Protocol(KnowledgeObject):
         bms = Biomarker.objects.filter(protocols=self).public().live().order_by(Lower('title'))
         context['biomarkers'] = bms
         return context
+    def data_table(self) -> dict:
+        if self.leadInvestigatorSite:
+            if self.leadInvestigatorSite.pi:
+                pi_url = self.leadInvestigatorSite.pi.url
+                pi_name = self.leadInvestigatorSite.pi.title
+            else:
+                pi_url = self.leadInvestigatorSite.url
+                pi_name = self.leadInvestigatorSite.title
+        else:
+            pi_url = pi_name = None
+
+        cg = self.collaborativeGroup.split(' ')[0] if self.collaborativeGroup else 'UNKNOWN'
+
+        return {'pi_name': pi_name, 'pi_url': pi_url, 'field': self.fieldOfResearch, 'cg': cg, **super().data_table()}
 
 
 # 🤬 Get bent

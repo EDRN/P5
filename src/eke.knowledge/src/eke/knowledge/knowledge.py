@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-'''💁‍♀️ ERN Knowledge Environment: classes to represent the base level of knowledge.'''
+'''💁‍♀️ EDRN Knowledge Environment: classes to represent the base level of knowledge.'''
 
 from .constants import MAX_URI_LENGTH
 from .rdf import RDFAttribute
@@ -8,7 +8,7 @@ from django.db import models
 from django.db.models import Q
 from django.db.models.functions import Lower
 from django.http import HttpRequest
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from modelcluster.fields import ParentalKey
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.models import Page, Orderable
@@ -30,6 +30,9 @@ class KnowledgeObject(MetadataPageMixin, Page):
     description = models.TextField(blank=True, null=False, help_text='A summary or descriptive abstract')
 
     content_panels = Page.content_panels + [FieldPanel('identifier'), FieldPanel('description')]
+
+    def data_table(self) -> dict:
+        return {'identifier': self.identifier, 'title': self.title, 'url': self.url, 'description': self.description}
 
     class Meta:
         pass
@@ -94,8 +97,14 @@ class KnowledgeFolder(MetadataPageMixin, Page):
         '''
         if request.GET.get('ajax') == 'true':
             return HttpResponse(self.faceted_markup(request))
+        elif request.GET.get('ajax') == 'json':
+            return JsonResponse(self.json(request))
         else:
             return super().serve(request)
+
+    def json(self, request: HttpRequest) -> HttpResponse:
+        data = [i.data_table() for i in self.get_contents(request)]
+        return {'data': data}
 
     def get_contents(self, request: HttpRequest) -> object: 
         '''Get my knowledge objects.
