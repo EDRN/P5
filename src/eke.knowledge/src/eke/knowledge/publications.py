@@ -49,6 +49,11 @@ class Publication(KnowledgeObject):
         blank=True, null=False,
         help_text='A summary of the contents of this publication'
     )
+
+    def data_table(self) -> dict:
+        '''Return the JSON-compatible dictionary describing this publication.'''
+        return {'journal': self.journal, 'year': self.year, **super().data_table()}
+
     def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
         context = super().get_context(request, args, kwargs)
         appearances = []
