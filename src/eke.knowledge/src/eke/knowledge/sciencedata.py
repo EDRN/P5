@@ -92,6 +92,7 @@ class DataCollection(KnowledgeObject):
         index.RelatedFields('associated_organs', [index.SearchField('title')]),
         index.SearchField('investigator_name'),
     ]
+
     def serve(self, request: HttpRequest) -> HttpResponse:
         '''Overridden service.
 
@@ -99,6 +100,42 @@ class DataCollection(KnowledgeObject):
         to LabCAS instead.
         '''
         return HttpResponseRedirect(self.identifier)
+
+    def data_table(self) -> dict:
+        '''Return the JSON-compatible dictionary describing this publication.
+
+        Override the superclass's ``url`` attribute because we want to go directly to LabCAS for
+        scientific data.'''
+        attributes = super().data_table()
+        attributes['url'] = self.identifier
+
+        if self.generating_protocol:
+            attributes['protocol'] = self.generating_protocol.title
+            attributes['protocol_url'] = self.generating_protocol.url
+            if self.generating_protocol.leadInvestigatorSite:
+                if self.generating_protocol.leadInvestigatorSite.pi:
+                    attributes['pi'] = self.generating_protocol.leadInvestigatorSite.pi.title
+                    attributes['pi_url'] = self.generating_protocol.leadInvestigatorSite.pi.url
+                else:
+                    attributes['pi'] = self.generating_protocol.leadInvestigatorSite.title
+                    attributes['pi_url'] = self.generating_protocol.leadInvestigatorSite.url
+            else:
+                attributes['pi'] = '(unknown)'
+        else:
+            attributes['protocol'] = attributes['pi'] = '(unknown)'
+
+        if self.associated_organs.count() > 0:
+            attributes['organs'] = ', '.join([str(i) for i in self.associated_organs.all().order_by('title')])
+        else:
+            attributes['organs'] = '(unknown)'
+
+        if self.collaborative_group:
+            attributes['cg'] = self.collaborative_group.split(' ')[0]
+        else:
+            attributes['cg'] = '(unknown)'
+
+        return attributes
+
     class RDFMeta:
         fields = {
             _pre('protocol'): RelativeRDFAttribute('generating_protocol', scalar=True),

@@ -4,6 +4,7 @@
 {% load wagtailcore_tags knowledge_tags plotly_dash static edrnsite_content_tags %}
 {{% block extra_css %}
     {% plotly_header %}
+    <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.12.1/b-2.2.3/b-colvis-2.2.3/b-html5-2.2.3/b-print-2.2.3/fh-3.2.4/kt-2.7.0/r-2.3.0/datatables.min.css'/>
 {% endblock %}
 {% block knowledge_content %}
 
@@ -29,51 +30,89 @@
         <div class='row'>
             {% plotly_direct name='ScienceDataDashboard' %}
         </div>
-        <form class='row g-3' action='{% pageurl page %}' method='GET'>
-            <div class='col-md-2'>
-                <label for='searchTerms' class='form-label'>Search data collections:</label>
-            </div>
-            <div class='col-md-9'>
-                <input id='searchTerms' class='form-control form-control-sm' type='text' name='query'
-                    {% if query %}
-                        value='{{query}}'
-                    {% else %}
-                        placeholder='Search terms…'
-                    {% endif %}
-                    aria-label='Search terms…'
-                />
-            </div>
-            <div class='col-md-1'>
-                <input type='submit' value='Search'/>
-            </div>
-        </form>
         <div class='row'>
-            <form class='col-md-3 col-sm-4' id='facets'>
-                {% faceted_vocab_checks 'organ' %}
-            </form>
-            <div class='col-md-9 col-sm-8 mt-3'>
-                <table summary='Science Data Collections' class='table'>
+            <div class='col-auto mb-3'>
+                <table summary='Science Data Collections' class='table' id='the-datatable' style='width: 100%;'>
                     <thead>
-                        <tr><th>Title</th><th>PI</th><th>Organ</th><th>Protocol</th><th>Collaborative Group</th></tr>
+                        <tr>
+                            <th class='only-search-col'>Title</th>
+                            <th>PI</th>
+                            <th>Organ</th>
+                            <th class='only-search-col'>Protocol</th>
+                            <th>Collab. Group</th>
+                        </tr>
                     </thead>
-                    <tbody id='searchCont'>
-                        {% faceted_results %}
-                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Title</th>
+                            <th>PI</th>
+                            <th>Organ</th>
+                            <th>Protocol</th>
+                            <th>Collab. Group</th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
     {% endif %}
 {% endblock knowledge_content %}
 {% block extra_js %}
-    <script src='{% static "eke.knowledge/js/jquery.deserialize.js" %}'></script>
-    <script src='{% static "eke.knowledge/js/jquery.facets.js" %}'></script>
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js'></script>
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js'></script>
+    <script type='text/javascript' src='https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.12.1/b-2.2.3/b-colvis-2.2.3/b-html5-2.2.3/b-print-2.2.3/fh-3.2.4/kt-2.7.0/r-2.3.0/datatables.min.js'></script>
     <script>
         $(document).ready(function() {
-            $('form#facets').facets({
-                URLParams: [{name: 'ajax', value: 'true'}],
-                preAJAX: function() {
-                    // Validation can occur here apparently
-                    return true;
+            $('#the-datatable thead tr th.only-search-col').each(function() {
+                var title = $(this).text();
+                $(this).html('<input type="text" placeholder="Search ' + title + 's"/>');
+            });
+            $('#the-datatable').DataTable({
+                ajax: {url: '{% pageurl page %}?ajax=json', dataSrc: 'data'},
+                columns: [
+                    {data: 'title', render: function(data, type, row) {
+                        return '<a href="' + row['url'] + '">' + data + '</a>';
+                    }},
+                    {data: 'pi', render: function(data, type, row) {
+                        return data === '(unknown)'? '<small>(unknown)</small>' :
+                            '<a href="' + row['pi_url'] + '">' + data + '</a>';
+                    }},
+                    {data: 'organs', render: function(data, type, row) {
+                        return data === '(unknown)'? '<small>(unknown)</small>' : data;
+                    }},
+                    {data: 'protocol', render: function(data, type, row) {
+                        return data === '(unknown)'? '<small>(unknown)</small>' :
+                            '<a href="' + row['protocol_url'] + '">' + data + '</a>';
+                    }},
+                    {data: 'cg', render: function(data, type, row) {
+                        return data === '(unknown)'? '<small>(unknown)</small>' : data;
+                    }}
+                ],
+                fixedHeader: true,
+                buttons: ['copy', 'excel', 'csv', 'pdf'],
+                dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>B",
+                initComplete: function() {
+                    this.api().columns([1, 2, 4]).every(function() {
+                        var column = this;
+                        var label = this.footer().innerHTML;
+                        var select = $('<select><option value="">— ' + label + ' —</option></select>')
+                            .appendTo($(column.header()).empty())
+                            .on('change', function() {
+                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                column.search(val? '^' + val + '$' : '', true, false).draw();
+                            });
+                        column.data().unique().sort().each(function(d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                    });
+                    this.api().columns([0, 3]).every(function() {
+                        var that = this;
+                        $('input', this.header()).on('keyup change clear', function() {
+                            if (that.search() !== this.value) {
+                                that.search(this.value).draw();
+                            }
+                        });
+                    });
                 }
             });
         });
