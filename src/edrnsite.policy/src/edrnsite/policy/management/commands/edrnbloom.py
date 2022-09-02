@@ -182,6 +182,8 @@ class Command(BaseCommand):
             {'link_text': i.title, 'internal_page': i} for i in workpage.get_children() if i.show_in_menus
         ]
         sponsor_tool = {'link_text': 'Find a Sponsor Tool', 'external_link': SPONSOR_TOOL_URL}
+        # Note: the `reverse('find-members')` here doesn't take into account the script name. This
+        # may result in an incorrect URL if the site is on a subpath.
         member_finder = {'link_text': 'Member Finder', 'external_link': reverse('find-members')}
         worklinks = worklinks[0:2] + [sponsor_tool] + [worklinks[2]] + [member_finder] + worklinks[3:]
 
