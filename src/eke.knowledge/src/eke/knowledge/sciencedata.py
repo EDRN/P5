@@ -102,7 +102,7 @@ class DataCollection(KnowledgeObject):
         return HttpResponseRedirect(self.identifier)
 
     def data_table(self) -> dict:
-        '''Return the JSON-compatible dictionary describing this publication.
+        '''Return the JSON-compatible dictionary describing this science data collection.
 
         Override the superclass's ``url`` attribute because we want to go directly to LabCAS for
         scientific data.'''
