@@ -5,7 +5,7 @@
 from .biomarker import Biomarker, BiomarkerBodySystem, BiomarkerCollaborativeGroupName, Protocol, BodySystemStudy
 from .constants import HGNC_PREDICATE_URI, ORGAN_GROUPS
 from django.db.models.functions import Lower
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.template.loader import render_to_string
 from django.utils.text import slugify
 from django_plotly_dash import DjangoDash
@@ -244,6 +244,17 @@ class BiomarkerIndex(KnowledgeFolder):
             dcc.Graph(id='phases', figure=phases_figure, className='col-md-4'),
         ])
         return context
+
+    def serve(self, request: HttpRequest) -> HttpResponse:
+        '''Overridden service.
+
+        We override serve in order to handle the ``ajax=organs`` request.
+        '''
+        if request.GET.get('ajax') == 'organs':
+            organs = BiomarkerBodySystem.objects.distinct().values_list('title', flat=True).order_by('title')
+            return JsonResponse({'data': [i for i in organs]})
+        else:
+            return super().serve(request)
 
     class Meta:
         pass

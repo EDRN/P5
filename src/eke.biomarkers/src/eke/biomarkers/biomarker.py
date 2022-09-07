@@ -146,6 +146,28 @@ class Biomarker(KnowledgeObject, QualityAssuredObject, ResearchedObject):
         context['visible_sections'] = visible_sections
         return context
 
+    def data_table(self) -> dict:
+        '''Return the JSON-compatible dictionary describing this biomarker.'''
+        attrs = super().data_table()
+        attrs['kind'] = self.biomarker_type
+
+        organs = self.biomarker_body_systems.values_list('title', flat=True).distinct().order_by(Lower('title'))
+        attrs['organs'] = ', '.join([str(i) for i in organs])
+
+        phases, fallback = set(), set()
+        for bbs in self.biomarker_body_systems.all():
+            phase = bbs.phase
+            if phase is not None:
+                fallback.add(phase)
+            for bss in bbs.body_system_studies.all():
+                phase = bss.phase
+                if phase is not None:
+                    phases.add(bss.phase)
+        phases = phases if phases else fallback
+        attrs['phases'] = ', '.join([str(i) for i in sorted(list(phases))])
+
+        return attrs
+
     class RDFMeta:
         fields = {
             qbp('HgncName'): RDFAttribute('hgnc_name', scalar=True),

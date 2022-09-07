@@ -4,6 +4,7 @@
 {% load wagtailcore_tags knowledge_tags plotly_dash static edrnsite_content_tags plotly_dash %}
 {% block extra_css %}
     {% plotly_header %}
+    <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.12.1/b-2.2.3/b-colvis-2.2.3/b-html5-2.2.3/b-print-2.2.3/fh-3.2.4/kt-2.7.0/r-2.3.0/datatables.min.css'/>
 {% endblock %}
 {% block knowledge_content %}
 
@@ -14,40 +15,31 @@
             <small>There are no biomarkers in this folder.</small>
         </div>
     {% else %}
-        <form class='row g-3' action='{% pageurl page %}' method='GET'>
-            <div class='col-md-2'>
-                <label for='searchTerms' class='form-label'>Search biomarkers:</label>
-            </div>
-            <div class='col-md-9'>
-                <input id='searchTerms' class='form-control form-control-sm' type='text' name='query'
-                    {% if query %}
-                        value='{{query}}'
-                    {% else %}
-                        placeholder='Search terms…'
-                    {% endif %}
-                    aria-label='Search terms…'
-                />
-            </div>
-            <div class='col-md-1'>
-                <input type='submit' value='Search'/>
-            </div>
-        </form>
-        <div class='row mt-3'>
-            <form class='col-md-3 col-sm-4' id='facets'>
-                {% faceted_vocab_checks 'organ' %}
-                {% faceted_vocab_checks 'phase' %}
-            </form>
-            <div class='col-md-9 col-sm-8'>
-                <table summary='Biomarkers' class='table'>
+
+        <div class='row'>
+            <div class='col-auto mb-3'>
+                <table summary='Biomarkers' class='table' id='the-datatable' style='width: 100%;'>
                     <thead>
-                        <tr><th>Title</th><th>Type</th><th>Organ(s)</th><th>Phase(s)</th></tr>
+                        <tr>
+                            <th class='only-search-col'>Title</th>
+                            <th>Type</th>
+                            <th>Organ</th>
+                            <th>Phase</th>
+                        </tr>
                     </thead>
-                    <tbody id='searchCont'>
-                        {% faceted_results %}
-                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Title</th>
+                            <th>Type</th>
+                            <th>Organ</th>
+                            <th>Phase</th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
+
+
     {% endif %}
     <div class='row mb-4'>
         <div class='col-lg-12'>
@@ -56,15 +48,86 @@
     </div>
 {% endblock knowledge_content %}
 {% block extra_js %}
-    <script src='{% static "eke.knowledge/js/jquery.deserialize.js" %}'></script>
-    <script src='{% static "eke.knowledge/js/jquery.facets.js" %}'></script>
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js'></script>
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js'></script>
+    <script type='text/javascript' src='https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.12.1/b-2.2.3/b-colvis-2.2.3/b-html5-2.2.3/b-print-2.2.3/fh-3.2.4/kt-2.7.0/r-2.3.0/datatables.min.js'></script>
     <script>
         $(document).ready(function() {
-            $('form#facets').facets({
-                URLParams: [{name: 'ajax', value: 'true'}],
-                preAJAX: function() {
-                    // Validation can occur here apparently
-                    return true;
+            $('#the-datatable thead tr th.only-search-col').each(function() {
+                var title = $(this).text();
+                $(this).html('<input type="text" placeholder="Search ' + title + 's"/>');
+            });
+            $('#the-datatable').DataTable({
+                ajax: {url: '{% pageurl page %}?ajax=json', dataSrc: 'data'},
+                columns: [
+                    {data: 'title', render: function(data, type, row) {
+                        return '<a href="' + row['url'] + '">' + data + '</a>';
+                    }},
+                    {data: 'kind'},
+                    {data: 'organs'},
+                    {data: 'phases'}
+                ],
+                fixedHeader: true,
+                buttons: ['copy', 'excel', 'csv', 'pdf'],
+                dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>B",
+                initComplete: function() {
+                    // Set up the phase selector
+                    var phase_column = this.api().column(3);
+                    var select = $('<select><option value="">— Phase —</option></select>')
+                        .appendTo($(phase_column.header()).empty())
+                        .on('change', function() {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            phase_column.search(val? val : '', true, false).draw();
+                        });
+                    for (let phase = 1; phase <= 5; ++phase) {
+                        select.append('<option value="' + phase + '">' + phase + '</option>');
+                    }
+
+                    // Set up the organ selector
+                    var organ_column = this.api().column(2);
+                    var organ_select = $('<select><option value="">— Organ —</option></select>')
+                        .appendTo($(organ_column.header()).empty())
+                        .on('change', function() {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            organ_column.search(val? val : '', true, false).draw();
+                        });
+                    var organ_retriever = new XMLHttpRequest();
+                    organ_retriever.open('GET', '{% pageurl page %}?ajax=organs', true);
+                    organ_retriever.onreadystatechange = function() {
+                        if (organ_retriever.readyState === 4 && organ_retriever.status === 200) {
+                            var organs = JSON.parse(organ_retriever.responseText)['data'];
+                            organs.forEach(organ => {
+                                organ_select.append('<option value="' + organ + '">' + organ + '</option>');
+                            })
+                        }
+                    }
+                    organ_retriever.send();
+
+                    // Add a search box for the title column
+                    var title_column = this.api().column(0);
+                    $('input', title_column.header()).on('keyup change clear', function() {
+                        if (title_column.search() !== this.value) {
+                            title_column.search(this.value).draw();
+                        }
+                    });
+
+                    // For the rest of the columns, just use the distinct values in <select> pulldowns
+                    // (which is just column 1 for now!).
+                    this.api().columns([1]).every(function() {
+                        var column = this;
+                        var label = this.footer().innerHTML;
+                        var select = $('<select><option value="">— ' + label + ' —</option></select>')
+                            .appendTo($(column.header()).empty())
+                            .on('change', function() {
+                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                column.search(val? '^' + val + '$' : '', true, false).draw();
+                            });
+                        // Here: try to find better data for organs and phases
+                        column.data().unique().sort().each(function(d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                    });
                 }
             });
         });
