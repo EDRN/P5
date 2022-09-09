@@ -9,7 +9,12 @@
     {# Removed since we're trying the new single login page which goes to multiple destinations #}
     {# <li class='list-inline-item'><a href='{{dmcc}}'>DMCC Site</a></li> #}
     {% if authenticated %}
-        <li class='list-inline-item'><a href='{{logout}}'>Log out</a></li>
+        <li class='list-inline-item'>
+            <form id='logout-form' method='post' action='{{logout}}'>
+                {% csrf_token %}
+                <button type='submit'>Log out</button>
+            </form>
+        </li>
     {% else %}
         <li class='list-inline-item'>
             <a href='{{login}}'>Log in</a>

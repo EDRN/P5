@@ -10,18 +10,30 @@
             <h1 class='cc-inner-title'>{{page.title}}</h1>
         </div>
     </div>
-    {% if not request.is_preview %}
-        {# 1 hour #}
-        {% cache 3600 flex-page-stream page.id %}
+    {% comment %}
+        Caching prevents any feedback for editors as they change pages. Since flex-pages will 
+        be used only under the root of the site, let's just stop caching. The home page is the
+        only part that really needs caching. Therefore, I'm commenting this out and leaving the
+        block iterator below.
+
+        {% if not request.is_preview %}
+            {# 1 hour #}
+            {% cache 3600 flex-page-stream page.id %}
+                {% for block in page.body %}
+                    {% include_block block %}
+                {% endfor %}
+            {% endcache %}
+        {% else %}
+            {# preview #}
             {% for block in page.body %}
                 {% include_block block %}
             {% endfor %}
-        {% endcache %}
-    {% else %}
-        {# preview #}
-        {% for block in page.body %}
-            {% include_block block %}
-        {% endfor %}
-    {% endif %}
+        {% endif %}
+    {% endcomment %}
+
+    {% for block in page.body %}
+        {% include_block block %}
+    {% endfor %}
+
 {% endblock content %}
 {# -*- Django HTML -*- #}
