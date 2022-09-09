@@ -23,7 +23,7 @@ class HomePage(MetadataPageMixin, Page):
         ('title', blocks.TitleBlock()),
         ('section_cards', blocks.SiteSectionCardsBlock()),
         ('carousel', blocks.CarouselBlock()),
-    ], null=True, blank=True)
+    ], null=True, blank=True, use_json_field=True)
     content_panels = Page.content_panels + [FieldPanel('body')]
     class Meta:
         verbose_name = 'home page'
@@ -37,7 +37,7 @@ class SectionPage(MetadataPageMixin, Page):
     body = StreamField([
         ('title', blocks.TitleBlock()),
         ('section_cards', blocks.SiteSectionCardsBlock()),
-    ], null=True, blank=True)
+    ], null=True, blank=True, use_json_field=True)
     content_panels = Page.content_panels + [FieldPanel('body')]
     class Meta:
         verbose_name = 'section page'
@@ -54,7 +54,7 @@ class FlexPage(MetadataPageMixin, Page):
             help_text='Richly formatted text',
         )),
         ('cards', blocks.CardsBlock()),
-    ], null=True, blank=True)
+    ], null=True, blank=True, use_json_field=True)
     content_panels = Page.content_panels + [
         FieldPanel('body')
     ]

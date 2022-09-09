@@ -13,12 +13,12 @@ from .protocols import ProtocolIndex, Protocol
 from .sciencedata import DataCollection, DataCollectionIndex
 from .sites import Site, SiteIndex, Person
 from django.db import models
-from wagtail.contrib.settings.models import BaseSetting, register_setting
+from wagtail.contrib.settings.models import BaseSiteSetting, register_setting
 from wagtail.admin.panels import FieldPanel
 
 
 @register_setting
-class RDFIngest(BaseSetting):
+class RDFIngest(BaseSiteSetting):
     enabled = models.BooleanField(blank=False, null=False, default=True, help_text='Global enable/disable RDF ingest')
     timeout = models.PositiveIntegerField(
         blank=False, null=False, default=120, help_text='Max time limit for ingest in minutes; 0 disables timeout',

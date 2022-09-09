@@ -3,11 +3,11 @@
 '''🗺 EDRN Knowledge Environment geocoding: models.'''
 
 from django.db import models
-from wagtail.contrib.settings.models import BaseSetting, register_setting
+from wagtail.contrib.settings.models import BaseSiteSetting, register_setting
 
 
 @register_setting
-class Geocoding(BaseSetting):
+class Geocoding(BaseSiteSetting):
     access_key = models.CharField(
         blank=False, null=False, help_text='AWS Access Key', default='key', max_length=192
     )

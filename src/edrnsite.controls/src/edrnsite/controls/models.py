@@ -6,12 +6,12 @@
 from django.core.validators import MinValueValidator
 from django.db import models
 from wagtail.admin.panels import FieldPanel
-from wagtail.contrib.settings.models import BaseSetting, register_setting
+from wagtail.contrib.settings.models import BaseSiteSetting, register_setting
 from wagtail.snippets.models import register_snippet
 
 
 @register_setting
-class SocialMedia(BaseSetting):
+class SocialMedia(BaseSiteSetting):
     '''Social media controls.'''
     facebook  = models.URLField(blank=True, help_text="URL to NCI's Facebook page")
     twitter   = models.URLField(blank=True, help_text="URL to DCP's Twitter profile")
@@ -54,7 +54,7 @@ class AnalyticsSnippet(models.Model):
 
 
 @register_setting
-class Informatics(BaseSetting):
+class Informatics(BaseSiteSetting):
     '''Informatics controls.'''
     in_development = models.BooleanField(default=True, null=False, help_text='True if this site is in development')
     entrez_email = models.EmailField(default='sean.kelly@nih.gov', null=False, help_text='Entrez registered user email')
@@ -73,7 +73,7 @@ class Informatics(BaseSetting):
 
 
 @register_setting
-class Search(BaseSetting):
+class Search(BaseSiteSetting):
     '''Search controls.'''
     results_per_page = models.IntegerField(
         default=20, null=False, validators=[MinValueValidator(1)],
