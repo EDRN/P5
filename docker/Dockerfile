@@ -136,10 +136,3 @@ HEALTHCHECK --interval=5m --timeout=2m --start-period=10m CMD /usr/bin/curl --fa
 LABEL "org.label-schema.name"="EDRN Public Portal"
 LABEL "org.label-schema.description"="Public website and knowledge environment for the Early Detecton Research Network"
 LABEL "org.label-schema.version"="6.0.0"
-
-
-# 🔮 TODO:
-# What about media?
-# HEALTHCHECK ?
-# CMD ?
-# LABEL ?
