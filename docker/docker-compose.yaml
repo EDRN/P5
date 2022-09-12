@@ -164,7 +164,7 @@ services:
     # A "celery" instance that handles background tasks; does not listen on any port.
     # Worker processes run Django functions so it needs all the same env vars as `portal`.
     worker:
-        image: ${EDRN_IMAGE_OWNER-ncidockerhub.nci.nih.gov/edrn/}edrn-portal:${EDRN_VERSION:-6.0.0}
+        image: ${EDRN_IMAGE_OWNER-nutjob4life/}edrn-portal:${EDRN_VERSION:-6.0.0}
         entrypoint: ['/usr/bin/django-admin', 'worker']
         volumes:
             -
