@@ -39,7 +39,7 @@ services:
     # Nominally on port 8000, published to ${EDRN_PUBLISHED_TLS_PORT} or 8080.
     # For a TLS endpoint, enable the profile `tls-proxy` and use portal 4134.
     portal:
-        image: ${EDRN_IMAGE_OWNER-ncidockerhub.nci.nih.gov/edrn/}edrn-portal:${EDRN_VERSION:-6.0.0}
+        image: ${EDRN_IMAGE_OWNER-nutjob4life/}edrn-portal:${EDRN_VERSION:-6.0.0}
         volumes:
             -
                 type: bind
