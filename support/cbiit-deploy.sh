@@ -20,19 +20,20 @@ echo ""
 echo "👉 What docker (and version) are we using"
 ssh -q $USER@$WEBSERVER "which docker ; docker --version" || exit 1
 
-echo ""
-echo "👉 The EDRN Docker Image ID build that will be set to the EDRN_PORTAL_VERSION"
-echo $EDRN_DOCKER_IMAGE
-
-echo ""
-echo "👉 Set EDRN_PORTAL_VERSION value"
-EDRN_PORTAL_VERSION=$(echo $EDRN_DOCKER_IMAGE | sed -e "s|\#||g")
-
-echo ""
-echo "👉 EDRN_PORTAL_VERSION value is:"
-echo ${EDRN_PORTAL_VERSION}
-
 echo "🏃 Begin deployment to $WEBSERVER"
+
+echo ""
+echo "👉 Here is what is on $WEBSERVER in $WEBROOT"
+
+ssh -q $USER@$WEBSERVER "ls -l $WEBROOT"
+
+echo ""
+echo "🧹Cleaning up remote workspace"
+
+ssh -q $USER@$WEBSERVER "sudo chown -R $USER:$USER /local/content/edrn &&\
+rm -rf $WEBROOT/docker-compose.yaml $WEBROOT/../media $WEBROOT/../static $WEBROOT/../postgresql $WEBROOT/.env &&\
+mkdir $WEBROOT/../media $WEBROOT/../static $WEBROOT/../postgresql &&\
+ls -lF $WEBROOT"
 
 echo ""
 echo "🍃 Making a .env file"
@@ -42,7 +43,7 @@ cat >.env <<EOF
 ALLOWED_HOSTS=$ALLOWED_HOSTS
 EDRN_DATA_DIR=$EDRN_DATA_DIR
 EDRN_PUBLISHED_PORT=$EDRN_PUBLISHED_PORT
-EDRN_VERSION=$EDRN_PORTAL_VERSION
+EDRN_VERSION=$EDRN_VERSION
 LDAP_BIND_PASSWORD=$LDAP_BIND_PASSWORD
 POSTGRES_PASSWORD=$POSTGRES_PASSWORD
 POSTGRES_USER_ID=$POSTGRES_USER_ID
@@ -51,26 +52,14 @@ EOF
 ls -la .env
 
 echo ""
-echo "👉 Here is the local docker-compose.yaml"
-
-ls -l ./docker-compose.yaml
-head -4 ./docker-compose.yaml
+echo "© Copying .env file to $WEBROOT"
+scp .env $USER@$WEBSERVER:$WEBROOT
 
 echo ""
-echo "👉 And here is what is on $WEBSERVER in $WEBROOT"
+echo "👉 Fetching the latest docker-compose.yaml"
 
-ssh -q $USER@$WEBSERVER "ls -l $WEBROOT"
-
-echo "🧹Cleanup remote workspace"
-ssh -q $USER@$WEBSERVER "sudo chown -R $USER:$USER /local/content/edrn &&\
-rm -rf $WEBROOT/docker-compose.yaml $WEBROOT/../media $WEBROOT/../static $WEBROOT/../postgresql $WEBROOT/.env &&\
-mkdir $WEBROOT/../media $WEBROOT/../static $WEBROOT/../postgresql &&\
-ls -lF $WEBROOT"
-
-echo ""
-echo "👉 Now I will copy the local docker-compose.yaml and .env to $WEBSERVER:$WEBROOT"
-
-scp ./docker-compose.yaml ./.env $USER@$WEBSERVER:$WEBROOT || exit 1
+ssh -q $USER@$WEBSERVER "cd $WEBROOT &&\
+curl --silent --fail --location --remote-name https://github.com/EDRN/P5/raw/main/docker/docker-compose.yaml" || exit 1
 
 echo ""
 echo "👉 Update ownership and check directory listing:"
@@ -88,11 +77,10 @@ docker compose rm --force --stop --volumes &&\
 docker container ls" || exit 1
 
 echo ""
-echo "🪢 Pulling the EDRN portal image $EDRN_PORTAL_VERSION from the NCI Docker Hub"
+echo "🪢 Pulling the images anonymously"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-echo $NCIDOCKERHUB_PW | docker login --username $NCIDOCKERHUB_USER --password-stdin ncidockerhub.nci.nih.gov &&\
-docker image pull ncidockerhub.nci.nih.gov/edrn/edrn-portal:$EDRN_PORTAL_VERSION &&\
-docker logout ncidockerhub.nci.nih.gov && docker logout" || exit 1
+docker logout ncidockerhub.nci.nih.gov && docker logout &&\
+docker compose --project-name edrn pull --include-deps --quiet" || exit 1
 
 echo ""
 echo "👉 Use Docker compose to bring up all the containers, and list what's running once complete."
@@ -120,7 +108,7 @@ docker compose --project-name edrn run --volume $WEBROOT/../exports:/mnt/zope --
     --entrypoint /usr/bin/django-admin --no-deps portal importfromplone \
     http://nohost/edrn/ /mnt/zope/edrn.json /mnt/zope/export_defaultpages.json /mnt/blobs &&\
 docker compose --project-name edrn exec portal django-admin collectstatic --no-input &&\
-docker compose --project-name edrn exec portal django-admin edrnbloom --hostname $FINAL_HOSTNAME &&\
+docker compose --project-name edrn exec portal django-admin edrnbloom $EDRN_LITE --hostname $FINAL_HOSTNAME &&\
 docker compose --project-name edrn exec portal django-admin investigator_addresses --import" || exit 1
 
 echo ""
