@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.forms.utils import ErrorList
 from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
+from wagtail.blocks.struct_block import StructBlockValidationError
 
 
 class TitleBlock(blocks.StructBlock):
@@ -41,24 +42,33 @@ class CarouselBlock(blocks.StructBlock):
 class Link(blocks.StructBlock):
     '''A hyperlink to a page in the site or to an external resource.'''
     link_text = blocks.CharBlock(max_length=120, required=False, help_text="Label for the link; don't use ‘here’")
-    internal_page = blocks.PageChooserBlock(required=False)
-    external_link = blocks.URLBlock(required=False)
+    internal_page = blocks.PageChooserBlock(required=False, help_text='Page in the site to link to')
+    external_link = blocks.URLBlock(required=False, help_text='External URL to link to')
+    view_name = blocks.CharBlock(max_length=32, required=False, help_text='Name of a view to link to')
 
     def clean(self, value: blocks.StructValue) -> blocks.StructValue:
         link_text = value.get('link_text')
         internal_page = value.get('internal_page')
         external_link = value.get('external_link')
+        view_name = value.get('view_name')
         errors = {}
         if link_text.lower() in ('here', 'click here', 'tap here'):
             errors['link_text'] = ErrorList(["Don't make your hyperlink be ‘here’; use something descriptive."])
-        if internal_page and external_link:
-            errors['internal_page'] = ErrorList(['Both of these fields cannot be filled. Please select or enter only one option.'])
-            errors['external_link'] = ErrorList(['Both of these fields cannot be filled. Please select or enter only one option.'])
-        elif not internal_page and not external_link:
-            errors['internal_page'] = ErrorList(['Please select a page or enter a URL for one of these options.'])
-            errors['external_link'] = ErrorList(['Please select a page or enter a URL for one of these options.'])
+
+        the_sum = int(bool(internal_page)) + int(bool(external_link)) + int(bool(view_name))
+        if the_sum > 1:
+            error_message = 'Only one of these fields can be filled.'
+            errors['internal_page'] = ErrorList([error_message])
+            errors['external_link'] = ErrorList([error_message])
+            errors['view_name'] = ErrorList([error_message])
+        elif the_sum == 0:
+            error_message = 'Exactly one of these fields must be filled.'
+            errors['internal_page'] = ErrorList([error_message])
+            errors['external_link'] = ErrorList([error_message])
+            errors['view_name'] = ErrorList([error_message])
         if errors:
-            raise ValidationError('Validation error in your Link', params=errors)
+            raise StructBlockValidationError(block_errors=errors)
+
         return super().clean(value)
 
     class Meta:
