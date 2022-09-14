@@ -4,7 +4,6 @@
 
 
 from .knowledge import KnowledgeObject, KnowledgeFolder, RDFSource
-from .cars import Car, CarIndex  # 🚗
 from .publications import Publication, PublicationIndex
 from .bodysystems import BodySystem, BodySystemIndex
 from .diseases import Disease, DiseaseIndex
@@ -37,8 +36,6 @@ class RDFIngest(BaseSiteSetting):
 __all__ = [
     BodySystem,
     BodySystemIndex,
-    Car,
-    CarIndex,
     DataCollection,
     DataCollectionIndex,
     Disease,

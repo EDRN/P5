@@ -25,7 +25,6 @@ from edrnsite.content.models import HomePage, FlexPage, BoilerplateSnippet, Cert
 from edrnsite.controls.models import SocialMedia
 from eke.biomarkers.models import BiomarkerIndex
 from eke.geocoding.models import Geocoding
-from eke.knowledge.models import CarIndex  # 🚗
 from eke.knowledge.publications import GrantNumber
 from robots.models import Rule, DisallowedUrl
 from wagtail.documents.models import Document
@@ -182,9 +181,7 @@ class Command(BaseCommand):
             {'link_text': i.title, 'internal_page': i} for i in workpage.get_children() if i.show_in_menus
         ]
         sponsor_tool = {'link_text': 'Find a Sponsor Tool', 'external_link': SPONSOR_TOOL_URL}
-        # Note: the `reverse('find-members')` here doesn't take into account the script name. This
-        # may result in an incorrect URL if the site is on a subpath.
-        member_finder = {'link_text': 'Member Finder', 'external_link': reverse('find-members')}
+        member_finder = {'link_text': 'Member Finder', 'view_name': 'find-members'}
         worklinks = worklinks[0:2] + [sponsor_tool] + [worklinks[2]] + [member_finder] + worklinks[3:]
 
         # And for the "News and Events" card, we need yet another special link
@@ -289,12 +286,6 @@ class Command(BaseCommand):
                 'title': 'Member Finder', 'style': 'navy', 'description': SD['work']['mf'], 'page': mf
             }
         ]}))
-
-        # 🚗
-        cars = CarIndex(title='Cars', live=True, show_in_menus=False, ingest_order=5)
-        cars.rdf_sources.add(*RDF_SOURCES['cars'][heavy])
-        workpage.add_child(instance=cars)
-        cars.save()
 
     def _write_aboutpage(self, aboutEDRN: SectionPage, heavy: bool):
         aboutEDRN.body.append(('title', {'text': 'About the Early Detection Research Network'}))

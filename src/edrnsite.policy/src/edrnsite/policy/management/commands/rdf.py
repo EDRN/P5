@@ -20,7 +20,6 @@ _sites         = 'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/sites/@@rdf'
 _testSites     = f'file:{pkg_resources.resource_filename(_testPkg, "data/sites.rdf")}'
 _people        = 'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/registered-person/@@rdf'
 _testPeople    = f'file:{pkg_resources.resource_filename(_testPkg, "data/people.rdf")}'
-_cars          = f'file:{pkg_resources.resource_filename(_testPkg, "data/cars.rdf")}'  # 🚗
 _protocols     = 'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/protocols/@@rdf'
 _testProtos    = f'file:{pkg_resources.resource_filename(_testPkg, "data/protocols.rdf")}'
 _data          = 'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/labcas/@@rdf'
@@ -82,11 +81,6 @@ RDF_SOURCES = {
             RDFSource(name='Focus BMDB', url=_bmdbResources, active=False),
             RDFSource(name='Test Resources', url=_testResources, active=True),
         ]
-    },
-    # 🚗
-    'cars': {
-        True: [RDFSource(name='Cars 🚕', url=_cars, active=True)],
-        False: [RDFSource(name='Cars 🚕', url=_cars, active=True)],
     },
     'sites': {
         True: [
