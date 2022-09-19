@@ -106,6 +106,8 @@ RUN \
     : Get the static files ready &&\
     /sbin/su-exec edrn /usr/bin/env LDAP_BIND_PASSWORD=unused SIGNING_KEY=unused /usr/bin/django-admin collectstatic --settings edrnsite.policy.settings.ops --no-input --clear --link &&\
     : Clean up clean up everybody everywhere &&\
+    : PrismaCloud does not like pip to be in the image &&\
+    /usr/bin/pip3 uninstall --yes --quiet pip &&\
     /sbin/apk del --quiet /edrn-build &&\
     /bin/rm -rf /app/wheels &&\
     /bin/rm -rf /var/cache/apk/* &&\
