@@ -39,7 +39,7 @@ services:
     # Nominally on port 8000, published to ${EDRN_PUBLISHED_TLS_PORT} or 8080.
     # For a TLS endpoint, enable the profile `tls-proxy` and use portal 4134.
     portal:
-        image: ${EDRN_IMAGE_OWNER-nutjob4life/}edrn-portal:${EDRN_VERSION:-6.0.0}
+        image: ${EDRN_IMAGE_OWNER-nutjob4life/}edrn-portal:${EDRN_VERSION:-6.0.0-uid26013}
         volumes:
             -
                 type: bind
@@ -93,7 +93,7 @@ services:
     #
     # Port 5432, non-published.
     db:
-        image: postgres:14.4-alpine3.16
+        image: postgres:14.5-alpine3.16
         volumes:
             -
                 type: bind
@@ -128,7 +128,7 @@ services:
     #
     # Ports 9200 and 9300, not published.
     search:
-        image: elasticsearch:7.17.5
+        image: elasticsearch:7.17.6
         # :crystal-ball-emoji: TODO: user ID 500/26013 issue … do we need a custom elasticsearch image?
         volumes:
             -
@@ -164,7 +164,7 @@ services:
     # A "celery" instance that handles background tasks; does not listen on any port.
     # Worker processes run Django functions so it needs all the same env vars as `portal`.
     worker:
-        image: ${EDRN_IMAGE_OWNER-nutjob4life/}edrn-portal:${EDRN_VERSION:-6.0.0}
+        image: ${EDRN_IMAGE_OWNER-nutjob4life/}edrn-portal:${EDRN_VERSION:-6.0.0-uid26013}
         entrypoint: ['/usr/bin/django-admin', 'worker']
         volumes:
             -
