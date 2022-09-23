@@ -22,6 +22,7 @@ from modelcluster.fields import ParentalKey
 from modelcluster.fields import ParentalManyToManyField
 from plotly.express import scatter_mapbox
 from rdflib import URIRef
+from urllib.error import HTTPError
 from urllib.parse import urlparse
 from urllib.request import urlopen
 from wagtail.admin.panels import FieldPanel, InlinePanel
@@ -98,17 +99,21 @@ class _ImageIngestingRDFAttribute(RDFAttribute):
         # Curiously, we can't pass a URL stream to ImageFile, since Django's ImageFile expects
         # to be able to do seek() operations on it. So we have to download to a temporary file:
         name = self._get_surname(predicates)
-        with tempfile.TemporaryFile() as out_file:
-            with urlopen(value) as image_stream:
-                out_file.write(image_stream.read())
-            image_file = ImageFile(out_file, name=self._get_file_name(value))
-            image = Image(
-                title=f'Photo of {name}', file=image_file,
-                # These values only make sense for the photos from the DMCC:
-                focal_point_x=66, focal_point_y=52, focal_point_height=76, focal_point_width=57
-            )
-            image.save()
-        return image
+        try:
+            with tempfile.TemporaryFile() as out_file:
+                with urlopen(value) as image_stream:
+                    out_file.write(image_stream.read())
+                image_file = ImageFile(out_file, name=self._get_file_name(value))
+                image = Image(
+                    title=f'Photo of {name}', file=image_file,
+                    # These values only make sense for the photos from the DMCC:
+                    focal_point_x=66, focal_point_y=52, focal_point_height=76, focal_point_width=57
+                )
+                image.save()
+            return image
+        except HTTPError:
+            _logger.warning('😡 The URL to image «%s» is invalid', value)
+            return None
 
 
 class Site(KnowledgeObject):
@@ -354,15 +359,21 @@ class Ingestor(BaseIngestor):
             if middle:
                 given += ' ' + middle
         if not given:
-            return last
+            title = last
         else:
-            return f'{last}, {given}'
+            title = f'{last}, {given}'
+        title = title.strip()
+        if not title or title == ',':
+            title = '«PERSON WITH NO NAME»'
+        return title
 
     def create_person(self, site: Site, uri: str, predicates: dict) -> Person:
         title = self.create_person_title(predicates)
-        Person.objects.filter(identifier__exact=uri).child_of(site).delete()
+        # Previously we deleted only those that where ``child_of(site)`` but this doesn't account for
+        # people who move to different sites
+        Person.objects.filter(identifier__exact=uri).delete()
         site.refresh_from_db()
-        if predicates.get(self._employmentPredicateURI, ['unknown'])[0] == self._doNotRecreateFlag:
+        if str(predicates.get(self._employmentPredicateURI, ['unknown'])[0]) == self._doNotRecreateFlag:
             return None
         person = Person(title=title, identifier=uri, live=True)
         for predicateURI, values, in predicates.items():
