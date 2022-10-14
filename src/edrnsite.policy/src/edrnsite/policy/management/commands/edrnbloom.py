@@ -362,7 +362,7 @@ class Command(BaseCommand):
         newsletter.move(newspage, pos='last-child')
 
         # 2nd: registration
-        registration = Page.objects.filter(title='Meeting Registration').first()
+        registration = Page.objects.filter(title='Upcoming Meetings').first()
         assert registration is not None
         registration.move(newspage, pos='last-child')
 
