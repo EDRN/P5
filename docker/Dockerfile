@@ -52,9 +52,12 @@ RUN \
     : Add system user edrn, no password, home dir edrn, group edrn, gecos info "EDRN User" &&\
     /usr/sbin/adduser -S -D -h /edrn -G edrn -u $user_id -g 'EDRN User' edrn &&\
     : Dependencies &&\
+    echo '@edge https://dl-cdn.alpinelinux.org/alpine/edge/main' >> /etc/apk/repositories &&\
+    echo '@edge https://dl-cdn.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories &&\
+    /sbin/apk update &&\
     build_deps="automake bzip2-dev cyrus-sasl-dev g++ gcc libffi-dev libjpeg-turbo-dev libwebp-dev libxml2-dev libxslt-dev make musl-dev openjpeg-dev openldap-dev openssl-dev pcre-dev python3-dev postgresql-dev su-exec tiff-dev zlib-dev " &&\
     run_deps="curl krb5-libs libgcc libjpeg-turbo libldap libpq libsasl libstdc++ libwebp libxml2 libxslt lynx netcat-openbsd openjpeg python3 rsync tiff" &&\
-    py_deps="py3-numpy py3-pandas py3-pillow py3-psycopg2" &&\
+    py_deps="py3-numpy@edge py3-pandas@edge py3-pillow py3-psycopg2" &&\
     /sbin/apk update --quiet &&\
     /sbin/apk add --no-progress --quiet --virtual /edrn-build $build_deps &&\
     /sbin/apk add --no-progress --quiet $run_deps &&\
