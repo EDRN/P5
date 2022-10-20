@@ -5,7 +5,7 @@
 from ._data import (
     GRANT_NUMBERS, BOILERPLATES, CERTIFICATIONS, SPONSOR_TOOL_URL, BLOG_URL, STUPID_TITLE, CAROUSEL_ALT_TEMPLATE,
     CAROUSEL_CAPTIONS, PREVENTION_SCIENCE_BLOG, MEETING_REPORTS_TEMPLATE, FIND_A_SPONSOR_TOOL_RICH_TEXT,
-    INFORMATICS_BODY, MEMBER_FINDER_TEMPLATE
+    INFORMATICS_BODY, MEMBER_FINDER_TEMPLATE, STATIC_SITES
 )
 from eke.knowledge.models import (
     PublicationIndex, BodySystemIndex, DiseaseIndex, MiscellaneousResourceIndex, SiteIndex, ProtocolIndex,
@@ -305,10 +305,18 @@ class Command(BaseCommand):
             page.move(aboutEDRN, pos='last-child')
             pages[card_id] = page
 
+        # DMCC won't have site data ready in time, so go ahead and create this, but not put it in menus
         sites = SiteIndex(
-            title='Sites', draft_title='Sites', seo_title='Sites', live=True, show_in_menus=True, ingest_order=50
+            title='Sites (RDF)', draft_title='Sites', seo_title='Sites', live=True, show_in_menus=False,
+            ingest_order=50
         )
         sites.rdf_sources.add(*RDF_SOURCES['sites'][heavy])
+        aboutEDRN.add_child(instance=sites)
+        sites.save()
+
+        # Then make a static version of the page
+        sites = FlexPage(title='Sites', draft_title='Sites', seo_title='Sites', live=True, show_in_menus=True)
+        sites.body.append(('rich_text', STATIC_SITES))
         aboutEDRN.add_child(instance=sites)
         sites.save()
 

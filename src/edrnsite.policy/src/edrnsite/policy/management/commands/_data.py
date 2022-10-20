@@ -3,7 +3,7 @@
 '''🧬 EDRN Site Policy: initial data.'''
 
 from wagtail.rich_text import RichText
-import pkg_resources, os.path
+import pkg_resources, os.path, csv, codecs
 
 # The grant numbers come from the file `data/grant-numbers.txt`
 GRANT_NUMBERS = pkg_resources.resource_string(__name__, 'data/grant-numbers.txt').decode('utf-8').strip().split('\n')
@@ -193,3 +193,44 @@ INFORMATICS_BODY = '''<p>
 
 <p>EDRN informatics leadership is provided by the <a href="https://www.jpl.nasa.gov/">Jet Propulsion Laboratory</a>'s EDRN Informatics Center and the <a href="https://www.fredhutch.org/en/research/divisions/public-health-sciences-division/research/biostatistics/comprehensive-center-for-advancement-scientific-strategies-compass.html">Fred Hutchinson EDRN Data Management and Coordinating Center (DMCC)</a>.</p>
 '''
+
+
+def _static_sites():
+    static_sites = []
+    for fn, heading, intro in (
+        ('cvc', 'Clinical Validation Centers (CVCs)', 'The Centers conduct clinical and epidemiological research regarding the clinical application of biomarkers.'),
+        ('dmcc', 'Data Management and Coordinating Center', 'The Center is responsible for coordinating the EDRN research activities, providing logistic support, and conducting statistical and computational research for data analysis, analyzing data for validation. The data center will develop a common database for Network research.'),
+        ('bcc', 'Biomarker Characterization Center (BCCs)', 'Centers that characterize biomarkers.'),
+        ('bdl', 'Biomarker Developmental Laboratories (BDLs)', 'Laboratories that develop biomarkers.'),
+        ('brl', 'Biomarker Reference Laboratories (BRLs)', 'Laboratories that reference biomarkers.')
+    ):
+        try:
+            static_sites.append(f'<h2>{heading}</h2>')
+            static_sites.append(f'<p>{intro}</h2>')
+            static_sites.append('<table class="table"><thead><tr><th>Group</th><th>Site ID</th><th>Name</th><th>Institution</th><th>PI Type</th><th>Member Type</th><th>Organ</th></tr></thead><tbody>')
+
+            reader = codecs.getreader('utf-8')
+            source = reader(pkg_resources.resource_stream(__name__, f'data/sites/{fn}.csv'))
+            reader = csv.reader(source)
+
+            for row in reader:
+                static_sites.append('<tr>')
+                for col in row:
+                    static_sites.append(f'<td>{col}</td>')
+                static_sites.append('</tr>')
+
+            static_sites.append('</tbody></table>')
+        finally:
+            source.close()
+    return ''.join(static_sites)
+
+
+STATIC_SITES = RichText(_static_sites())
+
+
+def main():
+    print(STATIC_SITES)
+
+
+if __name__ == '__main__':
+    main()
