@@ -10,7 +10,7 @@ from wagtail.rich_text import RichText
 from wagtail.documents.models import Document
 from wagtail.images.models import Image
 from django.template.loader import render_to_string
-import json, html, os, logging
+import json, html, os, logging, subprocess
 
 _logger = logging.getLogger(__name__)
 
@@ -179,8 +179,8 @@ class HTMLConverter(html.parser.HTMLParser):
         if link_target.startswith('#'): return None
         if link_target.endswith('/'): link_target = link_target[:-1]
         link_components = link_target.split('/')
-        if len(link_components) >= 2 and link_components[-2] == 'resolveuid':
-            target = self.plone_export.objs_by_uid.get(link_components[-1])
+        if len(link_components) >= 2 and 'resolveuid' in link_components:
+            target = self.plone_export.objs_by_uid.get(link_components[link_components.index('resolveuid') + 1])
             return target if target else None
         else:
             assert not link_target.startswith('/')
@@ -276,11 +276,37 @@ class PlonePage(PloneObject):
         if self.fp is None:
             raise ValueError(f'Illegal state: page {self.path} ({self.uid}) must be installed before rewriting')
 
-        html_converter = HTMLConverter(self.plone_export, self)
-        html_converter.feed(self.body)
-        html_converter.close()
+        # First, clean up the icky Plone code
+        cp = subprocess.run(
+            ['tidy', '-wrap', '-numeric', '-quiet', '-asxhtml', '-utf8', '--show-body-only', 'yes'],
+            input=self.body.encode('utf-8'), capture_output=True, check=False
+        )
+        if cp.returncode == 2:
+            raise ValueError(f'Cannot tidy this from Plone: «{self.body}»')
+        tidy_body = cp.stdout.decode('utf-8')
 
-        self.fp.body.append(('rich_text', RichText(html_converter.body)))
+        # Now, convert from Plone to Wagtail
+        try:
+            html_converter = HTMLConverter(self.plone_export, self)
+            html_converter.feed(tidy_body)
+            html_converter.close()
+        except ValueError:
+            # Ok, go back to the untidy version
+            html_converter = HTMLConverter(self.plone_export, self)
+            html_converter.feed(self.body)
+            html_converter.close()
+        converted_html = html_converter.body
+
+        # Tidy again, removing any problems introduced during the conversion
+        cp = subprocess.run(
+            ['tidy', '-wrap', '-numeric', '-quiet', '-asxhtml', '-utf8', '--show-body-only', 'yes'],
+            input=converted_html.encode('utf-8'), capture_output=True, check=False
+        )
+        if cp.returncode == 2:
+            raise ValueError(f'Cannot tidy this from Wagtail: «{converted_html}»')
+        tidied_and_converted = cp.stdout.decode('utf-8')
+
+        self.fp.body.append(('rich_text', RichText(tidied_and_converted)))
         self.fp.save()
 
     def link_start_tag(self, attrs):
