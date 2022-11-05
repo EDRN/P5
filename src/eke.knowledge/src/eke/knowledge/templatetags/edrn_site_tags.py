@@ -22,7 +22,10 @@ def biomarker_developmental_laboratories(bdls: list) -> dict:
     '''
     by_organ, cid = {}, 0
     for site in bdls:
-        for organ_name in [i.value for i in site.organs.all()]:
+        organs = [i.value for i in site.organs.all()]
+        if not organs:
+            organs = ['(No organ-specific research)']
+        for organ_name in organs:
             proposals = by_organ.get(organ_name, {})
             sites = proposals.get(site.proposal, [])
             sites.append(site)

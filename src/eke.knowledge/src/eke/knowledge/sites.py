@@ -488,6 +488,7 @@ class Ingestor(BaseIngestor):
 class SiteIndex(KnowledgeFolder):
     '''A site index is a container for Sites.'''
 
+    _bcc               = 'Biomarker Characterization Center'
     _bdl               = 'Biomarker Developmental Laboratories'
     _brl               = 'Biomarker Reference Laboratories'
     _cvc               = 'Clinical Validation Center'
@@ -505,6 +506,7 @@ class SiteIndex(KnowledgeFolder):
     def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
         context = super().get_context(request, *args, **kwargs)
 
+        context['bccs']  = Site.objects.child_of(self).live().public().filter(memberType=self._bcc)
         context['bdls']  = Site.objects.child_of(self).live().public().filter(memberType=self._bdl)
         context['brls']  = Site.objects.child_of(self).live().public().filter(memberType=self._brl)
         context['cvcs']  = Site.objects.child_of(self).live().public().filter(memberType=self._cvc)

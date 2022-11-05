@@ -11,7 +11,7 @@
             <ul class='list-inline'>
                 {% for site in proposal.sites %}
                     <li class='list-inline-item me-2'>
-                        <a href='{{site.pi.url}}'>{{site.pi.title}}</a>, <a href='{{site.url}}'>{{site.title}}</a>.
+                        <a href='{{site.pi.url}}'>{{site.pi.title}}</a> – <a href='{{site.url}}'>{{site.title}}</a>
                     </li>
                 {% empty %}
                     <li class='list-inline-item'><small>(No sites specified)</small></li>
@@ -20,7 +20,7 @@
             <h6 class='mt-3'>{% if proposal.title %}{{proposal.title}}{% else %}<small>(No proposal)</small>{% endif %}</h6>
             <p>
                 <button class='btn btn-sm btn-outline-secondary text-nowrap' type='button' data-bs-toggle='collapse'
-                    data-bs-target='#{{proposal.cid}}' aria-expanded='false' aria-controls='{{proposal.cid}}'>Read Summary</button>
+                    data-bs-target='#{{proposal.cid}}' aria-expanded='false' aria-controls='{{proposal.cid}}'>Read Specialty</button>
             </p>
             <div class='collapse' id='{{proposal.cid}}'>
                 <p class='card card-body'>{{proposal.specialty|safe}}</p>

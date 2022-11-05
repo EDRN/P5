@@ -31,7 +31,13 @@
                 {% else %}
                     <tr>
                         <td colspan='{% if show_organs %}3{% else %}2{% endif %}'>
-                            <small>(No summary available)</small>
+                            {% if proposal_group.sites|length == 1 %}
+                                <small>(No summary available for the above site)</small>
+                            {% else %}
+                                <small>
+                                    (No summary availalbe for the above {{proposal_group.sites|length}} sites)
+                                </small>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endif %}
