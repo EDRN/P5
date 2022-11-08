@@ -35,16 +35,16 @@ jobs:
         steps:
             -
                 name: 💳 Docker Hub Identification
-                uses: docker/login-action@v1
+                uses: docker/login-action@v2
                 with:
                     username: ${{secrets.DOCKERHUB_USERNAME}}
                     password: ${{secrets.DOCKERHUB_TOKEN}}
             -
                 name: 📚 Repository Checkout
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
             -
                 name: 🐍 Python Wrangling
-                uses: actions/setup-python@v2
+                uses: actions/setup-python@v4
                 with:
                     python-version: '3.10'
             -
@@ -56,13 +56,13 @@ jobs:
                     done
             -
                 name: 🎰 QEMU Multiple Machine Emulation
-                uses: docker/setup-qemu-action@v1
+                uses: docker/setup-qemu-action@v2
             -
                 name: 🚢 Docker Buildx
-                uses: docker/setup-buildx-action@v1
+                uses: docker/setup-buildx-action@v2
             -
                 name: 🧱 Image Construction and Publication — user ID 500
-                uses: docker/build-push-action@v2
+                uses: docker/build-push-action@v3
                 with:
                     build-args: user_id=500
                     context: .
@@ -74,7 +74,7 @@ jobs:
                         ${{secrets.DOCKERHUB_USERNAME}}/edrn-portal:latest-uid500
             -
                 name: 🧱 Image Construction and Publication — user ID 26013
-                uses: docker/build-push-action@v2
+                uses: docker/build-push-action@v3
                 with:
                     build-args: user_id=26013
                     context: .
