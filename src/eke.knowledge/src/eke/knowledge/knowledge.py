@@ -13,6 +13,7 @@ from modelcluster.fields import ParentalKey
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.models import Page, Orderable
 from wagtailmetadata.models import MetadataPageMixin
+from wagtail.search import index
 import rdflib
 
 
@@ -30,6 +31,7 @@ class KnowledgeObject(MetadataPageMixin, Page):
     description = models.TextField(blank=True, null=False, help_text='A summary or descriptive abstract')
 
     content_panels = Page.content_panels + [FieldPanel('identifier'), FieldPanel('description')]
+    search_fields = Page.search_fields + [index.SearchField('description')]
 
     def data_table(self) -> dict:
         return {'identifier': self.identifier, 'title': self.title, 'url': self.url, 'description': self.description}

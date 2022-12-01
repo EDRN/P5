@@ -51,9 +51,11 @@
                         </div>
                         <p class='mb-1'>
                             {% if result.search_description %}
-                                {{result.search_description|safe}}
+                                {{result.search_description|safe|truncatechars_html:200}}
                             {% elif result.specific.abstract %}
                                 {{result.specific.abstract|safe|truncatechars_html:200}}
+                            {% elif result.specific.description %}
+                                {{result.specific.description|safe|truncatechars_html:200}}
                             {% else %}
                                 <small>No description available</small>
                             {% endif %}
