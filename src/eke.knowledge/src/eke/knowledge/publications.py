@@ -1,6 +1,5 @@
 # encoding: utf-8
 
-# import dash
 from .constants import MAX_URI_LENGTH, MAX_SLUG_LENGTH
 from .knowledge import KnowledgeObject, KnowledgeFolder
 from .utils import edrn_schema_uri as esu
@@ -324,9 +323,9 @@ class PublicationIndex(KnowledgeFolder):
 
         df = pandas.DataFrame({
             "Year": years,
-            "Amount": counts
+            "# Publications": counts
         })
-        figure = bar(df, x='Year', y='Amount', barmode="group")
+        figure = bar(df, x='Year', y='# Publications', barmode="group")
 
         APP_NAME = 'PubsByYear'
         app = DjangoDash(APP_NAME)
