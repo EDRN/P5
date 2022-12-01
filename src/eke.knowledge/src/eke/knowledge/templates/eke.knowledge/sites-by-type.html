@@ -22,7 +22,13 @@
                         <td colspan='{% if show_organs %}3{% else %}2{% endif %}'>
                             <button class='btn btn-sm btn-outline-secondary text-nowrap' type='button'
                                 data-bs-toggle='collapse' data-bs-target='#{{proposal_group.cid}}' aria-expanded='false'
-                                aria-controls='{{proposal_group.cid}}'>Read Summary</button>
+                                aria-controls='{{proposal_group.cid}}'>
+                                {% if proposal_group.sites|length == 1 %}
+                                    Read summary for this site
+                                {% else %}
+                                    Read summary for above {{proposal_group.sites|length}} sites
+                                {% endif %}
+                            </button>
                             <div class='collapse' id='{{proposal_group.cid}}'>
                                 <p class='card card-body'>{{proposal_group.specialty|safe}}</p>
                             </div>
