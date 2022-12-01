@@ -16,6 +16,17 @@
         </div>
     {% else %}
 
+        <div class='row mb-3'>
+            <h5>Counts of Biomarkers by Phase</h5>
+            <div class='mx-auto row'>
+                <div class='col-sm-2'></div>
+                <div class='col-sm-2'>Phase 1: <strong>{{phase_1}}</strong></div>
+                <div class='col-sm-2'>Phase 2: <strong>{{phase_2}}</strong></div>
+                <div class='col-sm-2'>Phase 3: <strong>{{phase_3}}</strong></div>
+                <div class='col-sm-2'>Phase 4: <strong>{{phase_4}}</strong></div>
+                <div class='col-sm-2'>Phase 5: <strong>{{phase_5}}</strong></div>
+            </div>
+        </div>
         <div class='row'>
             <div class='col-auto mb-3'>
                 <table summary='Biomarkers' class='table' id='the-datatable' style='width: 100%;'>

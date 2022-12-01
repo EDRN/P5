@@ -230,6 +230,8 @@ class BiomarkerIndex(KnowledgeFolder):
         c = collections.Counter(bbs.values_list('phase', flat=True))
         c.update(bss.values_list('phase', flat=True))
         phases, amounts = [i[0] for i in c.items() if i[0] is not None], [i[1] for i in c.items() if i[0] is not None]
+        for phase, count in dict(zip(phases, amounts)).items():
+            context[f'phase_{phase}'] = count
         phases_frame = pandas.DataFrame({'Phase': phases, 'Count': amounts})
         phases_figure = plotly.express.pie(phases_frame, values='Count', names='Phase', title='Phases')
 
