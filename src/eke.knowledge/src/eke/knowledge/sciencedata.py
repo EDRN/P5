@@ -244,25 +244,25 @@ class DataCollectionIndex(KnowledgeFolder):
         discs, amounts = [i[0] for i in c.items() if i[0] is not None], [i[1] for i in c.items() if i[0] is not None]
         discs_frame = pandas.DataFrame({'Discipline': discs, 'Count': amounts})
         discs_figure = plotly.express.pie(discs_frame, values='Count', names='Discipline', title='Disciplines')
-        discs_figure.update_layout(showlegend=False)
+        discs_figure.update_layout(showlegend=True)
 
         c = collections.Counter(BodySystem.objects.filter(organs_in_data__in=matches).values_list('title', flat=True))
         organs, amounts = [i[0] for i in c.items() if i[0] is not None], [i[1] for i in c.items() if i[0] is not None]
         organs_frame = pandas.DataFrame({'Organ': organs, 'Count': amounts})
         organs_figure = plotly.express.pie(organs_frame, values='Count', names='Organ', title='Organs')
-        organs_figure.update_layout(showlegend=False)
+        organs_figure.update_layout(showlegend=True)
 
         c = collections.Counter(DataCategory.objects.filter(page__in=matches).values_list('value', flat=True))
         cats, amounts = [i[0] for i in c.items() if i[0] is not None], [i[1] for i in c.items() if i[0] is not None]
         cats_frame = pandas.DataFrame({'Category': cats, 'Count': amounts})
         cats_figure = plotly.express.pie(cats_frame, values='Count', names='Category', title='Data Categories')
-        cats_figure.update_layout(showlegend=False)
+        cats_figure.update_layout(showlegend=True)
         
         app = DjangoDash('ScienceDataDashboard')  # ← referenced in data-collection-index.html
         app.layout = html.Div(className='row', children=[
-            dcc.Graph(id='disciplines', figure=discs_figure, className='col-md-4'),
-            dcc.Graph(id='organs', figure=organs_figure, className='col-md-4'),
-            dcc.Graph(id='categories', figure=cats_figure, className='col-md-4'),
+            html.Div(className='row', children=[dcc.Graph(id='disciplines', figure=discs_figure, className='col')]),
+            html.Div(className='row', children=[dcc.Graph(id='organs', figure=organs_figure, className='col')]),
+            html.Div(className='row', children=[dcc.Graph(id='categories', figure=cats_figure, className='col')]),
         ])
 
         return context

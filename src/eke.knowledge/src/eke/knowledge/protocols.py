@@ -324,17 +324,17 @@ class ProtocolIndex(KnowledgeFolder):
             diseases_frame = pandas.DataFrame({'Disease': diseases, 'Count': amounts})
 
         fields_figure = plotly.express.pie(fields_frame, values='Count', names='Field', title='Fields of Research')
-        fields_figure.update_layout(showlegend=False)
+        fields_figure.update_layout(showlegend=True)
         groups_figure = plotly.express.pie(groups_frame, values='Count', names='Group', title='Collaborative Groups')
-        groups_figure.update_layout(showlegend=False)
+        groups_figure.update_layout(showlegend=True)
         diseases_figure = plotly.express.pie(diseases_frame, values='Count', names='Disease', title='Diseases Studied')
-        diseases_figure.update_layout(showlegend=False)
+        diseases_figure.update_layout(showlegend=True)
 
         app = DjangoDash('ProtocolDashboard')  # ← referenced in protocol-index.html
         app.layout = html.Div(className='row', children=[
-            dcc.Graph(id='fields-of-research', figure=fields_figure, className='col'),
-            dcc.Graph(id='collaborative-groups', figure=groups_figure, className='col'),
-            dcc.Graph(id='diseases', figure=diseases_figure, className='col'),
+            html.Div(className='row', children=[dcc.Graph(id='fields-of-research', figure=fields_figure, className='col')]),
+            html.Div(className='row', children=[dcc.Graph(id='collaborative-groups', figure=groups_figure, className='col')]),
+            html.Div(className='row', children=[dcc.Graph(id='diseases', figure=diseases_figure, className='col')]),
         ])
         return context
 
