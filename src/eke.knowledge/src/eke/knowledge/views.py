@@ -5,6 +5,7 @@
 from .knowledge import KnowledgeObject
 from .tasks import do_full_ingest, do_reindex, do_ldap_group_sync
 from .sites import Site, Person
+from edrn.auth.views import logged_in_or_basicauth
 from django.shortcuts import render
 from django.db.models import Q
 from django.db.models.functions import Lower
@@ -13,11 +14,19 @@ from django.http import (
 )
 
 
+def _get_referrer(request: HttpRequest) -> str:
+    try:
+        return request.META['HTTP_REFERER']
+    except KeyError:
+        return '/'
+
+
+@logged_in_or_basicauth('edrn')
 def start_full_ingest(request: HttpRequest) -> HttpResponse:
-    '''Start a full ingest and redirect to our referrer.'''
+    '''Start a full ingest and redirect to our referrer.''' 
     if request.user.is_superuser:
         do_full_ingest.delay()
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        return HttpResponseRedirect(_get_referrer(request))
     else:
         return HttpResponseForbidden()
 
@@ -26,7 +35,7 @@ def reindex_all_content(request: HttpRequest) -> HttpResponse:
     '''Reindex all content on the site and redirect to our referrer.'''
     if request.user.is_superuser:
         do_reindex.delay()
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        return HttpResponseRedirect(_get_referrer(request))
     else:
         return HttpResponseForbidden()
 
@@ -35,7 +44,7 @@ def sync_ldap_groups(request: HttpRequest) -> HttpResponse:
     '''Synchronize all LDAP groups into Django groups.'''
     if request.user.is_superuser:
         do_ldap_group_sync.delay()
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        return HttpResponseRedirect(_get_referrer(request))
     else:
         return HttpResponseForbidden()
 
