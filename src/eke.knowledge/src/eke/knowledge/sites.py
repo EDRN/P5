@@ -120,6 +120,7 @@ class Site(KnowledgeObject):
     template = 'eke.knowledge/site.html'
     parent_page_types = ['ekeknowledge.SiteIndex']
     subpage_types = ['ekeknowledge.Person']
+    preview_modes = []
     abbreviation = models.CharField(max_length=40, blank=True, null=False, help_text='A short name for the site')
     fundingStartDate = models.CharField(max_length=25, blank=True, null=False, help_text='When money was first given')
     fundingEndDate = models.CharField(max_length=25, blank=True, null=False, help_text='When the money stopped flowing')
@@ -323,23 +324,12 @@ class Ingestor(BaseIngestor):
         DMCC-site ID as well as the specialty information that was hand-entered years ago by Heather
         Kincaid.
         '''
-        hand_info = {}
-        with pkg_resources.resource_stream(__name__, 'data/site-hand-info.csv') as f:
-            decoder = codecs.getreader('utf-8')
-            reader = csv.reader(decoder(f))
-            for row in reader:
-                identifier, organs, proposal = row
-                hand_info[identifier] = (organs, proposal)
         self.statements = super().readRDF()
         for subj, preds in self.statements.items():
             typeURI = str(preds[rdflib.RDF.type][0])
             if typeURI not in (_siteType, self._personType): continue
             dmccCode = self._get_dmcc_code(subj)
             preds[URIRef(_internalIDPredicate)] = [dmccCode]
-            hand = hand_info.get(str(subj))
-            if hand is not None:
-                preds[_internalOrganPredicate] = hand[0].split(',')
-                preds[_interalProposalPredicate] = [hand[1]]
         return self.statements
 
     def create_person_title(self, predicates: dict) -> str:
