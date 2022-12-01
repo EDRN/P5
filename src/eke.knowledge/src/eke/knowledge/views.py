@@ -31,6 +31,7 @@ def start_full_ingest(request: HttpRequest) -> HttpResponse:
         return HttpResponseForbidden()
 
 
+@logged_in_or_basicauth('edrn')
 def reindex_all_content(request: HttpRequest) -> HttpResponse:
     '''Reindex all content on the site and redirect to our referrer.'''
     if request.user.is_superuser:
@@ -40,6 +41,7 @@ def reindex_all_content(request: HttpRequest) -> HttpResponse:
         return HttpResponseForbidden()
 
 
+@logged_in_or_basicauth('edrn')
 def sync_ldap_groups(request: HttpRequest) -> HttpResponse:
     '''Synchronize all LDAP groups into Django groups.'''
     if request.user.is_superuser:
