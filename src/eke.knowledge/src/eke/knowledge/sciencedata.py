@@ -130,7 +130,10 @@ class DataCollection(KnowledgeObject):
             attributes['organs'] = '(unknown)'
 
         if self.collaborative_group:
-            attributes['cg'] = self.collaborative_group.split(' ')[0]
+            truncated_group_name = self.collaborative_group.split(' ')[0]
+            if truncated_group_name == 'Breast':
+                truncated_group_name = 'Breast/Gyn'
+            attributes['cg'] = truncated_group_name
         else:
             attributes['cg'] = '(unknown)'
 
