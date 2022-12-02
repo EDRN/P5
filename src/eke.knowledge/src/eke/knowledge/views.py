@@ -24,7 +24,7 @@ def _get_referrer(request: HttpRequest) -> str:
 @logged_in_or_basicauth('edrn')
 def start_full_ingest(request: HttpRequest) -> HttpResponse:
     '''Start a full ingest and redirect to our referrer.''' 
-    if request.user.is_superuser:
+    if request.user.is_staff or request.user.is_superuser:
         do_full_ingest.delay()
         return HttpResponseRedirect(_get_referrer(request))
     else:
@@ -34,7 +34,7 @@ def start_full_ingest(request: HttpRequest) -> HttpResponse:
 @logged_in_or_basicauth('edrn')
 def reindex_all_content(request: HttpRequest) -> HttpResponse:
     '''Reindex all content on the site and redirect to our referrer.'''
-    if request.user.is_superuser:
+    if request.user.is_staff or request.user.is_superuser:
         do_reindex.delay()
         return HttpResponseRedirect(_get_referrer(request))
     else:
@@ -44,7 +44,7 @@ def reindex_all_content(request: HttpRequest) -> HttpResponse:
 @logged_in_or_basicauth('edrn')
 def sync_ldap_groups(request: HttpRequest) -> HttpResponse:
     '''Synchronize all LDAP groups into Django groups.'''
-    if request.user.is_superuser:
+    if request.user.is_staff or request.user.is_superuser:
         do_ldap_group_sync.delay()
         return HttpResponseRedirect(_get_referrer(request))
     else:

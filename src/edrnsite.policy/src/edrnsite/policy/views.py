@@ -8,7 +8,7 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, HttpRes
 
 def clear_caches(request: HttpRequest) -> HttpResponse:
     '''Clear all caches.'''
-    if request.user.is_superuser:
+    if request.user.is_staff or request.user.is_superuser:
         for cache in caches:
             caches[cache].clear()
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
