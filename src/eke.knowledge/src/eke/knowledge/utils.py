@@ -7,9 +7,15 @@ from django.contrib.auth.models import User
 from wagtail.models import Page, PageViewRestriction
 from wagtail.query import PageQuerySet
 from sortedcontainers import SortedList
+from django.template.loader import render_to_string
 import importlib, logging, rdflib, datetime, typing
 
 _logger = logging.getLogger(__name__)
+
+
+def ghetto_plotly_legend(labels: list, colors: list) -> str:
+    template_params = {'labels': [dict(label=i[0], color=i[1]) for i in zip(labels, colors)]}
+    return render_to_string('eke.knowledge/legend.html', template_params)
 
 
 def filter_by_user(qs: PageQuerySet, user: User) -> PageQuerySet:

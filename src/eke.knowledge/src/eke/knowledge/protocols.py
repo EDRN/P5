@@ -8,7 +8,8 @@ from .knowledge import KnowledgeObject, KnowledgeFolder
 from .rdf import RDFAttribute, RelativeRDFAttribute
 from .sites import Site
 from .utils import edrn_schema_uri as esu
-from .utils import Ingestor as BaseIngestor
+from .utils import Ingestor as BaseIngestor, ghetto_plotly_legend
+from dash_dangerously_set_inner_html import DangerouslySetInnerHTML
 from django.db import models
 from django.db.models import Q
 from django.db.models.fields import Field
@@ -291,50 +292,84 @@ class ProtocolIndex(KnowledgeFolder):
         context = super().get_context(request, *args, **kwargs)
         matches = context['knowledge_objects']
 
-        try:
-            field_facets = matches.facet('fieldOfResearch')
-            fields_frame = pandas.DataFrame(field_facets.items(), columns=('Field', 'Count'))
+        # 🔮 Get this from settings?
+        palette = plotly.express.colors.qualitative.Dark24
 
-            group_facets = matches.facet('collaborativeGroup')
-            groups_frame = pandas.DataFrame(group_facets.items(), columns=('Group', 'Count'))
+        # When from a search, the `facet` is conveniently available on the `matches` which is not a
+        # `PageQuerySet` but a `SearchResults`. However, it's problematic since it doesn't support all
+        # the ordering (order_by, Lower), so I'm going to use `values_list` instead.
+        #
+        # Also, now that we use DataTables, we don't use SearchResults at all!
+        #
+        # try:
+        #     field_facets = matches.facet('fieldOfResearch')
+        #     fields_frame = pandas.DataFrame(field_facets.items(), columns=('Field', 'Count'))
 
-            diseases_facets = matches.facet('cancer_types')
-            mapped_to_disease_names = []
-            while len(diseases_facets) > 0:
-                disease_pk, count = diseases_facets.popitem(last=False)
-                disease = Disease.objects.filter(pk=disease_pk).first()
-                if disease:
-                    mapped_to_disease_names.append((disease.title, count))
-            diseases_facets = collections.OrderedDict(mapped_to_disease_names)
-            diseases_frame = pandas.DataFrame(diseases_facets.items(), columns=('Disease', 'Count'))
+        #     group_facets = matches.facet('collaborativeGroup')
+        #     groups_frame = pandas.DataFrame(group_facets.items(), columns=('Group', 'Count'))
 
-        except AttributeError:
-            c = collections.Counter(matches.values_list('fieldOfResearch', flat=True))
-            fields, amounts = [i[0] for i in c.items()], [i[1] for i in c.items()]
-            fields_frame = pandas.DataFrame({'Field': fields, 'Count': amounts})
+        #     diseases_facets = matches.facet('cancer_types')
+        #     mapped_to_disease_names = []
+        #     while len(diseases_facets) > 0:
+        #         disease_pk, count = diseases_facets.popitem(last=False)
+        #         disease = Disease.objects.filter(pk=disease_pk).first()
+        #         if disease:
+        #             mapped_to_disease_names.append((disease.title, count))
+        #     diseases_facets = collections.OrderedDict(mapped_to_disease_names)
+        #     diseases_frame = pandas.DataFrame(diseases_facets.items(), columns=('Disease', 'Count'))
+        # except AttributeError:
 
-            matches = matches.exclude(collaborativeGroup='').exclude(collaborativeGroup__contains=',')
-            c = collections.Counter(matches.values_list('collaborativeGroup', flat=True))
-            groups, amounts = [i[0] for i in c.items()], [i[1] for i in c.items()]
-            groups_frame = pandas.DataFrame({'Group': groups, 'Count': amounts})
+        c = collections.Counter(matches.values_list('fieldOfResearch', flat=True))
+        fields, amounts = [i[0] for i in c.items()], [i[1] for i in c.items()]
+        fields_frame = pandas.DataFrame({'Field': fields, 'Count': amounts})
+        fields_legend = ghetto_plotly_legend([i[0] for i in c.most_common()], palette)
 
-            c = collections.Counter(matches.values_list('cancer_types', flat=True))
-            diseases = [Disease.objects.filter(pk=i[0]).first().title for i in c.items() if i[0] is not None]
-            amounts = [i[1] for i in c.items() if i[0] is not None]
-            diseases_frame = pandas.DataFrame({'Disease': diseases, 'Count': amounts})
+        matches = matches.exclude(collaborativeGroup='').exclude(collaborativeGroup__contains=',')
+        c = collections.Counter(matches.values_list('collaborativeGroup', flat=True))
+        groups, amounts = [i[0] for i in c.items()], [i[1] for i in c.items()]
+        groups_frame = pandas.DataFrame({'Group': groups, 'Count': amounts})
+        groups_legend = ghetto_plotly_legend([i[0] for i in c.most_common()], palette)
 
-        fields_figure = plotly.express.pie(fields_frame, values='Count', names='Field', title='Fields of Research')
-        fields_figure.update_layout(showlegend=True)
-        groups_figure = plotly.express.pie(groups_frame, values='Count', names='Group', title='Collaborative Groups')
-        groups_figure.update_layout(showlegend=True)
-        diseases_figure = plotly.express.pie(diseases_frame, values='Count', names='Disease', title='Diseases Studied')
-        diseases_figure.update_layout(showlegend=True)
+        c = collections.Counter(matches.values_list('cancer_types', flat=True))
+        diseases = [Disease.objects.filter(pk=i[0]).first().title for i in c.most_common() if i[0] is not None]
+        amounts = [i[1] for i in c.items() if i[0] is not None]
+        diseases_frame = pandas.DataFrame({'Disease': diseases, 'Count': amounts})
+        diseases_legend = ghetto_plotly_legend(diseases, palette)
+
+        fields_figure = plotly.express.pie(
+            fields_frame, values='Count', names='Field', title='Fields of Research', color_discrete_sequence=palette,
+            width=400
+        )
+        fields_figure.update_layout(showlegend=False, margin=dict(l=20, r=20, t=40, b=20))
+
+        groups_figure = plotly.express.pie(
+            groups_frame, values='Count', names='Group', title='Collaborative Groups', color_discrete_sequence=palette,
+            width=400
+        )
+        groups_figure.update_layout(showlegend=False, margin=dict(l=20, r=20, t=40, b=20))
+
+        diseases_figure = plotly.express.pie(
+            diseases_frame, values='Count', names='Disease', title='Diseases Studied', color_discrete_sequence=palette,
+            width=400
+        )
+        diseases_figure.update_layout(showlegend=False, margin=dict(l=20, r=20, t=40, b=20))
 
         app = DjangoDash('ProtocolDashboard')  # ← referenced in protocol-index.html
-        app.layout = html.Div(className='row', children=[
-            html.Div(className='row', children=[dcc.Graph(id='fields-of-research', figure=fields_figure, className='col')]),
-            html.Div(className='row', children=[dcc.Graph(id='collaborative-groups', figure=groups_figure, className='col')]),
-            html.Div(className='row', children=[dcc.Graph(id='diseases', figure=diseases_figure, className='col')]),
+        app.layout = html.Div(className='container', children=[
+            html.Div(className='row', children=[
+                html.Div(className='col-md-4', children=[
+                    dcc.Graph(id='fields-of-research', figure=fields_figure),
+                    DangerouslySetInnerHTML(fields_legend),
+                ]),
+                html.Div(className='col-md-4', children=[
+                    dcc.Graph(id='collaborative-groups', figure=groups_figure),
+                    DangerouslySetInnerHTML(groups_legend),
+                ]),
+                html.Div(className='col-md-4', children=[
+                    dcc.Graph(id='diseases', figure=diseases_figure),
+                    DangerouslySetInnerHTML(diseases_legend),
+                ]),
+            ]),
         ])
         return context
 

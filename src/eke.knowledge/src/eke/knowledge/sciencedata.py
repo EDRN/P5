@@ -7,7 +7,7 @@ from .bodysystems import BodySystem
 from .knowledge import KnowledgeObject, KnowledgeFolder
 from .protocols import Protocol
 from .rdf import RelativeRDFAttribute, RDFAttribute
-from .utils import Ingestor as BaseIngestor, filter_by_user
+from .utils import Ingestor as BaseIngestor, filter_by_user, ghetto_plotly_legend
 from django.contrib.auth.models import Group
 from django.db import models
 from django.db.models import Q
@@ -23,6 +23,7 @@ from wagtail.models import Orderable, PageViewRestriction
 from wagtail.search import index
 import dash_core_components as dcc
 import dash_html_components as html
+from dash_dangerously_set_inner_html import DangerouslySetInnerHTML
 import logging, rdflib, plotly.express, collections, pandas
 
 _logger = logging.getLogger(__name__)
@@ -239,6 +240,9 @@ class DataCollectionIndex(KnowledgeFolder):
         return ''.join(rows)
 
     def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
+        # Get this from settings?
+        palette = plotly.express.colors.qualitative.Dark24
+
         context = super().get_context(request, *args, **kwargs)
         context['statistics'] = DataStatistic.objects.child_of(self).order_by('title')
         matches = context['knowledge_objects']
@@ -246,26 +250,49 @@ class DataCollectionIndex(KnowledgeFolder):
         c = collections.Counter(Discipline.objects.filter(page__in=matches).values_list('value', flat=True))
         discs, amounts = [i[0] for i in c.items() if i[0] is not None], [i[1] for i in c.items() if i[0] is not None]
         discs_frame = pandas.DataFrame({'Discipline': discs, 'Count': amounts})
-        discs_figure = plotly.express.pie(discs_frame, values='Count', names='Discipline', title='Disciplines')
-        discs_figure.update_layout(showlegend=True)
+        discs_figure = plotly.express.pie(
+            discs_frame, values='Count', names='Discipline', title='Disciplines',
+            color_discrete_sequence=palette
+        )
+        discs_figure.update_layout(showlegend=False, margin=dict(l=20, r=20, t=40, b=20))
+        discs_legend = ghetto_plotly_legend([i[0] for i in c.most_common()], palette)
 
         c = collections.Counter(BodySystem.objects.filter(organs_in_data__in=matches).values_list('title', flat=True))
         organs, amounts = [i[0] for i in c.items() if i[0] is not None], [i[1] for i in c.items() if i[0] is not None]
         organs_frame = pandas.DataFrame({'Organ': organs, 'Count': amounts})
-        organs_figure = plotly.express.pie(organs_frame, values='Count', names='Organ', title='Organs')
-        organs_figure.update_layout(showlegend=True)
+        organs_figure = plotly.express.pie(
+            organs_frame, values='Count', names='Organ', title='Organs',
+            color_discrete_sequence=palette
+        )
+        organs_figure.update_layout(showlegend=False, margin=dict(l=20, r=20, t=40, b=20))
+        organs_legend = ghetto_plotly_legend([i[0] for i in c.most_common()], palette)
 
         c = collections.Counter(DataCategory.objects.filter(page__in=matches).values_list('value', flat=True))
         cats, amounts = [i[0] for i in c.items() if i[0] is not None], [i[1] for i in c.items() if i[0] is not None]
         cats_frame = pandas.DataFrame({'Category': cats, 'Count': amounts})
-        cats_figure = plotly.express.pie(cats_frame, values='Count', names='Category', title='Data Categories')
-        cats_figure.update_layout(showlegend=True)
-        
+        cats_figure = plotly.express.pie(
+            cats_frame, values='Count', names='Category', title='Data Categories',
+            color_discrete_sequence=palette
+        )
+        cats_figure.update_layout(showlegend=False, margin=dict(l=20, r=20, t=40, b=20))
+        cats_legend = ghetto_plotly_legend([i[0] for i in c.most_common()], palette)
+
         app = DjangoDash('ScienceDataDashboard')  # ← referenced in data-collection-index.html
-        app.layout = html.Div(className='row', children=[
-            html.Div(className='row', children=[dcc.Graph(id='disciplines', figure=discs_figure, className='col')]),
-            html.Div(className='row', children=[dcc.Graph(id='organs', figure=organs_figure, className='col')]),
-            html.Div(className='row', children=[dcc.Graph(id='categories', figure=cats_figure, className='col')]),
+        app.layout = html.Div(className='container', children=[
+            html.Div(className='row', children=[
+                html.Div(className='col-md-4', children=[
+                    dcc.Graph(id='disciplines', figure=discs_figure, className='dunno'),
+                    DangerouslySetInnerHTML(discs_legend),
+                ]),
+                html.Div(className='col-md-4', children=[
+                    dcc.Graph(id='organs', figure=organs_figure, className='dunno'),
+                    DangerouslySetInnerHTML(organs_legend),
+                ]),
+                html.Div(className='col-md-4', children=[
+                    dcc.Graph(id='categories', figure=cats_figure, className='dunno'),
+                    DangerouslySetInnerHTML(cats_legend),
+                ]),
+            ]),
         ])
 
         return context
