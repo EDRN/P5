@@ -1,0 +1,8 @@
+<ul class='list-inline small'>
+    {% for item in labels %}
+        <li class='list-inline-item'>
+            <i class='bi bi-square-fill' style='color: {{item.color}}'></i> {{item.label}}
+        </li>
+    {% endfor %}
+</ul>
+{# -*- Django HTML -*- #}
