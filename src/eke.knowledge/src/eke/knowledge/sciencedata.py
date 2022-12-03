@@ -240,12 +240,12 @@ class DataCollectionIndex(KnowledgeFolder):
         return ''.join(rows)
 
     def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
-        # Get this from settings?
-        palette = plotly.express.colors.qualitative.Dark24
-
         context = super().get_context(request, *args, **kwargs)
         context['statistics'] = DataStatistic.objects.child_of(self).order_by('title')
         matches = context['knowledge_objects']
+
+        # 🔮 Get this from settings?
+        palette = plotly.express.colors.qualitative.Dark24
 
         c = collections.Counter(Discipline.objects.filter(page__in=matches).values_list('value', flat=True))
         discs, amounts = [i[0] for i in c.items() if i[0] is not None], [i[1] for i in c.items() if i[0] is not None]
@@ -281,15 +281,15 @@ class DataCollectionIndex(KnowledgeFolder):
         app.layout = html.Div(className='container', children=[
             html.Div(className='row', children=[
                 html.Div(className='col-md-4', children=[
-                    dcc.Graph(id='disciplines', figure=discs_figure, className='dunno'),
+                    dcc.Graph(id='disciplines', figure=discs_figure),
                     DangerouslySetInnerHTML(discs_legend),
                 ]),
                 html.Div(className='col-md-4', children=[
-                    dcc.Graph(id='organs', figure=organs_figure, className='dunno'),
+                    dcc.Graph(id='organs', figure=organs_figure),
                     DangerouslySetInnerHTML(organs_legend),
                 ]),
                 html.Div(className='col-md-4', children=[
-                    dcc.Graph(id='categories', figure=cats_figure, className='dunno'),
+                    dcc.Graph(id='categories', figure=cats_figure),
                     DangerouslySetInnerHTML(cats_legend),
                 ]),
             ]),
