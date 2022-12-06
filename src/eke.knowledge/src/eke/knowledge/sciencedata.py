@@ -254,6 +254,7 @@ class DataCollectionIndex(KnowledgeFolder):
             discs_frame, values='Count', names='Discipline', title='Disciplines',
             color_discrete_sequence=palette
         )
+        discs_figure.update_traces(hoverinfo='skip', hovertemplate=None)
         discs_figure.update_layout(showlegend=False, margin=dict(l=20, r=20, t=40, b=20))
         discs_legend = ghetto_plotly_legend([i[0] for i in c.most_common()], palette)
 
@@ -264,6 +265,7 @@ class DataCollectionIndex(KnowledgeFolder):
             organs_frame, values='Count', names='Organ', title='Organs',
             color_discrete_sequence=palette
         )
+        organs_figure.update_traces(hoverinfo='skip', hovertemplate=None)
         organs_figure.update_layout(showlegend=False, margin=dict(l=20, r=20, t=40, b=20))
         organs_legend = ghetto_plotly_legend([i[0] for i in c.most_common()], palette)
 
@@ -274,6 +276,7 @@ class DataCollectionIndex(KnowledgeFolder):
             cats_frame, values='Count', names='Category', title='Data Categories',
             color_discrete_sequence=palette
         )
+        cats_figure.update_traces(hoverinfo='skip', hovertemplate=None)
         cats_figure.update_layout(showlegend=False, margin=dict(l=20, r=20, t=40, b=20))
         cats_legend = ghetto_plotly_legend([i[0] for i in c.most_common()], palette)
 

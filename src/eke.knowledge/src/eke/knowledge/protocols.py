@@ -340,18 +340,21 @@ class ProtocolIndex(KnowledgeFolder):
             fields_frame, values='Count', names='Field', title='Fields of Research', color_discrete_sequence=palette,
             width=400
         )
+        fields_figure.update_traces(hoverinfo='skip', hovertemplate=None)
         fields_figure.update_layout(showlegend=False, margin=dict(l=20, r=20, t=40, b=20))
 
         groups_figure = plotly.express.pie(
             groups_frame, values='Count', names='Group', title='Collaborative Groups', color_discrete_sequence=palette,
             width=400
         )
+        groups_figure.update_traces(hoverinfo='skip', hovertemplate=None)
         groups_figure.update_layout(showlegend=False, margin=dict(l=20, r=20, t=40, b=20))
 
         diseases_figure = plotly.express.pie(
             diseases_frame, values='Count', names='Disease', title='Diseases Studied', color_discrete_sequence=palette,
             width=400
         )
+        diseases_figure.update_traces(hoverinfo='skip', hovertemplate=None)
         diseases_figure.update_layout(showlegend=False, margin=dict(l=20, r=20, t=40, b=20))
 
         app = DjangoDash('ProtocolDashboard')  # ← referenced in protocol-index.html
