@@ -19,7 +19,7 @@
                 {% endfor %}
                 {% if proposal_group.specialty %}
                     <tr>
-                        <td colspan='{% if show_organs %}3{% else %}2{% endif %}'>
+                        <td class='pb-5' colspan='{% if show_organs %}3{% else %}2{% endif %}'>
                             <button class='btn btn-sm btn-outline-secondary text-nowrap' type='button'
                                 data-bs-toggle='collapse' data-bs-target='#{{proposal_group.cid}}' aria-expanded='false'
                                 aria-controls='{{proposal_group.cid}}'>
@@ -36,7 +36,7 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan='{% if show_organs %}3{% else %}2{% endif %}'>
+                        <td class='pb-5' colspan='{% if show_organs %}3{% else %}2{% endif %}'>
                             {% if proposal_group.sites|length == 1 %}
                                 <small>(No summary available for the above site)</small>
                             {% else %}
