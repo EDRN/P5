@@ -24,4 +24,5 @@ MIGRATION_MODULES = {
 
 INSTALLED_APPS = [
     'edrnsite.streams',
+    'wagtail.contrib.table_block',
 ]

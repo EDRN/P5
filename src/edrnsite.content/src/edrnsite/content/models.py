@@ -54,6 +54,8 @@ class FlexPage(MetadataPageMixin, Page):
             help_text='Richly formatted text',
         )),
         ('cards', blocks.CardsBlock()),
+        ('table', blocks.TableBlock()),
+        ('carousel', blocks.CarouselBlock()),
     ], null=True, blank=True, use_json_field=True)
     content_panels = Page.content_panels + [
         FieldPanel('body')

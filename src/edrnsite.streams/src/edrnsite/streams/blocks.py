@@ -3,11 +3,11 @@
 '''🦦 EDRN Site streams: blocks.'''
 
 
-from django.core.exceptions import ValidationError
 from django.forms.utils import ErrorList
+from wagtail.blocks.struct_block import StructBlockValidationError
 from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
-from wagtail.blocks.struct_block import StructBlockValidationError
+from wagtail.contrib.table_block.blocks import TableBlock as BaseTableBlock
 
 
 class TitleBlock(blocks.StructBlock):
@@ -117,3 +117,30 @@ class CardsBlock(blocks.StructBlock):
         template = 'edrnsite.streams/cards-block.html'
         icon = 'placeholder'
         label = 'EDRN Style Cards'
+
+
+class TableBlock(BaseTableBlock):
+    '''A table to appear in the EDRN site.'''
+    class Meta(object):
+        template = 'edrnsite.streams/table-block.html'
+
+
+# 🔮 Postpone this for now
+#
+# class HeroBlock(blocks.StructBlock):
+#     '''A "hero unit", or large section of highlighted content.'''
+#     _features = ['bold', 'italic', 'hr', 'link', 'document-link']
+#     _styles = ['left-light', 'right-light', 'left-dark', 'right-dark']
+#
+#     title = blocks.CharBlock(max_length=250, required=True, help_text='Heroic Headline')
+#     image = ImageChooserBlock(required=True, help_text='Large picture to show on the hero unit')
+#     description = blocks.RichTextBlock(required=False, help_text='Summary of this hero unit', features=_features)
+#     style = blocks.ChoiceBlock(
+#         choices=[(i, i.capitalize()) for i in _styles], required=False, help_text='Style for this hero unit'
+#     )
+#     links = blocks.ListBlock(Link())
+#     class Meta:
+#         template = 'edrnsite.streams/hero-block.html'
+#         icon = 'user'
+#         label = 'Hero Unit'
+#         help_text = 'An eye-catching display of a headline, imagery, optional text, and buttoned-links'
