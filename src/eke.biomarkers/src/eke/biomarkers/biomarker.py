@@ -13,6 +13,7 @@ from modelcluster.fields import ParentalKey
 from modelcluster.fields import ParentalManyToManyField
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.models import Page, Orderable
+from wagtail.search import index
 
 
 class QualityAssuredObject(models.Model):
@@ -110,6 +111,11 @@ class Biomarker(KnowledgeObject, QualityAssuredObject, ResearchedObject):
         InlinePanel('biomarker_aliases', label='BM Aliases'),
         InlinePanel('biomarker_access_groups', label='Access Groups'),
     ]
+    search_fields = KnowledgeObject.search_fields + [
+        index.SearchField('hgnc_name', boost=4),
+        index.RelatedFields('biomarker_aliases', [index.SearchField('value', boost=3)])
+    ]
+    search_fields[0].boost = 5
     def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
         context = super().get_context(request, *args, **kwargs)
 

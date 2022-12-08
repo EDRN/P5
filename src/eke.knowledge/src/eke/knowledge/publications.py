@@ -75,7 +75,7 @@ class Publication(KnowledgeObject):
         InlinePanel('authors', label='Authors')
     ]
     search_fields = KnowledgeObject.search_fields + [
-        index.SearchField('abstract', partial_match=False),  # 🔮 TODO: should boost=2?
+        # index.SearchField('abstract', partial_match=False),  # See if we can get biomarkers higher
         index.RelatedFields('authors', [index.SearchField('value')]),
         index.SearchField('journal'),
         index.FilterField('journal'),

@@ -16,6 +16,7 @@ class MiscellaneousResource(KnowledgeObject):
     template = 'eke.knowledge/misc-resource.html'
     parent_page_types = ['ekeknowledge.MiscellaneousResourceIndex']
     search_auto_update = False
+    search_fields = []  # 🔮 We should remove this as it causes a warning at startup, but we want these cleared from ES
     class RDFMeta:
         fields = {}
 
