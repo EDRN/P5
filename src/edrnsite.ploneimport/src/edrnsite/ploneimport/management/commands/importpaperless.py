@@ -32,11 +32,11 @@ class Command(BaseCommand):
         parser.add_argument('content-file', type=argparse.FileType('r'), help='Plone export ``edrn.json`` file')
         parser.add_argument('blobstorage-dir', help='Zope blobstorage directory')
 
-    def write_index(self, page: FlexPage):
+    def write_index(self, page: FlexPage, custom_label='<p>This group contains the following iteesm:</p>'):
         if page.get_children().count() == 0:
             page.body.append(('rich_text', RichText('<p>There are no items in this group.</p>')))
         else:
-            page.body.append(('rich_text', RichText('<p>This group contains the following items:</p>')))
+            page.body.append(('rich_text', RichText(custom_label)))
             text = '<ul class="list-unstyled">'
             for child in page.get_children().order_by(Lower('title')):
                 text += f'<li><a id="{child.pk}" linktype="page">{child.title}</a></li>'
@@ -155,6 +155,10 @@ class Command(BaseCommand):
             assert mission_and_structure is not None
             self.create_groups(home_page, mission_and_structure, plone_groups)
             self.create_network_consulting_team(home_page, nct)
+
+            groups = FlexPage.objects.filter(title='Groups').first()
+            assert groups is not None
+            self.write_index(groups, '<p>The collaborative groups and commitees of EDRN are listed below:</p>')
 
         finally:
             settings.WAGTAILREDIRECTS_AUTO_CREATE = old

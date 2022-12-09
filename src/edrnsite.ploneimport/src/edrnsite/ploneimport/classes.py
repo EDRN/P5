@@ -80,7 +80,7 @@ class PaperlessExport(object):
                 child = self._create_plone_tree(uid=child_uid)
                 if child is not None and child.item_id != 'steering-committee':  # Was imported from `importfromplone`
                     children.append(child)
-            plone_object = PlonePage(self, uid, path, item_id, title, description, children, 'Groups here')
+            plone_object = PlonePage(self, uid, path, item_id, title, description, children, '<p></p>')
         elif d['@type'] in ('eke.knowledge.groupspacefolder', 'eke.knowledge.collaborativegroupfolder'):
             children = [
                 self._create_plone_tree(uid=i) for i in [j.uid for j in self.tree.get(uid).children] 
@@ -159,7 +159,7 @@ class PloneExport(object):
                 child = self._create_plone_tree(uid=child_uid)
                 if child is not None:
                     children.append(child)
-            plone_object = PlonePage(self, uid, path, item_id, title, description, children, 'Groups here')
+            plone_object = PlonePage(self, uid, path, item_id, title, description, children, '<p></p>')
         elif d['@type'] == 'eke.knowledge.groupspacefolder':
             if path.endswith('steering-committee'):
                 children = [
