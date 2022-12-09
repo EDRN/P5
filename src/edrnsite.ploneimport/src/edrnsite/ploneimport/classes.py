@@ -24,6 +24,80 @@ class Node(object):
         return self.uid
 
 
+class PaperlessExport(object):
+    def __init__(self, base_url, content_file, blob_dir):
+        self.base_url, self.blob_dir, self.prefix = base_url, blob_dir, len(base_url)
+        self.content_by_uid, self.content_by_path, self.tree = {}, {}, {}
+        content = json.load(content_file)
+        content_file.close()
+        for i in content:
+            path, uid = i['@id'][self.prefix:], i['UID']
+            self.content_by_uid[uid] = self.content_by_path[path] = i
+            parent = i['parent']['UID']
+            if parent is not None:
+                child_node, parent_node = self.tree.get(uid, Node(uid)), self.tree.get(parent, Node(parent))
+                parent_node.children.add(child_node)
+                self.tree[uid] = child_node
+                self.tree[parent] = parent_node
+
+    def __repr__(self):
+        return f'{self.__class__.__name__}({self.base_url})' 
+
+    def get_import(self):
+        top_level_pages, self.objs_by_uid, self.objs_by_path = [], {}, {}
+        for top_level_item in ('network-consulting-team', 'about'):
+            top_level_pages.append(self._create_plone_tree(path=top_level_item))
+        root = PlonePage(self, None, '/', None, 'EDRN', 'Biomarkers: the key to early detection', top_level_pages, '')
+        return root
+
+    def _create_plone_tree(self, path=None, uid=None):
+        if path is not None:
+            d = self.content_by_path[path]
+        elif uid is not None:
+            d = self.content_by_uid[uid]
+        else:
+            raise ValueError('Must specify either path or uid')
+        uid, title, description, item_id, path = d['UID'], d['title'], d['description'], d['id'], d['@id'][self.prefix:]
+        title = title.strip()
+        if d['@type'] == 'Image':
+            blob = os.path.join(self.blob_dir, d['image']['blob_path'])
+            filename, ct = d['image']['filename'], d['image']['content-type']
+            plone_object = PloneImage(self, uid, path, item_id, title, description, filename, ct, blob)
+        elif d['@type'] == 'File':
+            blob = os.path.join(self.blob_dir, d['file']['blob_path'])
+            filename, ct = d['file']['filename'], d['file']['content-type']
+            if not filename: filename = d['id']
+            plone_object = PloneFile(self, uid, path, item_id, title, description, filename, ct, blob)
+        elif d['@type'] == 'Folder':
+            children = [self._create_plone_tree(uid=i) for i in [j.uid for j in self.tree.get(uid).children]]
+            children = [i for i in children if i is not None]
+            children.sort(key=lambda i: i.title)
+            body = render_to_string('edrnsite.ploneimport/folder-view.html', {'children': children})
+            plone_object = PlonePage(self, uid, path, item_id, title, description, children, body)
+        elif d['@type'] == 'eke.knowledge.collaborationsfolder':
+            children = []
+            for child_uid in [i.uid for i in self.tree.get(uid).children]:
+                child = self._create_plone_tree(uid=child_uid)
+                if child is not None and child.item_id != 'steering-committee':  # Was imported from `importfromplone`
+                    children.append(child)
+            plone_object = PlonePage(self, uid, path, item_id, title, description, children, 'Groups here')
+        elif d['@type'] in ('eke.knowledge.groupspacefolder', 'eke.knowledge.collaborativegroupfolder'):
+            children = [
+                self._create_plone_tree(uid=i) for i in [j.uid for j in self.tree.get(uid).children] 
+                if i is not None
+            ]
+            plone_object = PlonePage(self, uid, path, item_id, title, description, children, '<p></p>')
+        elif d['@type'] in (
+            'Document', 'Link', 'Event', 'eke.knowledge.groupspaceindex', 'eke.knowledge.collaborativegroupindex',
+            'News Item'
+        ):
+            plone_object = None
+        else:
+            raise ValueError(f'Unexpected type {d["@type"]}')
+        self.objs_by_uid[uid] = self.objs_by_path[path] = plone_object
+        return plone_object
+
+
 class PloneExport(object):
     def __init__(self, base_url, content_file, default_pages_file, blob_dir):
         self.base_url, self.blob_dir, self.prefix = base_url, blob_dir, len(base_url)
@@ -47,7 +121,7 @@ class PloneExport(object):
             assert uid not in self.default_pages
             self.default_pages[uid] = entry['default_page_uuid']
 
-    def __str__(self):
+    def __repr__(self):
         return f'{self.__class__.__name__}({self.base_url})'
 
     def _create_plone_tree(self, path=None, uid=None):
