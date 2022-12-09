@@ -47,7 +47,7 @@ def biomarker_developmental_laboratories(bdls: list) -> dict:
 def edrn_sites_by_type(sites: list, show_organs: bool) -> dict:
     by_proposal = {}
     for site in sites.order_by(Lower('proposal')).order_by(Lower('pi__title')):
-        specialty = site.specialty if site.specialty and site.specialty != ',' else None  # DMCC data quality = 🤢
+        specialty = site.specialty if site.specialty and site.specialty != ',' else None  # Thanks DMCC
         sites = by_proposal.get(specialty, [])
         sites.append(site)
         by_proposal[specialty] = sites

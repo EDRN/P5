@@ -63,7 +63,7 @@ class _MailtoRemovingRDFAttribute(RDFAttribute):
     def compute_new_value(self, modelField: Field, value: str, predicates: dict) -> object:
         if value.startswith('mailto:'):
             value = value[7:]
-        # Thanks DMCC 🙄
+        # Thanks DMCC
         garbage = {
             'kwriston': '',                                                          # 3518
             'smarquis@medicine.washington,edu': 'smarquis@medicine.washington.edu',  # 3039
@@ -172,7 +172,7 @@ class Site(KnowledgeObject):
     def _shouldSponsorBeShown(self):
         if not self.memberType: return False
         memberType = self.memberType.strip()
-        potential = memberType.startswith('Associate') or memberType.startswith('Assocaite')  # Thanks DMCC 🤢
+        potential = memberType.startswith('Associate') or memberType.startswith('Assocaite')  # Thanks DMCC
         sponsorAvailable = self.sponsor is not None
         return potential and sponsorAvailable
 
