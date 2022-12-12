@@ -56,10 +56,14 @@ echo "© Copying .env file to $WEBROOT"
 scp .env $USER@$WEBSERVER:$WEBROOT
 
 echo ""
-echo "👉 Fetching the latest docker-compose.yaml"
+echo "👉 Fetching the latest docker-compose.yaml and sync-from-ops.sh and pulling production content"
 
 ssh -q $USER@$WEBSERVER "cd $WEBROOT &&\
-curl --silent --fail --location --remote-name https://github.com/EDRN/P5/raw/main/docker/docker-compose.yaml" || exit 1
+curl --silent --fail --location --remote-name https://github.com/EDRN/P5/raw/main/docker/docker-compose.yaml &&\
+curl --silent --fail --location --remote-name https://github.com/EDRN/P5/raw/main/support/sync-from-ops.sh &&\
+chmod 755 sync-from-ops.sh &&\
+env NIH_PASSWORD=$NIH_PASSWORD WORKSPACE=/local/content/edrn /local/content/edrn/docker/sync-from-ops.sh" || exit 1
+
 
 echo ""
 echo "👉 Update ownership and check directory listing:"
@@ -99,24 +103,19 @@ ssh -q $USER@$WEBSERVER "cd $WEBROOT && docker compose --project-name edrn ps"
 
 
 echo ""
-echo "👷‍♀️ Initial database schema and population"
+echo "👷‍♀️ Bring over latest production DB"
 
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
+docker compose --project-name edrn exec db dropdb --force --if-exists --username=postgres edrn &&\
 docker compose --project-name edrn exec db createdb --username=postgres --encoding=UTF8 --owner=postgres edrn &&\
+bzip2 --decompress --stdout edrn.sql.bz2 | \
+    docker compose --project-name edrn exec db psql --dbname=edrn --echo-errors --quiet &&\
+docker compose --project-name edrn exec portal django-admin makemigrations &&\
 docker compose --project-name edrn exec portal django-admin migrate &&\
+docker compose --project-name edrn exec portal django-admin collectstatic --no-input --clear &&\
+docker compose --project-name edrn exec portal django-admin edrndevreset &&\
 docker compose --project-name edrn run --volume $WEBROOT/../exports:/mnt/zope --volume $WEBROOT/../blobstorage:/mnt/blobs \
-    --entrypoint /usr/bin/django-admin --no-deps portal importfromplone \
-    http://nohost/edrn/ /mnt/zope/edrn.json /mnt/zope/export_defaultpages.json /mnt/blobs &&\
-docker compose --project-name edrn exec portal django-admin collectstatic --no-input &&\
-docker compose --project-name edrn exec portal django-admin edrnbloom $EDRN_LITE --hostname $FINAL_HOSTNAME &&\
-docker compose --project-name edrn exec portal django-admin investigator_addresses --import" || exit 1
-
-echo ""
-echo "🔐 Doing LDAP group sync"
-ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal django-admin ldap_group_sync
-" || exit 1
-
+    --entrypoint /usr/bin/django-admin --no-deps portal importpaperless /mnt/zope/edrn.json /mnt/blobs" || exit 1
 
 # Disabling for now; can do this TTW
 #
@@ -125,12 +124,6 @@ docker compose --project-name edrn exec portal django-admin ldap_group_sync
 
 # ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 # docker compose --project-name edrn exec --detach --no-TTY portal django-admin rdfingest" || exit 1
-
-echo ""
-echo "📓 Populating main menus"
-
-ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal django-admin autopopulate_main_menus" || exit 1
 
 echo ""
 echo "👉 Restart Apache"
