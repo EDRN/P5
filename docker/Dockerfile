@@ -67,26 +67,13 @@ RUN \
     /sbin/apk add --no-progress --quiet $py_deps &&\
     :
 
-RUN \
-    : Over on GitHub Actions, we need to fail fast and not hit the six hour run limit, so make sure we got it right &&\
-    [ "`/usr/bin/python3 --version`" = "Python 3.10.8" ] &&\
-    :
+# Over on GitHub Actions, we need to fail fast and not hit the six hour run limit, so make sure we got it right
 
-RUN \
-    [ "`/usr/bin/python3 -c 'import numpy; print(numpy.__version__)'`" = "1.23.4" ] &&\
-    :
-
-RUN \
-    [ "`/usr/bin/python3 -c 'import pandas; print(pandas.__version__)'`" = "1.5.1" ] &&\
-    :
-
-RUN \
-    [ "`/usr/bin/python3 -c 'import PIL; print(PIL.__version__)'`" = "9.3.0" ] &&\
-    :
-
-RUN \
-    [ "`/usr/bin/python3 -c 'import psycopg2; print(psycopg2.__version__)'`" = "2.9.5 (dt dec pq3 ext lo64)" ] &&\
-    :
+RUN [ "`/usr/bin/python3 --version`" = "Python 3.10.9" ]
+RUN [ "`/usr/bin/python3 -c 'import numpy; print(numpy.__version__)'`" = "1.23.4" ]
+RUN [ "`/usr/bin/python3 -c 'import pandas; print(pandas.__version__)'`" = "1.5.1" ]
+RUN [ "`/usr/bin/python3 -c 'import PIL; print(PIL.__version__)'`" = "9.3.0" ]
+RUN [ "`/usr/bin/python3 -c 'import psycopg2; print(psycopg2.__version__)'`" = "2.9.5 (dt dec pq3 ext lo64)" ]
 
 RUN \
     : See https://github.com/python-ldap/python-ldap/issues/432 for workaround to Python LDAP vs OpenLDAP 2.5 issue &&\
