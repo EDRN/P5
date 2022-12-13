@@ -167,10 +167,10 @@ class Protocol(KnowledgeObject):
         limit = RDFIngest.for_request(request).edrn_protocol_limit
         context['nonEDRNProtocol'] = self.protocolID >= limit
         from .sciencedata import DataCollection
-        dcs = DataCollection.objects.filter(generating_protocol=self).public().live().order_by(Lower('title'))
+        dcs = DataCollection.objects.filter(generating_protocol=self).live().order_by(Lower('title'))
         context['data_collections'] = dcs
         from eke.biomarkers.biomarker import Biomarker
-        bms = Biomarker.objects.filter(protocols=self).public().live().order_by(Lower('title'))
+        bms = Biomarker.objects.filter(protocols=self).live().order_by(Lower('title'))
         context['biomarkers'] = bms
         return context
     def data_table(self) -> dict:
