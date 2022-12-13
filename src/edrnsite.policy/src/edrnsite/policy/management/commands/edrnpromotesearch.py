@@ -21,8 +21,13 @@ class Command(BaseCommand):
             }
             for name in names:
                 try:
+                    desc = biomarker.description
+                    if not desc:
+                        desc = f'This is the recommened biomarker for {name}'
                     query, _ = Query.objects.get_or_create(query_string=name)
-                    promotion, created = SearchPromotion.objects.get_or_create(query=query, page=biomarker)
+                    promotion, created = SearchPromotion.objects.get_or_create(
+                        query=query, page=biomarker, defaults={'description': desc}
+                    )
                     if created:
                         self.stdout.write(f'Promoting search for {name} to {biomarker}')
                 except Exception:

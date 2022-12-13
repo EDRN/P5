@@ -49,6 +49,7 @@ bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --qu
 ./manage.sh migrate
 ./manage.sh collectstatic --no-input --clear --link
 ./manage.sh edrndevreset
+./manage.sh edrnpromotesearch
 ./manage.sh importpaperless ../P5/var/zope-debug/edrn.json ../P5/var/blobstorage
 # shoud do `./manage.sh rdfingest` here too?
 
