@@ -19,7 +19,7 @@ import eke.biomarkers.settings as ekeBiomarkersSettings
 #
 # 🔗 https://docs.djangoproject.com/en/3.2/ref/settings/#installed-apps
 
-INSTALLED_APPS = ekeKnowlegeSettings.INSTALLED_APPS + edrnSiteContentSettings.INSTALLED_APPS + edrnThemeSettings.INSTALLED_APPS + [
+INSTALLED_APPS = edrnSiteSearchSettings.INSTALLED_APPS + ekeKnowlegeSettings.INSTALLED_APPS + edrnSiteContentSettings.INSTALLED_APPS + edrnThemeSettings.INSTALLED_APPS + [
     # Early Detection Research Network:
     'edrn.theme',
     'edrnsite.content',

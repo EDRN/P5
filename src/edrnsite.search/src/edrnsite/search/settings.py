@@ -17,6 +17,18 @@ MIGRATION_MODULES = {
 }
 
 
+# Installed Applications
+# ----------------------
+#
+# The "apps" (Python packages) enabled for Django.
+#
+# 🔗 https://docs.djangoproject.com/en/3.2/ref/settings/#installed-apps
+
+INSTALLED_APPS = [
+    'wagtail.contrib.search_promotions',  # Promote certain search results
+]
+
+
 # Search
 # ------
 #

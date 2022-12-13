@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 {% load wagtailcore_tags %}
-
 {% block title %}Search{% endblock title %}
-
 {% block content %}
     <div class='row'>
         <div class='col-auto'>
@@ -40,7 +38,7 @@
                 </span>
             {% endif %}
         </div>
-        <div class='col-lg-10'>
+        <div class='col-lg-8'>
         {% if page.paginator.count > 0 %}
             <div class='list-group'>
                 {% for result in page %}
@@ -115,14 +113,33 @@
             </nav>
 
         {% elif query %}
-            <div class='col-lg-10 mb-3'>
+            <div class='col-lg-8 mb-3'>
                 Sorry, no results found 😢
             </div>
         {% else %}
-            <div class='col-lg-10 mb-3'>
+            <div class='col-lg-8 mb-3'>
                 Please go ahead and enter some search keywords
             </div>
         {% endif %}
+        </div>
+        <div class='col-lg-2'>
+            {% if num_promotions %}
+                {% if num_promotions == 1 %}
+                    <h5><i class='bi bi-eyeglasses'></i> Looking for this?</h5>
+                {% else %}
+                    <h5><i class='bi bi-eyeglasses'></i> Looking for these?</h5>
+                {% endif %}
+                <ul class='list-group list-group-flush'>
+                    {% for promotion in promotions %}
+                        <li class='list-group-item'>
+                            <a href='{{promotion.page.url}}' title='{{promotion.description}}'>
+                                {{promotion.page.title}}
+                            </a>
+                            <small>({{promotion.page.content_type.name|capfirst}})</small>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         </div>
     </div>
 {% endblock content %}
