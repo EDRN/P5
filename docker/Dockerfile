@@ -55,6 +55,9 @@ RUN \
     echo '@edge https://dl-cdn.alpinelinux.org/alpine/edge/main' >> /etc/apk/repositories &&\
     echo '@edge https://dl-cdn.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories &&\
     /sbin/apk update &&\
+    :
+
+RUN \
     build_deps="automake bzip2-dev cyrus-sasl-dev g++ gcc libffi-dev libjpeg-turbo-dev libwebp-dev libxml2-dev libxslt-dev make musl-dev openjpeg-dev openldap-dev openssl-dev pcre-dev python3-dev postgresql-dev su-exec tiff-dev zlib-dev " &&\
     run_deps="curl krb5-libs libgcc libjpeg-turbo libldap libpq libsasl libstdc++ libwebp libxml2 libxslt lynx netcat-openbsd openjpeg python3 rsync tiff tidyhtml" &&\
     py_deps="py3-numpy py3-pandas py3-pillow py3-psycopg2" &&\
@@ -62,12 +65,30 @@ RUN \
     /sbin/apk add --no-progress --quiet --virtual /edrn-build $build_deps &&\
     /sbin/apk add --no-progress --quiet $run_deps &&\
     /sbin/apk add --no-progress --quiet $py_deps &&\
+    :
+
+RUN \
     : Over on GitHub Actions, we need to fail fast and not hit the six hour run limit, so make sure we got it right &&\
     [ "`/usr/bin/python3 --version`" = "Python 3.10.8" ] &&\
+    :
+
+RUN \
     [ "`/usr/bin/python3 -c 'import numpy; print(numpy.__version__)'`" = "1.23.4" ] &&\
+    :
+
+RUN \
     [ "`/usr/bin/python3 -c 'import pandas; print(pandas.__version__)'`" = "1.5.1" ] &&\
+    :
+
+RUN \
     [ "`/usr/bin/python3 -c 'import PIL; print(PIL.__version__)'`" = "9.3.0" ] &&\
+    :
+
+RUN \
     [ "`/usr/bin/python3 -c 'import psycopg2; print(psycopg2.__version__)'`" = "2.9.5 (dt dec pq3 ext lo64)" ] &&\
+    :
+
+RUN \
     : See https://github.com/python-ldap/python-ldap/issues/432 for workaround to Python LDAP vs OpenLDAP 2.5 issue &&\
     echo 'INPUT ( libldap.so )' > /usr/lib/libldap_r.so &&\
     /usr/bin/python3 -m ensurepip --upgrade &&\
