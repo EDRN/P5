@@ -23,7 +23,7 @@ class Command(BaseCommand):
                 try:
                     desc = biomarker.description
                     if not desc:
-                        desc = f'This is the recommened biomarker for {name}'
+                        desc = f'This is the recommended biomarker for {name}'
                     query, _ = Query.objects.get_or_create(query_string=name)
                     promotion, created = SearchPromotion.objects.get_or_create(
                         query=query, page=biomarker, defaults={'description': desc}
