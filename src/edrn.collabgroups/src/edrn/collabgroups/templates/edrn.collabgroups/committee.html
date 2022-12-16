@@ -18,17 +18,16 @@
 
             {% if have_events %}
                 <h2>Events</h2>
-                <p>The following lists the events for this group.</p>
 
                 {% if future_events %}
-                    <h3>Upcoming Events</h3>
+                    <p>Upcoming Events:</p>
                     <ul class='list-unstyled'>
                         {% for event in future_events %}
                             <li><a href='{{event.url}}'>{{event.title}}</a></li>
-                        {% empty %}
-                            <li class='small'>There are no upcoming events scheduled.</li>
                         {% endfor %}
                     </ul>
+                {% else %}
+                    <p class='small'>No upcoming events scheduled.</p>
                 {% endif %}
 
                 {% if past_events %}
