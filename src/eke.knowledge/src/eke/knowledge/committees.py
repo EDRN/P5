@@ -61,8 +61,8 @@ class CommitteeIndex(KnowledgeFolder):
     template = 'eke.knowledge/committee-index.html'
     def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
         context = super().get_context(request, *args, **kwargs)
-        cbs = Page.objects.child_of(self).live().public().filter(title__endswith='Cancers Research Group').order_by(Lower('title'))
-        others = Page.objects.child_of(self).live().public().exclude(title__endswith='Cancers Research Group').order_by(Lower('title'))
+        cbs = Page.objects.child_of(self).live().filter(title__endswith='Cancers Research Group').order_by(Lower('title'))
+        others = Page.objects.child_of(self).live().exclude(title__endswith='Cancers Research Group').order_by(Lower('title'))
         context['collaborative_groups'], context['other_groups'] = cbs, others
         return context
     class RDFMeta:

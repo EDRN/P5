@@ -89,8 +89,10 @@ class PaperlessExport(object):
                 if i is not None
             ]
             plone_object = PlonePage(self, uid, path, item_id, title, description, modified, children, '<p></p>')
+        elif d['@type'] == 'Event':
+            plone_object = PloneEvent(self, uid, path, item_id, title, description, modified, d)
         elif d['@type'] in (
-            'Document', 'Link', 'Event', 'eke.knowledge.groupspaceindex', 'eke.knowledge.collaborativegroupindex',
+            'Document', 'Link', 'eke.knowledge.groupspaceindex', 'eke.knowledge.collaborativegroupindex',
             'News Item'
         ):
             plone_object = None
@@ -398,9 +400,26 @@ class PloneLink(PlonePage):
 
 class PloneEvent(PlonePage):
     def __init__(self, plone_export, uid, path, item_id, title, description, pub_date, d: dict):
-        d['body_text'] = d['text']['data']
-        body = render_to_string('edrnsite.ploneimport/event-view.html', d)
+        try:
+            body = d['text']['data']
+        except TypeError:
+            body = ''
+        self.start = d['start']
         super().__init__(plone_export, uid, path, item_id, title, description, pub_date, None, body)
+
+    def install(self, parent: Page):
+        from edrn.collabgroups.models import CommitteeEvent
+        self.fp = CommitteeEvent(
+            title=self.title, live=True, show_in_menus=False, last_published_at=self.pub_date,
+            when=datetime.fromisoformat(self.start), timezone=CommitteeEvent.UTC
+        )
+        parent.add_child(instance=self.fp)
+        self.fp.save()
+        self._pk = self.fp.pk
+        for child in self.children:
+            if child is not None:
+                child.install(self.fp)
+        return self.fp
 
 
 class PloneFile(PloneObject):
