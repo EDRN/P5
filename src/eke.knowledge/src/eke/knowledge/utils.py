@@ -8,7 +8,8 @@ from wagtail.models import Page, PageViewRestriction
 from wagtail.query import PageQuerySet
 from sortedcontainers import SortedList
 from django.template.loader import render_to_string
-import importlib, logging, rdflib, datetime, typing
+from django.utils import timezone
+import importlib, logging, rdflib, typing
 
 _logger = logging.getLogger(__name__)
 
@@ -30,7 +31,7 @@ def filter_by_user(qs: PageQuerySet, user: User) -> PageQuerySet:
 
 def aware_now():
     '''Return the current time in UTC as a non-naive (aware) time with the UTC time zone.'''
-    return datetime.datetime.now(datetime.timezone.utc)
+    return timezone.now()
 
 
 def get_class(name: str) -> type:

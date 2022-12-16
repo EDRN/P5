@@ -10,6 +10,7 @@ from wagtail.rich_text import RichText
 from wagtail.documents.models import Document
 from wagtail.images.models import Image
 from django.template.loader import render_to_string
+from datetime import datetime
 import json, html, os, logging, subprocess
 
 _logger = logging.getLogger(__name__)
@@ -47,7 +48,7 @@ class PaperlessExport(object):
         top_level_pages, self.objs_by_uid, self.objs_by_path = [], {}, {}
         for top_level_item in ('network-consulting-team', 'about'):
             top_level_pages.append(self._create_plone_tree(path=top_level_item))
-        root = PlonePage(self, None, '/', None, 'EDRN', 'Biomarkers: the key to early detection', top_level_pages, '')
+        root = PlonePage(self, None, '/', None, 'EDRN', 'Biomarkers: the key to early detection', None, top_level_pages, '')
         return root
 
     def _create_plone_tree(self, path=None, uid=None):
@@ -59,34 +60,35 @@ class PaperlessExport(object):
             raise ValueError('Must specify either path or uid')
         uid, title, description, item_id, path = d['UID'], d['title'], d['description'], d['id'], d['@id'][self.prefix:]
         title = title.strip()
+        modified = datetime.fromisoformat(d['modified'])
         if d['@type'] == 'Image':
             blob = os.path.join(self.blob_dir, d['image']['blob_path'])
             filename, ct = d['image']['filename'], d['image']['content-type']
-            plone_object = PloneImage(self, uid, path, item_id, title, description, filename, ct, blob)
+            plone_object = PloneImage(self, uid, path, item_id, title, description, modified, filename, ct, blob)
         elif d['@type'] == 'File':
             blob = os.path.join(self.blob_dir, d['file']['blob_path'])
             filename, ct = d['file']['filename'], d['file']['content-type']
             if not filename: filename = d['id']
-            plone_object = PloneFile(self, uid, path, item_id, title, description, filename, ct, blob)
+            plone_object = PloneFile(self, uid, path, item_id, title, description, modified, filename, ct, blob)
         elif d['@type'] == 'Folder':
             children = [self._create_plone_tree(uid=i) for i in [j.uid for j in self.tree.get(uid).children]]
             children = [i for i in children if i is not None]
             children.sort(key=lambda i: i.title)
             body = render_to_string('edrnsite.ploneimport/folder-view.html', {'children': children})
-            plone_object = PlonePage(self, uid, path, item_id, title, description, children, body)
+            plone_object = PlonePage(self, uid, path, item_id, title, description, modified, children, body)
         elif d['@type'] == 'eke.knowledge.collaborationsfolder':
             children = []
             for child_uid in [i.uid for i in self.tree.get(uid).children]:
                 child = self._create_plone_tree(uid=child_uid)
                 if child is not None and child.item_id != 'steering-committee':  # Was imported from `importfromplone`
                     children.append(child)
-            plone_object = PlonePage(self, uid, path, item_id, title, description, children, '<p></p>')
+            plone_object = PlonePage(self, uid, path, item_id, title, description, modified, children, '<p></p>')
         elif d['@type'] in ('eke.knowledge.groupspacefolder', 'eke.knowledge.collaborativegroupfolder'):
             children = [
                 self._create_plone_tree(uid=i) for i in [j.uid for j in self.tree.get(uid).children] 
                 if i is not None
             ]
-            plone_object = PlonePage(self, uid, path, item_id, title, description, children, '<p></p>')
+            plone_object = PlonePage(self, uid, path, item_id, title, description, modified, children, '<p></p>')
         elif d['@type'] in (
             'Document', 'Link', 'Event', 'eke.knowledge.groupspaceindex', 'eke.knowledge.collaborativegroupindex',
             'News Item'
@@ -202,9 +204,10 @@ class PloneExport(object):
 
 
 class PloneObject(object):
-    def __init__(self, plone_export, uid, path, item_id, title, description, children=None):
+    def __init__(self, plone_export, uid, path, item_id, title, description, pub_date, children=None):
         self.plone_export = plone_export
         self.uid, self.path, self.item_id, self.title, self.description = uid, path, item_id, title, description
+        self.pub_date = pub_date
         assert self.path is not None
         if children is None:
             self.children = []
@@ -327,14 +330,14 @@ class HTMLConverter(html.parser.HTMLParser):
 
 
 class PlonePage(PloneObject):
-    def __init__(self, plone_export, uid, path, item_id, title, description, children, body):
-        super().__init__(plone_export, uid, path, item_id, title, description, children)
+    def __init__(self, plone_export, uid, path, item_id, title, description, pub_date, children, body):
+        super().__init__(plone_export, uid, path, item_id, title, description, pub_date, children)
         self.body = body
         self.fp = None
         assert isinstance(body, str)
 
     def install(self, parent: Page):
-        self.fp = FlexPage(title=self.title, live=True, show_in_menus=True)
+        self.fp = FlexPage(title=self.title, live=True, show_in_menus=True, last_published_at=self.pub_date)
         parent.add_child(instance=self.fp)
         self.fp.save()
         self._pk = self.fp.pk
@@ -388,21 +391,21 @@ class PlonePage(PloneObject):
 
 
 class PloneLink(PlonePage):
-    def __init__(self, plone_export, uid, path, item_id, title, description, url):
+    def __init__(self, plone_export, uid, path, item_id, title, description, pub_date, url):
         body = render_to_string('edrnsite.ploneimport/link-view.html', {'url': url})
-        super().__init__(plone_export, uid, path, item_id, title, description, None, body)
+        super().__init__(plone_export, uid, path, item_id, title, description, pub_date, None, body)
 
 
 class PloneEvent(PlonePage):
-    def __init__(self, plone_export, uid, path, item_id, title, description, d: dict):
+    def __init__(self, plone_export, uid, path, item_id, title, description, pub_date, d: dict):
         d['body_text'] = d['text']['data']
         body = render_to_string('edrnsite.ploneimport/event-view.html', d)
-        super().__init__(plone_export, uid, path, item_id, title, description, None, body)
+        super().__init__(plone_export, uid, path, item_id, title, description, pub_date, None, body)
 
 
 class PloneFile(PloneObject):
-    def __init__(self, plone_export, uid, path, item_id, title, description, filename, content_type, blob):
-        super().__init__(plone_export, uid, path, item_id, title, description)
+    def __init__(self, plone_export, uid, path, item_id, title, description, pub_date, filename, content_type, blob):
+        super().__init__(plone_export, uid, path, item_id, title, description, pub_date)
         self.filename, self.content_type, self.blob = filename, content_type, blob
 
     def install(self, parent: Page):
@@ -411,12 +414,12 @@ class PloneFile(PloneObject):
             try:
                 with open(self.blob, 'rb') as f:
                     document_file = File(f, name=self.filename)
-                    document = Document(title=self.title, file=document_file)
+                    document = Document(title=self.title, file=document_file, created_at=self.pub_date)
                     document.save()
             except FileNotFoundError:
                 with open(os.devnull, 'rb') as f:
                     document_file = File(f, name=self.filename)
-                    document = Document(title=self.title, file=document_file)
+                    document = Document(title=self.title, file=document_file, created_at=self.pub_date)
                     document.save()
         self._pk = document.pk
         return document
@@ -426,20 +429,20 @@ class PloneFile(PloneObject):
 
 
 class PloneImage(PloneFile):
-    def __init__(self, plone_export, uid, path, item_id, title, description, filename, content_type, blob):
-        super().__init__(plone_export, uid, path, item_id, title, description, filename, content_type, blob)
+    def __init__(self, plone_export, uid, path, item_id, title, description, pub_date, filename, content_type, blob):
+        super().__init__(plone_export, uid, path, item_id, title, description, pub_date, filename, content_type, blob)
 
     def install(self, parent: Page):
         image = Image.objects.filter(title=self.title).first()
         if image is None:
             try:
                 with open(self.blob, 'rb') as f:
-                    image_file = ImageFile(f, name=self.filename)
+                    image_file = ImageFile(f, name=self.filename, created_at=self.pub_date)
                     image = Image(title=self.title, file=image_file)
                     image.save()
             except FileNotFoundError:
                 with open(os.devnull, 'rb') as f:
-                    image_file = ImageFile(f, name=self.filename)
+                    image_file = ImageFile(f, name=self.filename, created_at=self.pub_date)
                     image = Image(title=self.title, file=image_file)
                     image.save()
         self._pk = image.pk

@@ -9,11 +9,15 @@ from django.db.models.functions import Lower
 from edrnsite.content.models import FlexPage
 from edrnsite.ploneimport.classes import PaperlessExport, PlonePage
 from edrnsite.policy.management.commands.utils import set_site
+from eke.knowledge.models import CommitteeIndex, RDFSource
+from edrn.collabgroups.models import Committee
 from wagtail.documents.models import Document
 from wagtail.models import Page, PageViewRestriction
 from wagtail.rich_text import RichText
 import argparse, pkg_resources
 
+
+_committees_url = 'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/committees/@@rdf'
 
 NCT_GROUP_ACCESS = [
     'Feng Fred Hutchinson Cancer Center',
@@ -24,6 +28,28 @@ NCT_GROUP_ACCESS = [
     'Super User'
 ]
 
+_groups = {
+    'associate-member': (33, 'No description available.'),
+    'biomarker-developmental-laboratories': (27, 'No description available.'),
+    'biomarker-reference-laboratories': (28, 'No description available.'),
+    'breast-and-gynecologic-cancers-research-group': (14, 'No description available.'),
+    'clinical-epidemiology-and-validation-center': (29, 'No description available.'),
+    'collaboration-and-publication-subcommittee': (7, '''The objective of the Collaboration and Publication Subcommittee is to define procedures and conditions for formal collaboration within the EDRN and with investigators outside the Network, and defines publication policies.'''),
+    'communication-and-workshop-subcommittee': (6, '''The objective of the Communication and Workshop Subcommittee is to achieve the full potential of biomarkers as tools to facilitate early detection of cancer by disseminating research goals and findings with the broader components of the research enterprise. To accomplish this objective, the Communication and Workshop Subcommittee defines formats for exchange of scientific findings such as workshops, seminars, and electronic information resources that serve to inform the research communities of scientific advances.'''),
+    'data-management-and-coordinating-center': (30, 'No description available.'),
+    'data-sharing-and-informatics-subcommittee': (8, '''The objectives of the Data Sharing and Informatics Subcommittee are to establish guidelines for the EDRN data structure and common data items, and to provide a forum for biostatisticians/analysts within EDRN to collaborate on research pertinent to EDRN.'''),
+    'erne-working-group': (10, 'No description available.'),
+    'executive-committee': (2, '''The Executive Committee (EC) consists of a Chair, Chair of the SC, Chairs of Collaborative Groups, at least one Principal Investigator from a BDL, BRL, CEVC, and DMCC (if not represented in the Collaborative Group Chairs), and the NCI Program Coordinator or a designee. The Committee is chaired by the Co-chair of the Steering Committee. The Committee expedites the work of the Steering Committee and assists the Chair of the Steering Committee. It coordinates the administrative and research activities of the EDRN on a regular basis and provides a mechanism for communication on the management of the EDRN. The Committee makes recommendations on major policy issues to the Steering Committee.'''),
+    'g-i-and-other-associated-cancers-research-group': (15, 'No description available.'),
+    'jet-propulsion-laboratory': (32, 'No description available.'),
+    'lung-and-upper-aerodigestive-cancers-research-group': (16, 'No description available.'),
+    'national-cancer-institute': (31, 'No description available.'),
+    'network-consulting-team': (3, '''The Network Consulting Team (NCT) is composed of a Chair and non-EDRN members appointed by NCI. The NCT reviews the progress of the EDRN, recommends new research initiatives, and ensures that the Network is responsive to promising opportunities in early detection research and risk assessment. The number and composition of members is not fixed. The NCT has access to all EDRN research information including Progress Reports provided by individual investigators. The NCT can recommend new research projects to the Steering Committee or to NCI. Members of the Network Consulting Team can serve on ad-hoc Committees of the EDRN, Review Groups, and as consultants to Subcommittees. Members of the Network Consulting Team cannot apply for Associate Membership. Associate Members cannot serve on the Network Consulting Team. The NCT meets at least once a year.'''),
+    'prioritization-subcommittee': (4, '''The objective of the Prioritization Subcommittee is to establish procedures for prioritizing research and allocating resources within the Network.'''),
+    'prostate-and-urologic-cancers-research-group': (17, 'No description available.'),
+    'technology-and-resource-sharing-subcommittee': (5, '''The objective of the Technology and Resource Sharing Subcommittee is to establish the rationale and conditions for sharing technology and other resources among investigators within and external to the EDRN.'''),
+}
+
 
 class Command(BaseCommand):
     help = 'Import the "paperless" files'
@@ -32,7 +58,7 @@ class Command(BaseCommand):
         parser.add_argument('content-file', type=argparse.FileType('r'), help='Plone export ``edrn.json`` file')
         parser.add_argument('blobstorage-dir', help='Zope blobstorage directory')
 
-    def write_index(self, page: FlexPage, custom_label='<p>This group contains the following iteesm:</p>'):
+    def write_index(self, page: FlexPage, custom_label='<p>This group contains the following itesm:</p>'):
         if page.get_children().count() == 0:
             page.body.append(('rich_text', RichText('<p>There are no items in this group.</p>')))
         else:
@@ -67,10 +93,19 @@ class Command(BaseCommand):
         folder.save()
         return folder
 
-    def create_groups_container(self, home_page: Page) -> Page:
-        about = home_page.get_children().filter(slug='about-edrn').first()
-        assert about is not None
-        return self.create_folder(about, 'Groups')
+    def create_groups_container(self, parent: Page) -> Page:
+        index = parent.get_children().filter(slug='groups').first()
+        if index is not None:
+            index.delete()
+            parent.refresh_from_db()
+        index = CommitteeIndex(
+            title='Committees and Collaborative Groups', slug='groups', live=True, show_in_menus=False,
+            ingest_order=90, seo_title='Committees', draft_title='Groups'
+        )
+        index.rdf_sources.add(RDFSource(name='DMCC Committees', url=_committees_url, active=True))
+        parent.add_child(instance=index)
+        index.save()
+        return index
 
     def create_network_consulting_team(self, home_page: Page, source: PlonePage):
         home_page.get_children().filter(title='Network Consulting Team').delete()
@@ -121,18 +156,42 @@ class Command(BaseCommand):
         return nct_page
 
     def create_groups(self, home_page: Page, mission_and_structure: Page, source: PlonePage):
+        plone_committees = {i.item_id: i for i in source.children}
+
         groups = mission_and_structure.get_children().filter(slug='groups').first()
         assert groups is not None
         groups.get_children().exclude(slug='steering-committee').delete()
+        current_steering_committee = groups.get_children().filter(slug='steering-committee').first()
+        assert current_steering_committee is not None
+        current_steering_committee.move(home_page, pos='last-child')
         groups.refresh_from_db()
-        for child in [i for i in source.children if i is not None]:
-            page = child.install(groups)
-            child.rewrite_html()
-            self.write_index(page)
-            if page.slug == 'network-consulting-team':
-                pvr = PageViewRestriction(page=page, restriction_type='groups')
+        home_page.refresh_from_db()
+        mission_and_structure.get_children().filter(slug='groups').delete()
+        mission_and_structure.refresh_from_db()
+        groups = self.create_groups_container(mission_and_structure)
+
+        for key, attributes in _groups.items():
+            id_number, description = attributes
+            committee = Committee(title=plone_committees[key].title, slug=key, live=True, id_number=id_number)
+            groups.add_child(instance=committee)
+            committee.save()
+            for doc in [i for i in plone_committees[key].children if i is not None]:
+                doc.install(committee)
+                doc.rewrite_html()
+
+            if key == 'network-consulting-team':
+                pvr = PageViewRestriction(page=committee, restriction_type='groups')
                 pvr.save()
                 pvr.groups.set(Group.objects.filter(name__in=NCT_GROUP_ACCESS), clear=True)
+
+        # for child in [i for i in source.children if i is not None]:
+        #     page = child.install(groups)
+        #     child.rewrite_html()
+        #     self.write_index(page)
+        #     if page.slug == 'network-consulting-team':
+        #         pvr = PageViewRestriction(page=page, restriction_type='groups')
+        #         pvr.save()
+        #         pvr.groups.set(Group.objects.filter(name__in=NCT_GROUP_ACCESS), clear=True)
 
     def handle(self, *args, **options):
         self.stdout.write('Importing Plone "paperless" content')
@@ -154,11 +213,12 @@ class Command(BaseCommand):
             mission_and_structure = FlexPage.objects.filter(slug='mission-and-structure').first()
             assert mission_and_structure is not None
             self.create_groups(home_page, mission_and_structure, plone_groups)
-            self.create_network_consulting_team(home_page, nct)
+            # Then migrate home/steering-committee contents to the Committee obj for steering-committee
+            # self.create_network_consulting_team(home_page, nct)
 
-            groups = FlexPage.objects.filter(title='Groups').first()
-            assert groups is not None
-            self.write_index(groups, '<p>The collaborative groups and commitees of EDRN are listed below:</p>')
+            # groups = FlexPage.objects.filter(title='Groups').first()
+            # assert groups is not None
+            # self.write_index(groups, '<p>The collaborative groups and commitees of EDRN are listed below:</p>')
 
         finally:
             settings.WAGTAILREDIRECTS_AUTO_CREATE = old

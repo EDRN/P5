@@ -3,6 +3,7 @@
 '''💁‍♀️ EDRN Knowledge Environment: models.'''
 
 
+from .committees import CommitteeIndex
 from .knowledge import KnowledgeObject, KnowledgeFolder, RDFSource
 from .publications import Publication, PublicationIndex
 from .bodysystems import BodySystem, BodySystemIndex
@@ -36,6 +37,7 @@ class RDFIngest(BaseSiteSetting):
 __all__ = [
     BodySystem,
     BodySystemIndex,
+    CommitteeIndex,
     DataCollection,
     DataCollectionIndex,
     Disease,

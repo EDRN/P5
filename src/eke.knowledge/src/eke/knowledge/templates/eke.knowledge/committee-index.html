@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags %}
+{# 🔮 TODO: caching #}
+{% block content %}
+    <div class='row'>
+        <div class='col-md-12 pt-3'>
+            <h1>{{page.title}}</h1>
+        </div>
+        <p>These are the working groups, committees, subcommittees, organizational structures, boards, and collaborative groups of the Early Detection Research Network.</p>
+
+        <h2>Collaborative Groups</h2>
+
+        <ul class='list-unstyled'>
+            {% for group in collaborative_groups %}
+                <li><a href='{{group.url}}'>{{group.title}}</a></li>
+            {% empty %}
+                <li class='small'>There are no collaborative groups.</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Other Groups</h2>
+
+        <ul class='list-unstyled'>
+            {% for group in other_groups %}
+                <li><a href='{{group.url}}'>{{group.title}}</a></li>
+            {% empty %}
+                <li class='small'>There are no other groups.</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+{% endblock content %}
+{# -*- Django HTML -*- #}

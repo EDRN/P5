@@ -1,0 +1,22 @@
+{% load wagtailimages_tags %}
+<div class='card col-auto'>
+    <a href='{{url}}'>
+        {% if photo %}
+            {% image photo fill-90x90-c100 as the_photo %}
+            <img
+                src='{{the_photo.url}}' class='card-img-top mt-2'
+                alt='Photograph of {{name}}' width='{{the_photo.width}}'
+            />
+        {% else %}
+            <img
+                src='{{gravatar_url}}' class='card-img-top mt-2'
+                alt='Photograph of {{name}}' width='190'
+            />
+        {% endif %}
+    </a>
+    <div class='card-body'>
+        <h5 class='card-title'>{{name}}</h5>
+        <p class='card-text'>{{title}}</p>
+    </div>
+</div>
+{# -*- Django HTML -*- #}
