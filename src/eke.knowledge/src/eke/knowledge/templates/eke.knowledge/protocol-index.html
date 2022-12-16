@@ -62,7 +62,10 @@
                             '<span title="' + data + '">' + data.substr(0, 195) + '…</span>' : data;
                     }},
                     {data: 'pi_name', render: function(data, type, row) {
-                        return '<a href="' + row['pi_url'] + '">' + data + '</a>';
+                        if (data == null)
+                            return 'UNKNOWN'
+                        else
+                            return '<a href="' + row['pi_url'] + '">' + data + '</a>';
                     }},
                     {data: 'field'},
                     {data: 'cg'}
