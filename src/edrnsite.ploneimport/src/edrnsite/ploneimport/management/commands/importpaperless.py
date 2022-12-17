@@ -6,12 +6,13 @@ from django.conf import settings
 from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand
 from django.db.models.functions import Lower
+from edrn.collabgroups.models import Committee
 from edrnsite.content.models import FlexPage
 from edrnsite.ploneimport.classes import PaperlessExport, PlonePage
 from edrnsite.policy.management.commands.utils import set_site
-from eke.knowledge.models import CommitteeIndex, RDFSource
-from edrn.collabgroups.models import Committee
+from eke.knowledge.models import CommitteeIndex, RDFSource, SiteIndex
 from wagtail.documents.models import Document
+from wagtail.images.models import Image
 from wagtail.models import Page, PageViewRestriction
 from wagtail.rich_text import RichText
 import argparse, pkg_resources
@@ -208,6 +209,25 @@ class Command(BaseCommand):
             page.move(new_steering_committee, pos='last-child')
         site.root_page.get_children().filter(slug='steering-committee').delete()
 
+    def move_rdf_sites(self, site, home_page):
+        FlexPage.objects.filter(slug='sites').delete()
+        sites = SiteIndex.objects.filter(slug='sites-rdf').first()
+        assert sites is not None
+        sites.title, sites.slug = 'Sites', 'sites'
+        sites.save()
+
+    def rewrite_mission_and_structure(self, site, home_page):
+        mas = FlexPage.objects.filter(slug='mission-and-structure').first()
+        assert mas is not None
+        del mas.body[0]
+        body = pkg_resources.resource_string(__name__, 'data/mas.html').decode('utf-8').strip()
+        pks = {
+            'org_chart': Image.objects.filter(title='New Organization Chart').first().pk,
+            'sites': SiteIndex.objects.first().pk,
+        }
+        mas.body.append(('rich_text', RichText(body.format(**pks))))
+        mas.save()
+
     def handle(self, *args, **options):
         self.stdout.write('Importing Plone "paperless" content')
 
@@ -229,6 +249,9 @@ class Command(BaseCommand):
             assert mission_and_structure is not None
             self.create_groups(site, home_page, mission_and_structure, plone_groups)
             self.create_network_consulting_team(home_page, nct)
+            self.move_rdf_sites(site, home_page)
+            self.rewrite_mission_and_structure(site, home_page)
+
         finally:
             settings.WAGTAILREDIRECTS_AUTO_CREATE = old
             settings.WAGTAILSEARCH_BACKENDS['default']['AUTO_UPDATE'] = True

@@ -52,6 +52,9 @@ bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --qu
 ./manage.sh edrnpromotesearch
 ./manage.sh importpaperless ../P5/var/zope-debug/edrn.json ../P5/var/blobstorage
 # shoud do `./manage.sh rdfingest` here too?
+./manage.sh rdfingest
 
-echo '🏁 Done! You can start it with `./manage.sh runserver 6468`'
+echo '🏁 Done! You can start it with:'
+echo './manage.sh runserver 6468'
+
 exit 0
