@@ -38,20 +38,26 @@ _groups = {
     # 'clinical-epidemiology-and-validation-center': (29, None, 'No description available.'),
     # 'jet-propulsion-laboratory': (32, None, 'No description available.'),
     # 'national-cancer-institute': (31, None, 'No description available.'),
+    # 'data-management-and-coordinating-center': (30, None, 'No description available.'),
+    # 'erne-working-group': (10, None, 'No description available.'),
+
 
     'breast-and-gynecologic-cancers-research-group': (14, 'Breast and Gynecologic', 'No description available.'),
-    'collaboration-and-publication-subcommittee': (7, None, '''The objective of the Collaboration and Publication Subcommittee is to define procedures and conditions for formal collaboration within the EDRN and with investigators outside the Network, and defines publication policies.'''),
-    'communication-and-workshop-subcommittee': (6, None, '''The objective of the Communication and Workshop Subcommittee is to achieve the full potential of biomarkers as tools to facilitate early detection of cancer by disseminating research goals and findings with the broader components of the research enterprise. To accomplish this objective, the Communication and Workshop Subcommittee defines formats for exchange of scientific findings such as workshops, seminars, and electronic information resources that serve to inform the research communities of scientific advances.'''),
-    'data-management-and-coordinating-center': (30, None, 'No description available.'),
-    'data-sharing-and-informatics-subcommittee': (8, None, '''The objectives of the Data Sharing and Informatics Subcommittee are to establish guidelines for the EDRN data structure and common data items, and to provide a forum for biostatisticians/analysts within EDRN to collaborate on research pertinent to EDRN.'''),
-    'erne-working-group': (10, None, 'No description available.'),
-    'executive-committee': (2, 'Executive Committee', '''The Executive Committee (EC) consists of a Chair, Chair of the SC, Chairs of Collaborative Groups, at least one Principal Investigator from a BDL, BRL, CEVC, and DMCC (if not represented in the Collaborative Group Chairs), and the NCI Program Coordinator or a designee. The Committee is chaired by the Co-chair of the Steering Committee. The Committee expedites the work of the Steering Committee and assists the Chair of the Steering Committee. It coordinates the administrative and research activities of the EDRN on a regular basis and provides a mechanism for communication on the management of the EDRN. The Committee makes recommendations on major policy issues to the Steering Committee.'''),
     'g-i-and-other-associated-cancers-research-group': (15, 'G.I. and Other Associated', 'No description available.'),
     'lung-and-upper-aerodigestive-cancers-research-group': (16, 'Lung and Upper Aerodigestive', 'No description available.'),
+    'prostate-and-urologic-cancers-research-group': (17, 'Prostate and Urologic', 'No description available.'),
+
+    'executive-committee': (2, 'Executive Committee', '''The Executive Committee (EC) consists of a Chair, Chair of the SC, Chairs of Collaborative Groups, at least one Principal Investigator from a BDL, BRL, CEVC, and DMCC (if not represented in the Collaborative Group Chairs), and the NCI Program Coordinator or a designee. The Committee is chaired by the Co-chair of the Steering Committee. The Committee expedites the work of the Steering Committee and assists the Chair of the Steering Committee. It coordinates the administrative and research activities of the EDRN on a regular basis and provides a mechanism for communication on the management of the EDRN. The Committee makes recommendations on major policy issues to the Steering Committee.'''),
     'network-consulting-team': (3, None, '''The Network Consulting Team (NCT) is composed of a Chair and non-EDRN members appointed by NCI. The NCT reviews the progress of the EDRN, recommends new research initiatives, and ensures that the Network is responsive to promising opportunities in early detection research and risk assessment. The number and composition of members is not fixed. The NCT has access to all EDRN research information including Progress Reports provided by individual investigators. The NCT can recommend new research projects to the Steering Committee or to NCI. Members of the Network Consulting Team can serve on ad-hoc Committees of the EDRN, Review Groups, and as consultants to Subcommittees. Members of the Network Consulting Team cannot apply for Associate Membership. Associate Members cannot serve on the Network Consulting Team. The NCT meets at least once a year.'''),
     'prioritization-subcommittee': (4, None, '''The objective of the Prioritization Subcommittee is to establish procedures for prioritizing research and allocating resources within the Network.'''),
-    'prostate-and-urologic-cancers-research-group': (17, 'Prostate and Urologic', 'No description available.'),
     'technology-and-resource-sharing-subcommittee': (5, None, '''The objective of the Technology and Resource Sharing Subcommittee is to establish the rationale and conditions for sharing technology and other resources among investigators within and external to the EDRN.'''),
+    'communication-and-workshop-subcommittee': (6, None, '''The objective of the Communication and Workshop Subcommittee is to achieve the full potential of biomarkers as tools to facilitate early detection of cancer by disseminating research goals and findings with the broader components of the research enterprise. To accomplish this objective, the Communication and Workshop Subcommittee defines formats for exchange of scientific findings such as workshops, seminars, and electronic information resources that serve to inform the research communities of scientific advances.'''),
+    'collaboration-and-publication-subcommittee': (7, None, '''The objective of the Collaboration and Publication Subcommittee is to define procedures and conditions for formal collaboration within the EDRN and with investigators outside the Network, and defines publication policies.'''),
+    'data-sharing-and-informatics-subcommittee': (8, None, '''The objectives of the Data Sharing and Informatics Subcommittee are to establish guidelines for the EDRN data structure and common data items, and to provide a forum for biostatisticians/analysts within EDRN to collaborate on research pertinent to EDRN.'''),
+
+    'standing-review-group': (-1, None, '''The Standing Review Group is responsible for reviewing Associate Membership applications. Members are nominated by the Chairs of the Collaborative Groups and the Prioritization Subcommittee and appointed by the Chair of the SC. The Group consists of one Principal Investigator from a BDL, one Principal Investigator from a CEVC, one Principal Investigator from a BRL, the Principal Investigator or designee from the DMCC, and two members appointed by the Chair of the EDRN SC. Additional EDRN and non-EDRN consultants can be added at the discretion of the EC. Details on the application and review processes are under the ‘Policies and Procedures’ section of this manual. Term of office is 2.5 years with eligibility for reappointment for one additional term (for a total of 5 yrs).'''),
+    'statistical-review-group': (-1, None, 'No description available.'),
+    'reference-set-working-group': (-1, None, 'No description available.'),
 }
 
 
@@ -64,11 +70,11 @@ class Command(BaseCommand):
 
     def write_index(self, page: FlexPage, custom_label='<p>This group contains the following itesm:</p>'):
         if page.get_children().count() == 0:
-            page.body.append(('rich_text', RichText('<p>There are no items in this group.</p>')))
+            page.body.append(('rich_text', RichText('<p>There are no items.</p>')))
         else:
             page.body.append(('rich_text', RichText(custom_label)))
             text = '<ul class="list-unstyled">'
-            for child in page.get_children().order_by(Lower('title')):
+            for child in page.get_children().order_by(Lower('title')).order_by('-last_published_at'):
                 text += f'<li><a id="{child.pk}" linktype="page">{child.title}</a></li>'
             text += '</ul>'
             page.body.append(('rich_text', RichText(text)))
@@ -177,15 +183,33 @@ class Command(BaseCommand):
         groups = self.create_groups_container(mission_and_structure)
         for key, attributes in _groups.items():
             id_number, ldap_group, description = attributes
-            committee = Committee(
-                title=plone_committees[key].title, slug=key, live=True, id_number=id_number,
-                description=description
-            )
-            groups.add_child(instance=committee)
-            committee.save()
-            for doc in [i for i in plone_committees[key].children if i is not None]:
-                doc.install(committee)
-                doc.rewrite_html()
+            if key in plone_committees:
+                # Old commitee from Plone
+                committee = Committee(
+                    title=plone_committees[key].title, slug=key, live=True, id_number=id_number,
+                    description=description
+                )
+                groups.add_child(instance=committee)
+                committee.save()
+
+                if key.endswith('cancers-research-group'):
+                    archive = self.create_folder(committee, 'Archived Documents')
+                else:
+                    archive = committee
+                for doc in [i for i in plone_committees[key].children if i is not None]:
+                    doc.install(archive)
+                    doc.rewrite_html()
+                if key.endswith('cancers-research-group'):
+                    self.write_index(archive, '<p>The following documents are archived in this folder:</p>')
+
+            else:
+                # New commitee
+                committee = Committee(
+                    title=' '.join([i.title() for i in key.split('-')]), slug=key, live=True, id_number=id_number,
+                    description=description
+                )
+                groups.add_child(instance=committee)
+                committee.save()
 
             if key == 'network-consulting-team':
                 pvr = PageViewRestriction(page=committee, restriction_type='groups')
@@ -221,9 +245,13 @@ class Command(BaseCommand):
         assert mas is not None
         del mas.body[0]
         body = pkg_resources.resource_string(__name__, 'data/mas.html').decode('utf-8').strip()
+        groups = mas.get_children().filter(slug='groups').first()
+        assert groups is not None
         pks = {
             'org_chart': Image.objects.filter(title='New Organization Chart').first().pk,
             'sites': SiteIndex.objects.first().pk,
+            'groups': groups.pk,
+            'sc': groups.get_children().filter(title='Steering Committee').first().pk,
         }
         mas.body.append(('rich_text', RichText(body.format(**pks))))
         mas.save()

@@ -62,13 +62,13 @@
         <div class='col-md-2'>
             {% if page.chair %}
                 <h4>Chair</h4>
-                {% chair_card page.chair %}
+                <p><a href='{{page.chair.url}}'>{{page.chair.title}}</a></p>
             {% else %}
                 <p class='small'>No chairperson</p>
             {% endif %}
             {% if page.co_chair %}
                 <h4 class='mt-2'>Co-Chair</h4>
-                {% chair_card page.co_chair %}
+                <p><a href='{{page.co_chair.url}}'>{{page.co_chair.title}}</a></p>
             {% else %}
                 <p class='small'>No co-chair</p>
             {% endif %}
