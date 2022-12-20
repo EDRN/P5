@@ -3,7 +3,7 @@
 '''🧬 EDRN Site: development reset.'''
 
 from django.core.management.base import BaseCommand
-from edrnsite.controls.models import Informatics
+from edrnsite.controls.models import Informatics, AnalyticsSnippet
 from wagtail.models import Site
 from robots.models import Rule, DisallowedUrl
 
@@ -21,6 +21,8 @@ class Command(BaseCommand):
         informatics = Informatics.for_site(site)
         informatics.in_development = True
         informatics.save()
+
+        AnalyticsSnippet.objects.all().delete()
 
         Rule.objects.filter(sites=site).delete()
         rule = Rule(robot='*')
