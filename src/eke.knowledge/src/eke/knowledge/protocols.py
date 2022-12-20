@@ -191,7 +191,8 @@ class Protocol(KnowledgeObject):
             'pi_name': pi_name,
             'pi_url': pi_url,
             'field': self.fieldOfResearch,
-            'diseases': ', '.join([str(i) for i in self.cancer_types.values_list('title', flat=True).order_by('title')]),
+            # Turned off for #190
+            # 'diseases': ', '.join([str(i) for i in self.cancer_types.values_list('title', flat=True).order_by('title')]),
             'cg': cg,
             **super().data_table()
         }
