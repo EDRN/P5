@@ -24,6 +24,7 @@
                             <th class='only-search-col'>Abstract</th>
                             <th>PI</th>
                             <th>Field</th>
+                            <th>Diseases Studied</th>
                             <th>Collab. Group</th>
                         </tr>
                     </thead>
@@ -33,6 +34,7 @@
                             <th>Abstract</th>
                             <th>PI</th>
                             <th>Field</th>
+                            <th>Diseases Studied</th>
                             <th>Collab. Group</th>
                         </tr>
                     </tfoot>
@@ -68,6 +70,7 @@
                             return '<a href="' + row['pi_url'] + '">' + data + '</a>';
                     }},
                     {data: 'field'},
+                    {data: 'diseases'},
                     {data: 'cg'}
                 ],
                 fixedHeader: true,
@@ -75,7 +78,7 @@
                 dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>B",
                 initComplete: function() {
-                    this.api().columns([2, 3, 4]).every(function() {
+                    this.api().columns([2, 3, 5]).every(function() {
                         var column = this;
                         var label = this.footer().innerHTML;
                         var select = $('<select><option value="">— ' + label + ' —</option></select>')

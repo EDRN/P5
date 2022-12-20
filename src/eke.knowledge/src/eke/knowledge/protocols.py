@@ -185,8 +185,16 @@ class Protocol(KnowledgeObject):
             pi_url = pi_name = None
 
         cg = self.collaborativeGroup.split(' ')[0] if self.collaborativeGroup else 'UNKNOWN'
+        if cg == 'Breast': cg = 'Breast/Gyn'
 
-        return {'pi_name': pi_name, 'pi_url': pi_url, 'field': self.fieldOfResearch, 'cg': cg, **super().data_table()}
+        return {
+            'pi_name': pi_name,
+            'pi_url': pi_url,
+            'field': self.fieldOfResearch,
+            'diseases': ', '.join([str(i) for i in self.cancer_types.values_list('title', flat=True).order_by('title')]),
+            'cg': cg,
+            **super().data_table()
+        }
 
 
 # 🤬 Get bent
@@ -340,21 +348,24 @@ class ProtocolIndex(KnowledgeFolder):
             fields_frame, values='Count', names='Field', title='Fields of Research', color_discrete_sequence=palette,
             width=400
         )
-        fields_figure.update_traces(hoverinfo='skip', hovertemplate=None)
+        # Why did I do this? Turn it back on #190
+        # fields_figure.update_traces(hoverinfo='skip', hovertemplate=None)
         fields_figure.update_layout(showlegend=False, margin=dict(l=20, r=20, t=40, b=20))
 
         groups_figure = plotly.express.pie(
             groups_frame, values='Count', names='Group', title='Collaborative Groups', color_discrete_sequence=palette,
             width=400
         )
-        groups_figure.update_traces(hoverinfo='skip', hovertemplate=None)
+        # Why did I do this? Turn it back on #190
+        # groups_figure.update_traces(hoverinfo='skip', hovertemplate=None)
         groups_figure.update_layout(showlegend=False, margin=dict(l=20, r=20, t=40, b=20))
 
         diseases_figure = plotly.express.pie(
             diseases_frame, values='Count', names='Disease', title='Diseases Studied', color_discrete_sequence=palette,
             width=400
         )
-        diseases_figure.update_traces(hoverinfo='skip', hovertemplate=None)
+        # Why did I do this? Turn it back on #190
+        # diseases_figure.update_traces(hoverinfo='skip', hovertemplate=None)
         diseases_figure.update_layout(showlegend=False, margin=dict(l=20, r=20, t=40, b=20))
 
         app = DjangoDash('ProtocolDashboard')  # ← referenced in protocol-index.html
