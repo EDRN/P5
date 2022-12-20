@@ -338,11 +338,12 @@ class ProtocolIndex(KnowledgeFolder):
         groups_frame = pandas.DataFrame({'Group': groups, 'Count': amounts})
         groups_legend = ghetto_plotly_legend([i[0] for i in c.most_common()], palette)
 
-        c = collections.Counter(matches.values_list('cancer_types', flat=True))
-        diseases = [Disease.objects.filter(pk=i[0]).first().title for i in c.most_common() if i[0] is not None]
-        amounts = [i[1] for i in c.items() if i[0] is not None]
-        diseases_frame = pandas.DataFrame({'Disease': diseases, 'Count': amounts})
-        diseases_legend = ghetto_plotly_legend(diseases, palette)
+        # #189: turn off for now
+        # c = collections.Counter(matches.values_list('cancer_types', flat=True))
+        # diseases = [Disease.objects.filter(pk=i[0]).first().title for i in c.most_common() if i[0] is not None]
+        # amounts = [i[1] for i in c.items() if i[0] is not None]
+        # diseases_frame = pandas.DataFrame({'Disease': diseases, 'Count': amounts})
+        # diseases_legend = ghetto_plotly_legend(diseases, palette)
 
         fields_figure = plotly.express.pie(
             fields_frame, values='Count', names='Field', title='Fields of Research', color_discrete_sequence=palette,
@@ -360,29 +361,31 @@ class ProtocolIndex(KnowledgeFolder):
         # groups_figure.update_traces(hoverinfo='skip', hovertemplate=None)
         groups_figure.update_layout(showlegend=False, margin=dict(l=20, r=20, t=40, b=20))
 
-        diseases_figure = plotly.express.pie(
-            diseases_frame, values='Count', names='Disease', title='Diseases Studied', color_discrete_sequence=palette,
-            width=400
-        )
+        # #189: turn off for now
+        # diseases_figure = plotly.express.pie(
+        #     diseases_frame, values='Count', names='Disease', title='Diseases Studied', color_discrete_sequence=palette,
+        #     width=400
+        # )
         # Why did I do this? Turn it back on #190
         # diseases_figure.update_traces(hoverinfo='skip', hovertemplate=None)
-        diseases_figure.update_layout(showlegend=False, margin=dict(l=20, r=20, t=40, b=20))
+        # diseases_figure.update_layout(showlegend=False, margin=dict(l=20, r=20, t=40, b=20))
 
         app = DjangoDash('ProtocolDashboard')  # ← referenced in protocol-index.html
         app.layout = html.Div(className='container', children=[
             html.Div(className='row', children=[
-                html.Div(className='col-md-4', children=[
+                html.Div(className='col-md-6', children=[  # changed ``col-md-4`` → ``col-md-6`` for #189
                     dcc.Graph(id='fields-of-research', figure=fields_figure),
                     DangerouslySetInnerHTML(fields_legend),
                 ]),
-                html.Div(className='col-md-4', children=[
+                html.Div(className='col-md-6', children=[  # changed ``col-md-4`` → ``col-md-6`` for #189
                     dcc.Graph(id='collaborative-groups', figure=groups_figure),
                     DangerouslySetInnerHTML(groups_legend),
                 ]),
-                html.Div(className='col-md-4', children=[
-                    dcc.Graph(id='diseases', figure=diseases_figure),
-                    DangerouslySetInnerHTML(diseases_legend),
-                ]),
+                # #189 turn off for now
+                # html.Div(className='col-md-4', children=[
+                #     dcc.Graph(id='diseases', figure=diseases_figure),
+                #     DangerouslySetInnerHTML(diseases_legend),
+                # ]),
             ]),
         ])
         return context
