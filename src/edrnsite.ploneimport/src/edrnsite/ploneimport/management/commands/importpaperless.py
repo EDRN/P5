@@ -4,6 +4,7 @@
 
 from django.conf import settings
 from django.contrib.auth.models import Group
+from django.core.cache import caches
 from django.core.management.base import BaseCommand
 from django.db.models.functions import Lower
 from edrn.collabgroups.models import Committee
@@ -280,6 +281,21 @@ class Command(BaseCommand):
             self.move_rdf_sites(site, home_page)
             self.rewrite_mission_and_structure(site, home_page)
 
+            # Finally fix the home page
+            sites = Page.objects.filter(title='Sites').first()
+            assert sites is not None
+            groups = Page.objects.filter(title='Committees and Collaborative Groups').first()
+            assert groups is not None
+            home_page.body[-1].value['cards'][-1]['links'][-1]['internal_page'] = sites
+            home_page.body[-1].value['cards'][-1]['links'].append({
+                'link_text': 'Committees and Working Groups', 'internal_page': groups
+            })
+            home_page.body[-1].value['cards'][-1]['links'].append({
+                'link_text': 'Member Finder', 'view_name': 'find-members'
+            })
+            home_page.save()
+            for cache in caches:
+                caches[cache].clear()
         finally:
             settings.WAGTAILREDIRECTS_AUTO_CREATE = old
             settings.WAGTAILSEARCH_BACKENDS['default']['AUTO_UPDATE'] = True
