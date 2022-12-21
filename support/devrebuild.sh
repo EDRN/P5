@@ -48,13 +48,14 @@ scp tumor.jpl.nasa.gov:/usr/local/edrn/portal/ops-nci/edrn.sql.bz2 .
 bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --quiet
 ./manage.sh makemigrations
 ./manage.sh migrate
-./manage.sh rebuild_references_index
 ./manage.sh collectstatic --no-input --clear --link
 ./manage.sh edrndevreset
 ./manage.sh edrnpromotesearch
 ./manage.sh importpaperless ../P5/var/zope-debug/edrn.json ../P5/var/blobstorage
 # shoud do `./manage.sh rdfingest` here too?
 ./manage.sh rdfingest
+# This takes a fair bit of time too:
+./manage.sh rebuild_references_index
 
 echo '🏁 Done! You can start it with:'
 echo './manage.sh runserver 6468'

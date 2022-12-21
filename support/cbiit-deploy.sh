@@ -112,12 +112,12 @@ bzip2 --decompress --stdout edrn.sql.bz2 | \
     docker compose --project-name edrn exec db psql --dbname=edrn --echo-errors --quiet &&\
 docker compose --project-name edrn exec portal django-admin makemigrations &&\
 docker compose --project-name edrn exec portal django-admin migrate &&\
-docker compose --project-name edrn exec portal django-admin rebuild_references_index &&\
 docker compose --project-name edrn exec portal django-admin collectstatic --no-input --clear &&\
 docker compose --project-name edrn exec portal django-admin edrndevreset &&\
 docker compose --project-name edrn exec portal django-admin edrnpromotesearch &&\
 docker compose --project-name edrn run --volume $WEBROOT/../exports:/mnt/zope --volume $WEBROOT/../blobstorage:/mnt/blobs \
-    --entrypoint /usr/bin/django-admin --no-deps portal importpaperless /mnt/zope/edrn.json /mnt/blobs" || exit 1
+    --entrypoint /usr/bin/django-admin --no-deps portal importpaperless /mnt/zope/edrn.json /mnt/blobs &&\
+docker compose --project-name edrn exec portal django-admin rebuild_references_index" || exit 1
 
 # Disabling for now; can do this TTW
 #
