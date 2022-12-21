@@ -42,7 +42,8 @@ trap 'echo "😲 Interrupted" 1>&2; exit 1' SIGINT
 echo "🏃‍♀️Here we go"
 dropdb --force --if-exists "edrn"
 createdb "edrn" 'P5 for the Early Detection Research Network'
-rsync --no-motd --recursive --delete --progress tumor.jpl.nasa.gov:/usr/local/edrn/portal/ops-nci/media .
+# Must use --checksum here because the nightly refresh from NCI to tumor munges all the timestamps
+rsync --checksum --no-motd --recursive --delete --progress tumor.jpl.nasa.gov:/usr/local/edrn/portal/ops-nci/media .
 scp tumor.jpl.nasa.gov:/usr/local/edrn/portal/ops-nci/edrn.sql.bz2 .
 bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --quiet
 ./manage.sh makemigrations
