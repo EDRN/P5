@@ -294,6 +294,21 @@ class Command(BaseCommand):
                 'link_text': 'Member Finder', 'view_name': 'find-members'
             })
             home_page.save()
+
+            # And the "About" section page
+            about = Page.objects.filter(slug='about-edrn').first().specific
+            assert about is not None
+            about.body[-1].value['cards'][-1]['page'] = sites
+            about.body[-1].value['cards'][-1]['links'].append({
+                'link_text': 'Also try the Member Finder', 'view_name': 'find-members'
+            })
+            about.body[-1].value['cards'].append({
+                'title': 'Committees', 'style': 'navy', 'page': groups,
+                'description': RichText(
+                    '<p>Working groups, committees, sub-committees, and other people getting things done.</p>'
+                )
+            })
+            about.save()
             for cache in caches:
                 caches[cache].clear()
         finally:
