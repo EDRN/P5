@@ -112,6 +112,7 @@ bzip2 --decompress --stdout edrn.sql.bz2 | \
     docker compose --project-name edrn exec db psql --dbname=edrn --echo-errors --quiet &&\
 docker compose --project-name edrn exec portal django-admin makemigrations &&\
 docker compose --project-name edrn exec portal django-admin migrate &&\
+docker compose --project-name edrn exec portal django-admin rebuild_references_index &&\
 docker compose --project-name edrn exec portal django-admin collectstatic --no-input --clear &&\
 docker compose --project-name edrn exec portal django-admin edrndevreset &&\
 docker compose --project-name edrn exec portal django-admin edrnpromotesearch &&\

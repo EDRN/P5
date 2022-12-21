@@ -42,11 +42,12 @@ trap 'echo "😲 Interrupted" 1>&2; exit 1' SIGINT
 echo "🏃‍♀️Here we go"
 dropdb --force --if-exists "edrn"
 createdb "edrn" 'P5 for the Early Detection Research Network'
-rsync -cr --progress tumor.jpl.nasa.gov:/usr/local/edrn/portal/ops-nci/media .
+rsync --no-motd --recursive --delete --progress tumor.jpl.nasa.gov:/usr/local/edrn/portal/ops-nci/media .
 scp tumor.jpl.nasa.gov:/usr/local/edrn/portal/ops-nci/edrn.sql.bz2 .
 bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --quiet
 ./manage.sh makemigrations
 ./manage.sh migrate
+./manage.sh rebuild_references_index
 ./manage.sh collectstatic --no-input --clear --link
 ./manage.sh edrndevreset
 ./manage.sh edrnpromotesearch
