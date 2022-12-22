@@ -7,12 +7,14 @@
 ._*
 .DS_Store
 .idea/
+.venv
 _build
 bin
 build
 compose.sh
 develop-eggs
 dist
+edrn.sql.bz2
 eggs
 group-export
 MASTER-PACKAGE
@@ -26,4 +28,3 @@ typescript
 var
 venv
 zexp-exports
-edrn.sql.bz2

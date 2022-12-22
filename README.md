@@ -21,22 +21,22 @@ $ createdb edrn
 This has to be done just for the first time—or if you ever get rid of the database with `dropdb edrn`. Then, set up the software and database schema and content:
 
 ```console
-$ python3 -m venv venv
-$ venv/bin/pip install --quiet --upgrade pip setuptools wheel build
-$ venv/bin/pip install --editable 'src/eke.geocoding[dev]'
-$ venv/bin/pip install --editable 'src/edrnsite.streams[dev]'
-$ venv/bin/pip install --editable 'src/edrnsite.controls[dev]'
-$ venv/bin/pip install --editable 'src/edrnsite.content[dev]'
-$ venv/bin/pip install --editable 'src/edrn.auth[dev]'
-$ venv/bin/pip install --editable 'src/edrn.collabgroups[dev]'
-$ venv/bin/pip install --editable 'src/eke.knowledge[dev]'
-$ venv/bin/pip install --editable 'src/eke.biomarkers[dev]'
-$ venv/bin/pip install --editable 'src/edrnsite.search[dev]'
-$ venv/bin/pip install --editable 'src/edrn.theme[dev]'
-$ venv/bin/pip install --editable 'src/edrnsite.ploneimport[dev]'
-$ venv/bin/pip install --editable 'src/edrnsite.policy[dev]'
-$ venv/bin/django-admin migrate --pythonpath . --settings local
-$ venv/bin/django-admin createsuperuser --pythonpath . --settings local --username root --email edrn-ic@jpl.nasa.gov
+$ python3 -m venv .venv
+$ .venv/bin/pip install --quiet --upgrade pip setuptools wheel build
+$ .venv/bin/pip install --editable 'src/eke.geocoding[dev]'
+$ .venv/bin/pip install --editable 'src/edrnsite.streams[dev]'
+$ .venv/bin/pip install --editable 'src/edrnsite.controls[dev]'
+$ .venv/bin/pip install --editable 'src/edrnsite.content[dev]'
+$ .venv/bin/pip install --editable 'src/edrn.auth[dev]'
+$ .venv/bin/pip install --editable 'src/edrn.collabgroups[dev]'
+$ .venv/bin/pip install --editable 'src/eke.knowledge[dev]'
+$ .venv/bin/pip install --editable 'src/eke.biomarkers[dev]'
+$ .venv/bin/pip install --editable 'src/edrnsite.search[dev]'
+$ .venv/bin/pip install --editable 'src/edrn.theme[dev]'
+$ .venv/bin/pip install --editable 'src/edrnsite.ploneimport[dev]'
+$ .venv/bin/pip install --editable 'src/edrnsite.policy[dev]'
+$ .venv/bin/django-admin migrate --pythonpath . --settings local
+$ .venv/bin/django-admin createsuperuser --pythonpath . --settings local --username root --email edrn-ic@jpl.nasa.gov
 ```
 
 When prompted for a password, enter a suitably secure root-level password for the Django super user (twice).
@@ -46,7 +46,7 @@ When prompted for a password, enter a suitably secure root-level password for th
 Then, to run a local server so you can point your browser at http://localhost:8000/ simply do:
 
 ```console
-$ venv/bin/django-admin runserver --pythonpath . --settings local
+$ .venv/bin/django-admin runserver --pythonpath . --settings local
 ```
 
 You can also visit the Wagtail admin at http://localhost:8000/admin/ and the Django admin at http://localhost:8000/django-admin/
@@ -54,7 +54,7 @@ You can also visit the Wagtail admin at http://localhost:8000/admin/ and the Dja
 To see all the commands besides `runserver` and `migrate` that Django supports:
 
 ```console
-$ venv/bin/django-admin help --pythonpath . --settings local
+$ .venv/bin/django-admin help --pythonpath . --settings local
 ```
 
 
@@ -149,18 +149,18 @@ To use this software in a [Docker](https://docker.com/) container environment, f
 
 Or by hand:
 
-    venv/bin/python -m build --outdir dist src/eke.geocoding
-    venv/bin/python -m build --outdir dist src/edrnsite.streams
-    venv/bin/python -m build --outdir dist src/edrnsite.controls
-    venv/bin/python -m build --outdir dist src/edrnsite.content
-    venv/bin/python -m build --outdir dist src/edrn.collabgroups
-    venv/bin/python -m build --outdir dist src/edrn.auth
-    venv/bin/python -m build --outdir dist src/edrn.theme
-    venv/bin/python -m build --outdir dist src/edrnsite.search
-    venv/bin/python -m build --outdir dist src/eke.knowledge
-    venv/bin/python -m build --outdir dist src/eke.biomarkers
-    venv/bin/python -m build --outdir dist src/edrnsite.ploneimport
-    venv/bin/python -m build --outdir dist src/edrnsite.policy
+    .venv/bin/python -m build --outdir dist src/eke.geocoding
+    .venv/bin/python -m build --outdir dist src/edrnsite.streams
+    .venv/bin/python -m build --outdir dist src/edrnsite.controls
+    .venv/bin/python -m build --outdir dist src/edrnsite.content
+    .venv/bin/python -m build --outdir dist src/edrn.collabgroups
+    .venv/bin/python -m build --outdir dist src/edrn.auth
+    .venv/bin/python -m build --outdir dist src/edrn.theme
+    .venv/bin/python -m build --outdir dist src/edrnsite.search
+    .venv/bin/python -m build --outdir dist src/eke.knowledge
+    .venv/bin/python -m build --outdir dist src/eke.biomarkers
+    .venv/bin/python -m build --outdir dist src/edrnsite.ploneimport
+    .venv/bin/python -m build --outdir dist src/edrnsite.policy
 
 Repeat this for any other source directory in `src`. Then build the image:
 

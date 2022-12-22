@@ -20,7 +20,8 @@
             "media",
             "build",
             "./static",
-            "xxx"
+            "xxx",
+            ".venv"
          ],
          "path" : "."
       }
