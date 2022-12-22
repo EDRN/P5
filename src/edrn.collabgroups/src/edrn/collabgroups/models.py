@@ -5,7 +5,6 @@
 from datetime import datetime, timezone
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.db.models.functions import Lower
 from django.http import HttpRequest
 from edrnsite.content.models import FlexPage
 from edrnsite.streams import blocks
@@ -144,7 +143,7 @@ class Committee(Page):
         assert event_content_type is not None
 
         context = super().get_context(request, *args, **kwargs)
-        context['members'] = self.members.all().order_by(Lower('title'))
+        context['members'] = self.members.all().order_by('title')
 
         now = aware_now()
         future = CommitteeEvent.objects.child_of(self).filter(when__gte=now).live().order_by('-when')

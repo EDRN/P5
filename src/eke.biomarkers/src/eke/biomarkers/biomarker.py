@@ -44,21 +44,21 @@ class ResearchedObject(models.Model):
     )
     @property
     def sorted_publications(self):
-        return self.publications.order_by(Lower('title'))
+        return self.publications.order_by('title')
     resources = ParentalManyToManyField(
         MiscellaneousResource, blank=True, verbose_name='Resource Useful for this Biomarker',
         related_name='%(app_label)s_%(class)s_using_resources'
     )
     @property
     def sorted_resources(self):
-        return self.resources.order_by(Lower('title'))
+        return self.resources.order_by('title')
     science_data = ParentalManyToManyField(
         DataCollection, blank=True, verbose_name='Scientific Data About this Biomarker',
         related_name='%(app_label)s_%(class)s_observed'
     )
     @property
     def sorted_science_data(self):
-        return self.science_data.order_by(Lower('title'))
+        return self.science_data.order_by('title')
     content_panels = [
         FieldPanel('publications'), FieldPanel('resources'), FieldPanel('science_data')
     ]
@@ -101,7 +101,7 @@ class Biomarker(KnowledgeObject, QualityAssuredObject, ResearchedObject):
     )
     @property
     def sorted_protocols(self):
-        return self.protocols.order_by(Lower('title'))
+        return self.protocols.order_by('title')
     members = ParentalManyToManyField('self', blank=True, verbose_name='Panel Members')
     content_panels = KnowledgeObject.content_panels + QualityAssuredObject.content_panels + ResearchedObject.content_panels + [
         FieldPanel('protocols'),
@@ -226,7 +226,7 @@ class BiomarkerBodySystem(ResearchedObject, PhasedObject, QualityAssuredObject, 
     ]
     @property
     def sorted_studies(self):
-        return self.body_system_studies.all().order_by(Lower('title'))
+        return self.body_system_studies.all().order_by('title')
     def __str__(self):
         return self.title
     class RDFMeta:

@@ -70,6 +70,7 @@ class DataStatistic(KnowledgeObject):
 class DataCollection(KnowledgeObject):
     '''Corresponds to a single collection of data in LabCAS.'''
     parent_page_types = ['ekeknowledge.DataCollectionIndex']
+    preview_modes = []
     generating_protocol = models.ForeignKey(
         Protocol, null=True, blank=True, verbose_name='Protocol that produced this data',
         related_name='generated_data_collections', on_delete=models.SET_NULL
