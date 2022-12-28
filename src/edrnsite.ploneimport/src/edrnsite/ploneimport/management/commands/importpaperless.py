@@ -284,6 +284,8 @@ class Command(BaseCommand):
             # Finally fix the home page
             sites = Page.objects.filter(title='Sites').first()
             assert sites is not None
+            sites.show_in_menus = True
+            sites.save()
             groups = Page.objects.filter(title='Committees and Collaborative Groups').first()
             assert groups is not None
             home_page.body[-1].value['cards'][-1]['links'][-1]['internal_page'] = sites
