@@ -128,6 +128,7 @@ RUN \
     /sbin/apk del --quiet /edrn-build &&\
     /bin/rm -rf /app/wheels &&\
     /bin/rm -rf /var/cache/apk/* &&\
+    /bin/chown -R edrn:edrn /usr/lib/python3.*/site-packages &&\
     :
 
 COPY --chown=edrn:edrn docker/*.py /app/
