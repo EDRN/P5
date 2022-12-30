@@ -42,14 +42,16 @@ source=https://edrn.nci.nih.gov/database-access
 echo "📈 Retrieving database" 1>&2
 rm -f "edrn.sql.bz2"
 wget \
-    --quiet \
     --execute robots=off \
     --timestamping \
     --no-check-certificate \
     --user="$NIH_USERNAME" \
     --password="$NIH_PASSWORD" \
     "$source/edrn.sql.bz2"
-
+if [ \! -f "edrn.sql.bz2" ]; then
+    echo "Failed to get $source/edrn.sql.bz2" 1>&2
+    exit 1
+fi
 
 # Media Blobs
 # -----------
