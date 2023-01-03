@@ -70,6 +70,9 @@ class FlexPage(MetadataPageMixin, Page):
     content_panels = Page.content_panels + [
         FieldPanel('body')
     ]
+    search_fields = Page.search_fields + [
+        index.SearchField('body'),
+    ]
     class Meta(object):
         verbose_name = 'web page'
         verbose_name_plural = 'web pages'
