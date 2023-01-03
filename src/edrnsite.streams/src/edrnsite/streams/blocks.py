@@ -4,10 +4,12 @@
 
 
 from django.forms.utils import ErrorList
+from django.utils.html import format_html
 from wagtail.blocks.struct_block import StructBlockValidationError
+from wagtail.contrib.table_block.blocks import TableBlock as BaseTableBlock
+from wagtail.contrib.typed_table_block.blocks import TypedTableBlock as BaseTypedTableBlock
 from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
-from wagtail.contrib.table_block.blocks import TableBlock as BaseTableBlock
 
 
 class TitleBlock(blocks.StructBlock):
@@ -120,9 +122,28 @@ class CardsBlock(blocks.StructBlock):
 
 
 class TableBlock(BaseTableBlock):
-    '''A table to appear in the EDRN site.'''
+    '''A basic table to appear in the EDRN site.'''
     class Meta(object):
         template = 'edrnsite.streams/table-block.html'
+        icon = 'table'
+        label = 'Basic (Plain Text) Table'
+
+
+class TypedTableBlock(BaseTypedTableBlock):
+    '''A more advanced table to appear in the EDRN site.'''
+    class Meta(object):
+        template = 'edrnsite.streams/typed-table-block.html'
+        icon = 'table'
+        label = 'Advanced Table'
+
+
+class BlockQuoteBlock(blocks.BlockQuoteBlock):
+    '''Override Wagtail's own BlockQuoteBlock so we can use Bootstrap styling.'''
+    def render_basic(self, value, context=None):
+        if value:
+            return format_html('<blockquote class="blockquote">{0}</blockquote>', value)
+        else:
+            return ''
 
 
 # 🔮 Postpone this for now
