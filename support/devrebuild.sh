@@ -53,6 +53,7 @@ bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --qu
 ./manage.sh edrnpromotesearch
 ./manage.sh importpaperless ../P5/var/zope-debug/edrn.json ../P5/var/blobstorage
 ./manage.sh translatetables
+./manage.sh rewritereferencesets
 # shoud do `./manage.sh rdfingest` here too?
 ./manage.sh rdfingest
 # This takes a fair bit of time too:
