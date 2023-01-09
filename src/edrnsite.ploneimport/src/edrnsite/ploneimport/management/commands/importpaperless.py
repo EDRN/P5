@@ -69,7 +69,7 @@ class Command(BaseCommand):
         parser.add_argument('content-file', type=argparse.FileType('r'), help='Plone export ``edrn.json`` file')
         parser.add_argument('blobstorage-dir', help='Zope blobstorage directory')
 
-    def write_index(self, page: FlexPage, custom_label='<p>This group contains the following itesm:</p>'):
+    def write_index(self, page: FlexPage, custom_label='<p>This group contains the following items:</p>'):
         if page.get_children().count() == 0:
             page.body.append(('rich_text', RichText('<p>There are no items.</p>')))
         else:

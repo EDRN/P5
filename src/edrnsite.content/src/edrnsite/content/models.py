@@ -57,13 +57,7 @@ class FlexPage(MetadataPageMixin, Page):
         ('cards', blocks.CardsBlock()),
         ('table', blocks.TableBlock()),
         ('block_quote', blocks.BlockQuoteBlock(help_text='Block quote')),
-        ('typed_table', blocks.TypedTableBlock([
-            ('text', wagtail_core_blocks.CharBlock(help_text='Plain text cell')),
-            ('rich_text', wagtail_core_blocks.RichTextBlock(help_text='Rich text cell')),
-            ('numeric', wagtail_core_blocks.FloatBlock(help_text='Numeric cell')),
-            ('integer', wagtail_core_blocks.IntegerBlock(help_text='Integer cell')),
-            ('page', wagtail_core_blocks.PageChooserBlock(help_text='Page within the site')),
-        ])),
+        ('typed_table', blocks.TYPED_TABLE_BLOCK),
         ('carousel', blocks.CarouselBlock()),
         ('raw_html', wagtail_core_blocks.RawHTMLBlock(help_text='Raw HTML (use with care)')),
     ], null=True, blank=True, use_json_field=True)
