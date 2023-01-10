@@ -39,6 +39,7 @@ class CommitteeEvent(Page):
     template = 'edrn.collabgroups/committee-event.html'
     search_auto_update = False
     parent_page_types = ['edrncollabgroups.Committee']
+    page_description = 'Event for a committee'
     subpage_types = []
 
     LOS_ANGELES = 'America/Los_Angeles'
@@ -113,7 +114,8 @@ class Committee(Page):
     template = 'edrn.collabgroups/committee.html'
     search_auto_update = False
     subpage_types = [FlexPage, CommitteeEvent]
-
+    page_description = 'Collaborative group, committee, working group, etc.'
+    
     id_number = models.CharField(blank=True, max_length=10, help_text='DMCC-assigned identification number')
     description = models.TextField(blank=True, null=False, help_text='A summary or descriptive abstract')
     chair = models.ForeignKey(

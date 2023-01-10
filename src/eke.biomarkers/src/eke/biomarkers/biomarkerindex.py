@@ -187,6 +187,7 @@ class Ingestor(BaseIngestor):
 class BiomarkerIndex(KnowledgeFolder):
     template = 'eke.biomarkers/biomarker-index.html'
     subpage_types = [Biomarker]
+    page_description = 'Container for biomarkers'
 
     def get_vocabulary(self, name) -> list:
         '''Get a "vocabulary" of known values for the field ``name`` for our contained subpage.'''

@@ -33,6 +33,7 @@ _logger = logging.getLogger(__name__)
 class Publication(KnowledgeObject):
     template = 'eke.knowledge/publication.html'
     parent_page_types = ['ekeknowledge.PublicationIndex']
+    page_description = 'Article, column, book, etc., of published scientific research'
     issue = models.CharField(max_length=50, blank=True, null=False, help_text='In what issue publication appeared')
     volume = models.CharField(max_length=50, blank=True, null=False, help_text='In what volume publication appeared')
     journal = models.CharField(max_length=250, blank=True, null=False, help_text='Name of the periodical')
@@ -288,6 +289,7 @@ class PublicationIndex(KnowledgeFolder):
 
     template = 'eke.knowledge/publication-index.html'
     subpage_types = [Publication]
+    page_description = 'Container for publications'
 
     def get_contents(self, request: HttpRequest):
         matches = Publication.objects.child_of(self).live().public().filter(year__isnull=False).order_by('-year')

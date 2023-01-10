@@ -20,6 +20,7 @@ class Disease(KnowledgeObject):
     '''A disease is an affliction, ailment, disorder, etc., of a body system.'''
     template = 'eke.knowledge/disease.html'
     parent_page_types = ['ekeknowledge.DiseaseIndex']
+    page_description = 'Affliction, ailment, disorder, etc., of a body system'
     search_auto_update = False
     icd9Code = models.CharField(
         'ICD9', blank=True, null=False, max_length=10,
@@ -50,6 +51,7 @@ class DiseaseIndex(KnowledgeFolder):
     '''A disease index is a container for diseases.'''
     subpage_types = [Disease]
     template = 'eke.knowledge/knowledge-folder.html'
+    page_description = 'Collection of diseases'
     class RDFMeta:
         ingestor = KnowledgeFolder.RDFMeta.ingestor
         types = {'http://edrn.nci.nih.gov/rdf/types.rdf#Disease': Disease}

@@ -90,6 +90,7 @@ class Biomarker(KnowledgeObject, QualityAssuredObject, ResearchedObject):
     # Update: apparently it's possible to use string substitution in the ``related_name``; trying that
     # for ``BiomarkerBodySystem`` but sticking with singly, non-specialzied ``Biomarker`` for now.
 
+    page_description = 'Indicator for disease'
     parent_page_types = ['ekebiomarkers.BiomarkerIndex']
     subpage_types = []
     template = 'eke.biomarkers/biomarker.html'

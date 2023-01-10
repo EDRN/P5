@@ -75,6 +75,7 @@ class _CollaborativeGroupRDFAttribute(RDFAttribute):
 class Protocol(KnowledgeObject):
     template = 'eke.knowledge/protocol.html'
     parent_page_types = ['ekeknowledge.ProtocolIndex']
+    page_description = 'Procedure for carrying out scientific research'
     coordinatingInvestigatorSite = models.ForeignKey(
         Site, null=True, blank=True, verbose_name='Coordinating Investigator Site',
         related_name='coordinated_protocols', on_delete=models.SET_NULL
@@ -258,6 +259,7 @@ class Ingestor(BaseIngestor):
 class ProtocolIndex(KnowledgeFolder):
     template = 'eke.knowledge/protocol-index.html'
     subpage_types = [Protocol]
+    page_description = 'Container for protocols'
 
     def get_contents(self, request: HttpRequest) -> object:
         matches = Protocol.objects.child_of(self).live().public().order_by(Lower('title'))

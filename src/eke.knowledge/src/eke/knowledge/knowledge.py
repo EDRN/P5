@@ -21,6 +21,7 @@ class KnowledgeObject(MetadataPageMixin, Page):
     '''An object in a knowledge environment that has an RDF subject URI.'''
     template = 'eke.knowledge/knowledge-object.html'
     search_auto_update = True
+    page_description = 'An object described by RDF'
 
     # I'd like this to be the primary_key for the table but Wagtail expects integers 🤷‍♀️
     identifier = models.CharField(
@@ -61,6 +62,9 @@ class KnowledgeFolder(MetadataPageMixin, Page):
     ingest_order   = models.IntegerField(blank=False, null=False, default=0, help_text='Relative ordering of ingest')
     subpage_types  = [KnowledgeObject]
     template       = 'eke.knowledge/knowledge-folder.html'
+
+    page_description = 'Container for knowledge objects'
+
     content_panels = Page.content_panels + [
         FieldPanel('ingest'),
         FieldPanel('ingest_order'),

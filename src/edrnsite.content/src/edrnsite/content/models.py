@@ -48,6 +48,7 @@ class SectionPage(MetadataPageMixin, Page):
 class FlexPage(MetadataPageMixin, Page):
     '''A flexible page that has as stream of various fields.'''
     template = 'edrnsite.content/flex-page.html'
+    page_description = 'Generic web page with a sequence of block content'
     body = StreamField([
         ('rich_text', wagtail_core_blocks.RichTextBlock(
             label='Rich Text',

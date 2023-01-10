@@ -17,6 +17,7 @@ class MiscellaneousResource(KnowledgeObject):
     parent_page_types = ['ekeknowledge.MiscellaneousResourceIndex']
     search_auto_update = False
     search_fields = []  # 🔮 We should remove this as it causes a warning at startup, but we want these cleared from ES
+    page_description = 'Any resource with a URL'
     class RDFMeta:
         fields = {}
 
@@ -25,6 +26,7 @@ class MiscellaneousResourceIndex(KnowledgeFolder):
     '''A miscellaneous resource index is a container for Miscellaneous resources.'''
     subpage_types = [MiscellaneousResource]
     template = 'eke.knowledge/knowledge-folder.html'
+    page_description = 'Container for miscellaneous resources'
     class RDFMeta:
         ingestor = 'eke.knowledge.miscresources.Ingestor'
         types = {
