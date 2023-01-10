@@ -66,7 +66,7 @@
                 {% for bm in biomarkers %}
                     <li><a href='{{bm.url}}'>{{bm.title}}</a></li>
                 {% empty %}
-                    <li class='small'>This protocol hasn't produced any biomarkers at all</li>
+                    <li class='small'>No biomarkers available at this time for this protocol</li>
                 {% endfor %}
             </ul>
 
@@ -75,7 +75,7 @@
                 {% for dc in data_collections %}
                     <li><a href='{{dc.identifier}}'>{{dc.title}}</a></li>
                 {% empty %}
-                    <li class='small'>This protocol has generated no scientific data</li>
+                    <li class='small'>No data available at this time for this protocol</li>
                 {% endfor %}
             </ul>
 
