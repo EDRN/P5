@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags edrn_metrics_filters %}
+{% block content %}
+    <div class='row'>
+        <div class='col-md-12'>
+            <h1>{{page.title|strip_timezone}}</h1>
+        </div>
+    </div>
+    <div class='row mb-4'>
+        <div class='col-md-12'>
+            <div class='accordion' id='dqr-content'>
+                <div class='accordion-item'>
+                    <h2 class='accordion-header' id='publess-biomarkers'>
+                        <button class='accordion-button' type='button' data-bs-toggle='collapse'
+                            data-bs-target='#publess-biomarkers-list' aria-controls='publess-biomarkers-list'>
+                            Biomarkers Without Publications
+                            {% if publess_biomarkers|length %}
+                                <span class='ms-2 badge bg-warning'>{{publess_biomarkers|length}}</span>
+                            {% else %}
+                                <span class='ms-2 badge bg-success'>Zero!</span>
+                            {% endif %}
+                        </button>
+                    </h2>
+                    <div id='publess-biomarkers-list' class='accordion-collapse collapse'
+                        aria-labelledby='publess-biomarkers' data-bs-parent='#dqr-content'>
+                        <div class='accordion-body'>
+                            <ul class='list-unstyled'>
+                                {% for biomarker in publess_biomarkers %}
+                                    <li><a href={{biomarker.url}}>{{biomarker.title}}</a></li>
+                                {% empty %}
+                                    <li>
+                                        <i class='bi bi-trophy'></i>
+                                        Congratulations! All biomarkers have publications.
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>    
+                    </div>
+                </div>
+
+                <div class='accordion-item'>
+                    <h2 class='accordion-header' id='dataless-biomarkers'>
+                        <button class='accordion-button' type='button' data-bs-toggle='collapse'
+                            data-bs-target='#dataless-biomarkers-list' aria-controls='dataless-biomarkers-list'>
+                            Biomarkers Without Science Data
+                            {% if dataless_biomarkers|length %}
+                                <span class='ms-2 badge bg-warning'>{{dataless_biomarkers|length}}</span>
+                            {% else %}
+                                <span class='ms-2 badge bg-success'>Zero!</span>
+                            {% endif %}
+                        </button>
+                    </h2>
+                    <div id='dataless-biomarkers-list' class='accordion-collapse collapse'
+                        aria-labelledby='dataless-biomarkers' data-bs-parent='#dqr-content'>
+                        <div class='accordion-body'>
+                            <ul class='list-unstyled'>
+                                {% for biomarker in dataless_biomarkers %}
+                                    <li><a href={{biomarker.url}}>{{biomarker.title}}</a></li>
+                                {% empty %}
+                                    <li>
+                                        <i class='bi bi-trophy'></i>
+                                        Congratulations! All biomarkers have science data.
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>    
+                    </div>
+                </div>
+
+                <div class='accordion-item'>
+                    <h2 class='accordion-header' id='piless-data'>
+                        <button class='accordion-button' type='button' data-bs-toggle='collapse'
+                            data-bs-target='#piless-data-list' aria-controls='piless-data-list'>
+                            Science Data without PIs
+                            {% if piless_data|length %}
+                                <span class='ms-2 badge bg-warning'>{{piless_data|length}}</span>
+                            {% else %}
+                                <span class='ms-2 badge bg-success'>Zero!</span>
+                            {% endif %}
+                        </button>
+                    </h2>
+                    <div id='piless-data-list' class='accordion-collapse collapse'
+                        aria-labelledby='piless-data' data-bs-parent='#dqr-content'>
+                        <div class='accordion-body'>
+                            <ul class='list-unstyled'>
+                                {% for data_collection in piless_data %}
+                                    <li><a href={{data_collection.url}}>{{data_collection.title}}</a></li>
+                                {% empty %}
+                                    <li>
+                                        <i class='bi bi-trophy'></i>
+                                        Congratulations! All science data are associated with PIs.
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>    
+                    </div>
+                </div>
+
+                <div class='accordion-item'>
+                    <h2 class='accordion-header' id='biomarkerless-data'>
+                        <button class='accordion-button' type='button' data-bs-toggle='collapse'
+                            data-bs-target='#biomarkerless-data-list' aria-controls='biomarkerless-data-list'>
+                            Science Data without Biomarkers
+                            {% if biomarkerless_data|length %}
+                                <span class='ms-2 badge bg-warning'>{{biomarkerless_data|length}}</span>
+                            {% else %}
+                                <span class='ms-2 badge bg-success'>Zero!</span>
+                            {% endif %}
+                        </button>
+                    </h2>
+                    <div id='biomarkerless-data-list' class='accordion-collapse collapse'
+                        aria-labelledby='biomarkerless-data' data-bs-parent='#dqr-content'>
+                        <div class='accordion-body'>
+                            <ul class='list-unstyled'>
+                                {% for data_collection in biomarkerless_data %}
+                                    <li><a href={{data_collection.url}}>{{data_collection.title}}</a></li>
+                                {% empty %}
+                                    <li>
+                                        <i class='bi bi-trophy'></i>
+                                        Congratulations! All science data are associated with biomarkers.
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>    
+                    </div>
+                </div>
+
+                <div class='accordion-item'>
+                    <h2 class='accordion-header' id='piless-pubs'>
+                        <button class='accordion-button' type='button' data-bs-toggle='collapse'
+                            data-bs-target='#piless-pubs-list' aria-controls='piless-pubs-list'>
+                            Publications without PIs
+                            {% if piless_pubs|length %}
+                                <span class='ms-2 badge bg-warning'>{{piless_pubs|length}}</span>
+                            {% else %}
+                                <span class='ms-2 badge bg-success'>Zero!</span>
+                            {% endif %}
+                        </button>
+                    </h2>
+                    <div id='piless-pubs-list' class='accordion-collapse collapse'
+                        aria-labelledby='piless-pubs' data-bs-parent='#dqr-content'>
+                        <div class='accordion-body'>
+                            <ul class='list-unstyled'>
+                                {% for pub in piless_pubs %}
+                                    <li><a href={{pub.url}}>{{pub.title}}</a></li>
+                                {% empty %}
+                                    <li>
+                                        <i class='bi bi-trophy'></i>
+                                        Congratulations! All publications have PIs.
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>    
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{# -*- Django HTML -*- #}

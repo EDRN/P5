@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags edrn_metrics_filters %}
+{% block content %}
+    <div class='row'>
+        <div class='col-md-12'>
+            <div class='float-end'>
+                <a href='{{page.url}}?new=true' role='button' class='btn btn-primary'>Run New Report</a>
+            </div>
+            <h1>{{page.title}}</h1>
+        </div>
+    </div>
+    <div class='row mt-3 mb-3'>
+        <div class='card' style='width: 16rem;'>
+            <div class='card-body'>
+                <h4 class='card-title'>Publication-free Biomarkers</h4>
+                <p class='card-text display-1 text-center'>{{publess_biomarkers}}</p>
+            </div>
+        </div>
+        <div class='card' style='width: 16rem;'>
+            <div class='card-body'>
+                <h4 class='card-title'>Data-free Biomarkers</h4>
+                <p class='card-text display-1 text-center'>{{dataless_biomarkers}}</p>
+            </div>
+        </div>
+        <div class='card' style='width: 16rem;'>
+            <div class='card-body'>
+                <h4 class='card-title'>PI-free Data Collections</h4>
+                <p class='card-text display-1 text-center'>{{piless_data}}</p>
+            </div>
+        </div>
+        <div class='card' style='width: 16rem;'>
+            <div class='card-body'>
+                <h4 class='card-title'>Biomarker-free Data Collections</h4>
+                <p class='card-text display-1 text-center'>{{biomarkerless_data}}</p>
+            </div>
+        </div>
+        <div class='card' style='width: 16rem;'>
+            <div class='card-body'>
+                <h4 class='card-title'>Publications with PIs</h4>
+                <p class='card-text display-1 text-center'>{{piless_pubs}}</p>
+            </div>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='row-md-12'>
+            <h2>Reports</h2>
+            <ul class='list-unstyled'>
+                {% for report in reports %}
+                    <li><a href='{{report.url}}'>{{report.title|strip_timezone}}</a></li>
+                {% empty %}
+                    <li class='small'>There are no data quality reports</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock content %}
+{# -*- Django HTML -*- #}

@@ -10,6 +10,7 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path, include, re_path
 from edrn.auth.urls import urlpatterns as edrnAuthURLs
+from edrn.metrics.urls import urlpatterns as edrn_metrics_urls
 from edrnsite.search.urls import urlpatterns as edrnSiteSearchURLs
 from eke.knowledge.urls import urlpatterns as ekeKnowledgeURLs
 from wagtail.admin import urls as wagtailadmin_urls
@@ -19,7 +20,7 @@ from wagtail.documents import urls as wagtaildocs_urls
 from wagtail_favicon.urls import urls as favicon_urls
 
 
-urlpatterns = ekeKnowledgeURLs + edrnSiteSearchURLs + edrnAuthURLs + [
+urlpatterns = ekeKnowledgeURLs + edrnSiteSearchURLs + edrnAuthURLs + edrn_metrics_urls + [
     path('clear-caches', clear_caches, name='clear_caches'),
     path('django-admin/', admin.site.urls),
     path('admin/', include(wagtailadmin_urls)),

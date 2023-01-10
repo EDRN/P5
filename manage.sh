@@ -37,6 +37,7 @@ if [ ! -d ".venv" ]; then
     .venv/bin/pip install --editable 'src/edrnsite.search[dev]'
     .venv/bin/pip install --editable 'src/edrn.theme[dev]'
     .venv/bin/pip install --editable 'src/edrnsite.ploneimport[dev]'
+    .venv/bin/pip install --editable 'src/edrn.metrics[dev]'
     .venv/bin/pip install --editable 'src/edrnsite.policy[dev]'
 fi
 

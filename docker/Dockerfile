@@ -114,6 +114,7 @@ RUN /usr/bin/pip3 install --progress-bar off /app/wheels/eke.geocoding-*.whl
 RUN /usr/bin/pip3 install --progress-bar off /app/wheels/eke.knowledge-*.whl
 RUN /usr/bin/pip3 install --progress-bar off /app/wheels/eke.biomarkers-*.whl
 RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.search-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrn.metrics-*.whl
 RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.policy-*.whl
 
 # And this too:

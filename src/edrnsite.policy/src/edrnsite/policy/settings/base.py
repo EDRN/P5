@@ -28,6 +28,7 @@ INSTALLED_APPS = edrnSiteSearchSettings.INSTALLED_APPS + ekeKnowlegeSettings.INS
     'eke.knowledge',
     'eke.biomarkers',
     'edrnsite.ploneimport',
+    'edrn.metrics',
 
     # Django:
     'django.contrib.admin',
