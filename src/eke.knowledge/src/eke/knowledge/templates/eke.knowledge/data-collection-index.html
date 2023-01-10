@@ -73,6 +73,8 @@
                         return '<a href="' + row['url'] + '">' + data + '</a>';
                     }},
                     {data: 'pi', render: function(data, type, row) {
+                        if (row['pi_url'] == null)
+                            return data;
                         return data === '(unknown)'? '<small>(unknown)</small>' :
                             '<a href="' + row['pi_url'] + '">' + data + '</a>';
                     }},

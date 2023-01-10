@@ -69,6 +69,7 @@ class DataStatistic(KnowledgeObject):
 
 class DataCollection(KnowledgeObject):
     '''Corresponds to a single collection of data in LabCAS.'''
+    page_description = 'Collection of data from the Data Commons (LabCAS)'
     parent_page_types = ['ekeknowledge.DataCollectionIndex']
     preview_modes = []
     generating_protocol = models.ForeignKey(
@@ -122,9 +123,12 @@ class DataCollection(KnowledgeObject):
                     attributes['pi'] = self.generating_protocol.leadInvestigatorSite.title
                     attributes['pi_url'] = self.generating_protocol.leadInvestigatorSite.url
             else:
-                attributes['pi'] = '(unknown)'
+                attributes['pi'] = self.investigator_name if self.investigator_name else '(unknown)'
+                attributes['pi_url'] = None
         else:
-            attributes['protocol'] = attributes['pi'] = '(unknown)'
+            attributes['protocol'] = '(unknown)'
+            attributes['pi'] = self.investigator_name if self.investigator_name else '(unknown)'
+            attributes['pi_url'] = None
 
         if self.associated_organs.count() > 0:
             attributes['organs'] = ', '.join([str(i) for i in self.associated_organs.all().order_by('title')])
@@ -214,6 +218,7 @@ class Ingestor(BaseIngestor):
 class DataCollectionIndex(KnowledgeFolder):
     template = 'eke.knowledge/data-collection-index.html'
     subpage_types = [DataCollection, DataStatistic]
+    page_description = 'Container for data collections'
 
     def get_vocabulary(self, name) -> list:
         '''Get a "vocabulary" of known values for the field ``name`` for our contained subpage.'''
