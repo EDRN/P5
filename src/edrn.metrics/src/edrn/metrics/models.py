@@ -18,6 +18,7 @@ from django.utils import timezone
 class DataQualityReport(Page):
     template = 'edrn.metrics/data-quality-report.html'
     page_description = 'A report on data quality within the portal'
+    parent_page_types = ['edrnmetrics.ReportIndex']
     publess_biomarkers = ParentalManyToManyField(
         Biomarker, blank=True, verbose_name='Biomarkers without publications', related_name='dqr_publess'
     )
