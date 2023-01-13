@@ -76,6 +76,8 @@
                         <img src='{{page.large_gravatar_url}}' alt='Photograph of {{page.title}}'/>
                     {% endif %}
                 </dd>
+                <dt>Site</dt>
+                <dd><a href='{{page.get_parent.url}}'>{{page.get_parent.title}}</a></dd>
                 <dt>Email</dt>
                 <dd>
                     {% if page.mbox %}
@@ -100,7 +102,13 @@
                     {% endif %}
                 </dd>
                 <dt>EDRN Title</dt>
-                <dd>{{page.edrnTitle}}</dd>
+                <dd>
+                    {% if page.edrnTitle %}
+                        {{page.edrnTitle}}
+                    {% else %}
+                        <small>(no title assigned)</small>
+                    {% endif %}
+                </dd>
                 {% if account_name %}
                     <dt>Account Name</dt>
                     <dd>
