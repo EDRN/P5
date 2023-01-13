@@ -93,13 +93,13 @@
                 <dd>{{page.protocolID}}</dd>
                 <dt>Field of Research</dt>
                 <dd>{{page.fieldOfResearch}}</dd>
-                <dt>Collaborative Groups</dt>
+                <dt>Collaborative Group</dt>
                 <dd>
-                    <ul class='list-unstyled'>
-                        {% for cg in page.collaborativeGroups.all %}
-                            <li>{{cg.value}}</li>
-                        {% endfor %}
-                    </ul>
+                    {% if page.collaborativeGroup %}
+                        {{page.collaborativeGroup}}
+                    {% else %}
+                        <small>(No collaborative group)</small>
+                    {% endif %}
                 </dd>
                 {% if page.phasedStatus %}
                     <dt>Phased Status</dt>
