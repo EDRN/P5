@@ -14,12 +14,14 @@ class Command(BaseCommand):
     help = 'Promotes biomarkers as search results'
 
     def handle(self, *args, **options):
-        '''Handle the EDRN `edrndevreset` command.'''
-        for biomarker in Biomarker.objects.exclude(hgnc_name__exact=''):
+        '''Handle the EDRN `edrnpromotesearch` command.'''
+        for biomarker in Biomarker.objects.all():
             names = {
                 biomarker.hgnc_name, biomarker.hgnc_name.lower(), biomarker.title, biomarker.title.lower()
             }
             for name in names:
+                name = name.strip()
+                if not name: continue
                 try:
                     desc = biomarker.description
                     if not desc:
