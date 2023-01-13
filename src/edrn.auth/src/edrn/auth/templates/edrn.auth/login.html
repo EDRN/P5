@@ -13,11 +13,11 @@
             </p>
 
             {% if form.errors %}
-                <p>{% trans "Your username and password didn't match. Please try again." %}</p>
+                <p class='text-warning'><strong>{% trans "Your username and password didn't match. Please try again." %}</strong></p>
             {% endif %}
 
             {% if next and request.user.is_authenticated %}
-                <p>{% trans "Your account doesn't have access to this page. To proceed, please log in with an account that has access." %}</p>
+                <p class='text-danger'><strong>{% trans "Your account doesn't have access to this page. To proceed, please log in with an account that has access." %}</strong></p>
             {% endif %}
 
             <div class='row mb-3'>
