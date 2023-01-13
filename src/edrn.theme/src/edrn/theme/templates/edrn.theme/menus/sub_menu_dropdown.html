@@ -8,7 +8,7 @@
 {% if menu_items %}
 	{% spaceless %}
 		<ul class='dropdown-menu' aria-labelledby='ddtoggle_{{parent_page.pk}}'>
-			{% for item in menu_items|edrn_sorted_menu %}
+			{% for item in menu_items %}
 				{# item.has_children_in_menu seems to be always False, even when we really do have sub-sub pages 🤷‍♀️ #}
 				<li class='{{item.active_class}} {% if item.has_children_in_menu %}dropdown{% endif %}'>
 					<a
