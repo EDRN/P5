@@ -128,9 +128,6 @@ li.footer-inline-item:after {
     font-size: 16px;
     color: black;
 }
-thead {
-    background-color: rgb(198, 238, 238);
-}
 .site-section-card h3, .site-section-card h3, .site-section-card h2 {
     text-transform: uppercase;
 }
@@ -146,4 +143,19 @@ thead {
     padding: 0;
     text-decoration: none;
     color: rgb(0, 82, 125);
+}
+
+table {
+    text-align: left;
+    position: relative;
+}
+thead {
+    background-color: rgb(198, 238, 238);
+}
+th {
+    background-color: rgb(198, 238, 238) !important;
+    position: sticky;
+    top: 0;
+}
+.typed-table-manager {
 }
