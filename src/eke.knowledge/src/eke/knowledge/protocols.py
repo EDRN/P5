@@ -129,6 +129,7 @@ class Protocol(KnowledgeObject):
     ]
     search_fields = KnowledgeObject.search_fields + [
         index.SearchField('abbreviation'),
+        index.SearchField('protocolID'),
         index.FilterField('fieldOfResearch'),
         index.FilterField('piName'),
         index.FilterField('collaborativeGroup'),
