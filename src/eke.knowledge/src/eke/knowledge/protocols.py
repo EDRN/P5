@@ -174,6 +174,7 @@ class Protocol(KnowledgeObject):
         from eke.biomarkers.biomarker import Biomarker
         bms = Biomarker.objects.filter(protocols=self).live().order_by(Lower('title'))
         context['biomarkers'] = bms
+        context['cancer_types'] = [i for i in self.cancer_types.all().order_by('title').values_list('title', flat=True)]
         return context
     def data_table(self) -> dict:
         if self.leadInvestigatorSite:

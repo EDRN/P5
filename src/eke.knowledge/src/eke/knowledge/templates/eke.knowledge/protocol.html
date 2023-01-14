@@ -101,6 +101,16 @@
                         <small>(No collaborative group)</small>
                     {% endif %}
                 </dd>
+                <dt>Cancer Types</dt>
+                <dd>
+                    <ul class='list-unstyled'>
+                        {% for cancer_type in cancer_types %}
+                            <li>{{cancer_type}}</li>
+                        {% empty %}
+                            <li class='small'>(No cancer types specified)</li>
+                        {% endfor %}
+                    </ul>
+                </dd>
                 {% if page.phasedStatus %}
                     <dt>Phased Status</dt>
                     <dd>{{page.phasedStatus}}</dd>
