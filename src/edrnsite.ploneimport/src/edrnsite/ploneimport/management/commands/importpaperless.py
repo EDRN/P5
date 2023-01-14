@@ -110,7 +110,7 @@ class Command(BaseCommand):
             index.delete()
             parent.refresh_from_db()
         index = CommitteeIndex(
-            title='Committees and Collaborative Groups', slug='groups', live=True, show_in_menus=False,
+            title='Committees and Collaborative Groups', slug='groups', live=True, show_in_menus=True,
             ingest_order=90, seo_title='Committees', draft_title='Groups'
         )
         index.rdf_sources.add(RDFSource(name='DMCC Committees', url=_committees_url, active=True))
@@ -181,7 +181,7 @@ class Command(BaseCommand):
         home_page.refresh_from_db()
         mission_and_structure.get_children().filter(slug='groups').delete()
         mission_and_structure.refresh_from_db()
-        groups = self.create_groups_container(mission_and_structure)
+        groups = self.create_groups_container(mission_and_structure.get_parent())
         for key, attributes in _groups.items():
             id_number, ldap_group, description = attributes
             if key in plone_committees:
@@ -246,7 +246,7 @@ class Command(BaseCommand):
         assert mas is not None
         del mas.body[0]
         body = pkg_resources.resource_string(__name__, 'data/mas.html').decode('utf-8').strip()
-        groups = mas.get_children().filter(slug='groups').first()
+        groups = mas.get_siblings().filter(slug='groups').first()
         assert groups is not None
         pks = {
             'org_chart': Image.objects.filter(title='New Organization Chart').first().pk,
