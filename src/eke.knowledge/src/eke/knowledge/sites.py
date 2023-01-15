@@ -332,7 +332,13 @@ class Ingestor(BaseIngestor):
             preds[URIRef(_internalIDPredicate)] = [dmccCode]
         return self.statements
 
-    def create_person_title(self, predicates: dict) -> str:
+    def create_person_title(self, predicates: dict) -> tuple:
+        '''Return a suitable "Last, First" formal name plus a "First Last" casual name of the person described by
+        the ``predicates``.
+
+        These are the formal and casual names, used in the title of a person object (formal) and promoted search
+        description (casual).
+        '''
         def get_name_components() -> tuple:
             def get_predicate_value(uri: rdflib.URIRef) -> str:
                 return str(predicates[uri][0]) if uri in predicates else ''
@@ -349,23 +355,26 @@ class Ingestor(BaseIngestor):
             if middle:
                 given += ' ' + middle
         if not given:
-            title = last
+            formal = casual = last
         else:
-            title = f'{last}, {given}'
-        title = title.strip()
-        if not title or title == ',':
-            title = '«PERSON WITH NO NAME»'
-        return title
+            formal, casual = f'{last}, {given}', f'{given} {last}'
+        formal, casual = formal.strip(), casual.strip()
+        if not formal or formal == ',':
+            formal = '«PERSON WITH NO NAME»'
+        if not casual:
+            casual = '«PERSON WITH NO NAME»'
+        return formal, casual
 
     def create_person(self, site: Site, uri: str, predicates: dict) -> Person:
-        title = self.create_person_title(predicates)
+        title, casual = self.create_person_title(predicates)
         # Previously we deleted only those that where ``child_of(site)`` but this doesn't account for
         # people who move to different sites
         Person.objects.filter(identifier__exact=uri).delete()
         site.refresh_from_db()
         if str(predicates.get(self._employmentPredicateURI, ['unknown'])[0]) == self._doNotRecreateFlag:
             return None
-        person = Person(title=title, identifier=uri, live=True)
+        promotion = f'{casual} is a member of the Early Detection Research Network.'
+        person = Person(title=title, identifier=uri, live=True, search_description=promotion)
         for predicateURI, values, in predicates.items():
             predicateURI = str(predicateURI)
             rdfAttribute = person.RDFMeta.fields.get(predicateURI)
@@ -464,6 +473,13 @@ class Ingestor(BaseIngestor):
         except (IndexError, KeyError):
             return None
 
+    def promote_sites(self, sites: set):
+        '''Set up search descriptions for the newly created sites in ``sites``.'''
+        for site in sites:
+            promotion = f'{site.title} is a site belonging to the Early Detection Research Network.'
+            site.search_description = promotion
+            site.save()
+
     def ingest(self):
         # We do this twice because the first time, sites that sponsor other sites may not yet exist. So the second
         # round links them up.
@@ -472,6 +488,7 @@ class Ingestor(BaseIngestor):
         c2, u2, d2 = self.ingest_people()
         self.setup_investigators()
         self.setup_coordinates(c2)
+        self.promote_sites(c0 | c1)
         return c0 | c1 | c2, u0 | u1 | u2, d0 | d1 | d2
 
 

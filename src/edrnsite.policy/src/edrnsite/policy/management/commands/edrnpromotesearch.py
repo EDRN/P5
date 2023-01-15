@@ -4,6 +4,7 @@
 
 from django.core.management.base import BaseCommand
 from eke.biomarkers.models import Biomarker
+from eke.knowledge.models import Site, Protocol, Publication, DataCollection
 from wagtail.contrib.search_promotions.models import SearchPromotion
 from wagtail.search.models import Query
 
@@ -11,7 +12,7 @@ from wagtail.search.models import Query
 class Command(BaseCommand):
     '''The EDRN "promote search" command".'''
 
-    help = 'Promotes biomarkers as search results'
+    help = 'Promotes various search results'
 
     def handle(self, *args, **options):
         '''Handle the EDRN `edrnpromotesearch` command.'''
@@ -34,3 +35,18 @@ class Command(BaseCommand):
                         self.stdout.write(f'Promoting search for {name} to {biomarker}')
                 except Exception:
                     pass
+        for site in Site.objects.all():
+            promotion = f'{site.title} is a site belonging to the Early Detection Research Network.'
+            site.search_description = promotion
+            site.save()
+        for protocol in Protocol.objects.all():
+            promotion = f'"{protocol.title}" is a protocol, project, or study that is being pursued or was pursued by the Early Detection Research Network.'
+            protocol.search_description = promotion
+            protocol.save()
+        for publication in Publication.objects.all():
+            publication.search_description = 'This is a publication by a member of the Early Detection Research Network.'
+            publication.save()
+        for dc in DataCollection.objects.all():
+            promotion = f'"{dc.title}" is scientific data collected by Early Detection Research Network.'
+            dc.search_description = promotion
+            dc.save()

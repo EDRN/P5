@@ -252,9 +252,17 @@ class Ingestor(BaseIngestor):
             protocol.involvedInvestigatorSites.set(sites, clear=True)
             protocol.save()
                 
+    def promote_search_results(self, protocols):
+        '''Make search descriptions for the newly-created ``protocols``.'''
+        for protocol in protocols:
+            promotion = '"f{protocol.title}" is a protocol, project, or study that is being pursued or was pursued by the Early Detection Research Network.'
+            protocol.search_description = promotion
+            protocol.save()
+
     def ingest(self):
         n, u, d = super().ingest()
         self.setInvolvedInvestigatorSites()
+        self.promote_search_results(n)
         return n, u, d
 
 

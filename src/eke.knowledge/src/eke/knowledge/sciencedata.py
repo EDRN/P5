@@ -197,6 +197,12 @@ class Ingestor(BaseIngestor):
         '''De-"distinguished name"-ify the given ``dn``.'''
         return dn.split(',')[0].split('=')[1]
 
+    def add_search_promotions(self, data_collections):
+        for dc in data_collections:
+            promotion = f'"{dc.title}" is scientific data collected by Early Detection Research Network.'
+            dc.search_description = promotion
+            dc.save()
+
     def ingest(self):
         '''Override ingest so we can set page view restrictions on certain data collections.'''
         n, u, d = super().ingest()
@@ -212,6 +218,7 @@ class Ingestor(BaseIngestor):
                 pvr = PageViewRestriction(page=collection, restriction_type='groups')
                 pvr.save()
                 pvr.groups.set(Group.objects.filter(name__in=groups), clear=True)
+        self.add_search_promotions(n)
         return n, u, d
 
 

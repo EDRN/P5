@@ -234,6 +234,7 @@ class Ingestor(BaseIngestor):
                         pub = Publication(
                             title=title, seo_title=title, draft_title=title, live=True,
                             slug=slug, identifier=identifier, pubMedID=pubMedID,
+                            search_description='This is a publication by a member of the Early Detection Research Network.'
                         )
                         if abstract:
                             paragraphs = abstract.get('AbstractText', [])
