@@ -101,14 +101,12 @@
                         </small>
                     {% endif %}
                 </dd>
-                <dt>EDRN Title</dt>
-                <dd>
-                    {% if page.edrnTitle %}
+                {% if page.edrnTitle %}
+                    <dt>EDRN Title</dt>
+                    <dd>
                         {{page.edrnTitle}}
-                    {% else %}
-                        <small>(no title assigned)</small>
-                    {% endif %}
-                </dd>
+                    </dd>
+                {% endif %}
                 {% if account_name %}
                     <dt>Account Name</dt>
                     <dd>
