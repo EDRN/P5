@@ -228,7 +228,7 @@ class Ingestor(BaseIngestor):
     def promote_search_results(self, protocols):
         '''Make search descriptions for the newly-created ``protocols``.'''
         for protocol in protocols:
-            promotion = '"f{protocol.title}" is a protocol, project, or study that is being pursued or was pursued by the Early Detection Research Network.'
+            promotion = f'"{protocol.title}" is a protocol, project, or study that is being pursued or was pursued by the Early Detection Research Network.'
             protocol.search_description = promotion
             protocol.save()
 
