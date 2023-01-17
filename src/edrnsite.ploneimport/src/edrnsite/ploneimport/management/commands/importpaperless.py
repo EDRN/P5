@@ -290,7 +290,7 @@ class Command(BaseCommand):
             assert groups is not None
             home_page.body[-1].value['cards'][-1]['links'][-1]['internal_page'] = sites
             home_page.body[-1].value['cards'][-1]['links'].append({
-                'link_text': 'Committees and Working Groups', 'internal_page': groups
+                'link_text': 'Committees and Collaborative Groups', 'internal_page': groups
             })
             home_page.body[-1].value['cards'][-1]['links'].append({
                 'link_text': 'Member Finder', 'view_name': 'find-members'
