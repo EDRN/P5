@@ -78,7 +78,19 @@
                 dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>B",
                 initComplete: function() {
-                    this.api().columns([2, 3, 4]).every(function() {  {# Changed `[2, 3, 5]` → `[2, 3, 4]` for #190 #}
+                    var cg_col = this.api().column(4);
+                    var select = $('<select><option value="">— Collab Group —</option></select>')
+                        .appendTo($(cg_col.header()).empty())
+                        .on('change', function() {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            cg_col.search(val? val : '', true, false).draw();
+                        });
+                    select.append('<option value="Breast/Gyn">Breast/Gyn</option>');
+                    select.append('<option value="G.I.">G.I.</option>');
+                    select.append('<option value="Lung">Lung</option>');
+                    select.append('<option value="Prostate">Prostate</option>');
+                    select.append('<option value="UNKNOWN">UNKNOWN</option>');
+                    this.api().columns([2, 3]).every(function() {
                         var column = this;
                         var label = this.footer().innerHTML;
                         var select = $('<select><option value="">— ' + label + ' —</option></select>')

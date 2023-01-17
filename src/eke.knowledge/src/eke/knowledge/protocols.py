@@ -59,17 +59,6 @@ class _CollaborativeGroupRDFAttribute(RDFAttribute):
     }
     def compute_new_value(self, modelField: Field, value: str, predicates: dict) -> object:
         return super().compute_new_value(modelField, self._aliases.get(value.strip(), value.strip()), predicates)
-    # 🤬 Get bent
-    # def modify_field(self, obj: object, values: list, modelField: Field, predicates: dict) -> bool:
-    #     modified = False
-    #     accessorName = modelField.get_accessor_name()
-    #     currentValues = [i.value for i in getattr(obj, accessorName).all()]
-    #     newValues = [self._aliases.get(str(i).strip(), str(i).strip()) for i in values]
-    #     if currentValues != newValues:
-    #         cls = modelField.related_model
-    #         setattr(obj, accessorName, [cls(value=i) for i in newValues])
-    #         modified = True
-    #     return modified
 
 
 class Protocol(KnowledgeObject):
@@ -123,8 +112,6 @@ class Protocol(KnowledgeObject):
         FieldPanel('analyticMethod'),
         FieldPanel('comments'),
         FieldPanel('finish_date'),
-        # 🤬 Get bent
-        # InlinePanel('collaborativeGroups', label='Collaborative Groups')
         FieldPanel('collaborativeGroup'),
     ]
     search_fields = KnowledgeObject.search_fields + [
@@ -134,12 +121,6 @@ class Protocol(KnowledgeObject):
         index.FilterField('piName'),
         index.FilterField('collaborativeGroup'),
         index.FilterField('cancer_types'),
-        # 🤬 Get bent
-        # This is not yet supported by Wagtail 2.16.1:
-        #     index.RelatedFields('collaborativeGroups', [index.FilterField('value')]),
-        # We are forced to do this:
-        # index.FilterField('collaborativeGroupsDeNormalized')
-
     ]
     class Meta:
         pass
@@ -187,8 +168,11 @@ class Protocol(KnowledgeObject):
         else:
             pi_url = pi_name = None
 
-        cg = self.collaborativeGroup.split(' ')[0] if self.collaborativeGroup else 'UNKNOWN'
-        if cg == 'Breast': cg = 'Breast/Gyn'
+        cgs = []
+        for cg in self.collaborativeGroup.split(', '):
+            cg = cg.split(' ')[0] if cg else 'UNKNOWN'
+            if cg == 'Breast': cg = 'Breast/Gyn'
+            cgs.append(cg)
 
         return {
             'pi_name': pi_name,
@@ -196,20 +180,9 @@ class Protocol(KnowledgeObject):
             'field': self.fieldOfResearch,
             # Turned off for #190
             # 'diseases': ', '.join([str(i) for i in self.cancer_types.values_list('title', flat=True).order_by('title')]),
-            'cg': cg,
+            'cg': ', '.join(cgs),
             **super().data_table()
         }
-
-
-# 🤬 Get bent
-# class CollaborativeGroup(Orderable):
-#     '''A name of a group that collaborates on a protocol.'''
-#     value = models.CharField(max_length=255, blank=False, null=False, default='Name', help_text='Group name')
-#     page = ParentalKey(Protocol, on_delete=models.CASCADE, related_name='collaborativeGroups')
-#     panels = [FieldPanel('value')]
-#     search_fields = [index.SearchField('value'), index.FilterField('value')]
-#     def __str__(self):
-#         return self.value
 
 
 class Ingestor(BaseIngestor):
