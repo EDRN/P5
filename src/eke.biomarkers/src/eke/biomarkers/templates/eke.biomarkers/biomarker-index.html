@@ -63,6 +63,15 @@
     <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js'></script>
     <script type='text/javascript' src='https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.12.1/b-2.2.3/b-colvis-2.2.3/b-html5-2.2.3/b-print-2.2.3/fh-3.2.4/kt-2.7.0/r-2.3.0/datatables.min.js'></script>
     <script>
+        function headerFunction(data, columnIndex, node) {
+            switch (columnIndex) {
+                case 0: return 'Title';
+                case 1: return 'Type';
+                case 2: return 'Organ';
+                case 3: return 'Phase';
+                default: return data;
+            }
+        }
         $(document).ready(function() {
             $('#the-datatable thead tr th.only-search-col').each(function() {
                 var title = $(this).text();
@@ -79,7 +88,12 @@
                     {data: 'phases'}
                 ],
                 fixedHeader: true,
-                buttons: ['copy', 'excel', 'csv', 'pdf'],
+                buttons: [
+                    {extend: 'copyHtml5', exportOptions: {format: {header: headerFunction}}},
+                    {extend: 'excelHtml5', exportOptions: {format: {header: headerFunction}}},
+                    {extend: 'csvHtml5', exportOptions: {format: {header: headerFunction}}},
+                    {extend: 'pdfHtml5', exportOptions: {format: {header: headerFunction}}}
+                ],
                 dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>B",
                 initComplete: function() {
