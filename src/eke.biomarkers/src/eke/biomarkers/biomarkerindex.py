@@ -164,6 +164,7 @@ class Ingestor(BaseIngestor):
                     bm.biomarker_collaborative_group_names.add(grp)
                     grp.save()
                 bm.save()
+            bmBodySys.biomarker_bodysystem_certifications.all().delete()
             self.setAttributes(bmBodySys, predicates)
             bmBodySys.save()
             self.add_organ_protocols(bmBodySys, predicates)
