@@ -227,18 +227,41 @@ class BiomarkerIndex(KnowledgeFolder):
         context = super().get_context(request, *args, **kwargs)
         matches = context['knowledge_objects']
 
-        bbs = BiomarkerBodySystem.objects.filter(biomarker__in=matches)
-        bss = BodySystemStudy.objects.filter(bbs__in=bbs)
-        c = collections.Counter(bbs.values_list('phase', flat=True))
-        c.update(bss.values_list('phase', flat=True))
-        phases, amounts = [i[0] for i in c.items() if i[0] is not None], [i[1] for i in c.items() if i[0] is not None]
-        for phase, count in dict(zip(phases, amounts)).items():
-            context[f'phase_{phase}'] = count
-        phases_frame = pandas.DataFrame({'Phase': phases, 'Count': amounts})
-        phases_figure = plotly.express.pie(phases_frame, values='Count', names='Phase', title='Phases')
+        bbs = BiomarkerBodySystem.objects.filter(biomarker__in=matches).all()
+        by_organs = {i: 0 for i in bbs.values_list('title', flat=True).distinct()}
+        p1 = p2 = p3 = p4 = p5 = 0
+        for organ in bbs.all():
+            if organ.phase == 1:
+                p1 += 1
+                by_organs[organ.title] += 1
+            elif organ.phase == 2:
+                p1 += 1
+                p2 += 1
+                by_organs[organ.title] += 2
+            elif organ.phase == 3:
+                p1 += 1
+                p2 += 1
+                p3 += 1
+                by_organs[organ.title] += 3
+            elif organ.phase == 4:
+                p1 += 1
+                p2 += 1
+                p3 += 1
+                p4 += 1
+                by_organs[organ.title] += 4
+            elif organ.phase == 5:
+                p1 += 1
+                p2 += 1
+                p3 += 1
+                p4 += 1
+                p5 += 1
+                by_organs[organ.title] += 5
 
-        c = collections.Counter(bbs.values_list('title', flat=True))
-        organs, amounts = [i[0] for i in c.items()], [i[1] for i in c.items()]
+        breakpoint()
+        context['phase_1'], context['phase_2'], context['phase_3'], context['phase_4'], context['phase_5'] = p1, p2, p3, p4, p5
+        phases_frame = pandas.DataFrame({'Phase': ['1', '2', '3', '4', '5'], 'Count': [p1, p2, p3, p4, p5]})
+        phases_figure = plotly.express.pie(phases_frame, values='Count', names='Phase', title='Phases')
+        organs, amounts = [i[0] for i in by_organs.items()], [i[1] for i in by_organs.items()]
         organs_frame = pandas.DataFrame({'Organ': organs, 'Count': amounts})
         organs_figure = plotly.express.bar(organs_frame, x='Organ', y='Count', title='Body Systems')
 
