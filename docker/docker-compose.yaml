@@ -61,6 +61,8 @@ services:
         environment:
             AWS_ACCESS_KEY_ID:
             AWS_SECRET_ACCESS_KEY:
+            RECAPTCHA_PRIVATE_KEY:
+            RECAPTCHA_PUBLIC_KEY:
             CSRF_TRUSTED_ORIGINS:
             FORCE_SCRIPT_NAME:
             LDAP_BIND_PASSWORD:

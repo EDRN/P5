@@ -4,8 +4,12 @@
 
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from edrnsite.streams import blocks
-from wagtail.admin.panels import FieldPanel
+from modelcluster.fields import ParentalKey
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
+from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
+from wagtailcaptcha.models import WagtailCaptchaEmailForm
 from wagtail.core import blocks as wagtail_core_blocks
 from wagtail.fields import RichTextField
 from wagtail.fields import StreamField
@@ -71,6 +75,69 @@ class FlexPage(MetadataPageMixin, Page):
     class Meta(object):
         verbose_name = 'web page'
         verbose_name_plural = 'web pages'
+
+
+class BaseEmailForm(Page):
+    subpage_types = []
+    intro = RichTextField(blank=True, help_text='Introductory text to appear above the form')
+    outro = RichTextField(blank=True, help_text='Text to appear below the form')
+    thank_you_text = RichTextField(blank=True, help_text='Gratitude to display after form submission')
+    content_panels = AbstractEmailForm.content_panels + [
+        FieldPanel('intro'),
+        InlinePanel('form_fields', label='Form Fields ✍️'),
+        FieldPanel('outro'),
+        FieldPanel('thank_you_text'),
+        MultiFieldPanel([
+            FieldRowPanel([
+                FieldPanel('from_address', classname='col6', help_text='From whom this email will originate'),
+                FieldPanel('to_address', classname='col6', help_text='Who should receive this email; commas in between multiple addresses')
+            ]),
+            FieldPanel('subject')
+        ], 'Email')
+    ]
+    class Meta:
+        abstract = True
+
+
+class EmailForm(BaseEmailForm, AbstractEmailForm):
+    template = 'edrnsite.content/email-form.html'
+    landing_page_template = 'edrnsite.content/email-form-landing.html'
+    page_description = 'Form that once submitted sends an email message'
+
+
+class CapchaEmailForm(BaseEmailForm, WagtailCaptchaEmailForm):
+    template = 'edrnsite.content/email-form.html'
+    landing_page_template = 'edrnsite.content/email-form-landing.html'
+    page_description = 'Form that once submitted sends an email message but also uses a CAPCTHA'
+
+
+class LimitedFormField(AbstractFormField):
+    '''This abstract form field removes the date and date/time choices.'''
+    CHOICES = (
+        ('singleline', _('Single line text')),
+        ('multiline', _('Multi-line text')),
+        ('email', _('Email')),
+        ('number', _('Number')),
+        ('url', _('URL')),
+        ('checkbox', _('Checkbox')),
+        ('checkboxes', _('Checkboxes')),
+        ('dropdown', _('Drop down')),
+        ('multiselect', _('Multiple select')),
+        ('radio', _('Radio buttons')),
+        ('hidden', _('Hidden field')),
+    )
+    field_type = models.CharField(verbose_name='Field Type', max_length=16, choices=CHOICES)
+    class Meta:
+        abstract = True
+        ordering = ['sort_order']
+
+
+class EmailFormField(LimitedFormField):
+    page = ParentalKey(EmailForm, on_delete=models.CASCADE, related_name='form_fields')
+
+
+class CaptchaEmailFormField(LimitedFormField):
+    page = ParentalKey(CapchaEmailForm, on_delete=models.CASCADE, related_name='form_fields')
 
 
 @register_snippet

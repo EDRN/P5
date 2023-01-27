@@ -11,3 +11,6 @@ CACHES = globals().get('CACHES', global_settings.CACHES)
 for cache, settings in CACHES.items():
     options = settings.get('OPTIONS', {})
     options['TIMEOUT'] = 0
+
+
+SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']

@@ -80,12 +80,14 @@ Here is a table of the environment variables that may affect the portal server (
 | `MEDIA_ROOT`            | Where to save media files                                       | Current dir + `/media` |
 | `MEDIA_URL`             | URL prefix of media files; must end with `/`                    | `/media/` |
 | `MQ_URL`                | URL to the message queuing service                              | `redis://` |
+| `RECAPTCHA_PRIVATE_KEY` | Private key for reCAPTCHA                                       | Unset |
+| `RECAPTCHA_PUBLIC_KEY`  | Public key for ereCAPTCHA                                       | Unset | 
 | `SECURE_COOKIES`        | `True` for secure handling of session and CSRF cookies          | `True` |
 | `SIGNING_KEY`           | Cryptographic key to protect sessions, messages, tokens, etc.   | Unset in operations; set to a known _bad_ value in development |
 | `STATIC_ROOT`           | Where to collect static files                                   | Current dir + `/static` |
 | `STATIC_URL`            | URL prefix of static files; must end with `/`                   | `/static/` |
 
-Note that the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` can be set through-the-web; the environment variables are just a fallback.
+Note that the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` can be set through-the-web; the environment variables are just a fallback. Sadly, neither `RECAPTCHA_PRIVATE_KEY` nor `RECAPTCHA_PUBLIC_KEY` can due to limitations of [wagtail-django-recaptcha](https://github.com/springload/wagtail-django-recaptcha).
 
 
 ## 🪶 Apache HTTPD Configuration with Jenkins

@@ -25,8 +25,8 @@ _testProtos    = f'file:{pkg_resources.resource_filename(_testPkg, "data/protoco
 _data          = 'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/labcas/@@rdf'
 _testData      = f'file:{pkg_resources.resource_filename(_testPkg, "data/labcas.rdf")}'
 
-_bio       = 'https://bmdb.jpl.nasa.gov/rdf/biomarkers?all=yeah'
-_bioOrgans = 'https://bmdb.jpl.nasa.gov/rdf/biomarker-organs?all=yeah'
+_bio       = 'https://bmdb.jpl.nasa.gov/rdf/biomarkers'
+_bioOrgans = 'https://bmdb.jpl.nasa.gov/rdf/biomarker-organs'
 _bioMuta   = 'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/fixed-biomuta/@@rdf'
 _testBio   = f'file:{pkg_resources.resource_filename("eke.biomarkers", "data/biomarkers.rdf")}'
 _testBO    = f'file:{pkg_resources.resource_filename("eke.biomarkers", "data/bio-org.rdf")}'

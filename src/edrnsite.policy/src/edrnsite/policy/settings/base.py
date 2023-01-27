@@ -39,7 +39,6 @@ INSTALLED_APPS = edrnSiteSearchSettings.INSTALLED_APPS + ekeKnowlegeSettings.INS
     'django.contrib.staticfiles',
 
     # Wagtail:
-    'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.contrib.settings',
     'wagtail.embeds',
@@ -348,3 +347,11 @@ CACHES = {
 # 🔗 https://docs.djangoproject.com/en/4.1/ref/settings/#csrf-trusted-origins
 
 CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'http://*.nci.nih.gov,https://*.nci.nih.gov').split(',')
+
+
+# reCAPTChA
+#
+# 🔗 https://github.com/springload/wagtail-django-recaptcha
+
+RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY', '')
+RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY', '')

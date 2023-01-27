@@ -6,7 +6,7 @@
 . ${HOME}/.secrets/passwords.sh
 
 export DJANGO_SETTINGS_MODULE=local
-export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
+export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY RECAPTCHA_PRIVATE_KEY RECAPTCHA_PUBLIC_KEY
 
 if [ ! -d "src" -o ! -d "etc" -o ! -d "docker" ]; then
     echo "🚨 Run this from the checked-out EDRN portal source directory" 1>&2

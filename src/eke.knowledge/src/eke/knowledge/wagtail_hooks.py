@@ -8,6 +8,7 @@ from django.http import HttpRequest
 from django.template.loader import render_to_string
 from wagtail.admin.ui.components import Component
 from wagtail.core import hooks
+import socket
 
 
 class IngestControlPanel(Component):
@@ -27,7 +28,8 @@ class IngestControlPanel(Component):
             'last_ingest_start': settings.last_ingest_start,
             'last_ingest_duration': settings.last_ingest_duration,
             'ingest_running': lock.locked(),
-            'knowledge_folders': folders
+            'knowledge_folders': folders,
+            'hostname': socket.getfqdn()
         }
         return render_to_string('eke.knowledge/ingest-controls.html', context, request=self.request)
 

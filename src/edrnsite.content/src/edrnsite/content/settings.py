@@ -26,4 +26,8 @@ INSTALLED_APPS = [
     'edrnsite.streams',
     'wagtail.contrib.table_block',
     'wagtail.contrib.typed_table_block',
+    'wagtail.contrib.forms',
+    'widget_tweaks',
+    'wagtailcaptcha',
+    'captcha',
 ]
