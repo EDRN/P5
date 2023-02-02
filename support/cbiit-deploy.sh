@@ -28,7 +28,7 @@ echo "👉 Here is what is on $WEBSERVER in $WEBROOT"
 ssh -q $USER@$WEBSERVER "ls -l $WEBROOT"
 
 echo ""
-echo "🧹Cleaning up remote workspace"
+echo "🧹Cleaning up remote workspace - MUST NOT BE DONE IN PRODUCTION"
 
 ssh -q $USER@$WEBSERVER "sudo chown -R $USER:$USER /local/content/edrn &&\
 rm -rf $WEBROOT/docker-compose.yaml $WEBROOT/../media $WEBROOT/../static $WEBROOT/../postgresql $WEBROOT/.env &&\
@@ -116,18 +116,40 @@ pwd && ls && [ -f edrn.sql.bz2 ] &&\
 bzip2 --decompress --stdout edrn.sql.bz2 | \
     docker compose --project-name edrn exec --no-TTY db psql --username=postgres --dbname=edrn --echo-errors --quiet" || exit 1
 
+echo ""
+echo "📀 Initial database setup"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn exec portal django-admin makemigrations &&\
 docker compose --project-name edrn exec portal django-admin migrate &&\
 docker compose --project-name edrn exec portal django-admin collectstatic --no-input --clear &&\
 docker compose --project-name edrn exec portal django-admin edrndevreset &&\
-docker compose --project-name edrn exec portal django-admin edrnpromotesearch &&\
+docker compose --project-name edrn exec portal django-admin edrnpromotesearch" || exit 1
+
+# This next step takes a lot of resources
+echo ""
+echo "🚢 Importing paperless content"
+ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn run --volume $WEBROOT/../exports:/mnt/zope --volume $WEBROOT/../blobstorage:/mnt/blobs \
-    --entrypoint /usr/bin/django-admin --no-deps --rm --no-TTY portal importpaperless /mnt/zope/edrn.json /mnt/blobs &&\
-docker compose --project-name edrn exec portal django-admin translatetables &&\
-docker compose --project-name edrn exec portal django-admin rewritereferencesets &&\
+    --entrypoint /usr/bin/django-admin --no-deps --rm --no-TTY portal importpaperless /mnt/zope/edrn.json /mnt/blobs" || exit 1
+
+echo ""
+echo "🏓 Translating tables"
+ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
+docker compose --project-name edrn exec portal django-admin translatetables" || exit 1
+
+echo ""
+echo "✍️ Rewriting reference sets"
+ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
+docker compose --project-name edrn exec portal django-admin rewritereferencesets" || exit 1
+
+echo ""
+echo "😘 Installing data quality reports"
+ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn exec portal django-admin installdataqualityreports" || exit 1
 
+# This next step takes a lot of resources
+echo ""
+echo "🧱 Rebuilding reference index"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn run --no-deps --rm --no-TTY --entrypoint /usr/bin/django-admin portal rebuild_references_index --chunk_size 100" || exit 1
 

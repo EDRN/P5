@@ -84,10 +84,30 @@ def generate_report(index: ReportIndex) -> DataQualityReport:
     when = timezone.now()
     dqr = DataQualityReport(title=when.isoformat(sep=' ', timespec='minutes'), live=True)
     index.add_child(instance=dqr)
-    dqr.publess_biomarkers.set(find_biomarkers_without_publications())
-    dqr.dataless_biomarkers.set(find_biomarkers_without_data())
-    dqr.piless_data.set(find_data_collections_without_pis())
-    dqr.biomarkerless_data.set(find_data_without_biomarkers())
-    dqr.piless_pubs.set(find_pubs_without_pis())
-    dqr.save()            
+
+    report = find_biomarkers_without_publications()
+    dqr.publess_biomarkers.set(report)
+    dqr.save()
+    del report
+
+    report = find_biomarkers_without_data()
+    dqr.dataless_biomarkers.set(report)
+    dqr.save()
+    del report
+
+    report = find_data_collections_without_pis()
+    dqr.piless_data.set(report)
+    dqr.save()
+    del report
+
+    report = find_data_without_biomarkers()
+    dqr.biomarkerless_data.set(report)
+    dqr.save()
+    del report
+
+    report = find_pubs_without_pis()
+    dqr.piless_pubs.set(report)
+    dqr.save()
+    del report
+
     return dqr
