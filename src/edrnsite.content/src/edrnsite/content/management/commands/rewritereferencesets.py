@@ -355,23 +355,46 @@ class Command(BaseCommand):
             ref_sets = home_page.get_descendants().filter(title='Specimen Reference Sets').first().specific
             assert ref_sets is not None
 
+            self.stdout.write('Cleaning the slate')
             self._clean_slate(ref_sets)
 
+            self.stdout.write('Creating ovarian breast page')
             brscw = self._create_ovarian_breast_page(ref_sets)
+
+            self.stdout.write('Creating breast page')
             breast = self._create_breast_page(ref_sets)
+
+            self.stdout.write('Creating BBD page')
             bbd = self._create_bbd_page(ref_sets)
+
+            self.stdout.write('Creating lung page')
             lung = self._create_lung_page(ref_sets)
+
+            self.stdout.write('Creating colon page')
             colon = self._create_colon_page(ref_sets)
+
+            self.stdout.write('Creating prostate page')
             prostate = self._create_prostate_page(ref_sets)
+
+            self.stdout.write('Creating liver page')
             liver = self._create_liver_page(ref_sets)
+
+            self.stdout.write('Creating pancreas page')
             pancreas = self._create_pancreas_page(ref_sets)
 
+            self.stdout.write('Adding table of ref sets')
             self._add_table(ref_sets, brscw, breast, bbd, lung, colon, prostate, liver, pancreas)
+
+            self.stdout.write('Adding general documents')
             self._add_general_documents(ref_sets)
 
+            self.stdout.write('Saving ref sets')
             ref_sets.save()
+
+            self.stdout.write('Clearing caches')
             for cache in caches:
                 caches[cache].clear()
         finally:
             settings.WAGTAILREDIRECTS_AUTO_CREATE = old
             settings.WAGTAILSEARCH_BACKENDS['default']['AUTO_UPDATE'] = True
+            self.stdout.write('Job done!')

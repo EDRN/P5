@@ -142,10 +142,14 @@ echo "✍️ Rewriting reference sets"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn exec portal django-admin rewritereferencesets" || exit 1
 
-echo ""
-echo "😘 Installing data quality reports"
-ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal django-admin installdataqualityreports" || exit 1
+# I have no idea why but these always fail with exit code 137 (out of memory),
+# and that's even after we ugpraded edrn-dev to a t2.2xlarge instance and
+# split the report generation into smaller chunks.
+# 
+# echo ""
+# echo "😘 Installing data quality reports"
+# ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
+# docker compose --project-name edrn exec portal django-admin installdataqualityreports" || exit 1
 
 # This next step takes a lot of resources
 echo ""
