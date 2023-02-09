@@ -69,7 +69,7 @@ RUN \
 
 # Over on GitHub Actions, we need to fail fast and not hit the six hour run limit, so make sure we got it right
 
-RUN [ "`/usr/bin/python3 --version`" = "Python 3.10.9" ]
+RUN [ "`/usr/bin/python3 --version`" = "Python 3.10.10" ]
 RUN [ "`/usr/bin/python3 -c 'import numpy; print(numpy.__version__)'`" = "1.23.4" ]
 RUN [ "`/usr/bin/python3 -c 'import pandas; print(pandas.__version__)'`" = "1.5.1" ]
 RUN [ "`/usr/bin/python3 -c 'import PIL; print(PIL.__version__)'`" = "9.3.0" ]

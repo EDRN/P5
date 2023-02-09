@@ -56,7 +56,7 @@ bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --qu
 ./manage.sh rewritereferencesets
 ./manage.sh installdataqualityreports
 # shoud do `./manage.sh rdfingest` here too?
-# ./manage.sh rdfingest
+./manage.sh rdfingest
 # This takes a fair bit of time too:
 ./manage.sh rebuild_references_index
 
