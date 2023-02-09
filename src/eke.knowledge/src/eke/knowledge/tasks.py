@@ -15,6 +15,14 @@ _logger = logging.getLogger(__name__)
 
 
 @shared_task
+def do_fix_tree():
+    with cache.lock('fix_tree', timeout=3600):
+        _logger.info('🌴 Calling management command `fixtree`')
+        call_command('fixtree')
+        _logger.info('🎬 `fixtree done')
+
+
+@shared_task
 def do_full_ingest():
     settings = RDFIngest.for_site(Site.objects.filter(is_default_site=True).first())
     with cache.lock('full_ingest', timeout=settings.timeout * 60):

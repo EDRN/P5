@@ -3,7 +3,7 @@
 '''💁‍♀️ EDRN Knowledge Environment: views.'''
 
 from .knowledge import KnowledgeObject
-from .tasks import do_full_ingest, do_reindex, do_ldap_group_sync
+from .tasks import do_full_ingest, do_reindex, do_ldap_group_sync, do_fix_tree
 from .sites import Site, Person
 from edrn.auth.views import logged_in_or_basicauth
 from django.shortcuts import render
@@ -19,6 +19,16 @@ def _get_referrer(request: HttpRequest) -> str:
         return request.META['HTTP_REFERER']
     except KeyError:
         return '/'
+
+
+@logged_in_or_basicauth('edrn')
+def fix_tree(request: HttpRequest) -> HttpResponse:
+    '''Fix any tree issues.''' 
+    if request.user.is_staff or request.user.is_superuser:
+        do_fix_tree.delay()
+        return HttpResponseRedirect(_get_referrer(request))
+    else:
+        return HttpResponseForbidden()
 
 
 @logged_in_or_basicauth('edrn')

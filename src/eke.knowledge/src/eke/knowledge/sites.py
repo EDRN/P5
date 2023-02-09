@@ -365,14 +365,21 @@ class Ingestor(BaseIngestor):
             casual = '«PERSON WITH NO NAME»'
         return formal, casual
 
-    def create_person(self, site: Site, uri: str, predicates: dict) -> Person:
-        title, casual = self.create_person_title(predicates)
+    def create_person(self, sites, uri: str, predicates: dict) -> Person:
         # Previously we deleted only those that where ``child_of(site)`` but this doesn't account for
-        # people who move to different sites
+        # people who move to different sites. Also, we need to refresh all sites because to keep the
+        # tree consistent.
         Person.objects.filter(identifier__exact=uri).delete()
-        site.refresh_from_db()
+        for site in sites:
+            site.refresh_from_db()
+
+        site = sites.filter(identifier__exact=predicates[self._siteURIPredicate][0]).first()
+        if not site: return None
+
         if str(predicates.get(self._employmentPredicateURI, ['unknown'])[0]) == self._doNotRecreateFlag:
             return None
+
+        title, casual = self.create_person_title(predicates)
         promotion = f'{casual} is a member of the Early Detection Research Network.'
         person = Person(title=title, identifier=uri, live=True, search_description=promotion)
         for predicateURI, values, in predicates.items():
@@ -398,7 +405,9 @@ class Ingestor(BaseIngestor):
             if results.count() == 0:
                 _logger.info('🤨 Person %s has a site %s that is unknown; skipping', subject, siteURI)
                 continue
-            person = self.create_person(results.first(), str(subject), predicates)
+            elif results.count() > 1:
+                _logger.info('😮 Wow, person %s has %d sites but I guess that is ok', subject, results.count())
+            person = self.create_person(results, str(subject), predicates)
             if person is None:
                 deleted.add(subject)
             else:
