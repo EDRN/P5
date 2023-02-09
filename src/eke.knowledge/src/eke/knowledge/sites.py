@@ -369,14 +369,25 @@ class Ingestor(BaseIngestor):
         # Previously we deleted only those that where ``child_of(site)`` but this doesn't account for
         # people who move to different sites. Also, we need to refresh all sites because to keep the
         # tree consistent.
-        Person.objects.filter(identifier__exact=uri).delete()
-        for site in sites:
-            site.refresh_from_db()
 
-        site = sites.filter(identifier__exact=predicates[self._siteURIPredicate][0]).first()
-        if not site: return None
+        site_uri = str(predicates[self._siteURIPredicate][0])
+
+        # Somehow one or both of these sites is a problem but I have no time to figure it out.
+        # if site_uri in ('http://edrn.nci.nih.gov/data/sites/417', 'http://edrn.nci.nih.gov/data/sites/284'):
+        #     maybe break point()
+
+        existing = Person.objects.filter(identifier__exact=uri).first()
+        if existing is not None:
+            parent = existing.get_parent()
+            existing.delete()
+            parent.refresh_from_db()
 
         if str(predicates.get(self._employmentPredicateURI, ['unknown'])[0]) == self._doNotRecreateFlag:
+            return None
+
+        site = sites.filter(identifier__exact=site_uri).first()
+        if not site:
+            _logger.info('🤷‍♀️ Potentially new person %s has no site %s', uri, site_uri)
             return None
 
         title, casual = self.create_person_title(predicates)
@@ -390,7 +401,7 @@ class Ingestor(BaseIngestor):
             rdfAttribute.modify_field(person, values, modelField, predicates)
         site.add_child(instance=person)
         person.save()
-        site.save()
+
         return person
 
     def ingest_people(self):

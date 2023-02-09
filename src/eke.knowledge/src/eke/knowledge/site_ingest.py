@@ -45,4 +45,5 @@ def full_ingest():
         return newObjects, updatedObjects, deadURIs
     finally:
         settings.WAGTAILSEARCH_BACKENDS['default']['AUTO_UPDATE'] = True
+        call_command('fixtree')
         call_command('wagtail_update_index')
