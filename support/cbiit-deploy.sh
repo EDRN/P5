@@ -139,6 +139,13 @@ ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn exec portal django-admin translatetables" || exit 1
 
 echo ""
+echo "🤷‍♀️ Restarting the portal to see if that helps with OoM issues"
+ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
+docker compose --project-name edrn stop portal &&\
+sleep 60 &&\
+docker compose --project-name edrn start portal" || exit 1
+
+echo ""
 echo "✍️ Rewriting reference sets"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn exec portal django-admin rewritereferencesets" || exit 1
@@ -146,24 +153,19 @@ docker compose --project-name edrn exec portal django-admin rewritereferencesets
 echo ""
 echo "👩‍🔧 Fixing any tree issues"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal fixtree" || exit 1
+docker compose --project-name edrn exec portal django-admin fixtree" || exit 1
 
-# I have no idea why but these always fail with exit code 137 (out of memory),
-# and that's even after we ugpraded edrn-dev to a t2.2xlarge instance and
-# split the report generation into smaller chunks.
-# 
-# echo ""
-# echo "😘 Installing data quality reports"
-# ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-# docker compose --project-name edrn exec portal django-admin installdataqualityreports" || exit 1
+echo ""
+echo "🤷‍♀️ Restarting the portal to see if that helps with OoM issues"
+ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
+docker compose --project-name edrn stop portal &&\
+sleep 60 &&\
+docker compose --project-name edrn start portal" || exit 1
 
-
-# 🔮 IDEA: shut down the entire composition then restart it to see if that clears up memory; we can
-# then continue the build steps
-#
-# Might need a final shutdown and restart at the end
-#
-# Putting this idea on hold as the build now runs to completion
+echo ""
+echo "😘 Installing data quality reports"
+ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
+docker compose --project-name edrn exec portal django-admin installdataqualityreports" || exit 1
 
 
 # This next step takes a lot of resources
@@ -172,17 +174,29 @@ echo "🧱 Rebuilding reference index"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn run --no-deps --rm --no-TTY --entrypoint /usr/bin/django-admin portal rebuild_references_index --chunk_size 100" || exit 1
 
-# Disabling for now; can do this TTW
+# We can do the "rdfingest" through-the-web so let's skip it here
+#
+# echo ""
+# echo "🤷‍♀️ Restarting the portal to see if that helps with OoM issues"
+# ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
+# docker compose --project-name edrn stop portal &&\
+# sleep 60 &&\
+# docker compose --project-name edrn start portal" || exit 1
 #
 # echo ""
 # echo "📀 Initial ingest … hold onto your hats"
-
 # ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-# docker compose --project-name edrn exec --detach --no-TTY portal django-admin rdfingest" || exit 1
+# docker compose --project-name edrn exec --no-TTY portal django-admin rdfingest" || exit 1
+
+echo ""
+echo "🤷‍♀️ Final portal restart"
+ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
+docker compose --project-name edrn stop portal &&\
+sleep 60 &&\
+docker compose --project-name edrn start portal" || exit 1
 
 echo ""
 echo "👉 Restart Apache"
-
 ssh -q $USER@$WEBSERVER "sudo systemctl restart apache" || exit 1
 
 echo ""
