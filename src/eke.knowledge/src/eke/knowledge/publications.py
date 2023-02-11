@@ -17,6 +17,7 @@ from modelcluster.fields import ParentalKey
 from plotly.express import bar
 from rdflib import URIRef
 from urllib.error import HTTPError
+from urllib.parse import urlparse
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.fields import RichTextField
 from wagtail.models import Orderable
@@ -111,9 +112,10 @@ class Ingestor(BaseIngestor):
     _siteIDPredicate      = URIRef(esu('site'))                   # RDF predicate for site ID
     _grantNumberURIPrefix = 'urn:edrn:knowledge:pub:via-grants:'  # How we'll identify pubs from grant numbers
 
-    def slugify(self, pubMedID: str, title: str) -> str:
+    def slugify(self, pubMedID: str, title: str, identifier: str) -> str:
         '''Make an appropriate URI slug component for a publication.'''
-        return slugify(f'{pubMedID} {title}')[:MAX_SLUG_LENGTH]
+        lastpath = urlparse(identifier).path.split('/')[-1]
+        return slugify(f'{pubMedID} {lastpath} {title}')[:MAX_SLUG_LENGTH]
 
     def configureEntrez(self):
         '''Set up the Entrez API.
@@ -209,13 +211,11 @@ class Ingestor(BaseIngestor):
 
         for group in divvy(subjectURItoPMIDs):
             identifiers, pubInfo = [i[0] for i in group], [i[1] for i in group]
-            identifiers.sort()
             # At this point identifiers is a sequence of unicode subjectUrIs and
             # pubInfo is a sequence of two-pair tuples of (unicode PubMedID, unicode site ID URI or None if unk)
             pubInfoDict = dict(pubInfo)
             # pubInfoDict is now a mapping of unicode PubMedID to unicode site ID URI (or None if unknwon)
             pubMedIDs = list(pubInfoDict.keys())
-            pubMedIDs.sort()
             # pubMedIDs is a sequence of unicode PubMedIDs
             try:
                 with closing(Entrez.efetch(db='pubmed', retmode='xml', rettype='medline', id=pubMedIDs)) as ef:
@@ -226,7 +226,7 @@ class Ingestor(BaseIngestor):
                         # 🔮 TODO: find a better way to break these titles
                         # And maybe keep a separate full_title attribute
                         title = str(medline['MedlineCitation']['Article']['ArticleTitle'])[:250]
-                        slug = self.slugify(pubMedID, title)
+                        slug = self.slugify(pubMedID, title, identifier)
                         if Publication.objects.child_of(self.folder).filter(slug=slug).count() > 0:
                             _logger.debug('Publication %s “%s” already exists, skipping', pubMedID, slug)
                             continue

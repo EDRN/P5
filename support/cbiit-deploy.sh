@@ -64,7 +64,7 @@ ssh -q $USER@$WEBSERVER "cd $WEBROOT &&\
 curl --silent --fail --location --remote-name https://github.com/EDRN/P5/raw/main/docker/docker-compose.yaml &&\
 curl --silent --fail --location --remote-name https://github.com/EDRN/P5/raw/main/support/sync-from-ops.sh &&\
 chmod 755 sync-from-ops.sh &&\
-env NIH_PASSWORD=$NIH_PASSWORD WORKSPACE=/local/content/edrn /local/content/edrn/docker/sync-from-ops.sh" || exit 1
+env NIH_USERNAME=$NIH_USERNAME NIH_PASSWORD=$NIH_PASSWORD WORKSPACE=/local/content/edrn /local/content/edrn/docker/sync-from-ops.sh" || exit 1
 
 
 echo ""

@@ -43,10 +43,11 @@ class Command(BaseCommand):
             promotion = f'"{protocol.title}" is a protocol, project, or study that is being pursued or was pursued by the Early Detection Research Network.'
             protocol.search_description = promotion
             protocol.save()
-        for publication in Publication.objects.all():
-            publication.search_description = 'This is a publication by a member of the Early Detection Research Network.'
-            publication.save()
         for dc in DataCollection.objects.all():
             promotion = f'"{dc.title}" is scientific data collected by Early Detection Research Network.'
             dc.search_description = promotion
             dc.save()
+
+        # This is the wrong place for this, but I don't want to make yet another management command.
+        # This is to address bad data in publications as a result of EDRN/P5#228
+        Publication.objects.all().delete()
