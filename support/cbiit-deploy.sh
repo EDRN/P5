@@ -123,8 +123,26 @@ docker compose --project-name edrn exec portal django-admin fixtree &&\
 docker compose --project-name edrn exec portal django-admin makemigrations &&\
 docker compose --project-name edrn exec portal django-admin migrate &&\
 docker compose --project-name edrn exec portal django-admin collectstatic --no-input --clear &&\
-docker compose --project-name edrn exec portal django-admin edrndevreset &&\
+docker compose --project-name edrn exec portal django-admin edrndevreset" || exit 1
+
+echo ""
+echo "🤷‍♀️ Restarting the portal to see if that helps with OoM issues"
+ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
+docker compose --project-name edrn stop portal &&\
+sleep 60 &&\
+docker compose --project-name edrn start portal" || exit 1
+
+echo ""
+echo "📯 Promoting search results"
+ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn exec portal django-admin edrnpromotesearch" || exit 1
+
+echo ""
+echo "🤷‍♀️ Restarting the portal to see if that helps with OoM issues"
+ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
+docker compose --project-name edrn stop portal &&\
+sleep 60 &&\
+docker compose --project-name edrn start portal" || exit 1
 
 # This next step takes a lot of resources
 echo ""
@@ -132,6 +150,13 @@ echo "🚢 Importing paperless content"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn run --volume $WEBROOT/../exports:/mnt/zope --volume $WEBROOT/../blobstorage:/mnt/blobs \
     --entrypoint /usr/bin/django-admin --no-deps --rm --no-TTY portal importpaperless /mnt/zope/edrn.json /mnt/blobs" || exit 1
+
+echo ""
+echo "🤷‍♀️ Restarting the portal to see if that helps with OoM issues"
+ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
+docker compose --project-name edrn stop portal &&\
+sleep 60 &&\
+docker compose --project-name edrn start portal" || exit 1
 
 echo ""
 echo "🏓 Translating tables"
