@@ -33,20 +33,24 @@ class Command(BaseCommand):
                     )
                     if created:
                         self.stdout.write(f'Promoting search for {name} to {biomarker}')
+                        del promotion
                 except Exception:
                     pass
         for site in Site.objects.all():
             promotion = f'{site.title} is a site belonging to the Early Detection Research Network.'
             site.search_description = promotion
             site.save()
+            del site
         for protocol in Protocol.objects.all():
             promotion = f'"{protocol.title}" is a protocol, project, or study that is being pursued or was pursued by the Early Detection Research Network.'
             protocol.search_description = promotion
             protocol.save()
+            del protocol
         for dc in DataCollection.objects.all():
             promotion = f'"{dc.title}" is scientific data collected by Early Detection Research Network.'
             dc.search_description = promotion
             dc.save()
+            del dc
 
         # This is the wrong place for this, but I don't want to make yet another management command.
         # This is to address bad data in publications as a result of EDRN/P5#228
