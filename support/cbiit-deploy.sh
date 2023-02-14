@@ -3,7 +3,7 @@
 # CBIIT deployment script for EDRN.
 #
 # Called by Jenkins to deploy the EDRN application to edrn-dev.nci.nih.gov,
-# edrn-stage, and edrn (production) too.
+# edrn-stage, and maybe some day production too.
 #
 # Originally by Cuong Nguyen.
 # Modified by @nutjob4life
