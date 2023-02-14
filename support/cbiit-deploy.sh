@@ -86,7 +86,13 @@ echo ""
 echo "🪢 Pulling the images anonymously"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker logout ncidockerhub.nci.nih.gov && docker logout &&\
-docker image rm --force nutjob4life/edrn-portal:$EDRN_VERSION &&\
+docker image rm --force nutjob4life/edrn-portal:$EDRN_VERSION &"
+
+# The `docker image rm` step can take a long time, and sshd will time out the
+# idle connection because it's a despotic and horrible server.
+sleep 400
+
+ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn pull --include-deps --quiet" || exit 1
 
 echo ""
@@ -141,6 +147,8 @@ docker compose --project-name edrn exec portal django-admin edrnpromotesearch &"
 
 echo ""
 echo "⏱️ Waiting a full 10 minutes for that last step to complete"
+# The `edrnpromotesearch` step can take a long time, and sshd will time out the
+# idle connection because it's a despotic and horrible server.
 sleep 600
 
 echo ""
