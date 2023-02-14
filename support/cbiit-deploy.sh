@@ -86,6 +86,7 @@ echo ""
 echo "🪢 Pulling the images anonymously"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker logout ncidockerhub.nci.nih.gov && docker logout &&\
+docker image rm --force nutjob4life/edrn-portal:$EDRN_VERSION &&\
 docker compose --project-name edrn pull --include-deps --quiet" || exit 1
 
 echo ""
@@ -126,16 +127,21 @@ docker compose --project-name edrn exec portal django-admin collectstatic --no-i
 docker compose --project-name edrn exec portal django-admin edrndevreset" || exit 1
 
 echo ""
-echo "🤷‍♀️ Restarting the portal to see if that helps with OoM issues"
+echo "🤷‍♀️ Restarting the portal and stopping search engine"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn stop portal &&\
+docker compose --project-name edrn stop search &&\
 sleep 60 &&\
 docker compose --project-name edrn start portal" || exit 1
 
 echo ""
-echo "📯 Promoting search results"
+echo "📯 Promoting search results and putting it into the background"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal django-admin edrnpromotesearch" || exit 1
+docker compose --project-name edrn exec portal django-admin edrnpromotesearch &" || exit 1
+
+echo ""
+echo "⏱️ Waiting a full 10 minutes for that last step to complete"
+sleep 600
 
 echo ""
 echo "🤷‍♀️ Restarting the portal to see if that helps with OoM issues"
@@ -214,10 +220,11 @@ docker compose --project-name edrn run --no-deps --rm --no-TTY --entrypoint /usr
 # docker compose --project-name edrn exec --no-TTY portal django-admin rdfingest" || exit 1
 
 echo ""
-echo "🤷‍♀️ Final portal restart"
+echo "🤷‍♀️ Final portal restart and restart of search engine"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn stop portal &&\
 sleep 60 &&\
+docker compose --project-name edrn start search &&\
 docker compose --project-name edrn start portal" || exit 1
 
 echo ""
