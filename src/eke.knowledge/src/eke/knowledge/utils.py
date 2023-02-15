@@ -24,7 +24,7 @@ def filter_by_user(qs: PageQuerySet, user: User) -> PageQuerySet:
     if not user.is_authenticated:
         qs = qs.public()
     elif not user.is_superuser:
-        disallowed = PageViewRestriction.objects.exclude(groups__id=user.groups.all()).values_list("page", flat=True)
+        disallowed = PageViewRestriction.objects.exclude(groups__in=user.groups.all()).values_list("page", flat=True)
         qs = qs.exclude(id__in=disallowed)
     return qs
 
