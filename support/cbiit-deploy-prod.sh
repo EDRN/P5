@@ -1,9 +1,7 @@
 #!/bin/sh
 #
-# CBIIT deployment script for EDRN.
-#
-# Called by Jenkins to deploy the EDRN application to edrn-dev.nci.nih.gov,
-# edrn-stage.nci.nih.gov. But NOT for production!
+# CBIIT deployment script for EDRN — for PRODUCTION use
+# Although you can do it on edrn-stage as well.
 #
 # Originally by Cuong Nguyen.
 # Modified by @nutjob4life
@@ -28,11 +26,11 @@ echo "👉 Here is what is on $WEBSERVER in $WEBROOT"
 ssh -q $USER@$WEBSERVER "ls -l $WEBROOT"
 
 echo ""
-echo "🧹Cleaning up remote workspace - MUST NOT BE DONE IN PRODUCTION"
+echo "🧹Cleaning up remote production workspace and keeping the media dir around"
 
 ssh -q $USER@$WEBSERVER "sudo chown -R $USER:$USER /local/content/edrn &&\
-rm -rf $WEBROOT/docker-compose.yaml $WEBROOT/../media $WEBROOT/../static $WEBROOT/../postgresql $WEBROOT/.env &&\
-mkdir $WEBROOT/../media $WEBROOT/../static $WEBROOT/../postgresql &&\
+rm -rf $WEBROOT/docker-compose.yaml $WEBROOT/../static $WEBROOT/.env &&\
+mkdir $WEBROOT/../media $WEBROOT/../static &&\
 ls -lF $WEBROOT"
 
 echo ""
@@ -58,13 +56,11 @@ echo "© Copying .env file to $WEBROOT"
 scp .env $USER@$WEBSERVER:$WEBROOT
 
 echo ""
-echo "👉 Fetching the latest docker-compose.yaml and sync-from-ops.sh and pulling production content"
+echo "👉 Fetching the latest docker-compose.yaml"
 
 ssh -q $USER@$WEBSERVER "cd $WEBROOT &&\
 curl --silent --fail --location --remote-name https://github.com/EDRN/P5/raw/main/docker/docker-compose.yaml &&\
-curl --silent --fail --location --remote-name https://github.com/EDRN/P5/raw/main/support/sync-from-ops.sh &&\
-chmod 755 sync-from-ops.sh &&\
-env NIH_USERNAME=$NIH_USERNAME NIH_PASSWORD=$NIH_PASSWORD WORKSPACE=/local/content/edrn /local/content/edrn/docker/sync-from-ops.sh" || exit 1
+chmod 755 sync-from-ops.sh" || exit 1
 
 
 echo ""
@@ -112,25 +108,12 @@ ssh -q $USER@$WEBSERVER "cd $WEBROOT && docker compose --project-name edrn ps"
 
 
 echo ""
-echo "👷‍♀️ Bring over latest production DB"
-
-ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec db dropdb --force --if-exists --username=postgres edrn &&\
-docker compose --project-name edrn exec db createdb --username=postgres --encoding=UTF8 --owner=postgres edrn" || exit 1
-
-ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-pwd && ls && [ -f edrn.sql.bz2 ] &&\
-bzip2 --decompress --stdout edrn.sql.bz2 | \
-    docker compose --project-name edrn exec --no-TTY db psql --username=postgres --dbname=edrn --echo-errors --quiet" || exit 1
-
-echo ""
 echo "📀 Initial database setup"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn exec portal django-admin fixtree &&\
 docker compose --project-name edrn exec portal django-admin makemigrations &&\
 docker compose --project-name edrn exec portal django-admin migrate &&\
-docker compose --project-name edrn exec portal django-admin collectstatic --no-input --clear &&\
-docker compose --project-name edrn exec portal django-admin edrndevreset" || exit 1
+docker compose --project-name edrn exec portal django-admin collectstatic --no-input --clear" || exit 1
 
 echo ""
 echo "🤷‍♀️ Restarting the portal and stopping search engine"
