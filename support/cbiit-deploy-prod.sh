@@ -29,8 +29,8 @@ echo ""
 echo "🧹Cleaning up remote production workspace and keeping the media dir around"
 
 ssh -q $USER@$WEBSERVER "sudo chown -R $USER:$USER /local/content/edrn &&\
-rm -rf $WEBROOT/docker-compose.yaml $WEBROOT/../static $WEBROOT/.env &&\
-mkdir $WEBROOT/../media $WEBROOT/../static &&\
+rm -rf $WEBROOT/docker-compose.yaml $WEBROOT/../static $WEBROOT/../postgresql $WEBROOT/.env &&\
+mkdir $WEBROOT/../media $WEBROOT/../static $WEBROOT/../postgresql &&\
 ls -lF $WEBROOT"
 
 echo ""
@@ -105,6 +105,18 @@ sleep 17
 echo ""
 echo "🕵️ Checking on containers"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT && docker compose --project-name edrn ps"
+
+
+echo ""
+echo "👷‍♀️ Upgrading production DB"
+
+ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
+docker compose --project-name edrn exec db dropdb --force --if-exists --username=postgres edrn &&\
+docker compose --project-name edrn exec db createdb --username=postgres --encoding=UTF8 --owner=postgres edrn" || exit 1
+ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
+[ -f /local/content/edrn/database-access/edrn.sql.bz2 ] &&\
+bzip2 --decompress --stdout /local/content/edrn/database-access/edrn.sql.bz2 | \
+    docker compose --project-name edrn exec --no-TTY db psql --username=postgres --dbname=edrn --echo-errors --quiet" || exit 1
 
 
 echo ""
