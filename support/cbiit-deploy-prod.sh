@@ -135,15 +135,16 @@ docker compose --project-name edrn stop search &&\
 sleep 60 &&\
 docker compose --project-name edrn start portal" || exit 1
 
-# echo ""
-# echo "📯 Promoting search results and putting it into the background"
-# ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-# docker compose --project-name edrn exec portal django-admin edrnpromotesearch &" || exit 1
-# echo ""
-# echo "⏱️ Waiting a full 10 minutes for that last step to complete"
+echo ""
+echo "📯 Promoting search results and putting it into the background"
+ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
+docker compose --project-name edrn exec portal django-admin edrnpromotesearch &" || exit 1
+
+echo ""
+echo "⏱️ Waiting a full 10 minutes for that last step to complete"
 # The `edrnpromotesearch` step can take a long time, and sshd will time out the
 # idle connection because it's a despotic and horrible server.
-# sleep 600
+sleep 600
 
 echo ""
 echo "🤷‍♀️ Restarting the portal to see if that helps with OoM issues"
@@ -237,11 +238,3 @@ echo ""
 echo "👉 Done with $WEBSERVER"
 
 echo ""
-echo "📯 Don't forget to do this part by hand after turning off xagt:"
-echo ""
-echo "📯 docker compose --project-name edrn exec portal django-admin edrnpromotesearch"
-echo ""
-echo "It can take some time to run so do not let sshd cut it off. Check the exit status"
-echo "too. If it exits with 143 or 137, it got killed due to OoM."
-echo ""
-echo "And don't forget to turn xagt back on when it's done."
