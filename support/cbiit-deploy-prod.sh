@@ -231,7 +231,7 @@ docker compose --project-name edrn start portal" || exit 1
 
 echo ""
 echo "👉 Restart Apache"
-ssh -q $USER@$WEBSERVER "sudo systemctl restart apache" || exit 1
+ssh -q $USER@$WEBSERVER "sudo systemctl stop apache ; sudo systemctl start apache" || exit 1
 
 echo ""
 echo "👉 Done with $WEBSERVER"
