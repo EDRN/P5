@@ -50,17 +50,19 @@ bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --qu
 ./manage.sh migrate
 ./manage.sh collectstatic --no-input --clear --link
 ./manage.sh edrndevreset
-./manage.sh edrnpromotesearch
-./manage.sh importpaperless ../P5/var/zope-debug/edrn.json ../P5/var/blobstorage
-./manage.sh translatetables
-./manage.sh rewritereferencesets
-./manage.sh installdataqualityreports
-# shoud do `./manage.sh rdfingest` here too?
-# ./manage.sh rdfingest
-# This takes a fair bit of time too:
-./manage.sh rebuild_references_index
+# This may be optional if you want to save time:
+./manage.sh rdfingest
 
 echo '🏁 Done! You can start it with:'
 echo './manage.sh runserver 6468'
 
 exit 0
+
+
+# For 6.0.5, the commands we used to run were:
+# ./manage.sh edrnpromotesearch
+# ./manage.sh importpaperless ../P5/var/zope-debug/edrn.json ../P5/var/blobstorage
+# ./manage.sh translatetables
+# ./manage.sh rewritereferencesets
+# ./manage.sh installdataqualityreports
+# ./manage.sh rebuild_references_index
