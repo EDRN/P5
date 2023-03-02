@@ -135,91 +135,9 @@ sleep 60 &&\
 docker compose --project-name edrn start portal" || exit 1
 
 echo ""
-echo "📯 Promoting search results and putting it into the background"
+echo "🆙 Applying upgrades"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal django-admin edrnpromotesearch &" || exit 1
-
-echo ""
-echo "⏱️ Waiting a full 10 minutes for that last step to complete"
-# The `edrnpromotesearch` step can take a long time, and sshd will time out the
-# idle connection because it's a despotic and horrible server.
-sleep 600
-
-echo ""
-echo "🤷‍♀️ Restarting the portal to see if that helps with OoM issues"
-ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn stop portal &&\
-sleep 60 &&\
-docker compose --project-name edrn start portal" || exit 1
-
-# This next step takes a lot of resources
-echo ""
-echo "🚢 Importing paperless content"
-ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn run --volume $WEBROOT/../exports:/mnt/zope --volume $WEBROOT/../blobstorage:/mnt/blobs \
-    --entrypoint /usr/bin/django-admin --no-deps --rm --no-TTY portal importpaperless /mnt/zope/edrn.json /mnt/blobs" || exit 1
-
-echo ""
-echo "🤷‍♀️ Restarting the portal to see if that helps with OoM issues"
-ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn stop portal &&\
-sleep 60 &&\
-docker compose --project-name edrn start portal" || exit 1
-
-echo ""
-echo "🏓 Translating tables"
-ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal django-admin translatetables" || exit 1
-
-echo ""
-echo "🤷‍♀️ Restarting the portal to see if that helps with OoM issues"
-ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn stop portal &&\
-sleep 60 &&\
-docker compose --project-name edrn start portal" || exit 1
-
-echo ""
-echo "✍️ Rewriting reference sets"
-ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal django-admin rewritereferencesets" || exit 1
-
-echo ""
-echo "👩‍🔧 Fixing any tree issues"
-ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal django-admin fixtree" || exit 1
-
-echo ""
-echo "🤷‍♀️ Restarting the portal to see if that helps with OoM issues"
-ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn stop portal &&\
-sleep 60 &&\
-docker compose --project-name edrn start portal" || exit 1
-
-echo ""
-echo "😘 Installing data quality reports"
-ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal django-admin installdataqualityreports" || exit 1
-
-
-# This next step takes a lot of resources
-echo ""
-echo "🧱 Rebuilding reference index"
-ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn run --no-deps --rm --no-TTY --entrypoint /usr/bin/django-admin portal rebuild_references_index --chunk_size 100" || exit 1
-
-# We can do the "rdfingest" through-the-web so let's skip it here
-#
-# echo ""
-# echo "🤷‍♀️ Restarting the portal to see if that helps with OoM issues"
-# ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-# docker compose --project-name edrn stop portal &&\
-# sleep 60 &&\
-# docker compose --project-name edrn start portal" || exit 1
-#
-# echo ""
-# echo "📀 Initial ingest … hold onto your hats"
-# ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-# docker compose --project-name edrn exec --no-TTY portal django-admin rdfingest" || exit 1
+docker compose --project-name edrn exec portal django-admin edrnnewforms" || exit 1
 
 echo ""
 echo "🤷‍♀️ Final portal restart and restart of search engine"

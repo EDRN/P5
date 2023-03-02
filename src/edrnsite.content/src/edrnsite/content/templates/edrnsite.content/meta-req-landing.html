@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags edrnsite_content_tags %}
+{% block content %}
+
+    <h1>Collection Metadata Received</h1>
+
+    <p>
+        Thanks for your collection metadata, {{name}}. Your submission is now in the system and we'll
+        get back to you by email to <code>{{email}}</code>.
+    </p>
+
+    <p>You can now safely close this browser window.</p>
+
+{% endblock content %}
+{# -*- Django HTML -*- #}

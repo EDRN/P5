@@ -160,9 +160,12 @@ th {
 .typed-table-manager {
 }
 
-label.is-required:before {
+label.is-required:before, legend.is-required:before {
     content: "✱";
     color: red;
+}
+legend {
+    font-size: 16px;
 }
 b {
     font-weight: 1000;

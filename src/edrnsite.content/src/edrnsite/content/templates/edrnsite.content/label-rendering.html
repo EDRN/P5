@@ -1,0 +1,10 @@
+{% spaceless %}
+{% if use_tag %}
+    <{{ tag }}{% include 'django/forms/attrs.html' %} class='form-label'>
+        {{ label }}
+    </{{ tag }}>
+{% else %}
+    {{ label }}
+{% endif %}
+{% endspaceless %}
+{# -*- Django HTML -*- #}

@@ -50,8 +50,9 @@ bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --qu
 ./manage.sh migrate
 ./manage.sh collectstatic --no-input --clear --link
 ./manage.sh edrndevreset
+./manage.sh edrnnewforms
 # This may be optional if you want to save time:
-./manage.sh rdfingest
+# ./manage.sh rdfingest
 
 echo '🏁 Done! You can start it with:'
 echo './manage.sh runserver 6468'

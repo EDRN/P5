@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags edrnsite_content_tags %}
+{% block content %}
+
+    <h1>Specimen Request Received</h1>
+
+    <p>
+        Thanks for your specimen request, {{name}}. Your submission is now in the system and we'll
+        get back to you.
+    </p>
+
+    {% edrn_boilerplate 'specimen-request-next-steps' %}    
+
+{% endblock content %}
+{# -*- Django HTML -*- #}
