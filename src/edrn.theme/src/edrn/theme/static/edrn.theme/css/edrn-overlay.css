@@ -159,3 +159,11 @@ th {
 }
 .typed-table-manager {
 }
+
+label.is-required:before {
+    content: "✱";
+    color: red;
+}
+b {
+    font-weight: 1000;
+}
