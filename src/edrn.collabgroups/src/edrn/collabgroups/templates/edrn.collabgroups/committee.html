@@ -27,7 +27,14 @@
                         {% endfor %}
                     </ul>
                 {% else %}
-                    <p class='small'>No upcoming events scheduled.</p>
+                    {% if past_events %}
+                        <p class='small'>
+                            No upcoming events scheduled.
+                            Click or tap "Past Events" below ↓ to see events that have occurred in the past.
+                        </p>
+                    {% else %}
+                        <p class='small'>No upcoming events scheduled.</p>
+                    {% endif %}
                 {% endif %}
 
                 {% if past_events %}
