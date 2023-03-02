@@ -26,7 +26,7 @@ class Command(BaseCommand):
             intro=intro,
             outro=outro,
             from_address='ic-portal@jpl.nasa.gov',
-            to_address='sean.kelly@jpl.nasa.gov',
+            to_address='sean.kelly@jpl.nasa.gov,heather.kincaid@jpl.nasa.gov',
             subject='A new Specimen Reference Set Request has been submitted'
         )
         parent.add_child(instance=form_page)
@@ -51,7 +51,7 @@ class Command(BaseCommand):
             intro=intro,
             outro=outro,
             from_address='ic-data@jpl.nasa.gov',
-            to_address='sean.kelly@jpl.nasa.gov',
+            to_address='sean.kelly@jpl.nasa.gov,heather.kincaid@jpl.nasa.gov',
             subject='New Metadata Collection has been submitted'
         )
         parent.add_child(instance=form_page)
