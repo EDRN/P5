@@ -145,6 +145,11 @@ class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
             except (AttributeError, KeyError, IndexError):
                 name = f'{request.user.first_name} {request.user.last_name}'.strip()
             initial['custodian'] = name
+            try:
+                email = request.user.ldap_user.attrs['mail'][0]
+            except (AttributeError, KeyError, IndexError):
+                email = request.user.email
+            initial['custodian_email'] = email
         return initial
     def get_landing_page(self) -> str:
         return 'edrnsite.content/meta-req-landing.html'
