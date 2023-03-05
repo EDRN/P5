@@ -101,7 +101,11 @@ a.dropdown-item:hover, a.dropdown-toggle:hover {
 .site-footer p {
     font-family: "Noto Sans", "Century Gothic", Arial, sans-serif !important;
 }
-.site-footer h5, .site-footer h6 {
+.site-footer .division, .site-footer .edrn-footer-menu-heading {
+    font-weight: bold;
+    font-family: Montserrat, "Avant Garde", Arial, sans-serif;
+}
+.site-footer .division, .site-footer .edrn-footer-menu-heading {
     color: white;
 }
 /*

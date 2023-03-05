@@ -2,11 +2,11 @@
 <footer class='px-5 border-top site-footer text-light'
     style='background: url({% static "edrn.theme/images/hexagon-molecular-structure-footer.png" %}) no-repeat 100% 0, linear-gradient(45deg, #4659a5, #2f779d);'>
     <div class='row py-3'>
-        <h5>Division of Cancer Prevention <br/><small>at the National Cancer Institute</small></h5>
+        <div class='division'>Division of Cancer Prevention <br/><small>at the National Cancer Institute</small></div>
     </div>
     <div class='row row-cols-4 mx-1'>
         <div class='col'>
-            <h6 class='edrn-footer-menu-heading'>Follow DCP</h6>
+            <div class='edrn-footer-menu-heading'>Follow DCP</div>
             {# 7 days #}
             {% cache 604800 global-footer-social-settings %}
                 <ul class='nav list-inline'>
