@@ -3,51 +3,18 @@
     <table class='table'>
         <thead>
             <tr>
-                <th scope='col'>Site</th>
-                <th scope='col'>Investigator</th>
-                {% if show_organs %}<th scope='col'>Organ</th>{% endif %}
+                <th width='10%' scope='col'>Site ID</th>
+                <th width='40%' scope='col'>Investigator</th>
+                <th width='50%' scope='col'>Site</th>
             </tr>
         </thead>
         <tbody>
-            {% for proposal_group in proposal_groups %}
-                {% for site in proposal_group.sites %}
-                    <tr>
-                        <td><a href='{{site.url}}'>{{site.title}}</a></td>
-                        <td><a href='{{site.pi.url}}'>{{site.pi.title}}</a></td>
-                        {% if show_organs %}<td>{{site.organs|knowledge_value_joined}}</td>{% endif %}
-                    </tr>
-                {% endfor %}
-                {% if proposal_group.specialty %}
-                    <tr>
-                        <td class='pb-5' colspan='{% if show_organs %}3{% else %}2{% endif %}'>
-                            <button class='btn btn-sm btn-outline-secondary text-nowrap' type='button'
-                                data-bs-toggle='collapse' data-bs-target='#{{proposal_group.cid}}' aria-expanded='false'
-                                aria-controls='{{proposal_group.cid}}'>
-                                {% if proposal_group.sites|length == 1 %}
-                                    Read summary for this site ↑
-                                {% else %}
-                                    Read summary for above {{proposal_group.sites|length}} sites
-                                {% endif %}
-                            </button>
-                            <div class='collapse' id='{{proposal_group.cid}}'>
-                                <p class='card card-body'>{{proposal_group.specialty|safe}}</p>
-                            </div>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td class='pb-5' colspan='{% if show_organs %}3{% else %}2{% endif %}'>
-                            {% if proposal_group.sites|length == 1 %}
-                                <small>(No summary available for the above site)</small>
-                            {% else %}
-                                <small>
-                                    (No summary available for the above {{proposal_group.sites|length}} sites)
-                                </small>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endif %}
-
+            {% for site in sites %}
+                <tr>
+                    <td>{{site.dmccSiteID}}</td>
+                    <td><a href='{{site.pi.url}}'>{{site.pi.title}}</a></td>
+                    <td><a href='{{site.url}}'>{{site.title}}</a></td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>

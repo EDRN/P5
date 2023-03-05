@@ -13,7 +13,7 @@ from django.core.files.images import ImageFile
 from django.db import models
 from django.db.models.fields import Field
 from django.db.models.functions import Lower
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.utils.text import slugify
 from django_plotly_dash import DjangoDash
 from eke.geocoding.models import InvestigatorAddress
@@ -28,10 +28,11 @@ from urllib.request import urlopen
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.fields import RichTextField
 from wagtail.images.models import Image
+from wagtail.models import Orderable, Page
 from wagtail.search import index
 import dash_core_components as dcc
 import dash_html_components as html
-import pandas, logging, rdflib, pkg_resources, csv, codecs, tempfile, libgravatar
+import pandas, logging, rdflib, tempfile, libgravatar
 
 
 _logger                     = logging.getLogger(__name__)
@@ -41,6 +42,10 @@ _interalProposalPredicate   = 'urn:internal:propsoal'
 _internalOrganPredicate     = 'urn:internal:organ'
 _surname_predicate_uri      = rdflib.URIRef('http://xmlns.com/foaf/0.1/surname')
 _default_person_icon        = 'mp'
+
+
+def get_predicate_value(uri: rdflib.URIRef, predicates: dict) -> str:
+    return str(predicates[uri][0]) if uri in predicates else ''
 
 
 class _MemberTypeRDFAttribute(RDFAttribute):
@@ -221,6 +226,7 @@ class Person(KnowledgeObject):
     template = 'eke.knowledge/person.html'
     parent_page_types = [Site]
     edrnTitle = models.CharField(max_length=40, blank=True, null=False, help_text='Title bestowed from on high')
+    degrees = models.CharField(max_length=40, blank=True, null=False, help_text='Academia')
     mbox = models.EmailField(blank=True, null=False, help_text='Email address')
     fax = models.CharField(max_length=40, blank=True, null=False, help_text='Who seriously uses fax?')
     account_name = models.CharField(max_length=32, blank=True, null=False, help_text='DMCC-assigned login identifier')
@@ -238,6 +244,7 @@ class Person(KnowledgeObject):
 
     content_panels = KnowledgeObject.content_panels + [
         FieldPanel('edrnTitle'),
+        FieldPanel('degrees'),
         FieldPanel('mbox'),
         FieldPanel('fax'),
         FieldPanel('personID'),
@@ -299,19 +306,31 @@ class Person(KnowledgeObject):
         return context
 
 
+class OrganizationalGroup(Page):
+    '''An organizational group in EDRN consisting of a name and related sites.'''
+    content_panels = Page.content_panels + [InlinePanel('group_members', label='Group Members')]
+    preview_modes = []
+    def serve(self, request: HttpRequest) -> HttpResponse:
+        '''Overridden because you don't ever visit these; they're more "structural".'''
+        return HttpResponseRedirect(self.get_parent().url)
+
+
 class Ingestor(BaseIngestor):
     '''Site ingestor.'''
 
+    _degree_pred_uri_prefix = 'http://edrn.nci.nih.gov/rdf/schema.rdf#degree'
     _doNotRecreateFlag      = 'Former employee'
     _employmentPredicateURI = rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#employmentActive')
     _givenNamePredicateURI  = rdflib.URIRef('http://xmlns.com/foaf/0.1/givenname')
+    _member_site_pred_uri   = rdflib.URIRef('urn:edrn:predicates:member_site')
     _middleNamePredicateURI = rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#middleName')
     _personType             = 'http://edrn.nci.nih.gov/rdf/types.rdf#Person'
     _piPredicateURI         = rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#pi')
+    _org_group_type         = 'urn:edrn:types:org_group'
     _siteURIPredicate       = rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#site')
-    _coPIPredicateURI       = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#copi')
-    _coIPredicateURI        = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#coi')
-    _iPredicateURI          = rdflib.URIRef(u'http://edrn.nci.nih.gov/rdf/schema.rdf#investigator')
+    _coPIPredicateURI       = rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#copi')
+    _coIPredicateURI        = rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#coi')
+    _iPredicateURI          = rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#investigator')
     _api_fetch_size         = 20
 
     def _get_dmcc_code(self, uri: rdflib.URIRef) -> str:
@@ -340,12 +359,10 @@ class Ingestor(BaseIngestor):
         description (casual).
         '''
         def get_name_components() -> tuple:
-            def get_predicate_value(uri: rdflib.URIRef) -> str:
-                return str(predicates[uri][0]) if uri in predicates else ''
             return (
-                get_predicate_value(_surname_predicate_uri),
-                get_predicate_value(self._givenNamePredicateURI),
-                get_predicate_value(self._middleNamePredicateURI)
+                get_predicate_value(_surname_predicate_uri, predicates),
+                get_predicate_value(self._givenNamePredicateURI, predicates),
+                get_predicate_value(self._middleNamePredicateURI, predicates)
             )
         last, first, middle = get_name_components()
         given = first
@@ -364,6 +381,16 @@ class Ingestor(BaseIngestor):
         if not casual:
             casual = '«PERSON WITH NO NAME»'
         return formal, casual
+
+    def assign_academic_degree(self, person: Person, predicates: dict):
+        degrees = []
+        for i in range(1, 4):
+            degree = str(predicates.get(rdflib.URIRef(f'{self._degree_pred_uri_prefix}{i}'), [''])[0]).strip()
+            if degree:
+                degrees.append(degree)
+        degrees = ', '.join(degrees)
+        if degrees:
+            person.degrees = degrees
 
     def create_person(self, sites, uri: str, predicates: dict) -> Person:
         # Previously we deleted only those that where ``child_of(site)`` but this doesn't account for
@@ -399,6 +426,7 @@ class Ingestor(BaseIngestor):
             if rdfAttribute is None: continue
             modelField = person._meta.get_field(rdfAttribute.name)
             rdfAttribute.modify_field(person, values, modelField, predicates)
+        self.assign_academic_degree(person, predicates)
         site.add_child(instance=person)
         person.save()
 
@@ -500,16 +528,36 @@ class Ingestor(BaseIngestor):
             site.search_description = promotion
             site.save()
 
+    def record_organizational_groups(self):
+        # Start with a clean slate
+        OrganizationalGroup.objects.child_of(self.folder).delete()
+        self.folder.refresh_from_db()
+        for subject, predicates in self.filter_by_rdf_type(self.statements, rdflib.URIRef(self._org_group_type)):
+            og = OrganizationalGroup(title=str(predicates[rdflib.DCTERMS.title][0]))
+            self.folder.add_child(instance=og)
+            og.save()
+            for ms_uri in predicates.get(self._member_site_pred_uri, []):
+                ms_preds = self.statements.get(ms_uri)
+                if not ms_preds: continue
+                ms = _create_org_group_member(ms_preds)
+                if not ms:
+                    _logger.error('Could not find needed info to make member group for %s; skipping', ms_uri)
+                    continue
+                og.group_members.add(ms)
+                ms.save()
+
     def ingest(self):
         # We do this twice because the first time, sites that sponsor other sites may not yet exist. So the second
         # round links them up.
-        c0, u0, d0 = super().ingest()
-        c1, u1, d1 = super().ingest()
-        c2, u2, d2 = self.ingest_people()
+        c0, u0, d0 = super().ingest()      # This sets self.statements
+        c1, u1, d1 = super().ingest()  
+        c2, u2, d2 = self.ingest_people()  # So subseqeunt invocations like this one can use it
         self.setup_investigators()
         self.setup_coordinates(c2)
         self.promote_sites(c0 | c1)
+        self.record_organizational_groups()
         return c0 | c1 | c2, u0 | u1 | u2, d0 | d1 | d2
+        # return set(), set(), set()
 
 
 class SiteIndex(KnowledgeFolder):
@@ -528,16 +576,14 @@ class SiteIndex(KnowledgeFolder):
     _spore             = 'SPOREs'
     _non               = 'Non-EDRN Site'
     template           = 'eke.knowledge/site-index.html'
-    subpage_types      = [Site]
+    subpage_types      = [Site, OrganizationalGroup]
 
     def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
         context = super().get_context(request, *args, **kwargs)
 
-        context['bccs']  = Site.objects.child_of(self).live().public().filter(memberType=self._bcc)
-        context['bdls']  = Site.objects.child_of(self).live().public().filter(memberType=self._bdl)
-        context['brls']  = Site.objects.child_of(self).live().public().filter(memberType=self._brl)
-        context['cvcs']  = Site.objects.child_of(self).live().public().filter(memberType=self._cvc)
-        context['dmccs'] = Site.objects.child_of(self).live().public().filter(memberType=self._dmcc)
+        for og in OrganizationalGroup.objects.child_of(self).order_by('title'):
+            context[og.title.lower()] = og.group_members.all()
+
         context['ics']   = Site.objects.child_of(self).live().public().filter(memberType=self._ic)
         context['ncis']  = Site.objects.child_of(self).live().public().filter(memberType=self._nci)
         context['typeA'] = Site.objects.child_of(self).live().public().filter(memberType=self._typeA)
@@ -582,3 +628,56 @@ class SiteIndex(KnowledgeFolder):
         types = {
             _siteType: Site,
         }
+
+
+class OrgGroupMember(Orderable):
+    site = models.ForeignKey(
+        Site, null=True, blank=True, verbose_name='Site', related_name='+', on_delete=models.CASCADE
+    )
+    pi = models.ForeignKey(
+        Person, null=True, blank=True, verbose_name='Principal Investigator', related_name='+',
+        on_delete=models.CASCADE
+    )
+    organ_name = models.CharField(max_length=120, blank=True, null=False, help_text='Organ(s)')
+    group_num = models.IntegerField(null=False, default=0, help_text='Group Number')
+    sort_order = models.IntegerField(null=False, default=0, help_text='Sort Order')
+    member_type = models.CharField(max_length=30, blank=True, null=False, help_text='Member type(s)')
+    role = models.CharField(max_length=30, blank=True, null=False, help_text='Role played')
+    panels = [
+        FieldPanel('site'),
+        FieldPanel('pi'),
+        FieldPanel('organ_name'),
+        FieldPanel('group_num'),
+        FieldPanel('sort_order'),
+        FieldPanel('member_type'),
+        FieldPanel('role')
+    ]
+    page = ParentalKey(OrganizationalGroup, on_delete=models.CASCADE, related_name='group_members')
+    def __str__(self):
+        return f'{self.organ_name}'
+    class Meta:
+        ordering = ['organ_name', 'group_num', 'sort_order', 'pi__title']
+
+
+def _create_org_group_member(predicates: dict) -> OrgGroupMember:
+    pi_uri = get_predicate_value(rdflib.term.URIRef('urn:edrn:predicates:person'), predicates)
+    site_uri = get_predicate_value(rdflib.term.URIRef('urn:edrn:predicates:site'), predicates)
+    role = get_predicate_value(rdflib.term.URIRef('urn:edrn:predicates:role'), predicates)
+    sort_order = get_predicate_value(rdflib.term.URIRef('urn:edrn:predicates:sort_order'), predicates)
+    group_num = get_predicate_value(rdflib.term.URIRef('urn:edrn:predicates:group_number'), predicates)
+    mem_type = get_predicate_value(rdflib.term.URIRef('urn:edrn:predicates:member_type'), predicates)
+    organ = get_predicate_value(rdflib.term.URIRef('urn:edrn:predicates:organ_name'), predicates)
+    sort_order = int(sort_order) if len(sort_order) > 0 else 0
+    group_num = int(group_num) if len(group_num) > 0 else 0
+    pi = Person.objects.filter(identifier=pi_uri).first()
+    if not pi:
+        _logger.error('Member groups RDF references unknown person URI %s', pi_uri)
+        return None
+    site = Site.objects.filter(identifier=site_uri).first()
+    if not site:
+        _logger.error('Member groups RDF references unknown site URI %s', site_uri)
+        return None
+    return OrgGroupMember(
+        site=site, pi=pi, organ_name=organ, group_num=group_num, sort_order=sort_order, member_type=mem_type,
+        role=role
+    )

@@ -78,6 +78,10 @@
                 </dd>
                 <dt>Site</dt>
                 <dd><a href='{{page.get_parent.url}}'>{{page.get_parent.title}}</a></dd>
+                {% if page.degrees %}
+                    <dt>Degree(s)</dt>
+                    <dd>{{page.degrees}}</dd>
+                {% endif %}
                 <dt>Email</dt>
                 <dd>
                     {% if page.mbox %}

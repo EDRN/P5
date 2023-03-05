@@ -1,0 +1,43 @@
+{% load knowledge_filters %}
+<div class='row'>
+    {% for organ, groups in organs.items %}
+        <h3>{{organ}}</h3>
+        {% for group_number, members in groups.items %}
+            {% if show_group_nums %}
+                <h4>
+                    <i>
+                        Group
+                        {% if 0 < group_number < 10 %}
+                            <i class="bi bi-{{group_number}}-circle-fill"></i>
+                        {% else %}
+                            {{group_number}}
+                        {% endif %}
+                    </i>
+                </h4>
+            {% endif %}
+            <table summary='Sites in group {{group_number}} for {{organ}}' class='table'>
+                <thead>
+                    <tr>
+                        <th width='10%' scope='col'>Site ID</th>
+                        <th width='27%' scope='col'>Investigator</th>
+                        <th width='36%' scope='col'>Site Name</th>
+                        <th width='16%' scope='col'>PI Type</th>
+                        <th width='11%' scope='col'>Member Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in members %}
+                        <tr>
+                            <td>{{member.site.dmccSiteID}}</td>
+                            <td><a href='{{member.pi.url}}'>{{member.pi.title}}, {{member.pi.degrees}}</a></td>
+                            <td><a href='{{member.site.url}}'>{{member.site.title}}</a></td>
+                            <td>{{member.role}}</td>
+                            <td>{{member.member_type}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+    {% endfor %}
+</div>
+{# -*- Django HTML -*- #}

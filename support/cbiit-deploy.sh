@@ -143,7 +143,8 @@ docker compose --project-name edrn start portal" || exit 1
 echo ""
 echo "🆙 Applying upgrades"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal django-admin edrnnewforms" || exit 1
+docker compose --project-name edrn exec portal django-admin edrnnewforms &&\
+docker compose --project-name edrn exec portal django-admin edrnupdaterdfsettings" || exit 1
 
 echo ""
 echo "🤷‍♀️ Final portal restart and restart of search engine"

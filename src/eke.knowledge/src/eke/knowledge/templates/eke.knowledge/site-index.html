@@ -35,57 +35,50 @@
         </ul>
 
         <h2><a name='bccs'>Biomarker Characterization Centers</a></h2>
-        {% if bccs %}
-            {% edrn_sites_by_type bccs True %}
+        {% if bcc %}
+            {% edrn_sites_organized_by_needlessly_complex_and_arbitrary_groups bcc True %}
         {% else %}
             <p class='small'>There are no known Biomarker Characterization Centers.</p>
         {% endif %}
 
         <h2><a name='bdls'>Biomarker Developmental Laboratories</a></h2>
-        {% if bdls %}
-            <p class='pb-1 mb-3 small'>
-                The following Biomarker Developmental Laboratories are organized by the focused organ of biomarker
-                development, and then by the proposal made by those participating sites. The term "No organ-specific
-                research" means the sites are not organ-focused. The term "No proposal" means no proposal title was
-                found for the sites. Note that even where there is no proposal title, a summary of the specialty for
-                each site may still be available.
-            </p>
-            {% biomarker_developmental_laboratories bdls %}
+        {% if bdl %}
+            {% edrn_sites_organized_by_needlessly_complex_and_arbitrary_groups bdl True %}
         {% else %}
             <small>There are no known Biomarker Developmental Laboratories.</small>
         {% endif %}
 
         <h2><a name='brls'>Biomarker Reference Laboratories</a></h2>
-        {% if brls %}
-            {% edrn_sites_by_type brls True %}
+        {% if brl %}
+            {% edrn_sites_organized_by_needlessly_complex_and_arbitrary_groups brl True %}
         {% else %}
             <p class='small'>There are no known Biomarker Reference Laboratories.</p>
         {% endif %}
 
         <h2><a name='cvcs'>Clinical Validation Centers</a></h2>
-        {% if cvcs %}
-            {% edrn_sites_by_type cvcs True %}
+        {% if cvc %}
+            {% edrn_sites_organized_by_needlessly_complex_and_arbitrary_groups cvc True %}
         {% else %}
             <p class='small'>There are no known Clinical Validation Centers.</p>
         {% endif %}
 
         <h2><a name='dmcc'>Data Management and Coordinating Center</a></h2>
-        {% if dmccs %}
-            {% edrn_sites_by_type dmccs False %}
+        {% if dmcc %}
+            {% edrn_sites_organized_by_needlessly_complex_and_arbitrary_groups dmcc False %}
         {% else %}
             <p class='small'>There are no Data Management or Coordinating Centers.</p>
         {% endif %}
 
         <h2><a name='ic'>Informatics Center</a></h2>
         {% if ics %}
-            {% edrn_sites_by_type ics False %}
+            {% edrn_sites_by_type ics %}
         {% else %}
             <p class='small'>There are no known Informatics Centers.</p>
         {% endif %}
 
         <h2><a name='nci'>National Cancer Institute</a></h2>
         {% if ncis %}
-            {% edrn_sites_by_type ncis False %}
+            {% edrn_sites_by_type ncis %}
         {% else %}
             <p class='small'>There is no National Cancer Institute.</p>
         {% endif %}
@@ -95,35 +88,35 @@
 
         <h3>Associate Member A — EDRN Funded</h3>
         {% if typeA %}
-            {% edrn_sites_by_type typeA False %}
+            {% edrn_sites_by_type typeA %}
         {% else %}
             <p class='small'>There are no type A associate members.</p>
         {% endif %}
 
         <h3>Associate Member B</h3>
         {% if typeB %}
-            {% edrn_sites_by_type typeB False %}
+            {% edrn_sites_by_type typeB %}
         {% else %}
             <p class='small'>There are no type B associate members.</p>
         {% endif %}
 
         <h3>Associate Member C</h3>
         {% if typeC %}
-            {% edrn_sites_by_type typeC False %}
+            {% edrn_sites_by_type typeC %}
         {% else %}
             <p class='small'>There are no type C associate members.</p>
         {% endif %}
 
         <h2><a name='spore'>SPOREs</a></h2>
         {% if spore %}
-            {% edrn_sites_by_type spore False %}
+            {% edrn_sites_by_type spore %}
         {% else %}
             <p class='small'>There are no Specialized Programs of Research Excellence (SPORE).</p>
         {% endif %}
 
         <h2><a name='nonEDRN'>Non-EDRN Sites</a></h2>
         {% if non %}
-            {% edrn_sites_by_type non False %}
+            {% edrn_sites_by_type non %}
         {% else %}
             <p class='small'>There are no non-EDRN sites.</p>
         {% endif %}
