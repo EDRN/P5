@@ -32,7 +32,10 @@ class KnowledgeObject(MetadataPageMixin, Page):
     description = models.TextField(blank=True, null=False, help_text='A summary or descriptive abstract')
 
     content_panels = Page.content_panels + [FieldPanel('identifier'), FieldPanel('description')]
-    search_fields = Page.search_fields + [index.SearchField('description')]
+    search_fields = Page.search_fields + [
+        index.SearchField('identifier'),
+        index.SearchField('description')
+    ]
 
     def data_table(self) -> dict:
         return {'identifier': self.identifier, 'title': self.title, 'url': self.url, 'description': self.description}
