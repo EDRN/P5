@@ -16,7 +16,7 @@ from modelcluster.fields import ParentalKey
 from urllib.parse import urlparse
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
 from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField, EmailFormMixin
-from wagtail.core import blocks as wagtail_core_blocks
+from wagtail import blocks as wagtail_core_blocks
 from wagtail.fields import RichTextField
 from wagtail.fields import StreamField
 from wagtail.models import Page

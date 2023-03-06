@@ -91,6 +91,10 @@
             <dl>
                 <dt>Protocol ID</dt>
                 <dd>{{page.protocolID}}</dd>
+                {% if page.kind %}
+                    <dt>Protocol Type</dt>
+                    <dd>{{page.kind}}</dd>
+                {% endif %}
                 <dt>Field of Research</dt>
                 <dd>{{page.fieldOfResearch}}</dd>
                 <dt>Collaborative Group</dt>

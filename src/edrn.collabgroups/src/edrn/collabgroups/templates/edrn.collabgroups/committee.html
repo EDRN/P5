@@ -68,19 +68,19 @@
         </div>
         <div class='col-md-2'>
             {% if page.chair %}
-                <h4>Chair</h4>
+                <h3>Chair</h3>
                 <p><a href='{{page.chair.url}}'>{{page.chair.title}}</a></p>
             {% else %}
                 <p class='small'>No chairperson</p>
             {% endif %}
             {% if page.co_chair %}
-                <h4 class='mt-2'>Co-Chair</h4>
+                <h3 class='mt-2'>Co-Chair</h3>
                 <p><a href='{{page.co_chair.url}}'>{{page.co_chair.title}}</a></p>
             {% else %}
                 <p class='small'>No co-chair</p>
             {% endif %}
 
-            <h4 class='mt-3'>Members</h4>
+            <h3 class='mt-3'>Members</h3>
             <ul class='list-unstyled'>
                 {% for member in members %}
                     <li><a href='{{member.url}}'>{{member.title}}</a></li>

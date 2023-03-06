@@ -2,7 +2,7 @@
 
 '''🧬 EDRN Site: Wagtail hooks and interceptors.'''
 
-from wagtail.core import hooks
+from wagtail import hooks
 from django.http import HttpRequest
 
 

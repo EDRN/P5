@@ -8,7 +8,7 @@ from .utils import aware_now
 from celery import shared_task
 from django.core.cache import cache
 from django.core.management import call_command
-from wagtail.core.models import Site
+from wagtail.models import Site
 import logging
 
 _logger = logging.getLogger(__name__)

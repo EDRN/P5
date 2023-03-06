@@ -15,7 +15,7 @@ from edrnsite.search.urls import urlpatterns as edrnSiteSearchURLs
 from eke.knowledge.urls import urlpatterns as ekeKnowledgeURLs
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.contrib.sitemaps.views import sitemap
-from wagtail.core import urls as wagtail_urls
+from wagtail import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 from wagtail_favicon.urls import urls as favicon_urls
 

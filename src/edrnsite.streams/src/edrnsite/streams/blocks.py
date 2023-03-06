@@ -8,7 +8,7 @@ from django.utils.html import format_html
 from wagtail.blocks.struct_block import StructBlockValidationError
 from wagtail.contrib.table_block.blocks import TableBlock as BaseTableBlock
 from wagtail.contrib.typed_table_block.blocks import TypedTableBlock as BaseTypedTableBlock
-from wagtail.core import blocks
+from wagtail import blocks
 from wagtail.images.blocks import ImageChooserBlock
 
 

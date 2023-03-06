@@ -12,7 +12,7 @@ from eke.knowledge.models import Person
 from eke.knowledge.utils import aware_now
 from modelcluster.fields import ParentalManyToManyField
 from wagtail.admin.panels import FieldPanel
-from wagtail.core import blocks as wagtail_core_blocks
+from wagtail import blocks as wagtail_core_blocks
 from wagtail.fields import StreamField
 from wagtail.models import Page
 from wagtail.snippets.models import register_snippet

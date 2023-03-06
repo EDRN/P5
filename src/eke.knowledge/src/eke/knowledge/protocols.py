@@ -98,6 +98,7 @@ class Protocol(KnowledgeObject):
     finish_date = models.TextField(null=False, blank=True, help_text='When this protocol ceased')
     # 🤬 Get bent    # collaborativeGroupsDeNormalized = models.CharField(max_length=400, blank=True, null=False, help_text='🙄')
     collaborativeGroup = models.CharField(max_length=400, blank=True, null=False, help_text='Collaborative Group')
+    kind = models.CharField(max_length=80, blank=True, null=False, help_text='Protocol type')
     content_panels = KnowledgeObject.content_panels + [
         FieldPanel('coordinatingInvestigatorSite'),
         FieldPanel('leadInvestigatorSite'),
@@ -113,6 +114,7 @@ class Protocol(KnowledgeObject):
         FieldPanel('comments'),
         FieldPanel('finish_date'),
         FieldPanel('collaborativeGroup'),
+        FieldPanel('kind'),
     ]
     search_fields = KnowledgeObject.search_fields + [
         index.SearchField('abbreviation'),
@@ -141,7 +143,8 @@ class Protocol(KnowledgeObject):
             esu('finishDate'): RDFAttribute('finish_date', scalar=True),
             _internalIDPredicate: RDFAttribute('protocolID', scalar=True),
             str(rdflib.DCTERMS.title): RDFAttribute('title', scalar=True),
-            str(rdflib.DCTERMS.description): _ComplexDescriptionRDFAttribute('description', scalar=True)
+            str(rdflib.DCTERMS.description): _ComplexDescriptionRDFAttribute('description', scalar=True),
+            esu('protocolType'): RDFAttribute('kind', scalar=True)
         }
     def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
         '''Get the context for the page template.'''
@@ -225,17 +228,27 @@ class Ingestor(BaseIngestor):
             protocol.involvedInvestigatorSites.set(sites, clear=True)
             protocol.save()
                 
-    def promote_search_results(self, protocols):
+    def promote_search_results(self):
         '''Make search descriptions for the newly-created ``protocols``.'''
-        for protocol in protocols:
-            promotion = f'"{protocol.title}" is a protocol, project, or study that is being pursued or was pursued by the Early Detection Research Network.'
+        for protocol in Protocol.objects.child_of(self.folder):
+            if protocol.kind == 'Validation':
+                kind = 'Validation study'
+            elif protocol.kind == 'Single':
+                kind = 'Single protocol'
+            elif protocol.kind == 'Other sepcify' or not protocol.kind:
+                kind = 'protocol, project, or study'
+            else:
+                kind = protocol.kind
+            first_letter = kind[0].lower()
+            article = 'an' if first_letter in ('a', 'e', 'i', 'o', 'u') else 'a'
+            promotion = f'"{protocol.title}" is {article} {kind} of the Early Detection Research Network.'
             protocol.search_description = promotion
             protocol.save()
 
     def ingest(self):
         n, u, d = super().ingest()
         self.setInvolvedInvestigatorSites()
-        self.promote_search_results(n)
+        self.promote_search_results()
         return n, u, d
 
 

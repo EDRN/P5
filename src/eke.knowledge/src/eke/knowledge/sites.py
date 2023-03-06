@@ -392,6 +392,23 @@ class Ingestor(BaseIngestor):
         if degrees:
             person.degrees = degrees
 
+    def _compute_search_promotion_for_person(self, name: str, predicates: dict) -> str:
+        title = get_predicate_value(rdflib.URIRef(esu('edrnTitle')), predicates)
+        if not title:
+            return f'{name} is a member of the Early Detection Research Network.'
+        if title == 'DMCC':
+            mt = 'DMCC member'
+        elif title.endswith('Staff'):
+            mt = f'{title} member'
+        else:
+            mt = title
+        if mt.startswith('EDRN '):
+            mt = mt[5:]
+        mt = mt.lower()        
+        first_letter = mt[0]
+        article = 'an' if first_letter in ('a', 'e', 'i', 'o', 'u') else 'a'
+        return f'{name} is {article} {mt} of the Early Detection Research Network.'
+
     def create_person(self, sites, uri: str, predicates: dict) -> Person:
         # Previously we deleted only those that where ``child_of(site)`` but this doesn't account for
         # people who move to different sites. Also, we need to refresh all sites because to keep the
@@ -418,7 +435,7 @@ class Ingestor(BaseIngestor):
             return None
 
         title, casual = self.create_person_title(predicates)
-        promotion = f'{casual} is a member of the Early Detection Research Network.'
+        promotion = self._compute_search_promotion_for_person(casual, predicates)
         person = Person(title=title, identifier=uri, live=True, search_description=promotion)
         for predicateURI, values, in predicates.items():
             predicateURI = str(predicateURI)
@@ -477,10 +494,11 @@ class Ingestor(BaseIngestor):
             self.add_investigators(site, self._iPredicateURI,    predicates, 'investigators', scalar=False)
             site.save()
 
-    def setup_coordinates(self, people: set):
+    def setup_coordinates(self):
         misses, lookups = {}, set()
 
         # Assign coordinates for people for whom we've already got coordinates saved
+        people = set(Person.objects.descendant_of(self.folder))
         while len(people) > 0:
             p = people.pop()
             address = InvestigatorAddress.normalize(p.address, p.city, p.state, p.postal_code, p.country)
@@ -521,10 +539,25 @@ class Ingestor(BaseIngestor):
         except (IndexError, KeyError):
             return None
 
-    def promote_sites(self, sites: set):
+    def promote_sites(self):
         '''Set up search descriptions for the newly created sites in ``sites``.'''
-        for site in sites:
-            promotion = f'{site.title} is a site belonging to the Early Detection Research Network.'
+        for site in Site.objects.child_of(self.folder):
+            if site.memberType:
+                if site.memberType == 'SPOREs':
+                    mt = 'a SPORE site'
+                elif site.memberType == 'Biomarker Reference Laboratories':
+                    mt = 'a Biomarker Reference Laboratory'
+                elif site.memberType == 'Biomarker Developmental Laboratories':
+                    mt = 'a Biomarker Developmental Laboratory'
+                elif site.memberType.startswith('Associate'):
+                    mt = 'an Associate site'
+                else:
+                    first_letter = site.memberType[0].lower()
+                    article = 'an' if first_letter in ('a', 'e', 'i', 'o', 'u') else 'a'
+                    mt = f'{article} {site.memberType}'
+                promotion = f'{site.title} is {mt} of the Early Detection Research Network.'
+            else:
+                promotion = f'{site.title} is a site belonging to the Early Detection Research Network.'
             site.search_description = promotion
             site.save()
 
@@ -553,11 +586,10 @@ class Ingestor(BaseIngestor):
         c1, u1, d1 = super().ingest()  
         c2, u2, d2 = self.ingest_people()  # So subseqeunt invocations like this one can use it
         self.setup_investigators()
-        self.setup_coordinates(c2)
-        self.promote_sites(c0 | c1)
+        self.setup_coordinates()
+        self.promote_sites()
         self.record_organizational_groups()
         return c0 | c1 | c2, u0 | u1 | u2, d0 | d1 | d2
-        # return set(), set(), set()
 
 
 class SiteIndex(KnowledgeFolder):

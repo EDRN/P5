@@ -7,7 +7,7 @@ from django.core.cache import cache
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from wagtail.admin.ui.components import Component
-from wagtail.core import hooks
+from wagtail import hooks
 from urllib.request import urlopen
 
 
@@ -37,7 +37,7 @@ class IngestControlPanel(Component):
             'last_ingest_duration': settings.last_ingest_duration,
             'ingest_running': lock.locked(),
             'knowledge_folders': folders,
-            'hostname': my_ip
+            'my_ip': my_ip
         }
         return render_to_string('eke.knowledge/ingest-controls.html', context, request=self.request)
 
