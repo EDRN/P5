@@ -235,7 +235,7 @@ class Ingestor(BaseIngestor):
                 kind = 'Validation study'
             elif protocol.kind == 'Single':
                 kind = 'Single protocol'
-            elif protocol.kind == 'Other sepcify' or not protocol.kind:
+            elif protocol.kind == 'Other specify' or not protocol.kind:
                 kind = 'protocol, project, or study'
             else:
                 kind = protocol.kind
