@@ -29,7 +29,7 @@ class SpecimenReferenceSetRequestForm(AbstractEDRNForm):
     from this set to an investigator not directly connected with this application.'''
     _complete_help_text = '''By checking this box, I agree to complete the assays on the reference set specimens and
     return results to the EDRN DMCC within 4 months of their receipt.'''
-    _labcas_help_text = '''By checking this box, I agree to release assay results for posting on eCAS, a secure domain
+    _labcas_help_text = '''By checking this box, I agree to release assay results for posting on LabCAS, a secure domain
     on the EDRN website, 3 months after I have received the unblinded results back from the DMCC for my review.'''
 
     investigator = forms.CharField(label='Investigator', help_text='Name of the investigator.', max_length=100)
@@ -71,7 +71,7 @@ class SpecimenReferenceSetRequestForm(AbstractEDRNForm):
     proposal = forms.CharField(label='Scientific Proposal', help_text=_propsoal_help_text, widget=forms.Textarea)
     sale = forms.BooleanField(label='No Sale or Release', help_text=_sale_help_text)
     completion = forms.BooleanField(label='Assay Completion', help_text=_complete_help_text)
-    labcas = forms.BooleanField(label='eCAS Posting', help_text=_labcas_help_text)
+    labcas = forms.BooleanField(label='LabCAS Posting', help_text=_labcas_help_text)
     signature = forms.CharField(label='Signature', help_text='Type your name in lieu of providing a signature.', max_length=100)
 
 
