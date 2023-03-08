@@ -19,12 +19,14 @@ class Command(BaseCommand):
         parent = home_page.get_descendants().filter(slug='specimen-reference-sets').first()
         assert parent is not None
         intro = RichText(pkg_resources.resource_string(__name__, 'content/spec-intro.html').decode('utf-8').strip())
+        advice = RichText(pkg_resources.resource_string(__name__, 'content/spec-advice.html').decode('utf-8').strip())
         outro = RichText(pkg_resources.resource_string(__name__, 'content/spec-outro.html').decode('utf-8').strip())
         self.stdout.write('🧫 Creating the specimen reference set request form page')
         form_page = SpecimenReferenceSetRequestFormPage(
             title='Specimen Set Request Form',
             intro=intro,
             outro=outro,
+            proposal_advice=advice,
             from_address='ic-portal@jpl.nasa.gov',
             to_address='sean.kelly@jpl.nasa.gov,heather.kincaid@jpl.nasa.gov',
             subject='A new Specimen Reference Set Request has been submitted'

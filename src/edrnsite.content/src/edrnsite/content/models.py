@@ -30,6 +30,7 @@ class AbstractFormPage(Page):
     '''Abstract base class for Wagtai pages holding Django forms.'''
     intro = RichTextField(blank=True, help_text='Introductory text to appear above the form')
     outro = RichTextField(blank=True, help_text='Text to appear below the form')
+    preview_modes = []
     content_panels = Page.content_panels + [
         FieldPanel('intro'),
         FieldPanel('outro')
@@ -68,14 +69,14 @@ class AbstractFormPage(Page):
     def serve(self, request: HttpRequest) -> HttpResponse:
         form_class = self.get_form()
         if request.method == 'POST':
-            form = form_class(request.POST)
+            form = form_class(request.POST, page=self)
             if form.is_valid():
                 params = {'page': self, **self.process_submission(form)}
                 return render(request, self.get_landing_page(), params)
         else:
-            form = form_class(initial=self.get_initial_values(request))
+            form = form_class(initial=self.get_initial_values(request), page=self)
         self._bootstrap(form)
-        return render(request, 'edrnsite.content/form.html', {'page': self, 'form': form})
+        return render(request, 'edrnsite.content/form.html', {'page': self, 'form': form})  # Fix this
 
     class Meta:
         abstract = True
@@ -84,8 +85,11 @@ class AbstractFormPage(Page):
 class SpecimenReferenceSetRequestFormPage(AbstractFormPage, EmailFormMixin):
     '''Page containing a form for specimen reference set requests.'''
     page_description = 'Page containing a form for specimen reference set requests'
-
+    proposal_advice = RichTextField(
+        blank=True, help_text='Enter the advice on filling out the "Scientific Proposal" section.'
+    )
     content_panels = AbstractFormPage.content_panels + [
+        FieldPanel('proposal_advice'),
         MultiFieldPanel([
             FieldRowPanel([
                 FieldPanel('from_address', classname='col6', help_text='From whom this email will originate'),
@@ -108,7 +112,7 @@ class SpecimenReferenceSetRequestFormPage(AbstractFormPage, EmailFormMixin):
         if request.user.is_authenticated:
             try:
                 name = request.user.ldap_user.attrs['cn'][0]
-            except (AttributeError, KeyError, IndexError):
+            except (AttributeError, KeyError, IndexError, TypeError):
                 name = f'{request.user.first_name} {request.user.last_name}'.strip()
             initial['name'] = name
         return initial
@@ -142,12 +146,12 @@ class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
         if request.user.is_authenticated:
             try:
                 name = request.user.ldap_user.attrs['cn'][0]
-            except (AttributeError, KeyError, IndexError):
+            except (AttributeError, KeyError, IndexError, TypeError):
                 name = f'{request.user.first_name} {request.user.last_name}'.strip()
             initial['custodian'] = name
             try:
                 email = request.user.ldap_user.attrs['mail'][0]
-            except (AttributeError, KeyError, IndexError):
+            except (AttributeError, KeyError, IndexError, TypeError):
                 email = request.user.email
             initial['custodian_email'] = email
         return initial
@@ -278,7 +282,7 @@ class EmailForm(BaseEmailForm, AbstractEmailForm):
     page_description = 'Form that once submitted sends an email message'
 
 
-class CapchaEmailForm(BaseEmailForm, WagtailCaptchaEmailForm):
+class CaptchaEmailForm(BaseEmailForm, WagtailCaptchaEmailForm):
     template = 'edrnsite.content/email-form.html'
     landing_page_template = 'edrnsite.content/email-form-landing.html'
     page_description = 'Form that once submitted sends an email message but also uses a CAPCTHA'
@@ -310,7 +314,7 @@ class EmailFormField(LimitedFormField):
 
 
 class CaptchaEmailFormField(LimitedFormField):
-    page = ParentalKey(CapchaEmailForm, on_delete=models.CASCADE, related_name='form_fields')
+    page = ParentalKey(CaptchaEmailForm, on_delete=models.CASCADE, related_name='form_fields')
 
 
 @register_snippet

@@ -20,7 +20,7 @@ def edrn_personal_links(context: Context) -> dict:
         params['authenticated'] = True
         try:
             params['name'] = request.user.ldap_user.attrs['cn'][0]
-        except (AttributeError, KeyError, IndexError):
+        except (AttributeError, KeyError, IndexError, TypeError):
             params['name'] = f'{request.user.first_name} {request.user.last_name}'.strip()
         params['logout'] = reverse('logout') + '?next=' + request.path
     else:

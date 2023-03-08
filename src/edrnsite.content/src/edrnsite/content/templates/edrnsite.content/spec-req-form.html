@@ -1,0 +1,156 @@
+{% if not form.is_valid and form.is_bound %}
+    <div class='alert alert-warning' role='alert'>
+        <i class='bi bi-exclamation-octagon-fill'></i> There's a problem with your submission.
+        Please double-check your entries below.
+    </div>
+{% endif %}
+
+{{form.non_field_errors}}
+
+<div class='row'>
+    <div class='{{form.investigator.css_classes}} col-sm-6 mb-3 form-group'>
+        {{form.investigator.label_tag}}
+        {{form.investigator.errors}}
+        {{form.investigator}}
+        <div class='form-text'>{{form.investigator.help_text|safe}}</div>
+    </div>
+    <div class='{{form.institution.css_classes}} col-sm-6 mb-3 form-group'>
+        {{form.institution.label_tag}}
+        {{form.institution.errors}}
+        {{form.institution}}
+        <div class='form-text'>{{form.institution.help_text|safe}}</div>
+    </div>
+</div>
+
+<div class='row'>
+    <div class='{{form.name.css_classes}} col-sm-4 mb-3 form-group'>
+        {{form.name.label_tag}}
+        {{form.name.errors}}
+        {{form.name}}
+        <div class='form-text'>{{form.name.help_text|safe}}</div>
+    </div>
+    <div class='{{form.email.css_classes}} col-sm-4 mb-3 form-group'>
+        {{form.email.label_tag}}
+        {{form.email.errors}}
+        {{form.email}}
+        <div class='form-text'>{{form.email.help_text|safe}}</div>
+    </div>
+    <div class='{{form.phone.css_classes}} col-sm-4 mb-3 form-group'>
+        {{form.phone.label_tag}}
+        {{form.phone.errors}}
+        {{form.phone}}
+        <div class='form-text'>{{form.phone.help_text|safe}}</div>
+    </div>
+</div>
+
+<div class='row'>
+    <div class='{{form.collaborative_group_oversight.css_classes}} mb-3 form-group col-sm-3'>
+        {{form.collaborative_group_oversight.label_tag}}
+        {{form.collaborative_group_oversight.errors}}
+        {{form.collaborative_group_oversight}}
+        <div class='form-text'>{{form.collaborative_group_oversight.help_text|safe}}</div>
+    </div>
+    <div class='{{form.organ_site.css_classes}} mb-3 form-group col-sm-3'>
+        {{form.organ_site.label_tag}}
+        {{form.organ_site.errors}}
+        {{form.organ_site}}
+        <div class='form-text'>{{form.organ_site.help_text|safe}}</div>
+    </div>
+    <div class='{{form.specimen_type.css_classes}} mb-3 form-group col-sm-3'>
+        {{form.specimen_type.label_tag}}
+        {{form.specimen_type.errors}}
+        {{form.specimen_type}}
+        <div class='form-text'>{{form.specimen_type.help_text|safe}}</div>
+    </div>
+    <div class='{{form.other_specimen_type.css_classes}} mb-3 form-group col-sm-3'>
+        {{form.other_specimen_type.label_tag}}
+        {{form.other_specimen_type.errors}}
+        {{form.other_specimen_type}}
+        <div class='form-text'>{{form.other_specimen_type.help_text|safe}}</div>
+    </div>
+</div>
+
+<div class='row'>
+    <div class='{{form.min_volume.css_classes}} mb-3 form-group col-sm-6'>
+        {{form.min_volume.label_tag}}
+        {{form.min_volume.errors}}
+        {{form.min_volume}}
+        <div class='form-text'>{{form.min_volume.help_text|safe}}</div>
+    </div>
+    <div class='{{form.study_length.css_classes}} mb-3 form-group col-sm-6'>
+        {{form.study_length.label_tag}}
+        {{form.study_length.errors}}
+        {{form.study_length}}
+        <div class='form-text'>{{form.study_length.help_text|safe}}</div>
+    </div>
+</div>
+
+<div class='row'>
+    <div class='{{form.irb_approval.css_classes}} mb-3 form-group col-sm-6'>
+        {{form.irb_approval.label_tag}}
+        {{form.irb_approval.errors}}
+        {{form.irb_approval}}
+        <div class='form-text'>{{form.irb_approval.help_text|safe}}</div>
+    </div>
+    <div class='{{form.irb_explanation.css_classes}} mb-3 form-group col-sm-6'>
+        {{form.irb_explanation.label_tag}}
+        {{form.irb_explanation.errors}}
+        {{form.irb_explanation}}
+        <div class='form-text'>{{form.irb_explanation.help_text|safe}}</div>
+    </div>
+</div>
+
+<div class='{{form.funding.css_classes}} mb-3 form-group'>
+    {{form.funding.label_tag}}
+    {{form.funding.errors}}
+    {{form.funding}}
+    <div class='form-text'>{{form.funding.help_text|safe}}</div>
+</div>
+
+
+<h2>Proposal</h2>
+{{form.page.proposal_advice|safe}}
+<div class='{{form.proposal.css_classes}} mb-3 form-group'>
+    {{form.proposal.label_tag}}
+    {{form.proposal.errors}}
+    {{form.proposal}}
+    <div class='form-text'>{{form.proposal.help_text|safe}}</div>
+</div>
+
+
+<h2>Affirmations</h2>
+
+<div class='{{form.sale.css_classes}} mb-3 form-group'>
+    {{form.sale.label_tag}}
+    {{form.sale.errors}}
+    {{form.sale}}
+    <div class='form-text'>{{form.sale.help_text|safe}}</div>
+</div>
+<div class='{{form.completion.css_classes}} mb-3 form-group'>
+    {{form.completion.label_tag}}
+    {{form.completion.errors}}
+    {{form.completion}}
+    <div class='form-text'>{{form.completion.help_text|safe}}</div>
+</div>
+<div class='{{form.labcas.css_classes}} mb-3 form-group'>
+    {{form.labcas.label_tag}}
+    {{form.labcas.errors}}
+    {{form.labcas}}
+    <div class='form-text'>{{form.labcas.help_text|safe}}</div>
+</div>
+<div class='{{form.signature.css_classes}} mb-3 form-group'>
+    {{form.signature.label_tag}}
+    {{form.signature.errors}}
+    {{form.signature}}
+    <div class='form-text'>{{form.signature.help_text|safe}}</div>
+</div>
+<div class='{{form.captcha.css_classes}} mb-3 form-group'>
+    {{form.captcha.label_tag}}
+    {{form.captcha.errors}}
+    {{form.captcha}}
+    <div class='form-text'>{{form.captcha.help_text|safe}}</div>
+</div>
+
+{% for field in hidden_fields %}{{field}}{% endfor %}
+
+{# -*- Django HTML -*- #}

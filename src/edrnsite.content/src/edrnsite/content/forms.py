@@ -2,8 +2,17 @@
 
 '''😌 EDRN Site Content: Django forms.'''
 
+from captcha.fields import ReCaptchaField
 from django import forms
+from django.forms.utils import ErrorList
 from eke.knowledge.models import Site, Person, Protocol, BodySystem
+
+
+class EDRNErrorList(ErrorList):
+    def __init__(self, initlist=None, error_class=None, renderer=None):
+        if error_class is None:
+            error_class = 'text-danger'
+        super().__init__(initlist, error_class, renderer)
 
 
 class AbstractEDRNForm(forms.Form):
@@ -13,6 +22,27 @@ class AbstractEDRNForm(forms.Form):
     error_css_class = 'is-invalid'
     required_css_class = 'is-required'
 
+    def __init__(
+        self,
+        data=None,
+        files=None,
+        auto_id='id_%s',
+        prefix=None,
+        initial=None,
+        error_class=EDRNErrorList,
+        label_suffix=None,
+        empty_permitted=False,
+        field_order=None,
+        use_required_attribute=None,
+        renderer=None,
+        page=None
+    ):
+        super().__init__(
+            data, files, auto_id, prefix, initial, error_class, label_suffix, empty_permitted, field_order,
+            use_required_attribute, renderer
+        )
+        self.page = page
+
     class Meta:
         abstract = True
 
@@ -20,11 +50,13 @@ class AbstractEDRNForm(forms.Form):
 class SpecimenReferenceSetRequestForm(AbstractEDRNForm):
     '''Form to request specimen reference sets.'''
 
+    template_name = 'edrnsite.content/spec-req-form.html'
+
     _funding_help_text = '''Explain how testing of the reference set(s) will be funded. If there is a current
     NIH-funded grant, enter the grant №, annual direct costs, and funding period. If there is other sponsorship,
     provide a statement of committment from the sponsoring agency, company, or foundation. If there is some
     other funding, please specify.'''
-    _propsoal_help_text = '''Enter about 3–5 pages worth of text as recommended in the preamble to this form.'''
+    _proposal_help_text = '''Enter about 3–5 pages worth of text as recommended in the preamble to this form.'''
     _sale_help_text = '''By checking this box, I agree not to resell or release the reference set or sub-aliquots
     from this set to an investigator not directly connected with this application.'''
     _complete_help_text = '''By checking this box, I agree to complete the assays on the reference set specimens and
@@ -37,21 +69,32 @@ class SpecimenReferenceSetRequestForm(AbstractEDRNForm):
     institution = forms.CharField(label='Institution', help_text='Institution requesting the specimens.', max_length=250)
     email = forms.EmailField(label='Email', help_text='Email address at which you can be reached.')
     phone = forms.CharField(label='Phone', help_text='Contact telephone number.', max_length=25, required=False)
-    sets = forms.MultipleChoiceField(
+    collaborative_group_oversight = forms.MultipleChoiceField(
+        required=False,
         widget=forms.CheckboxSelectMultiple,
-        label='Specimen Reference Set(s) Requested',
-        help_text='Select all that apply; if checking "Organ Site", fill in the organ name, below.',
+        label='Collaborative Group Oversight',
+        help_text='Select all that apply.',
         choices=(
             ('breast-gyn', 'Breast & Gynecological'),
             ('colorect-gi', 'Colorectal & Other GI'),
             ('lung', 'Lung & Upper Aerodigestive'),
             ('prostate', 'Prostate & Other Urologic'),
-            ('organ', 'Organ Site')
         )
     )
-    organ_site = forms.CharField(
-        label='Organ Site(s)', required=False,
-        help_text='If you selected "Organ Site" above, enter the organs separated by commas (e.g.: "lung, ovary").'
+    organ_site = forms.CharField(label='Organ Site(s)', help_text='For example, "lung, ovary").')
+    specimen_type = forms.ChoiceField(
+        required=True,
+        widget=forms.RadioSelect,
+        label='Specimen Type',
+        help_text='Select the kind of specimen; if you select Other, fill in the next blank.',
+        choices=(
+            ('serum', 'Serum'),
+            ('plasma', 'Plasma'),
+            ('other', 'Other'),
+        )
+    )
+    other_specimen_type = forms.CharField(
+        required=False, help_text='If you selected "Other" previously, enter the desired specimen type.'
     )
     min_volume = forms.DecimalField(
         label='Minimum Volume', min_value=0,
@@ -65,14 +108,15 @@ class SpecimenReferenceSetRequestForm(AbstractEDRNForm):
     )
     irb_explanation = forms.CharField(
         label='IRB Elaboration', required=False,
-        help_text='If you answered "yes" above, enter your IRB number. If you answered "pending", enter the expected approval date.'
+        help_text='If you answered "yes", enter your IRB number. If you answered "pending", enter the expected approval date.'
     )
     funding = forms.CharField(label='Funding', help_text=_funding_help_text, widget=forms.Textarea)
-    proposal = forms.CharField(label='Scientific Proposal', help_text=_propsoal_help_text, widget=forms.Textarea)
+    proposal = forms.CharField(label='Scientific Proposal', help_text=_proposal_help_text, widget=forms.Textarea)
     sale = forms.BooleanField(label='No Sale or Release', help_text=_sale_help_text)
     completion = forms.BooleanField(label='Assay Completion', help_text=_complete_help_text)
     labcas = forms.BooleanField(label='LabCAS Posting', help_text=_labcas_help_text)
     signature = forms.CharField(label='Signature', help_text='Type your name in lieu of providing a signature.', max_length=100)
+    captcha = ReCaptchaField()
 
 
 def _pis():
