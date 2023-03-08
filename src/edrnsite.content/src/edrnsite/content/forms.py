@@ -81,7 +81,7 @@ class SpecimenReferenceSetRequestForm(AbstractEDRNForm):
             ('prostate', 'Prostate & Other Urologic'),
         )
     )
-    organ_site = forms.CharField(label='Organ Site(s)', help_text='For example, "lung, ovary").')
+    organ_site = forms.CharField(label='Organ Site(s)', help_text='For example, "lung, ovary".')
     specimen_type = forms.ChoiceField(
         required=True,
         widget=forms.RadioSelect,
@@ -94,7 +94,7 @@ class SpecimenReferenceSetRequestForm(AbstractEDRNForm):
         )
     )
     other_specimen_type = forms.CharField(
-        required=False, help_text='If you selected "Other" previously, enter the desired specimen type.'
+        required=False, help_text='If you selected "Other", enter the desired specimen type.'
     )
     min_volume = forms.DecimalField(
         label='Minimum Volume', min_value=0,

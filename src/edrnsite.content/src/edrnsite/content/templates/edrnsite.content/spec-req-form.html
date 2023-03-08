@@ -43,6 +43,8 @@
     </div>
 </div>
 
+<hr/>
+
 <div class='row'>
     <div class='{{form.collaborative_group_oversight.css_classes}} mb-3 form-group col-sm-3'>
         {{form.collaborative_group_oversight.label_tag}}
@@ -70,6 +72,8 @@
     </div>
 </div>
 
+<hr/>
+
 <div class='row'>
     <div class='{{form.min_volume.css_classes}} mb-3 form-group col-sm-6'>
         {{form.min_volume.label_tag}}
@@ -84,6 +88,8 @@
         <div class='form-text'>{{form.study_length.help_text|safe}}</div>
     </div>
 </div>
+
+<hr/>
 
 <div class='row'>
     <div class='{{form.irb_approval.css_classes}} mb-3 form-group col-sm-6'>
@@ -120,35 +126,40 @@
 
 <h2>Affirmations</h2>
 
-<div class='{{form.sale.css_classes}} mb-3 form-group'>
-    {{form.sale.label_tag}}
-    {{form.sale.errors}}
-    {{form.sale}}
-    <div class='form-text'>{{form.sale.help_text|safe}}</div>
+<div class='row'>
+    <div class='{{form.sale.css_classes}} mb-3 form-group col-sm-4'>
+        {{form.sale.label_tag}}
+        {{form.sale.errors}}
+        {{form.sale}}
+        <div class='form-text'>{{form.sale.help_text|safe}}</div>
+    </div>
+    <div class='{{form.completion.css_classes}} mb-3 form-group col-sm-4'>
+        {{form.completion.label_tag}}
+        {{form.completion.errors}}
+        {{form.completion}}
+        <div class='form-text'>{{form.completion.help_text|safe}}</div>
+    </div>
+    <div class='{{form.labcas.css_classes}} mb-3 form-group col-sm-4'>
+        {{form.labcas.label_tag}}
+        {{form.labcas.errors}}
+        {{form.labcas}}
+        <div class='form-text'>{{form.labcas.help_text|safe}}</div>
+    </div>
 </div>
-<div class='{{form.completion.css_classes}} mb-3 form-group'>
-    {{form.completion.label_tag}}
-    {{form.completion.errors}}
-    {{form.completion}}
-    <div class='form-text'>{{form.completion.help_text|safe}}</div>
-</div>
-<div class='{{form.labcas.css_classes}} mb-3 form-group'>
-    {{form.labcas.label_tag}}
-    {{form.labcas.errors}}
-    {{form.labcas}}
-    <div class='form-text'>{{form.labcas.help_text|safe}}</div>
-</div>
-<div class='{{form.signature.css_classes}} mb-3 form-group'>
-    {{form.signature.label_tag}}
-    {{form.signature.errors}}
-    {{form.signature}}
-    <div class='form-text'>{{form.signature.help_text|safe}}</div>
-</div>
-<div class='{{form.captcha.css_classes}} mb-3 form-group'>
-    {{form.captcha.label_tag}}
-    {{form.captcha.errors}}
-    {{form.captcha}}
-    <div class='form-text'>{{form.captcha.help_text|safe}}</div>
+
+<div class='row'>
+    <div class='{{form.signature.css_classes}} mb-3 form-group col-sm-8'>
+        {{form.signature.label_tag}}
+        {{form.signature.errors}}
+        {{form.signature}}
+        <div class='form-text'>{{form.signature.help_text|safe}}</div>
+    </div>
+    <div class='{{form.captcha.css_classes}} mb-3 form-group col-sm-4'>
+        {{form.captcha.label_tag}}
+        {{form.captcha.errors}}
+        {{form.captcha}}
+        <div class='form-text'>{{form.captcha.help_text|safe}}</div>
+    </div>
 </div>
 
 {% for field in hidden_fields %}{{field}}{% endfor %}
