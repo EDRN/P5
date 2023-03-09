@@ -106,15 +106,65 @@
     </div>
 </div>
 
-<div class='{{form.funding.css_classes}} mb-3 form-group'>
-    {{form.funding.label_tag}}
-    {{form.funding.errors}}
-    {{form.funding}}
-    <div class='form-text'>{{form.funding.help_text|safe}}</div>
+
+<h2>Funding</h2>
+<p>Check one of the three boxes below:</p>
+<div class='row'>
+    <div class='col-sm-4'>
+        <div class='{{form.nih_funding.css_classes}} mb-3 form-group'>
+            {{form.nih_funding}}
+            <label class='form-label' for='id_nih_funding'><b>Current NIH-funded grant</b></label>
+        </div>
+        <p>↑ If you check the box above, please provide the following:</p>
+        <div class='{{form.grant_number.css_classes}} mb-3 form-group'>
+            {{form.grant_number.label_tag}}
+            {{form.grant_number.errors}}
+            {{form.grant_number}}
+            <div class='form-text'>{{form.grant_number.help_text|safe}}</div>
+        </div>
+        <div class='{{form.annual_direct_costs.css_classes}} mb-3 form-group'>
+            {{form.annual_direct_costs.label_tag}}
+            {{form.annual_direct_costs.errors}}
+            {{form.annual_direct_costs}}
+            <div class='form-text'>{{form.annual_direct_costs.help_text|safe}}</div>
+        </div>
+        <div class='{{form.funding_period.css_classes}} mb-3 form-group'>
+            {{form.funding_period.label_tag}}
+            {{form.funding_period.errors}}
+            {{form.funding_period}}
+            <div class='form-text'>{{form.funding_period.help_text|safe}}</div>
+        </div>
+    </div>
+    <div class='col-sm-4'>
+        <div class='{{form.other_sponsorship.css_classes}} mb-3 form-group'>
+            {{form.other_sponsorship}}
+            <label class='form-label' for='id_other_sponsorship'><b>Other sponsorship</b></label>
+        </div>
+        <p>↑ If you check the box above, please provide a letter of committment to:</p>
+        <p>
+            EDRN DMCC at COMPASS<br/>
+            Fred Hutch Cancer Research Center<br/>
+            1100 Faireview Ave N #M3-A306<br/>
+            Seattle WA 98109-1024<br/>
+            United States
+        </p>
+    </div>
+    <div class='col-sm-4'>
+        <div class='{{form.other_funding.css_classes}} mb-3 form-group'>
+            {{form.other_funding}}
+            <label class='form-label' for='id_other_funding'><b>Other funding</b></label>
+        </div>
+        <p>↑ If you check the box above, please provide the following:</p>
+        <div class='{{form.funding_specification.css_classes}} mb-3 form-group'>
+            {{form.funding_specification.label_tag}}
+            {{form.funding_specification.errors}}
+            {{form.funding_specification}}
+            <div class='form-text'>{{form.funding_specification.help_text|safe}}</div>
+        </div>
+    </div>
 </div>
 
-
-<h2>Proposal</h2>
+<h2>Scientific Proposal</h2>
 {{form.page.proposal_advice|safe}}
 <div class='{{form.proposal.css_classes}} mb-3 form-group'>
     {{form.proposal.label_tag}}

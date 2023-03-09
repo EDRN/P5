@@ -110,7 +110,18 @@ class SpecimenReferenceSetRequestForm(AbstractEDRNForm):
         label='IRB Elaboration', required=False,
         help_text='If you answered "yes", enter your IRB number. If you answered "pending", enter the expected approval date.'
     )
-    funding = forms.CharField(label='Funding', help_text=_funding_help_text, widget=forms.Textarea)
+
+    # funding = forms.CharField(label='Funding', help_text=_funding_help_text, widget=forms.Textarea)
+    nih_funding = forms.BooleanField(required=False, label='Current NIH-funded grant')
+    grant_number = forms.CharField(required=False, label='Grant number', max_length=30)
+    annual_direct_costs = forms.CharField(required=False, label='Annual direct costs', max_length=30)
+    funding_period = forms.CharField(required=False, label='Funding period', max_length=30)
+
+    other_sponsorship = forms.BooleanField(required=False, label='Other Sponsorship')
+
+    other_funding = forms.BooleanField(required=False, label='Other funding')
+    funding_specification = forms.CharField(required=False, label='Specify funding', widget=forms.Textarea)
+
     proposal = forms.CharField(label='Scientific Proposal', help_text=_proposal_help_text, widget=forms.Textarea)
     sale = forms.BooleanField(label='No Sale or Release', help_text=_sale_help_text)
     completion = forms.BooleanField(label='Assay Completion', help_text=_complete_help_text)
