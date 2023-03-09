@@ -166,31 +166,50 @@ class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
         cp.add_section('Collection')
         cp.set('Collection', 'CollectionName', data['collection_name'])
         cp.set('Collection', 'CollectionDescription', data['description'])
-        cp.set('Collection', 'Discipline', data['discipline'])
-        cp.set('Collection', 'DataCategory', data['category'])
-        site = Site.objects.filter(identifier=data['institution']).first()
-        cp.set('Collection', 'Institution', site.title)
-        cp.set('Collection', 'InstitutionId', self._code(data['institution']))
+
         pi = Person.objects.filter(identifier=data['lead_pi']).first()
-        cp.set('Collection', 'LeadPI', pi.title)
-        cp.set('Collection', 'LeadPIId', self._code(data['lead_pi']))
+        cp.set('Collection', 'LeadPIID', self._code(data['lead_pi']))
+        cp.set('Collection', 'LeadPIName', pi.title)
+
         cp.set('Collection', 'DataCustodian', data['custodian'])
         cp.set('Collection', 'DataCustodianEmail', data['custodian_email'])
-        bs = BodySystem.objects.filter(identifier=data['organ']).first()
-        cp.set('Collection', 'Organ', bs.title)
-        cp.set('Collection', 'OrganId', self._code(data['organ']))
-        if not data['private']: cp.set('Collection', 'OwnerPrincipal', self._all_users_dn)
-        cp.set('Collection', 'CollaborativeGroup', data['cg'])
-        cp.set('Collection', 'Consortium', 'EDRN')
+
+        site = Site.objects.filter(identifier=data['institution']).first()
+        cp.set('Collection', 'InstitutionID', self._code(data['institution']))
+        cp.set('Collection', 'InstitutionName', site.title)
+
         protocol = Protocol.objects.filter(identifier=data['protocol']).first()
+        cp.set('Collection', 'ProtocolID', self._code(data['protocol']))
         cp.set('Collection', 'ProtocolName', protocol.title)
-        cp.set('Collection', 'ProtocolId', self._code(data['protocol']))
-        cp.set('Collection', 'Species', data['species'])
-        if data['method']: cp.set('Collection', 'MethodDetails', data['method'])
+        cp.set('Collection', 'ProtocolAbbreviatedName', protocol.abbreviation)
+
+        cp.set('Collection', 'Discipline', data['discipline'])
+        cp.set('Collection', 'DataCategory', data['category'])
+
+        bs = BodySystem.objects.filter(identifier=data['organ']).first()
+        cp.set('Collection', 'OrganID', self._code(data['organ']))
+        cp.set('Collection', 'OrganName', bs.title)
+
+        cp.set('Collection', 'CollaborativeGroup', data['cg'])
         if data['results']: cp.set('Collection', 'ResultsAndConclusionSummary', data['results'])
         if data['pub_med_id']: cp.set('Collection', 'PubMedID', data['pub_med_id'])
+        if data['reference_url']: cp.set('Collection', 'ReferenceURL', data['reference_url'])
+        cp.set('Collection', 'Consortium', 'EDRN')
+        cp.set('Collection', 'Species', data['species'])
+
+        if not data['private']: cp.set('Collection', 'OwnerPrincipal', self._all_users_dn)
         if data['access_groups']:
-            cp.set('Collection', 'OwnerPrincipal', '|'.join([f'cn={i},dc=edrn,dc=jpl,dc=nasa,dc=gov' for i in data['access_groups'].splitlines()]))
+            cp.set(
+                'Collection', 'OwnerPrincipal',
+                '|'.join([f'cn={i},dc=edrn,dc=jpl,dc=nasa,dc=gov' for i in data['access_groups'].splitlines()])
+            )
+
+        if data['doi']: cp.set('Collection', 'DOI', data['doi'])
+        if data['doi_url']: cp.set('Collection', 'DOI URL', data['doi_url'])  # Is the space in `DOI URL` correct?
+
+        # Is this even needed?
+        if data['method']: cp.set('Collection', 'MethodDetails', data['method'])
+
         buffer = StringIO()
         cp.write(buffer)
         return buffer.getvalue()
