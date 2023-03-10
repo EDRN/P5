@@ -59,6 +59,7 @@ def _data_categories():
         'Single Slide Image',
         'Tissue Micro Array',
         'Whole Slide Imaging',
+        'Other (specify below)',
     )
     return [(i.lower().replace(' ', '-'), i) for i in categories]
 
@@ -87,7 +88,7 @@ class MetadataCollectionForm(AbstractEDRNForm):
     lead_pi = forms.ChoiceField(label='Lead PI', help_text='Select a primary investigator.', choices=_pis)
     institution = forms.ChoiceField(label='Institution', help_text='Select the curating instutition.', choices=_instutions)
     protocol = forms.ChoiceField(label='Protocol', help_text='Select the protocol that generated the data.', choices=_protocols)
-    discipline = forms.ChoiceField(label='Discipline', widget=forms.RadioSelect, choices=(
+    discipline = forms.MultipleChoiceField(label='Discipline', widget=forms.CheckboxSelectMultiple, choices=(
         ('genomics', 'Genomics'),
         ('proteomics', 'Proteomics'),
         ('pathology-images', 'Pathology Imagess'),
@@ -107,6 +108,10 @@ class MetadataCollectionForm(AbstractEDRNForm):
         )
     )
     category = forms.ChoiceField(label='Data Category', help_text='Categorize the data.', choices=_data_categories)
+    other_category = forms.CharField(
+        label='Other Data Category', help_text='If you selected Other above ↑, enter the category here.',
+        max_length=100, required=False
+    )
     organ = forms.ChoiceField(label='Organ', help_text='Select the body system.', choices=_organs)
     species = forms.ChoiceField(label='Species', help_text='Enter the species.', choices=_species)
     private = forms.BooleanField(required=False, label='Private Data', help_text='Check this box ↑ if this data collection is private.')
@@ -114,7 +119,6 @@ class MetadataCollectionForm(AbstractEDRNForm):
         label='Shared Access', required=False, widget=forms.Textarea,
         help_text='If this data is private, enter the names of sites and/or people who should have access, ONE PER LINE.'
     )
-    method = forms.CharField(required=False, label='Method Details', widget=forms.Textarea)  # is this needed?
     results = forms.CharField(required=False, label='Results and Conclusion Summary', widget=forms.Textarea)
     reference_url = forms.URLField(required=False, label='Reference URL', help_text='Optional URL to reference with this collection.')
     reference_url_description = forms.ChoiceField(
@@ -131,6 +135,10 @@ class MetadataCollectionForm(AbstractEDRNForm):
     pub_med_id = forms.CharField(required=False, label='PubMed ID', max_length=20)
     doi = forms.CharField(required=False, label='DOI', max_length=150, help_text='Digital Object Identifier')
     doi_url = forms.URLField(required=False, label='DOI URL', help_text='URL form of the DOI')
+    comments = forms.CharField(
+        required=False, label='Comments or Questions', widget=forms.Textarea, max_length=5000,
+        help_text='Have questions? Need to clarify something? Want to make some comments? Enter here.'
+    )
 
 
 class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
@@ -194,7 +202,8 @@ class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
         cp.set('Collection', 'ProtocolName', protocol.title)
         cp.set('Collection', 'ProtocolAbbreviatedName', protocol.abbreviation)
 
-        cp.set('Collection', 'Discipline', data['discipline'])
+        if data['discipline']:
+            cp.set('Collection', 'Discipline', '|'.join(data['discipline']))
         cp.set('Collection', 'DataCategory', data['category'])
 
         bs = BodySystem.objects.filter(identifier=data['organ']).first()
@@ -216,11 +225,13 @@ class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
             )
 
         if data['doi']: cp.set('Collection', 'DOI', data['doi'])
-        if data['doi_url']: cp.set('Collection', 'DOI URL', data['doi_url'])  # Is the space in `DOI URL` correct?
-
-        # Is this even needed?
-        if data['method']: cp.set('Collection', 'MethodDetails', data['method'])
+        if data['doi_url']: cp.set('Collection', 'DOIURL', data['doi_url'])
 
         buffer = StringIO()
         cp.write(buffer)
+        if data['comments']:
+            buffer.write('\n\n\n')
+            buffer.write('-' * 40)
+            buffer.write('\n\nThe following was entered into the comments section:\n\n')
+            buffer.write(data['comments'])
         return buffer.getvalue()
