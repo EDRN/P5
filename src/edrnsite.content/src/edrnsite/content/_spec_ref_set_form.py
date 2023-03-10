@@ -155,7 +155,7 @@ class SpecimenReferenceSetRequestFormPage(AbstractFormPage, EmailFormMixin):
         rendered = self.render_email(form)
         p = form.cleaned_data['proposal']
         message = EmailMessage(
-            subject=self.subject, body=rendered, from_email=self.from_address, to=','.split(self.to_address),
+            subject=self.subject, body=rendered, from_email=self.from_address, to=self.to_address.split(','),
             attachments=[(p.name, p.read(), p.content_type)]
         )
         message.send()
