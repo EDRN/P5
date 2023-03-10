@@ -7,6 +7,7 @@ from .base_forms import AbstractEDRNForm
 from .base_models import AbstractFormPage
 from captcha.fields import ReCaptchaField
 from django import forms
+from django.core.mail.message import EmailMessage
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel
 from wagtail.contrib.forms.models import EmailFormMixin
 from wagtail.fields import RichTextField
@@ -148,7 +149,16 @@ class SpecimenReferenceSetRequestFormPage(AbstractFormPage, EmailFormMixin):
         return SpecimenReferenceSetRequestForm
 
     def process_submission(self, form: forms.Form) -> dict:
-        self.send_mail(form)
+        # The ``EmailFormMixin`` nicely provides both the from/to/subject fields and also this handy function:
+        #     self.send_mail(form)
+        # which we can't use since it doesn't handle attachments.
+        rendered = self.render_email(form)
+        p = form.cleaned_data['proposal']
+        message = EmailMessage(
+            subject=self.subject, body=rendered, from_email=self.from_address, to=','.split(self.to_address),
+            attachments=[(p.name, p.read(), p.content_type)]
+        )
+        message.send()
         return {'name': form.cleaned_data['name'], 'email': form.cleaned_data['email']}
 
     def get_initial_values(self, request) -> dict:
