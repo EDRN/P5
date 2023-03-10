@@ -152,6 +152,7 @@ class SpecimenReferenceSetRequestFormPage(AbstractFormPage, EmailFormMixin):
         # The ``EmailFormMixin`` nicely provides both the from/to/subject fields and also this handy function:
         #     self.send_mail(form)
         # which we can't use since it doesn't handle attachments.
+        del form.cleaned_data['captcha']
         rendered = self.render_email(form)
         p = form.cleaned_data['proposal']
         message = EmailMessage(
