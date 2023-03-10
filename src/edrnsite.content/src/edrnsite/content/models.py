@@ -3,20 +3,18 @@
 '''😌 EDRN site content's models.'''
 
 
-from configparser import ConfigParser
+from ._metadata_collection_form import MetadataCollectionFormPage  # noqa
+from ._spec_ref_set_form import SpecimenReferenceSetRequestFormPage  # noqa
 from django import forms
 from django.db import models
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from edrnsite.streams import blocks
-from eke.knowledge.models import Site, Person, Protocol, BodySystem
-from io import StringIO
 from modelcluster.fields import ParentalKey
-from urllib.parse import urlparse
-from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
-from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField, EmailFormMixin
 from wagtail import blocks as wagtail_core_blocks
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
+from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
 from wagtail.fields import RichTextField
 from wagtail.fields import StreamField
 from wagtail.models import Page
@@ -80,139 +78,6 @@ class AbstractFormPage(Page):
 
     class Meta:
         abstract = True
-
-
-class SpecimenReferenceSetRequestFormPage(AbstractFormPage, EmailFormMixin):
-    '''Page containing a form for specimen reference set requests.'''
-    page_description = 'Page containing a form for specimen reference set requests'
-    proposal_advice = RichTextField(
-        blank=True, help_text='Enter the advice on filling out the "Scientific Proposal" section.'
-    )
-    content_panels = AbstractFormPage.content_panels + [
-        FieldPanel('proposal_advice'),
-        MultiFieldPanel([
-            FieldRowPanel([
-                FieldPanel('from_address', classname='col6', help_text='From whom this email will originate'),
-                FieldPanel('to_address', classname='col6', help_text='Who should receive this email; commas in between multiple addresses')
-            ]),
-            FieldPanel('subject')
-        ], 'Email')
-    ]
-
-    def get_form(self) -> type:
-        from .forms import SpecimenReferenceSetRequestForm
-        return SpecimenReferenceSetRequestForm
-
-    def process_submission(self, form: forms.Form) -> dict:
-        self.send_mail(form)
-        return {'name': form.cleaned_data['name'], 'email': form.cleaned_data['email']}
-
-    def get_initial_values(self, request) -> dict:
-        initial = super().get_initial_values(request)
-        if request.user.is_authenticated:
-            try:
-                name = request.user.ldap_user.attrs['cn'][0]
-            except (AttributeError, KeyError, IndexError, TypeError):
-                name = f'{request.user.first_name} {request.user.last_name}'.strip()
-            initial['name'] = name
-        return initial
-
-    def get_landing_page(self) -> str:
-        return 'edrnsite.content/spec-req-landing.html'
-
-
-class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
-    '''Page containing a form for metadata collection.'''
-    page_description = 'Page containing a form for metadata collection'
-    _all_users_dn = 'cn=All Users,dc=edrn,dc=jpl,dc=nasa,dc=gov'
-
-    content_panels = AbstractFormPage.content_panels + [
-        MultiFieldPanel([
-            FieldRowPanel([
-                FieldPanel('from_address', classname='col6', help_text='From whom this email will originate'),
-                FieldPanel('to_address', classname='col6', help_text='Who should receive this email; commas in between multiple addresses')
-            ]),
-            FieldPanel('subject')
-        ], 'Email')
-    ]
-    def get_form(self) -> type:
-        from .forms import MetadataCollectionForm
-        return MetadataCollectionForm
-    def process_submission(self, form: forms.Form) -> dict:
-        self.send_mail(form)
-        return {'name': form.cleaned_data['custodian'], 'email': form.cleaned_data['custodian_email']}
-    def get_initial_values(self, request) -> dict:
-        initial = super().get_initial_values(request)
-        if request.user.is_authenticated:
-            try:
-                name = request.user.ldap_user.attrs['cn'][0]
-            except (AttributeError, KeyError, IndexError, TypeError):
-                name = f'{request.user.first_name} {request.user.last_name}'.strip()
-            initial['custodian'] = name
-            try:
-                email = request.user.ldap_user.attrs['mail'][0]
-            except (AttributeError, KeyError, IndexError, TypeError):
-                email = request.user.email
-            initial['custodian_email'] = email
-        return initial
-    def get_landing_page(self) -> str:
-        return 'edrnsite.content/meta-req-landing.html'
-    def _code(self, identifier: str) -> str:
-        return urlparse(identifier).path.split('/')[-1]
-    def render_email(self, form):
-        data = form.cleaned_data
-        cp = ConfigParser()
-        cp.optionxform = lambda option: option
-        cp.add_section('Collection')
-        cp.set('Collection', 'CollectionName', data['collection_name'])
-        cp.set('Collection', 'CollectionDescription', data['description'])
-
-        pi = Person.objects.filter(identifier=data['lead_pi']).first()
-        cp.set('Collection', 'LeadPIID', self._code(data['lead_pi']))
-        cp.set('Collection', 'LeadPIName', pi.title)
-
-        cp.set('Collection', 'DataCustodian', data['custodian'])
-        cp.set('Collection', 'DataCustodianEmail', data['custodian_email'])
-
-        site = Site.objects.filter(identifier=data['institution']).first()
-        cp.set('Collection', 'InstitutionID', self._code(data['institution']))
-        cp.set('Collection', 'InstitutionName', site.title)
-
-        protocol = Protocol.objects.filter(identifier=data['protocol']).first()
-        cp.set('Collection', 'ProtocolID', self._code(data['protocol']))
-        cp.set('Collection', 'ProtocolName', protocol.title)
-        cp.set('Collection', 'ProtocolAbbreviatedName', protocol.abbreviation)
-
-        cp.set('Collection', 'Discipline', data['discipline'])
-        cp.set('Collection', 'DataCategory', data['category'])
-
-        bs = BodySystem.objects.filter(identifier=data['organ']).first()
-        cp.set('Collection', 'OrganID', self._code(data['organ']))
-        cp.set('Collection', 'OrganName', bs.title)
-
-        cp.set('Collection', 'CollaborativeGroup', data['cg'])
-        if data['results']: cp.set('Collection', 'ResultsAndConclusionSummary', data['results'])
-        if data['pub_med_id']: cp.set('Collection', 'PubMedID', data['pub_med_id'])
-        if data['reference_url']: cp.set('Collection', 'ReferenceURL', data['reference_url'])
-        cp.set('Collection', 'Consortium', 'EDRN')
-        cp.set('Collection', 'Species', data['species'])
-
-        if not data['private']: cp.set('Collection', 'OwnerPrincipal', self._all_users_dn)
-        if data['access_groups']:
-            cp.set(
-                'Collection', 'OwnerPrincipal',
-                '|'.join([f'cn={i},dc=edrn,dc=jpl,dc=nasa,dc=gov' for i in data['access_groups'].splitlines()])
-            )
-
-        if data['doi']: cp.set('Collection', 'DOI', data['doi'])
-        if data['doi_url']: cp.set('Collection', 'DOI URL', data['doi_url'])  # Is the space in `DOI URL` correct?
-
-        # Is this even needed?
-        if data['method']: cp.set('Collection', 'MethodDetails', data['method'])
-
-        buffer = StringIO()
-        cp.write(buffer)
-        return buffer.getvalue()
 
 
 class HomePage(MetadataPageMixin, Page):

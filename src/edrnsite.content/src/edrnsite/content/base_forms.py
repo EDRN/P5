@@ -42,5 +42,10 @@ class AbstractEDRNForm(forms.Form):
         )
         self.page = page
 
+    @staticmethod
+    def get_encoding_type() -> str:
+        '''Subclasses can override this if they need something other than ``application/x-www-form-urlencoded``.'''
+        return 'application/x-www-form-urlencoded'
+
     class Meta:
         abstract = True

@@ -8,6 +8,15 @@
 {{form.non_field_errors}}
 
 <div class='row'>
+    <div class='{{form.ref_sets.css_classes}} col-auto mb-3 form-group'>
+        {{form.ref_sets.label_tag}}
+        {{form.ref_sets.errors}}
+        {{form.ref_sets}}
+        <div class='form-text'>{{form.ref_sets.help_text|safe}}</div>
+    </div>
+</div>
+
+<div class='row'>
     <div class='{{form.investigator.css_classes}} col-sm-6 mb-3 form-group'>
         {{form.investigator.label_tag}}
         {{form.investigator.errors}}
