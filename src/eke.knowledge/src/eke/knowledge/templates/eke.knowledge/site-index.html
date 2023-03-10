@@ -36,35 +36,35 @@
 
         <h2><a name='bccs'>Biomarker Characterization Centers</a></h2>
         {% if bcc %}
-            {% edrn_sites_organized_by_needlessly_complex_and_arbitrary_groups bcc True %}
+            {% edrn_sites_organized_by_needlessly_complex_and_arbitrary_groups "BCC" bcc True %}
         {% else %}
             <p class='small'>There are no known Biomarker Characterization Centers.</p>
         {% endif %}
 
         <h2><a name='bdls'>Biomarker Developmental Laboratories</a></h2>
         {% if bdl %}
-            {% edrn_sites_organized_by_needlessly_complex_and_arbitrary_groups bdl True %}
+            {% edrn_sites_organized_by_needlessly_complex_and_arbitrary_groups "BDL" bdl True %}
         {% else %}
             <small>There are no known Biomarker Developmental Laboratories.</small>
         {% endif %}
 
         <h2><a name='brls'>Biomarker Reference Laboratories</a></h2>
         {% if brl %}
-            {% edrn_sites_organized_by_needlessly_complex_and_arbitrary_groups brl True %}
+            {% edrn_sites_organized_by_needlessly_complex_and_arbitrary_groups "BRL" brl True %}
         {% else %}
             <p class='small'>There are no known Biomarker Reference Laboratories.</p>
         {% endif %}
 
         <h2><a name='cvcs'>Clinical Validation Centers</a></h2>
         {% if cvc %}
-            {% edrn_sites_organized_by_needlessly_complex_and_arbitrary_groups cvc True %}
+            {% edrn_sites_organized_by_needlessly_complex_and_arbitrary_groups "CVC" cvc True %}
         {% else %}
             <p class='small'>There are no known Clinical Validation Centers.</p>
         {% endif %}
 
         <h2><a name='dmcc'>Data Management and Coordinating Center</a></h2>
         {% if dmcc %}
-            {% edrn_sites_organized_by_needlessly_complex_and_arbitrary_groups dmcc False %}
+            {% edrn_sites_organized_by_needlessly_complex_and_arbitrary_groups "DMCC" dmcc False %}
         {% else %}
             <p class='small'>There are no Data Management or Coordinating Centers.</p>
         {% endif %}

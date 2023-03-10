@@ -2,7 +2,7 @@
 <div class='row'>
     {% for organ, groups in organs.items %}
         <h3>{{organ}}</h3>
-        {% for group_number, members in groups.items %}
+        {% for group_number, member_info in groups.items %}
             {% if show_group_nums %}
                 <h4>
                     <i>
@@ -26,7 +26,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for member in members %}
+                    {% for member in member_info.members %}
                         <tr>
                             <td>{{member.site.dmccSiteID}}</td>
                             <td><a href='{{member.pi.url}}'>{{member.pi.title}}, {{member.pi.degrees}}</a></td>
@@ -37,6 +37,34 @@
                     {% endfor %}
                 </tbody>
             </table>
+            {% if member_info.members|length == 0 %}
+                <p class='small'>No members of this group were specified at this time.</p>
+            {% elif member_info.summary|length > 0 %}
+                <p>
+                    <button class='btn btn-sm btn-outline-secondary' type='button' data-bs-toggle='collapse'
+                        data-bs-target='#{{member_info.target}}' aria-expanded='false'
+                        aria-controls='{{member_info.target}}'>
+                        {% if member_info.members|length == 1 %}
+                            Read summary for the above ↑ site
+                        {% else %}
+                            Read summary for the above {{member_info.members|length}} sites
+                        {% endif %}
+                    </button>
+                </p>
+                <div class='collapse' id='{{member_info.target}}'>
+                    <div class='card card-body'>{{member_info.summary|safe}}</div>
+                </div>
+            {% else %}
+                <p class='small'>
+                    No summary available for the
+                    {% if member_info.members|length == 1 %}
+                        above ↑ site
+                    {% else %}
+                        above {{member_info.members|length}} sites
+                    {% endif %}
+                    at this time.
+                </p>
+            {% endif %}
         {% endfor %}
     {% endfor %}
 </div>
