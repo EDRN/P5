@@ -1,5 +1,15 @@
 {# This is used by AbstractEDRNForm unless the specific form class overrides template_name #}
+
+{% if not form.is_valid and form.is_bound %}
+    <div class='alert alert-warning' role='alert'>
+        <i class='bi bi-exclamation-octagon-fill'></i> There's a problem with your submission.
+        Please double-check your entries below.
+    </div>
+{% endif %}
+
+{{form.non_field_errors}}
 {{ errors }}
+
 {% if errors and not fields %}
     <div>{% for field in hidden_fields %}{{field}}{% endfor %}</div>
 {% endif %}
