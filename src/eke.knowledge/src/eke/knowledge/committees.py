@@ -13,9 +13,10 @@ import logging, urllib.parse, rdflib
 
 _logger = logging.getLogger(__name__)
 
-_chair    = rdflib.term.URIRef('http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#chair')
-_co_chair = rdflib.term.URIRef('http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#coChair')
-_member   = rdflib.term.URIRef('http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#member')
+_chair      = rdflib.term.URIRef('http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#chair')
+_co_chair   = rdflib.term.URIRef('http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#coChair')
+_member     = rdflib.term.URIRef('http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#member')
+_consultant = rdflib.term.URIRef('http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#consultant')
 
 
 class Ingestor(BaseIngestor):
@@ -46,7 +47,7 @@ class Ingestor(BaseIngestor):
                 person = Person.objects.filter(identifier=new_co_chair).first()
                 if person:
                     committee.co_chair = person
-            new_members = predicates.get(_member, [])
+            new_members = set(predicates.get(_member, [])) | set(predicates.get(_consultant, []))
             people = Person.objects.filter(identifier__in=new_members).order_by('title')
             committee.members.set(people, bulk=True, clear=True)
             committee.save()
