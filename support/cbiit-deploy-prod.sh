@@ -121,7 +121,6 @@ bzip2 --decompress --stdout /local/content/edrn/database-access/edrn.sql.bz2 | \
 echo ""
 echo "📀 Initial database setup"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal django-admin fixtree &&\
 docker compose --project-name edrn exec portal django-admin makemigrations &&\
 docker compose --project-name edrn exec portal django-admin migrate &&\
 docker compose --project-name edrn exec portal django-admin collectstatic --no-input --clear" || exit 1
