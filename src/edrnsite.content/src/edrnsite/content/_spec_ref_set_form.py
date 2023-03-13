@@ -73,7 +73,8 @@ class SpecimenReferenceSetRequestForm(AbstractEDRNForm):
         )
     )
     organ_site = forms.CharField(label='Organ Site(s)', help_text='For example, "lung, ovary".')
-    specimen_type = forms.ChoiceField(
+    specimen_type = forms.MultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple,
         required=True,
         label='Specimen Type',
         help_text='Select the kind of specimen; if you select Other, fill in the next blank.',
@@ -87,16 +88,17 @@ class SpecimenReferenceSetRequestForm(AbstractEDRNForm):
             ('stool', 'Stool'),
             ('tissue', 'Tissue'),
             ('urine', 'Urine'),
-            ('other', 'Other, specify →'),
+            ('other', 'Other, specify'),
         )
     )
     other_specimen_type = forms.CharField(
         required=False, help_text='If you selected "Other", enter the desired specimen type.'
     )
-    min_volume = forms.DecimalField(
-        label='Minimum Volume', min_value=0,
-        help_text='The minimum volume of each sample requested in μL (microliters).'
+    min_volume = forms.CharField(
+        label='Minimum Volume', max_length=500, widget=forms.Textarea(attrs={'rows': 5}),
+        help_text='The minimum volume of each sample requested; include appropriate units such as μL (microliters), g (grams), etc.'
     )
+
     study_length = forms.IntegerField(label='Study Length', help_text='Expected duration of the study in months.', min_value=0)
     irb_approval = forms.ChoiceField(
         label='IRB Approval', widget=forms.RadioSelect,
@@ -108,7 +110,6 @@ class SpecimenReferenceSetRequestForm(AbstractEDRNForm):
         help_text='If you answered "yes", enter your IRB number. If you answered "pending", enter the expected approval date.'
     )
 
-    # funding = forms.CharField(label='Funding', help_text=_funding_help_text, widget=forms.Textarea)
     nih_funding = forms.BooleanField(required=False, label='Current NIH-funded grant')
     grant_number = forms.CharField(required=False, label='Grant number', max_length=30)
     annual_direct_costs = forms.CharField(required=False, label='Annual direct costs', max_length=30)
