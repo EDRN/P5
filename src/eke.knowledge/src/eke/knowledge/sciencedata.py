@@ -227,6 +227,14 @@ class DataCollectionIndex(KnowledgeFolder):
     subpage_types = [DataCollection, DataStatistic]
     page_description = 'Container for data collections'
 
+    metadata_collection_form = models.ForeignKey(
+        'edrnsitecontent.MetadataCollectionFormPage', null=True, blank=True,
+        verbose_name='Metadata Collection Form', related_name='+',
+        help_text='Which page to use as the metadata collection form',
+        on_delete=models.SET_NULL
+    )
+    content_panels = KnowledgeFolder.content_panels + [FieldPanel('metadata_collection_form')]
+
     def get_vocabulary(self, name) -> list:
         '''Get a "vocabulary" of known values for the field ``name`` for our contained subpage.'''
         if name == 'organ':

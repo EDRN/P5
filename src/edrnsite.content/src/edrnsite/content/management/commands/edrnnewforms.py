@@ -127,6 +127,11 @@ class Command(BaseCommand):
             page.body.append(('rich_text', RichText(fixer.get_fixed())))
             page.save()
 
+    def _link_metadata_collection_form(self, form: MetadataCollectionFormPage):
+        index = Page.objects.filter(slug='data').first().specific
+        index.metadata_collection_form = form
+        index.save()
+
     def handle(self, *args, **options):
         self.stdout.write('Populating the EDRN site with the new forms')
 
@@ -140,8 +145,9 @@ class Command(BaseCommand):
             SpecimenReferenceSetRequestFormPage.objects.all().delete()
             MetadataCollectionFormPage.objects.all().delete()
             spec_ref_set_req_form = self._create_specimen_ref_set_req_form_page(home_page)
-            self._create_metadata_collection_form(home_page)
+            metadata_collection_form = self._create_metadata_collection_form(home_page)
             self._link_spec_ref_set_req_form(spec_ref_set_req_form)
+            self._link_metadata_collection_form(metadata_collection_form)
 
         finally:
             settings.WAGTAILREDIRECTS_AUTO_CREATE = old

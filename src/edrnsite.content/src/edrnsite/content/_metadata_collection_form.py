@@ -4,6 +4,7 @@
 
 from .base_forms import AbstractEDRNForm
 from .base_models import AbstractFormPage
+from captcha.fields import ReCaptchaField
 from configparser import ConfigParser
 from django import forms
 from eke.knowledge.models import Site, Person, Protocol, BodySystem
@@ -139,6 +140,7 @@ class MetadataCollectionForm(AbstractEDRNForm):
         required=False, label='Comments or Questions', widget=forms.Textarea, max_length=5000,
         help_text='Have questions? Need to clarify something? Want to make some comments? Enter here.'
     )
+    captcha = ReCaptchaField()
 
 
 class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):

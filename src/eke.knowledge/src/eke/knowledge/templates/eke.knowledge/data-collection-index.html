@@ -10,6 +10,15 @@
 
     {% edrn_boilerplate 'hidden-data-notice' %}
 
+    {% if page.metadata_collection_form %}
+        <div class='row'>
+            <p>
+                <a href='{{page.metadata_collection_form.url}}'><i class='bi bi-ui-checks-grid'></i> Visit
+                the {{page.metadata_collection_form.title}}</a>.
+            </p>
+        </div>
+    {% endif %}
+
     {% if knowledge_empty %}
         <div class='row'>
             <small>There are no data collections in this folder.</small>
