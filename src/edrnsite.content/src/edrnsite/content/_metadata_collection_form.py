@@ -121,7 +121,7 @@ class MetadataCollectionForm(AbstractEDRNForm):
         help_text='If this data is private, enter the names of sites and/or people who should have access, ONE PER LINE.'
     )
     results = forms.CharField(required=False, label='Results and Conclusion Summary', widget=forms.Textarea)
-    reference_url = forms.URLField(required=False, label='Reference URL', help_text='Optional URL to reference with this collection.')
+    reference_url = forms.URLField(required=False, label='URL Link', help_text='Optional URL link to external or additional data described by this collection.')
     reference_url_description = forms.ChoiceField(
         required=False,
         widget=forms.RadioSelect,
