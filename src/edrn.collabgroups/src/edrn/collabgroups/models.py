@@ -115,7 +115,7 @@ class Committee(Page):
     search_auto_update = False
     subpage_types = [FlexPage, CommitteeEvent]
     page_description = 'Collaborative group, committee, working group, etc.'
-    
+
     id_number = models.CharField(blank=True, max_length=10, help_text='DMCC-assigned identification number')
     description = models.TextField(blank=True, null=False, help_text='A summary or descriptive abstract')
     chair = models.ForeignKey(
