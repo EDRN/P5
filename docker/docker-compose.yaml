@@ -130,7 +130,7 @@ services:
     #
     # Ports 9200 and 9300, not published.
     search:
-        image: elasticsearch:7.17.6
+        image: elasticsearch:7.17.9
         # :crystal-ball-emoji: TODO: user ID 500/26013 issue … do we need a custom elasticsearch image?
         volumes:
             -

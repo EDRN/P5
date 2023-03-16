@@ -42,8 +42,6 @@ if [ ! -d ".venv" ]; then
 
     # When wagtail/wagtail#10184 is fixed, we can remove this:
     patch --directory ${PWD}/.venv/lib/python3.10/site-packages --input ${PWD}/patches/wagtail-users-utils.patch --strip 0
-    # When pabluk/libgravatar#15 is fixed, we can remove this:
-    patch --directory ${PWD}/.venv/lib/python3.10/site-packages --input ${PWD}/patches/libgravatar.patch --strip 0
 fi
 
 command="$1"
