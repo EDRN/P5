@@ -20,6 +20,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         old = getattr(settings, 'WAGTAILREDIRECTS_AUTO_CREATE', True)
         try:
+            settings.WAGTAILSEARCH_BACKENDS['default']['AUTO_UPDATE'] = False
+
             verbosity = int(options['verbosity'])
             root_logger = logging.getLogger('')
             if verbosity >= 3:
