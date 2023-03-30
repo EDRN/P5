@@ -81,7 +81,7 @@ echo ""
 echo "🪢 Pulling the images anonymously"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker logout ncidockerhub.nci.nih.gov && docker logout &&\
-docker image rm --force nutjob4life/edrn-portal:$EDRN_VERSION &"
+docker image rm --force edrndocker/edrn-portal:$EDRN_VERSION &"
 
 # The `docker image rm` step can take a long time, and sshd will time out the
 # idle connection because it's a despotic and horrible server.
