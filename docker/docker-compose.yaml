@@ -39,7 +39,7 @@ services:
     # Nominally on port 8000, published to ${EDRN_PUBLISHED_TLS_PORT} or 8080.
     # For a TLS endpoint, enable the profile `tls-proxy` and use portal 4134.
     portal:
-        image: ${EDRN_IMAGE_OWNER-nutjob4life/}edrn-portal:${EDRN_VERSION:-6.0.0-uid26013}
+        image: ${EDRN_IMAGE_OWNER-edrndocker/}edrn-portal:${EDRN_VERSION:-6.0.0-uid26013}
         volumes:
             -
                 type: bind
@@ -166,7 +166,7 @@ services:
     # A "celery" instance that handles background tasks; does not listen on any port.
     # Worker processes run Django functions so it needs all the same env vars as `portal`.
     worker:
-        image: ${EDRN_IMAGE_OWNER-nutjob4life/}edrn-portal:${EDRN_VERSION:-6.0.0-uid26013}
+        image: ${EDRN_IMAGE_OWNER-edrndocker/}edrn-portal:${EDRN_VERSION:-6.0.0-uid26013}
         entrypoint: ['/usr/bin/django-admin', 'worker']
         volumes:
             -
