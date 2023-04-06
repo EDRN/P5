@@ -5,6 +5,7 @@
 from .biomarker import Biomarker, BiomarkerBodySystem, BiomarkerCollaborativeGroupName, Protocol, BodySystemStudy
 from .constants import HGNC_PREDICATE_URI, ORGAN_GROUPS
 from django.db.models.functions import Lower
+from django.core.exceptions import ValidationError
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.template.loader import render_to_string
 from django.utils.text import slugify
@@ -16,7 +17,7 @@ from sortedcontainers import SortedList
 from wagtail.models import Page
 import dash_core_components as dcc
 import dash_html_components as html
-import rdflib, logging, typing, plotly.express, collections, pandas
+import rdflib, logging, typing, plotly.express, pandas
 
 _logger = logging.getLogger(__name__)
 _biomarker_type_uri = 'http://edrn.nci.nih.gov/rdf/rdfs/bmdb-1.0.0#Biomarker'
@@ -80,7 +81,10 @@ class Ingestor(BaseIngestor):
                 study_uri = useless_wrapper.get(self._ref_study_pred_uri, [None])[0]
                 values.append(study_uri)
             modder.modify_field(bm, values, bm._meta.get_field('protocols'), predicates)
-            bm.save()
+            try:
+                bm.save()
+            except ValidationError:
+                _logger.exception('Cannot save biomarker %s after adding protocols; skipping it', bm.identifier)
 
     def connect_panels(self):
         '''Connect biomarker panels to their composed biomarkers.'''
@@ -108,13 +112,17 @@ class Ingestor(BaseIngestor):
                     # In this case, we have a biomarker with subject ``uri`` not in the ``empaneled`` dict,
                     # which means that the biomarker has ``<ns1:IsPanel>1</ns1:IsPanel>`` but no other
                     # biomarkers have claimed membership in it. So just ignore it.
-                    continue                    
+                    continue
 
                 # See if the set of members has changed
                 bm = Biomarker.objects.filter(identifier__exact=uri).first()
                 if set(bm.members.all().values_list('identifier', flat=True)) != member_uris:
                     bm.members.set(Biomarker.objects.filter(identifier__in=member_uris), clear=True)
-                    bm.save()
+                    try:
+                        bm.save()
+                    except ValidationError:
+                        _logger.exception('Cannot save biomarker %s after connecting enpaneled members', bm.identifier)
+                        continue
                     # If this was a new biomarker, we're done. If it was an updated biomarker, we're done.
                     # However, it might've been an under-the-radar biomarker that was neither new nor
                     # updated, so in this case, add it to the updated roster.
@@ -141,7 +149,12 @@ class Ingestor(BaseIngestor):
                     if not bss:
                         bss = BodySystemStudy(title=protocol.title, protocol=protocol)
                         bbs.body_system_studies.add(bss, bulk=False)
-                        bss.save()
+                        try:
+                            bss.save()
+                        except ValidationError:
+                            _logger.exception('Cannot save body-system-study for protocol %s', protocol_uri)
+                            continue
+                    # oh my so many saves
                     bbs.save()
                     self.setAttributes(bss, predicates)
                     bss.save()

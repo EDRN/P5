@@ -9,6 +9,7 @@ from .publications import Publication
 from .rdf import RDFAttribute, RelativeRDFAttribute
 from .utils import edrn_schema_uri as esu
 from .utils import Ingestor as BaseIngestor
+from django.core.exceptions import ValidationError
 from django.core.files.images import ImageFile
 from django.db import models
 from django.db.models.fields import Field
@@ -444,9 +445,12 @@ class Ingestor(BaseIngestor):
             modelField = person._meta.get_field(rdfAttribute.name)
             rdfAttribute.modify_field(person, values, modelField, predicates)
         self.assign_academic_degree(person, predicates)
-        site.add_child(instance=person)
-        person.save()
-
+        try:
+            site.add_child(instance=person)
+            person.save()
+        except ValidationError:
+            _logger.exception('Cannot save person %s in site %s; pressing on', uri, site_uri)
+            return None
         return person
 
     def ingest_people(self):
@@ -492,7 +496,10 @@ class Ingestor(BaseIngestor):
             self.add_investigators(site, self._coPIPredicateURI, predicates, 'coPIs',         scalar=False)
             self.add_investigators(site, self._coIPredicateURI,  predicates, 'coIs',          scalar=False)
             self.add_investigators(site, self._iPredicateURI,    predicates, 'investigators', scalar=False)
-            site.save()
+            try:
+                site.save()
+            except ValidationError:
+                _logger.exception('Cannot save site %s after adding investigators; pressing on', subject)
 
     def setup_coordinates(self):
         misses, lookups = {}, set()
@@ -583,7 +590,7 @@ class Ingestor(BaseIngestor):
         # We do this twice because the first time, sites that sponsor other sites may not yet exist. So the second
         # round links them up.
         c0, u0, d0 = super().ingest()      # This sets self.statements
-        c1, u1, d1 = super().ingest()  
+        c1, u1, d1 = super().ingest()
         c2, u2, d2 = self.ingest_people()  # So subseqeunt invocations like this one can use it
         self.setup_investigators()
         self.setup_coordinates()

@@ -5,7 +5,7 @@
 
 from .committees import CommitteeIndex
 from .knowledge import KnowledgeObject, KnowledgeFolder, RDFSource
-from .publications import Publication, PublicationIndex
+from .publications import Publication, PublicationIndex, PMCID
 from .bodysystems import BodySystem, BodySystemIndex
 from .diseases import Disease, DiseaseIndex
 from .miscresources import MiscellaneousResource, MiscellaneousResourceIndex

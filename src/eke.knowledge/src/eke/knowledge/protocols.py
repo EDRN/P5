@@ -10,6 +10,7 @@ from .sites import Site
 from .utils import edrn_schema_uri as esu
 from .utils import Ingestor as BaseIngestor, ghetto_plotly_legend
 from dash_dangerously_set_inner_html import DangerouslySetInnerHTML
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.db.models.fields import Field
@@ -226,8 +227,11 @@ class Ingestor(BaseIngestor):
         for protocol, siteIDs in protocolToSites.items():
             sites = Site.objects.filter(identifier__in=siteIDs)
             protocol.involvedInvestigatorSites.set(sites, clear=True)
-            protocol.save()
-                
+            try:
+                protocol.save()
+            except ValidationError:
+                _logger.exception('Cannot save protocol %s after adding involved investigators', protocol.identifier)
+
     def promote_search_results(self):
         '''Make search descriptions for the newly-created ``protocols``.'''
         for protocol in Protocol.objects.child_of(self.folder):
@@ -243,7 +247,10 @@ class Ingestor(BaseIngestor):
             article = 'an' if first_letter in ('a', 'e', 'i', 'o', 'u') else 'a'
             promotion = f'"{protocol.title}" is {article} {kind} of the Early Detection Research Network.'
             protocol.search_description = promotion
-            protocol.save()
+            try:
+                protocol.save()
+            except ValidationError:
+                _logger.exception('Cannot save protocol %s after adding search description', protocol.identifier)
 
     def ingest(self):
         n, u, d = super().ingest()

@@ -6,6 +6,7 @@
 from .knowledge import KnowledgeFolder
 from .sites import Person
 from .utils import Ingestor as BaseIngestor
+from django.core.exceptions import ValidationError
 from django.db.models.functions import Lower
 from django.http import HttpRequest
 from wagtail.models import Page
@@ -50,7 +51,10 @@ class Ingestor(BaseIngestor):
             new_members = set(predicates.get(_member, [])) | set(predicates.get(_consultant, []))
             people = Person.objects.filter(identifier__in=new_members).order_by('title')
             committee.members.set(people, bulk=True, clear=True)
-            committee.save()
+            try:
+                committee.save()
+            except ValidationError:
+                _logger.exception('Cannot save committee %s but pressing on', uri)
 
         # Nothing to report
         return set(), set(), set()

@@ -3,6 +3,7 @@
 '''💁‍♀️ EDRN Knowledge Environment: utilities.'''
 
 from .knowledge import KnowledgeFolder, KnowledgeObject
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from wagtail.models import Page, PageViewRestriction
 from wagtail.query import PageQuerySet
@@ -179,8 +180,11 @@ class Ingestor(object):
             instance = cls(title=title, draft_title=title, seo_title=title, slug=slug, live=live, identifier=uri)
             self.folder.specific_deferred.add_child(instance=instance)
             self.setAttributes(instance, predicates)
-            instance.save()
-            createdObjects.add(instance)
+            try:
+                instance.save()
+                createdObjects.add(instance)
+            except ValidationError:
+                _logger.exception('Cannot save %s; pressing on', uri)
         return createdObjects
 
     def updateObjects(self, uris: set, statements: dict) -> set:
@@ -203,8 +207,11 @@ class Ingestor(object):
                 # It was a plain Django model all along
                 pass
             if self.setAttributes(obj, statements[rdflib.URIRef(uri)]):
-                obj.save()
-                updatedObjects.add(obj)
+                try:
+                    obj.save()
+                    updatedObjects.add(obj)
+                except ValidationError:
+                    _logger.exception('Cannot update %s; pressing on', uri)
         return updatedObjects
 
     def ingest(self):
