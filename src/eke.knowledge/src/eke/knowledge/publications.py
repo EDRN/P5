@@ -6,6 +6,7 @@ from .utils import edrn_schema_uri as esu
 from .utils import Ingestor as BaseIngestor
 from Bio import Entrez
 from contextlib import closing
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.http import HttpRequest
 from django.template.loader import render_to_string
@@ -29,6 +30,15 @@ import pandas, re, logging
 
 
 _logger = logging.getLogger(__name__)
+
+
+class PMCID(models.Model):
+    pmid = models.CharField(max_length=20, blank=True, null=False, help_text='Entrez Medline PMID code number')
+    pmcid = models.CharField(max_length=20, blank=True, null=False, help_text='Entrez Medline PMCID code number')
+    class Meta:
+        indexes = [
+            models.Index(fields=['pmid'])
+        ]
 
 
 class Publication(KnowledgeObject):
@@ -254,7 +264,10 @@ class Ingestor(BaseIngestor):
                         if pubInfoDict[pubMedID]: pub.siteID = pubInfoDict[pubMedID]
                         self.setAuthors(pub, medline)
                         self.folder.add_child(instance=pub)
-                        pub.save()
+                        try:
+                            pub.save()
+                        except ValidationError:
+                            _logger.exception('Cannot save publication %s; pressing on', identifier)
             except HTTPError as ex:
                 _logger.warning('Entrez retrieval failed with %d for «%r» but pressing on', ex.getcode(), pubMedIDs)
                 _logger.debug('Entrez failed URL was «%s»', ex.geturl())
