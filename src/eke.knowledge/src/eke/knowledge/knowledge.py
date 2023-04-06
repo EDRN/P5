@@ -115,7 +115,7 @@ class KnowledgeFolder(MetadataPageMixin, Page):
         data = [i.data_table() for i in self.get_contents(request)]
         return {'data': data}
 
-    def get_contents(self, request: HttpRequest) -> object: 
+    def get_contents(self, request: HttpRequest) -> object:
         '''Get my knowledge objects.
 
         This returns the contained KnowledgeObjects (down to their specifics) as either a ``PageQuerySet``
