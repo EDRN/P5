@@ -1,13 +1,14 @@
 # encoding: utf-8
 
 from .constants import MAX_URI_LENGTH, MAX_SLUG_LENGTH
-from .knowledge import KnowledgeObject, KnowledgeFolder
+from .knowledge import KnowledgeObject, KnowledgeFolder, DataTableColumn, DataTableOrdering
 from .utils import edrn_schema_uri as esu
 from .utils import Ingestor as BaseIngestor
 from Bio import Entrez
 from contextlib import closing
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import F, Q
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.utils.text import slugify
@@ -171,7 +172,7 @@ class Ingestor(BaseIngestor):
                     if not pubMedIDs: continue
                     missing |= pubMedIDs - currentPMIDs
             except HTTPError as ex:
-                _logger.warning('Entrez search failed with %d for «%s» but pressing on', ex.getcode(), searchTerm)   
+                _logger.warning('Entrez search failed with %d for «%s» but pressing on', ex.getcode(), searchTerm)
         for newPubMed in missing:
             subjectURItoPMIDs[self._grantNumberURIPrefix + newPubMed] = (newPubMed, '')
 
@@ -304,6 +305,23 @@ class PublicationIndex(KnowledgeFolder):
     template = 'eke.knowledge/publication-index.html'
     subpage_types = [Publication]
     page_description = 'Container for publications'
+
+    # 🔮 TODO: memoize!
+    def get_server_side_datatable_results(
+        self, search_value: str, columns: list[DataTableColumn], orderings: list[DataTableOrdering]
+    ) -> list[dict]:
+        '''Get the datatable results for the given search parameters and return them as a
+        list of dicts describing each matching row.
+        '''
+        matches = Publication.objects.child_of(self).live().public()
+
+        # At this point we'd use Q with filter and F with order_by and finally .search() to
+        # get a set of matches, however thanks to wagtail/wagtail#5319, we can't do any column
+        # ordering after Elasticsearch changes the PageQuerySet into a SearchResults.
+        #
+        # This means server-side DataTables will have to remain a hoped-for dream.
+
+        return matches
 
     def get_contents(self, request: HttpRequest):
         matches = Publication.objects.child_of(self).live().public().filter(year__isnull=False).order_by('-year')

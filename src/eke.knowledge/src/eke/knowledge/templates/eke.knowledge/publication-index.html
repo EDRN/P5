@@ -30,7 +30,7 @@
                             <th>Title</th>
                             <th>Journal</th>
                             <th>Year</th>
-                        </tr>                            
+                        </tr>
                     </tfoot>
                 </table>
             </div>
@@ -57,6 +57,11 @@
                 $(this).html('<input type="text" placeholder="Search ' + title + 's"/>');
             });
             $('#the-datatable').DataTable({
+                {% comment %}
+                    Sadly we can't use server side data tables quite yet 🙁
+                    ajax: {url: '{% pageurl page %}?ajax=json-server-datatable', dataSrc: 'data'},
+                    serverSide: true,
+                {% endcomment %}
                 ajax: {url: '{% pageurl page %}?ajax=json', dataSrc: 'data'},
                 columns: [
                     {data: 'title', render: function(data, type, row) {

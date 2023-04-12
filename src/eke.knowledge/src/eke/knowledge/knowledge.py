@@ -8,13 +8,27 @@ from django.db import models
 from django.db.models import Q
 from django.db.models.functions import Lower
 from django.http import HttpRequest
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
+from django.http.request import QueryDict
 from modelcluster.fields import ParentalKey
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.models import Page, Orderable
-from wagtailmetadata.models import MetadataPageMixin
 from wagtail.search import index
-import rdflib
+from wagtailmetadata.models import MetadataPageMixin
+import rdflib, dataclasses, re, logging
+
+_order_regex = re.compile(r'^order\[([0-9]+)]\[(dir|column)]$')
+_col_regex = re.compile(r'^columns\[([0-9)+])]\[(data|name|search|searchable|orderable)](\[(value|regex)])?$')
+_logger = logging.getLogger(__name__)
+
+
+def _request_parameters(qd: QueryDict):
+    while True:
+        try:
+            key, values = qd.popitem()
+            yield key, values
+        except KeyError:
+            break
 
 
 class KnowledgeObject(MetadataPageMixin, Page):
@@ -56,6 +70,36 @@ class KnowledgeObject(MetadataPageMixin, Page):
             str(rdflib.DCTERMS.title): RDFAttribute('title', scalar=True),
             str(rdflib.DCTERMS.description): RDFAttribute('description', scalar=True)
         }
+
+
+@dataclasses.dataclass(init=False, order=True, frozen=False)
+class DataTableReference(object):
+    '''An abstract DataTables column or ordering reference.'''
+    priority: int
+    def __init__(self, priority: int):
+        self.priority = priority
+    def __hash__(self):
+        return hash(self.priority)
+
+
+class DataTableColumn(DataTableReference):
+    '''A searchable, sortable column in a data table.'''
+    data: str
+    name: str
+    searchable: bool
+    orderable: bool
+    search_value: str
+    search_regex: bool
+    def __repr__(self):
+        return f'{self.__class__.__name__}(data={self.data},searchable={self.searchable})'
+
+
+class DataTableOrdering(DataTableReference):
+    '''A sort request for a column in the table.'''
+    column: int
+    ascending: bool
+    def __repr__(self):
+        return f'{self.__class__.__name__}(priority={self.priority},column={self.column},ascending={self.ascending})'
 
 
 class KnowledgeFolder(MetadataPageMixin, Page):
@@ -105,11 +149,123 @@ class KnowledgeFolder(MetadataPageMixin, Page):
         won't need to override this usually.
         '''
         if request.GET.get('ajax') == 'true':
+            # Since we moved everything to DataTables, this is no longer used.
             return HttpResponse(self.faceted_markup(request))
         elif request.GET.get('ajax') == 'json':
+            # This is used by DataTables for client-side processing
             return JsonResponse(self.json(request))
+        elif request.GET.get('ajax') == 'json-server-datatable':
+            # This is used by DataTables for server-side processing
+            return JsonResponse(self.json_datatable(request))
         else:
+            # Well maybe our superclass knows how to handle this 🤷‍♀️
             return super().serve(request)
+
+    def _get_server_side_search_columns(self, qd: QueryDict) -> tuple:
+        '''From the given ``qd``, determine all the desired columns and their search parameters,
+        and all the desired column orderings. Return a double of lists. The first list in the
+        double tells all the desired columns in priority order and consists of
+        ``DataTableColumn`` objects. The second list in the double tells how the data should be
+        ordered and consists of ``DataTableOrdering`` objects.
+        '''
+        columns, orderings = {}, {}
+        for key, values in _request_parameters(qd):
+            if key.startswith('order'):
+                match = _order_regex.match(key)
+                if match:
+                    priority = int(match.group(1))
+                    ordering = orderings.get(priority, DataTableOrdering(priority))
+                    if match.group(2) == 'column':
+                        ordering.column = int(values[0])
+                    elif match.group(2) == 'dir':
+                        ordering.ascending = values[0] == 'asc'
+                    orderings[priority] = ordering
+                else:
+                    _logger.warning('DataTables passed an order directive I cannot parse: «%s»', key)
+            elif key.startswith('column'):
+                match = _col_regex.match(key)
+                if match:
+                    priority, kind = int(match.group(1)), match.group(2)
+                    column = columns.get(priority, DataTableColumn(priority))
+                    if kind == 'data':
+                        column.data = values[0]
+                    elif kind == 'name':
+                        column.name = values[0]
+                    elif kind == 'searchable':
+                        column.searchable = values[0] == 'true'
+                    elif kind == 'orderable':
+                        column.orderable = values[0] == 'true'
+                    elif kind == 'search':
+                        search_param = match.group(4)
+                        if search_param == 'value':
+                            column.search_value = values[0]
+                        elif search_param == 'regex':
+                            column.search_regex = values[0] == 'true'
+                    columns[priority] = column
+                else:
+                    _logger.warning('DataTables passed a column directive I cannot parse: «%s»', key)
+        return sorted(columns.values()), sorted(orderings.values())
+
+    def get_server_side_datatable_results(
+        self, search_value: str, columns: list[DataTableColumn], orderings: list[DataTableOrdering]
+    ) -> list[dict]:
+        '''Get the datatable results for the given search parameters and return them as a
+        list of dicts describing each matching row. Subclasses are strongly encouraged to
+        memoize their implementations.
+        '''
+        raise NotImplementedError('Sublcasses must implement ``get_server_side_datatable_results``')
+
+    def json_datatable(self, request: HttpRequest) -> dict:
+        '''Return a json-ready package for server-side DataTables.
+
+        Sadly we can't do this quite yet since Elasticsearch can't order columns. See
+        wagtail/wagtail#5319 for more information.
+        '''
+        g = request.GET.copy()
+        draw, start, length = int(g.pop('draw')[0]), int(g.pop('start')[0]), int(g.pop('length')[0])
+        search_value, search_regex = g.pop('search[value]')[0], g.pop('search[regex]')[0] == 'true'
+        columns, orderings = self._get_server_side_search_columns(g)
+
+        # Elasticsearch supports regex searching but the Wagtail search interface to it does not.
+        # So check to see if any regex search is enabled; if so, we can't do it.
+        if search_regex or any([i.search_regex for i in columns]):
+            raise ValueError('We cannot support regex searches at this time')
+
+        results = self.get_server_side_datatable_results(search_value, search_regex, columns, orderings)
+        return {
+            'draw': draw,
+            'recordsTotal': self.get_contents(request).count(),
+            'recordsFiltered': len(results),
+            'data': results[start:length]
+        }
+
+        # 'ajax': ['json-server-datatable']
+        # 'draw': ['1']
+        # 'columns[0][data]': ['title']
+        # 'columns[0][name]': ['']
+        # 'columns[0][searchable]': ['true']
+        # 'columns[0][orderable]': ['true']
+        # 'columns[0][search][value]': ['']
+        # 'columns[0][search][regex]': ['false']
+        # 'columns[1][data]': ['journal']
+        # 'columns[1][name]': ['']
+        # 'columns[1][searchable]': ['true']
+        # 'columns[1][orderable]': ['true']
+        # 'columns[1][search][value]': ['']
+        # 'columns[1][search][regex]': ['false']
+        # 'columns[2][data]': ['year']
+        # 'columns[2][name]': ['']
+        # 'columns[2][searchable]': ['true']
+        # 'columns[2][orderable]': ['true']
+        # 'columns[2][search][value]': ['']
+        # 'columns[2][search][regex]': ['false']
+        # 'order[0][column]': ['0']
+        # 'order[0][dir]': ['asc']
+        # 'start': ['0']
+        # 'length': ['10']
+        # 'search[value]': ['']
+        # 'search[regex]': ['false']
+        # '_': ['1669931867747']
 
     def json(self, request: HttpRequest) -> HttpResponse:
         data = [i.data_table() for i in self.get_contents(request)]
