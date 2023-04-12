@@ -133,6 +133,10 @@ class MetadataCollectionForm(AbstractEDRNForm):
             ('other', 'Other'),
         )
     )
+    reference_url_other = forms.CharField(
+        required=False, label='Other', max_length=280,
+        help_text='If you selected "Other" above, enter the description of the reference URL.'
+    )
     pub_med_id = forms.CharField(required=False, label='PubMed ID', max_length=20)
     doi = forms.CharField(required=False, label='DOI', max_length=150, help_text='Digital Object Identifier')
     doi_url = forms.URLField(required=False, label='DOI URL', help_text='URL form of the DOI')
@@ -216,6 +220,9 @@ class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
         if data['results']: cp.set('Collection', 'ResultsAndConclusionSummary', data['results'])
         if data['pub_med_id']: cp.set('Collection', 'PubMedID', data['pub_med_id'])
         if data['reference_url']: cp.set('Collection', 'ReferenceURL', data['reference_url'])
+        if data['reference_url_description']:
+            cp.set('Collection', 'ReferenceURLDescription', data['reference_url_description'])
+        if data['reference_url_other']: cp.set('Collection', 'ReferenceURLOther', data['reference_url_other'])
         cp.set('Collection', 'Consortium', 'EDRN')
         cp.set('Collection', 'Species', data['species'])
 
