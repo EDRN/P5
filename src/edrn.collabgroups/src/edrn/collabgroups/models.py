@@ -53,7 +53,7 @@ class CommitteeEvent(Page):
         (CHICAGO, 'Chicago (central)'),
         (NEW_YORK, 'New York (eastern)'),
         (UTC, 'UTC (global)'),
-    ]    
+    ]
 
     when = models.DateTimeField(help_text='When does this event start; will be converted to UTC based on timezone below')
     timezone = models.CharField(
