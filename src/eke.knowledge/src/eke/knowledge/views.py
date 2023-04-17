@@ -23,7 +23,7 @@ def _get_referrer(request: HttpRequest) -> str:
 
 @logged_in_or_basicauth('edrn')
 def fix_tree(request: HttpRequest) -> HttpResponse:
-    '''Fix any tree issues.''' 
+    '''Fix any tree issues.'''
     if request.user.is_staff or request.user.is_superuser:
         do_fix_tree.delay()
         return HttpResponseRedirect(_get_referrer(request))
@@ -33,7 +33,7 @@ def fix_tree(request: HttpRequest) -> HttpResponse:
 
 @logged_in_or_basicauth('edrn')
 def start_full_ingest(request: HttpRequest) -> HttpResponse:
-    '''Start a full ingest and redirect to our referrer.''' 
+    '''Start a full ingest and redirect to our referrer.'''
     if request.user.is_staff or request.user.is_superuser:
         do_full_ingest.delay()
         return HttpResponseRedirect(_get_referrer(request))
@@ -78,7 +78,7 @@ def find_members(request: HttpRequest) -> HttpResponse:
 
     This handles rendering of the member finder page and also the faceted re-visit as the
     user makes selections.
-    '''    
+    '''
     if request.GET.get('ajax') == 'true':
         pi, site_name, types = request.GET.get('pi'), request.GET.get('site'), request.GET.getlist('member-type')
 
