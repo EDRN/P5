@@ -23,7 +23,10 @@ class Command(BaseCommand):
         count = Biomarker.objects.all().count()
         for biomarker in Biomarker.objects.all():
             if not biomarker.search_description:
-                biomarker.search_description = biomarker.description
+                if biomarker.search_description:
+                    biomarker.search_description = biomarker.description
+                else:
+                    biomarker.search_description = f'{biomarker.title} is a biomarker being researched by EDRN'
                 biomarker.save()
             del biomarker
             count -= 1
