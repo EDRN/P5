@@ -7,6 +7,7 @@ from edrn.collabgroups.models import Committee, CommitteeEvent
 from edrnsite.content.models import FlexPage
 from eke.biomarkers.models import Biomarker
 from eke.knowledge.models import BodySystem, Disease, OrganizationalGroup, MiscellaneousResource
+import argparse
 
 
 class Command(BaseCommand):
@@ -14,9 +15,10 @@ class Command(BaseCommand):
 
     help = 'Add meta descriptions to various objects'
 
-    def handle(self, *args, **options):
-        '''Handle the EDRN `edrn_meta_descs` command.'''
+    def add_arguments(self, parser: argparse.ArgumentParser):
+        parser.add_argument('phase', help='Which phase of meta descs to add, 1 or 2')
 
+    def _phase_1(self):
         self.stdout.write('Adding meta descs to biomarkers')
         count = Biomarker.objects.all().count()
         for biomarker in Biomarker.objects.all():
@@ -66,6 +68,7 @@ class Command(BaseCommand):
                 e.save()
             del e
 
+    def _phase_2(self):
         self.stdout.write('Adding meta descs to misc resources')
         count = MiscellaneousResource.objects.all().count()
         for m in MiscellaneousResource.objects.all():
@@ -149,3 +152,13 @@ class Command(BaseCommand):
                 page.search_description = 'These are materials made for a meeting'
                 page.save()
             del page
+
+    def handle(self, *args, **options):
+        '''Handle the EDRN `edrn_meta_descs` command.'''
+
+        if options['phase'] == '1':
+            self._phase_1()
+        elif options['phase'] == '2':
+            self._phase_2()
+        else:
+            raise ValueError('Please specify phase of 1 or 2')
