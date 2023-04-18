@@ -77,62 +77,73 @@ class Command(BaseCommand):
             if count % 100 == 0 and count > 0:
                 self.stdout.write(f'{count} miscellaneous resources to go')
 
-        self.stdout.write('Adding meta descs to flex pages with recurring themes')
+        self.stdout.write('Adding meta descs to flex pages with recurring themes: group calls')
         for page in FlexPage.objects.filter(title__contains='Group Call'):
             if not page.search_description:
                 page.search_description = 'This was a group call held in the past'
                 page.save()
             del page
+        self.stdout.write('Adding meta descs to flex pages with recurring themes: conference calls')
         for page in FlexPage.objects.filter(title__contains='Conference Call'):
             if not page.search_description:
                 page.search_description = 'This was a conference call held in the past'
                 page.save()
             del page
+        self.stdout.write('Adding meta descs to flex pages with recurring themes: ending with "Call"')
         for page in FlexPage.objects.filter(title__endswith='Call'):
             if not page.search_description:
                 page.search_description = 'This was a call held in the past'
                 page.save()
             del page
+        self.stdout.write('Adding meta descs to flex pages with recurring themes: Group Meetings')
         for page in FlexPage.objects.filter(title__contains='Group Meeting'):
             if not page.search_description:
                 page.search_description = 'This was a group meeting held in the past'
                 page.save()
             del page
+        self.stdout.write('Adding meta descs to flex pages with recurring themes: workshop')
         for page in FlexPage.objects.filter(title__contains='Workshop'):
             if not page.search_description:
                 page.search_description = 'This was a workshop held in the past'
                 page.save()
             del page
+        self.stdout.write('Adding meta descs to flex pages with recurring themes: meeting')
         for page in FlexPage.objects.filter(title__contains='Meeting'):
             if not page.search_description:
                 page.search_description = 'This was a meeting held in the past'
                 page.save()
             del page
+        self.stdout.write('Adding meta descs to flex pages with recurring themes: Meeting')
         for page in FlexPage.objects.filter(title__contains='meeting'):
             if not page.search_description:
                 page.search_description = 'This was a meeting held in the past'
                 page.save()
             del page
+        self.stdout.write('Adding meta descs to flex pages with recurring themes: webinar')
         for page in FlexPage.objects.filter(title__contains='webinar'):
             if not page.search_description:
                 page.search_description = 'This was a web-based seminar held in the past'
                 page.save()
             del page
+        self.stdout.write('Adding meta descs to flex pages with recurring themes: teleconference')
         for page in FlexPage.objects.filter(title__contains='Teleconference'):
             if not page.search_description:
                 page.search_description = 'This was a telephone conference held in the past'
                 page.save()
             del page
+        self.stdout.write('Adding meta descs to flex pages with recurring themes: agenda')
         for page in FlexPage.objects.filter(title__contains='Agenda'):
             if not page.search_description:
                 page.search_description = 'This is the list of items, schedule, program, timetable, or plan for a meeting'
                 page.save()
             del page
+        self.stdout.write('Adding meta descs to flex pages with recurring themes: ending with presentations')
         for page in FlexPage.objects.filter(title__endswith='Presentations'):
             if not page.search_description:
                 page.search_description = 'These are materials made for a meeting, usually in the form of visual slides'
                 page.save()
             del page
+        self.stdout.write('Adding meta descs to flex pages with recurring themes: ending with materials')
         for page in FlexPage.objects.filter(title__endswith='Materials'):
             if not page.search_description:
                 page.search_description = 'These are materials made for a meeting'
