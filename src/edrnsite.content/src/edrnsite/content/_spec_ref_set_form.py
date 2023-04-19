@@ -16,20 +16,16 @@ from wagtail.fields import RichTextField
 from django.utils.text import slugify
 
 
-_preamble_default = '''
-Thank you for your specimen reference set request. This email can serve as a
-receipt for your request should you need to refer back to it in the future. It
-is also a reminder of the affirmations you made as part of the request.
+_preamble_default = (
+    'Thank you for your specimen reference set request. This email can serve as a receipt for your request'
+    ' should you need to refer back to it in the future. It is also a reminder of the affirmations you made'
+    ' as part of the request. For your information, here are the answers you supplied in the form:'
+)
 
-For your information, here is the submitted form, including the affirmations
-and your typed "signature":
-'''
-
-_closing_default = '''
-For your reference, a copy of your proposal is attached. If you have any
-questions or concerns, please reach out to the DMCC by replying to this
-message or emailing directly to edrndmcc@fredhutch.org.
-'''
+_closing_default = (
+    'For your reference, a copy of your proposal is attached. If you have any questions or concerns, please'
+    ' reach out to the DMCC by email to edrndmcc@fredhutch.org.'
+)
 
 
 def _ref_sets():
