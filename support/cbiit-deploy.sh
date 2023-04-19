@@ -131,7 +131,8 @@ docker compose --project-name edrn exec portal django-admin migrate &&\
 docker compose --project-name edrn exec portal django-admin fixtree &&\
 docker compose --project-name edrn exec portal django-admin collectstatic --no-input --clear &&\
 docker compose --project-name edrn exec portal django-admin edrndevreset &&\
-docker compose --project-name edrn exec portal django-admin edrn_meta_descs" || exit 1
+docker compose --project-name edrn exec portal django-admin edrn_meta_descs 1 &&\
+docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2" || exit 1
 
 echo ""
 echo "🤷‍♀️ Restarting the portal and stopping search engine"
