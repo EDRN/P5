@@ -7,11 +7,29 @@ from .base_forms import AbstractEDRNForm
 from .base_models import AbstractFormPage
 from captcha.fields import ReCaptchaField
 from django import forms
+from django.conf import settings
 from django.core.mail.message import EmailMessage
+from django.db import models
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel
 from wagtail.contrib.forms.models import EmailFormMixin
 from wagtail.fields import RichTextField
 from django.utils.text import slugify
+
+
+_preamble_default = '''
+Thank you for your specimen reference set request. This email can serve as a
+receipt for your request should you need to refer back to it in the future. It
+is also a reminder of the affirmations you made as part of the request.
+
+For your information, here is the submitted form, including the affirmations
+and your typed "signature":
+'''
+
+_closing_default = '''
+For your reference, a copy of your proposal is attached. If you have any
+questions or concerns, please reach out to the DMCC by replying to this
+message or emailing directly to edrndmcc@fredhutch.org.
+'''
 
 
 def _ref_sets():
@@ -126,7 +144,8 @@ class SpecimenReferenceSetRequestForm(AbstractEDRNForm):
     completion = forms.BooleanField(label='Assay Completion', help_text=_complete_help_text)
     labcas = forms.BooleanField(label='LabCAS Posting', help_text=_labcas_help_text)
     signature = forms.CharField(label='Signature', help_text='Type your name in lieu of providing a signature.', max_length=100)
-    captcha = ReCaptchaField()
+    if not settings.DEBUG:
+        captcha = ReCaptchaField()
 
 
 class SpecimenReferenceSetRequestFormPage(AbstractFormPage, EmailFormMixin):
@@ -134,6 +153,22 @@ class SpecimenReferenceSetRequestFormPage(AbstractFormPage, EmailFormMixin):
     page_description = 'Page containing a form for specimen reference set requests'
     proposal_advice = RichTextField(
         blank=True, help_text='Enter the advice on filling out the "Scientific Proposal" section.'
+    )
+    submitter_from = models.EmailField(
+        blank=False, default='edrndmcc@fredhutch.org',
+        help_text="Email address from which to send the copy of the form data that's sent to the submitter of the request"
+    )
+    submitter_subject = models.CharField(
+        max_length=80, blank=False, default='A copy of your specimen reference set request, for your records',
+        help_text='Subject line for the copy of the form sent to the submitter of the request'
+    )
+    submitter_preamble = models.TextField(
+        blank=False, default=_preamble_default,
+        help_text='Preamble to the message body for the copy of the form data sent to the submitter of the request'
+    )
+    submitter_closing = models.TextField(
+        blank=False, default=_closing_default,
+        help_text='Closing to the message body for the copy of the form data sent to the submitter of the request'
     )
     content_panels = AbstractFormPage.content_panels + [
         FieldPanel('proposal_advice'),
@@ -143,17 +178,35 @@ class SpecimenReferenceSetRequestFormPage(AbstractFormPage, EmailFormMixin):
                 FieldPanel('to_address', classname='col6', help_text='Who should receive this email; commas in between multiple addresses')
             ]),
             FieldPanel('subject')
-        ], 'Email')
+        ], 'Email'),
+        MultiFieldPanel([
+            FieldPanel('submitter_from'),
+            FieldPanel('submitter_subject'),
+            FieldPanel('submitter_preamble'),
+            FieldPanel('submitter_closing')
+        ], "Submitter's Copy Email")
     ]
 
     def get_form(self) -> type:
         return SpecimenReferenceSetRequestForm
 
+    def format_for_submitter(self, form: forms.Form) -> str:
+        '''Format a copy of the submitted form for the submitter themselves.
+
+        This gives them a nice little "receipt" of their request and also serves as a reminder of the
+        affirmations they made.
+        '''
+        body = self.submitter_preamble + '\n\n'
+        body += super().render_email(form)
+        body += '\n\n' + self.submitter_closing
+        return body
+
     def process_submission(self, form: forms.Form) -> dict:
         # The ``EmailFormMixin`` nicely provides both the from/to/subject fields and also this handy function:
         #     self.send_mail(form)
         # which we can't use since it doesn't handle attachments.
-        del form.cleaned_data['captcha']
+        if not settings.DEBUG:
+            del form.cleaned_data['captcha']
         rendered = self.render_email(form)
         p = form.cleaned_data['proposal']
         message = EmailMessage(
@@ -161,6 +214,16 @@ class SpecimenReferenceSetRequestFormPage(AbstractFormPage, EmailFormMixin):
             attachments=[(p.name, p.read(), p.content_type)]
         )
         message.send()
+
+        # #255: send a copy to the submitter so they have a record
+        rendered = self.format_for_submitter(form)
+        message = EmailMessage(
+            subject=self.submitter_subject, body=rendered, from_email=self.from_address,
+            to=[form.cleaned_data['email']], attachments=[(p.name, p.read(), p.content_type)]
+        )
+        message.send()
+
+        # And we're done
         return {'name': form.cleaned_data['name'], 'email': form.cleaned_data['email']}
 
     def get_initial_values(self, request) -> dict:

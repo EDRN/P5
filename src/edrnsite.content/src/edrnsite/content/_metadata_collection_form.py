@@ -7,6 +7,7 @@ from .base_models import AbstractFormPage
 from captcha.fields import ReCaptchaField
 from configparser import ConfigParser
 from django import forms
+from django.conf import settings
 from eke.knowledge.models import Site, Person, Protocol, BodySystem
 from io import StringIO
 from urllib.parse import urlparse
@@ -144,7 +145,8 @@ class MetadataCollectionForm(AbstractEDRNForm):
         required=False, label='Comments or Questions', widget=forms.Textarea, max_length=5000,
         help_text='Have questions? Need to clarify something? Want to make some comments? Enter here.'
     )
-    captcha = ReCaptchaField()
+    if not settings.DEBUG:
+        captcha = ReCaptchaField()
 
 
 class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
@@ -164,6 +166,8 @@ class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
     def get_form(self) -> type:
         return MetadataCollectionForm
     def process_submission(self, form: forms.Form) -> dict:
+        if not settings.DEBUG:
+            del form.cleaned_data['captcha']
         self.send_mail(form)
         return {'name': form.cleaned_data['custodian'], 'email': form.cleaned_data['custodian_email']}
     def get_initial_values(self, request) -> dict:
