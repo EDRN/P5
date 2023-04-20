@@ -35,6 +35,14 @@
         </ul>
 
         <h2><a name='bccs'>Biomarker Characterization Centers</a></h2>
+        <p>
+            The Biomaker Characterization Centers (BCCs) identify, specify, and make distinctive new biomarkers
+            or refine existing biomarkers. There are two kinds of BCCs:
+        </p>
+        <ul>
+            <li><a href='#bdls'>Biomarker Developmental Laboratories (BDLs)</a></li>
+            <li><a href='#brls'>Biomarker Reference Laboraotries (BRLs)</a></li>
+        </ul>
         {% if bcc %}
             {% edrn_sites_organized_by_needlessly_complex_and_arbitrary_groups "BCC" bcc True %}
         {% else %}
@@ -42,6 +50,12 @@
         {% endif %}
 
         <h2><a name='bdls'>Biomarker Developmental Laboratories</a></h2>
+        <p>
+            Biomarker Developmental Laboratories (BDLs) discover and develop new biomarkers or refine existing
+            biomarkers. They are the primary source of new biomarkers or panels of biomarkers on which the EDRN
+            conducts validation trials. They also develop assays to detect candidate biomarkers and conduct
+            pre-validation studies.
+        </p>
         {% if bdl %}
             {% edrn_sites_organized_by_needlessly_complex_and_arbitrary_groups "BDL" bdl True %}
         {% else %}
@@ -49,6 +63,12 @@
         {% endif %}
 
         <h2><a name='brls'>Biomarker Reference Laboratories</a></h2>
+        <p>
+            Biomarker Reference Laboratories (BRLs) conduct assays for EDRN validation trials. The assays are
+            performed on blinded biospecimens to minimize bias in the analysis and independently verify the assay
+            performance. BRLs also serve as the primary resource for analytical validation of biomarkers,
+            technological development, standardization, assay refinement and quality control.
+        </p>
         {% if brl %}
             {% edrn_sites_organized_by_needlessly_complex_and_arbitrary_groups "BRL" brl True %}
         {% else %}
@@ -56,6 +76,12 @@
         {% endif %}
 
         <h2><a name='cvcs'>Clinical Validation Centers</a></h2>
+        <p>
+            Clinical Validation Centers (CVCs) conduct validation trials on biomarkers discovered/developed by
+            both EDRN and non-EDRN investigators. CVCs also provide high-quality, well-annotated biospecimens to
+            the BDLs for biomarker discovery, development and pre-validation studies. The use of biospecimens
+            collected using rigorous standard operating procedures helps minimize false discoveries.
+        </p>
         {% if cvc %}
             {% edrn_sites_organized_by_needlessly_complex_and_arbitrary_groups "CVC" cvc True %}
         {% else %}
@@ -63,6 +89,13 @@
         {% endif %}
 
         <h2><a name='dmcc'>Data Management and Coordinating Center</a></h2>
+        <p>
+            The Data Management and Coordinating Center (DMCC) works with the CVCs to conduct biomarker validation
+            trials. The DMCC assists with protocol design, monitors the trial, and maintains the data and
+            biospecimen tracking system. The DMCC is responsible for analyzing the results of the trials,
+            thereby reducing bias as they are independent from the laboratories that discovered the biomarkers.
+            The DMCC provides statistical advice to the BDLs, develops theoretical and applied approaches for simultaneous analysis of multiple markers, and collaborates with the EDRN Informatics Center.
+        </p>
         {% if dmcc %}
             {% edrn_sites_organized_by_needlessly_complex_and_arbitrary_groups "DMCC" dmcc False %}
         {% else %}
@@ -70,6 +103,10 @@
         {% endif %}
 
         <h2><a name='ic'>Informatics Center</a></h2>
+        <p>
+            The Informatics Center, provided by the Jet Propulsion Laboratory, pioneers bio-informatics software
+            and systems, and serves the data archives and catalogs for EDRN's extensive data holdings.
+        </p>
         {% if ics %}
             {% edrn_sites_by_type ics %}
         {% else %}
@@ -77,6 +114,9 @@
         {% endif %}
 
         <h2><a name='nci'>National Cancer Institute</a></h2>
+        <p>
+            The National Cancer Institute is the hub of the Early Detection Research Network.
+        </p>
         {% if ncis %}
             {% edrn_sites_by_type ncis %}
         {% else %}
