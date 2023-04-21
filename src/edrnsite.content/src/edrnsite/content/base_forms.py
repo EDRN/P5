@@ -7,6 +7,9 @@ from django.forms.utils import ErrorList
 from eke.knowledge.models import Site, Person
 
 
+ALL_USERS_DN = 'cn=All Users,dc=edrn,dc=jpl,dc=nasa,dc=gov'
+
+
 def institution_choices():
     '''Vocabulary for choices of institution in choice fields.'''
     return [(i.identifier, f'{i.title} ({i.dmccSiteID})') for i in Site.objects.all().order_by('title')]

@@ -2,7 +2,9 @@
 
 '''😌 EDRN Site Content: metadata collection form.'''
 
-from .base_forms import AbstractEDRNForm, institution_choices, pi_choices, discipline_choices, data_category_choices
+from .base_forms import (
+    AbstractEDRNForm, institution_choices, pi_choices, discipline_choices, data_category_choices, ALL_USERS_DN
+)
 from .base_models import AbstractFormPage
 from captcha.fields import ReCaptchaField
 from configparser import ConfigParser
@@ -101,7 +103,6 @@ class MetadataCollectionForm(AbstractEDRNForm):
 class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
     '''Page containing a form for metadata collection.'''
     page_description = 'Page containing a form for metadata collection'
-    _all_users_dn = 'cn=All Users,dc=edrn,dc=jpl,dc=nasa,dc=gov'
 
     content_panels = AbstractFormPage.content_panels + [
         MultiFieldPanel([
@@ -179,7 +180,7 @@ class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
         cp.set('Collection', 'Consortium', 'EDRN')
         cp.set('Collection', 'Species', data['species'])
 
-        if not data['private']: cp.set('Collection', 'OwnerPrincipal', self._all_users_dn)
+        if not data['private']: cp.set('Collection', 'OwnerPrincipal', ALL_USERS_DN)
         if data['access_groups']:
             cp.set(
                 'Collection', 'OwnerPrincipal',
