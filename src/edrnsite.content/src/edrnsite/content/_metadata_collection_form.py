@@ -1,29 +1,18 @@
 # encoding: utf-8
 
-'''😌 EDRN Site Content: Django forms.'''
+'''😌 EDRN Site Content: metadata collection form.'''
 
-from .base_forms import AbstractEDRNForm
+from .base_forms import AbstractEDRNForm, institution_choices, pi_choices, discipline_choices, data_category_choices
 from .base_models import AbstractFormPage
 from captcha.fields import ReCaptchaField
 from configparser import ConfigParser
 from django import forms
 from django.conf import settings
-from eke.knowledge.models import Site, Person, Protocol, BodySystem
+from eke.knowledge.models import Person, Protocol, BodySystem, Site
 from io import StringIO
 from urllib.parse import urlparse
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel
 from wagtail.contrib.forms.models import EmailFormMixin
-
-
-def _pis():
-    return [
-        (i.identifier, i.title)
-        for i in Person.objects.filter(pk__in=Site.objects.values_list('pi', flat=True)).order_by('title')
-    ]
-
-
-def _instutions():
-    return [(i.identifier, f'{i.title} ({i.dmccSiteID})') for i in Site.objects.all().order_by('title')]
 
 
 def _protocols():
@@ -32,38 +21,6 @@ def _protocols():
 
 def _organs():
     return [(i.identifier, i.title) for i in BodySystem.objects.all().order_by('title')]
-
-
-def _data_categories():
-    categories = (
-        'Antibody Microarray',
-        'Biospecimen',
-        'Clinical',
-        'CT',
-        'DNA Methylation Sequencing',
-        'DNA Microarray Analysis',
-        'Documentation',
-        'ELISA',
-        'Fluoroscopy',
-        'Immunoassay',
-        'Immunohistochemestry',
-        'LabMAP',
-        'Luminex',
-        'Mammography',
-        'Mass Spectrometry',
-        'MRI',
-        'Multiplex-Immunofluorescent Staining',
-        'PET',
-        'Protein Microarray',
-        'Radiomics',
-        'RNA Sequencing',
-        'Sequencing',
-        'Single Slide Image',
-        'Tissue Micro Array',
-        'Whole Slide Imaging',
-        'Other (specify below)',
-    )
-    return [(i.lower().replace(' ', '-'), i) for i in categories]
 
 
 def _species():
@@ -87,18 +44,10 @@ class MetadataCollectionForm(AbstractEDRNForm):
     description = forms.CharField(label='Collection Description', help_text='A short summary of this collection.', widget=forms.Textarea)
     custodian = forms.CharField(label='Data Custodian', help_text='Genrally, this is your name.')
     custodian_email = forms.EmailField(label='Data Custodian Email', help_text='Email address for the data custodian.')
-    lead_pi = forms.ChoiceField(label='Lead PI', help_text='Select a primary investigator.', choices=_pis)
-    institution = forms.ChoiceField(label='Institution', help_text='Select the curating instutition.', choices=_instutions)
+    lead_pi = forms.ChoiceField(label='Lead PI', help_text='Select a primary investigator.', choices=pi_choices)
+    institution = forms.ChoiceField(label='Institution', help_text='Select the curating instutition.', choices=institution_choices)
     protocol = forms.ChoiceField(label='Protocol', help_text='Select the protocol that generated the data.', choices=_protocols)
-    discipline = forms.MultipleChoiceField(label='Discipline', widget=forms.CheckboxSelectMultiple, choices=(
-        ('genomics', 'Genomics'),
-        ('proteomics', 'Proteomics'),
-        ('pathology-images', 'Pathology Imagess'),
-        ('radiology', 'Radiology'),
-        ('immunology', 'Immunology'),
-        ('pathology', 'Pathology'),
-        ('undefined', 'Undefined')
-    ))
+    discipline = forms.MultipleChoiceField(label='Discipline', widget=forms.CheckboxSelectMultiple, choices=discipline_choices)
     cg = forms.ChoiceField(
         label='Collaborative Group', help_text='Select the collaborative research group',
         widget=forms.RadioSelect,
@@ -109,7 +58,7 @@ class MetadataCollectionForm(AbstractEDRNForm):
             ('prostate', 'Prostate & Other Urologic Cancers Research Group'),
         )
     )
-    category = forms.ChoiceField(label='Data Category', help_text='Categorize the data.', choices=_data_categories)
+    category = forms.ChoiceField(label='Data Category', help_text='Categorize the data.', choices=data_category_choices)
     other_category = forms.CharField(
         label='Other Data Category', help_text='If you selected Other above ↑, enter the category here.',
         max_length=100, required=False

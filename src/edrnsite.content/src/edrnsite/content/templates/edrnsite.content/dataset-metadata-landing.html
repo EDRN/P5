@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags edrnsite_content_tags %}
+{% block content %}
+
+    <h1>Dataset Metadata Received</h1>
+
+    <p>
+        Thanks for submitting the metadata for your dataset named "{{name}}". We've received it and will
+        process it.
+    </p>
+
+    <p>You can now safely close this browser window.</p>
+
+{% endblock content %}
+{# -*- Django HTML -*- #}

@@ -3,6 +3,7 @@
 '''😌 EDRN site content's models.'''
 
 
+from ._dataset_metadata_form import DatasetMetadataFormPage  #noqa
 from ._metadata_collection_form import MetadataCollectionFormPage  # noqa
 from ._spec_ref_set_form import SpecimenReferenceSetRequestFormPage  # noqa
 from django import forms

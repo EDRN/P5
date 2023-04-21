@@ -50,6 +50,7 @@ bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --qu
 ./manage.sh migrate
 ./manage.sh collectstatic --no-input --clear --link
 ./manage.sh edrndevreset
+./manage.sh edrn_forms
 ./manage.sh edrn_meta_descs 1
 ./manage.sh edrn_meta_descs 2
 # This may be optional if you want to save time:

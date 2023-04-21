@@ -4,6 +4,66 @@
 
 from django import forms
 from django.forms.utils import ErrorList
+from eke.knowledge.models import Site, Person
+
+
+def institution_choices():
+    '''Vocabulary for choices of institution in choice fields.'''
+    return [(i.identifier, f'{i.title} ({i.dmccSiteID})') for i in Site.objects.all().order_by('title')]
+
+
+def pi_choices():
+    '''Vocabulary for choices for principal investigators.'''
+    return [
+        (i.identifier, i.title)
+        for i in Person.objects.filter(pk__in=Site.objects.values_list('pi', flat=True)).order_by('title')
+    ]
+
+
+def discipline_choices():
+    '''Vocabulary for choices for disciplines.'''
+    return [
+        ('genomics', 'Genomics'),
+        ('proteomics', 'Proteomics'),
+        ('pathology-images', 'Pathology Imagess'),
+        ('radiology', 'Radiology'),
+        ('immunology', 'Immunology'),
+        ('pathology', 'Pathology'),
+        ('undefined', 'Undefined')
+    ]
+
+
+def data_category_choices():
+    '''Vocabulary for choices for data categories.'''
+    categories = (
+        'Antibody Microarray',
+        'Biospecimen',
+        'Clinical',
+        'CT',
+        'DNA Methylation Sequencing',
+        'DNA Microarray Analysis',
+        'Documentation',
+        'ELISA',
+        'Fluoroscopy',
+        'Immunoassay',
+        'Immunohistochemestry',
+        'LabMAP',
+        'Luminex',
+        'Mammography',
+        'Mass Spectrometry',
+        'MRI',
+        'Multiplex-Immunofluorescent Staining',
+        'PET',
+        'Protein Microarray',
+        'Radiomics',
+        'RNA Sequencing',
+        'Sequencing',
+        'Single Slide Image',
+        'Tissue Micro Array',
+        'Whole Slide Imaging',
+        'Other (specify below)',
+    )
+    return [(i.lower().replace(' ', '-'), i) for i in categories]
 
 
 class BootstrapErrorList(ErrorList):
