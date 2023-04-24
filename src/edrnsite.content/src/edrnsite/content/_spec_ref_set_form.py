@@ -5,10 +5,10 @@
 
 from .base_forms import AbstractEDRNForm
 from .base_models import AbstractFormPage
+from .tasks import send_email
 from captcha.fields import ReCaptchaField
 from django import forms
 from django.conf import settings
-from django.core.mail.message import EmailMessage
 from django.db import models
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel
 from wagtail.contrib.forms.models import EmailFormMixin
@@ -205,19 +205,26 @@ class SpecimenReferenceSetRequestFormPage(AbstractFormPage, EmailFormMixin):
             del form.cleaned_data['captcha']
         rendered = self.render_email(form)
         p = form.cleaned_data['proposal']
-        message = EmailMessage(
-            subject=self.subject, body=rendered, from_email=self.from_address, to=self.to_address.split(','),
-            attachments=[(p.name, p.read(), p.content_type)]
+        # message = EmailMessage(
+        #     subject=self.subject, body=rendered, from_email=self.from_address, to=self.to_address.split(','),
+        #     attachments=[(p.name, p.read(), p.content_type)]
+        # )
+        attachment_data = p.read()
+        send_email(
+            self.from_address, self.to_address.split(','), self.subject, rendered,
+            {'name': p.name, 'data': attachment_data, 'content_type': p.content_type}, 30
         )
-        message.send()
 
         # #255: send a copy to the submitter so they have a record
         rendered = self.format_for_submitter(form)
-        message = EmailMessage(
-            subject=self.submitter_subject, body=rendered, from_email=self.from_address,
-            to=[form.cleaned_data['email']], attachments=[(p.name, p.read(), p.content_type)]
+        # message = EmailMessage(
+        #     subject=self.submitter_subject, body=rendered, from_email=self.from_address,
+        #     to=[form.cleaned_data['email']], attachments=[(p.name, p.read(), p.content_type)]
+        # )
+        send_email(
+            self.from_address, [form.cleaned_data['email']], self.submitter_subject, rendered,
+            {'name': p.name, 'data': attachment_data, 'content_type': p.content_type}, 15
         )
-        message.send()
 
         # And we're done
         return {'name': form.cleaned_data['name'], 'email': form.cleaned_data['email']}
