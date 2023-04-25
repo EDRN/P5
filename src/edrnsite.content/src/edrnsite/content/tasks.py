@@ -9,7 +9,7 @@ _logger = logging.getLogger(__name__)
 
 
 @shared_task
-def do_send_email(from_addr: str, to: list, subject: str, body: str, attachment: str, delay: int):
+def do_send_email(from_addr, to, subject, body, attachment, delay):
     _logger.info('Sending email to "%s" from "%s" with delay %d', to, from_addr, delay)
     time.sleep(delay)
     if attachment:
@@ -25,7 +25,7 @@ def do_send_email(from_addr: str, to: list, subject: str, body: str, attachment:
     message.send()
 
 
-def send_email(from_addr: str, to: list[str], subject: str, body: str, attachment: dict | None, delay: int):
+def send_email(from_addr, to, subject, body, attachment, delay):
     if attachment:
         for field in ('name', 'data', 'content_type'):
             assert field in attachment
