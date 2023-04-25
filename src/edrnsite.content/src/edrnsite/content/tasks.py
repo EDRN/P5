@@ -9,7 +9,7 @@ _logger = logging.getLogger(__name__)
 
 
 @shared_task
-def do_send_email(from_addr: str, to: list[str], subject: str, body: str, attachment: str | None, delay: int):
+def do_send_email(from_addr: str, to: list, subject: str, body: str, attachment: str, delay: int):
     _logger.info('Sending email to "%s" from "%s" with delay %d', to, from_addr, delay)
     time.sleep(delay)
     if attachment:
