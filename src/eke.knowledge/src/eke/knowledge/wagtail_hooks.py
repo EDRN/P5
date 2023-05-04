@@ -9,6 +9,7 @@ from django.template.loader import render_to_string
 from wagtail.admin.ui.components import Component
 from wagtail import hooks
 from urllib.request import urlopen
+import os
 
 
 class IngestControlPanel(Component):
@@ -37,7 +38,8 @@ class IngestControlPanel(Component):
             'last_ingest_duration': settings.last_ingest_duration,
             'ingest_running': lock.locked(),
             'knowledge_folders': folders,
-            'my_ip': my_ip
+            'my_ip': my_ip,
+            'my_path': os.environ.get('PATH', '«undefined»')
         }
         return render_to_string('eke.knowledge/ingest-controls.html', context, request=self.request)
 
