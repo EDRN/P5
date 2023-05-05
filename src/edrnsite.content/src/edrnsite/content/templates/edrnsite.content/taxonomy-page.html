@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags static %}
+{% block header_scripts %}
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+    <script src='{% static "edrnsite.content/js/SimpleHorizontalTree.js" %}'></script>
+    {% if self.taxonomy %}
+        <script src='{{self.taxonomy.url}}'></script>
+    {% endif %}
+    <script>let opennodelist=['Science'];</script>
+{% endblock header_scripts %}
+{% block body_onload %}taxonomy_main();{% endblock body_onload %}
+{% block content %}
+    <div class='row'>
+        <div class='col-md-8 offset-md-0'>
+            <h1>{{page.title}}</h1>
+        </div>
+    </div>
+    {% if self.taxonomy %}
+        <div class='mb-3 row justify-content-center taxonomy-container' style='width: 1400px; font-size: 12px;'>
+            <div id='canvas'></div>
+        </div>
+        <div class='infobox'></div>
+    {% else %}
+        <small>No taxonomy has been configured for this page.</small>
+    {% endif %}
+{% endblock content %}
+{# -*- Django HTML -*- #}

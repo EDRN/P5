@@ -1,0 +1,685 @@
+<div class="row">
+    <div class="col-lg-12">
+        <p>This is a collection of ReST endpoints supported by LabCAS, the software that powers the Data Commons of the Early Detection Research Network (EDRN) and the National Institute of Standards and Technologies (NIST).</p>
+
+<p>The base URLs are:</p>
+
+<ul>
+<li>For EDRN, <a href="https://edrn-labcas.jpl.nasa.gov">https://edrn-labcas.jpl.nasa.gov</a></li>
+<li>For NIST, <a href="https://labcas.jpl.nasa.gov/nist">https://labcas.jpl.nasa.gov/nist</a>
+<br /></li>
+</ul>
+
+<p>Note that all endpoints require authentication to function. This can be provided using either:</p>
+
+<ul>
+<li>HTTP Basic authentication with a username and password.</li>
+<li>JSON Web Token (JWT) bearer authorization by first passing a username and password with HTTP Basic authentication to the <code>/auth</code> endpoint to generate a JWT, which can then be passed all other endpoints.</li>
+</ul>
+
+
+        
+
+        <h2 id="doc-api-detail">
+            API detail
+            <a href="#doc-api-detail"><i class="bi bi-link-45deg"></i></a>
+        </h2>
+
+        
+
+
+        
+        
+        <div class="endpoints-group">
+            <h3 id="folder-token-service">
+                Token Service
+                <a href="#folder-token-service"><i class="bi bi-link-45deg"></i></a>
+            </h3>
+
+            <div><p>The Token service has a single endpoint whose responsibility is to generate JSON Web Tokens (JWTs) for use with the other ReST API endpoints.</p>
+</div>
+
+            
+            
+            <div class="request">
+
+                <h4 id="request-token-service-authentication">
+                    Authentication
+                    <a href="#request-token-service-authentication"><i class="bi bi-link-45deg"></i></a>
+                </h4>
+
+                <div><p>This endpoint generates a JSON Web Token (JWT) given a valid username and password with HTTP Basic authentication. The JWT can then be used as the bearer authorization in future ReST endpoint calls.</p>
+</div>
+
+                <div>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="nav-item">
+                            <button class='nav-link active' data-bs-toggle='tab' type='button' role='tab'
+                                id='token-service-authentication-curl-tab'
+                                data-bs-target='#request-token-service-authentication-example-curl'
+                                aria-controls='request-token-service-authentication-example-curl'>
+                                Curl
+                            </button>
+                        </li>
+                        <li role="presentation" class='nav-item'>
+                            <button class='nav-link' data-bs-toggle='tab' type='button' role='tab'
+                                id='token-service-authentication-http-tab'
+                                data-bs-target='#request-token-service-authentication-example-http'
+                                aria-controls='request-token-service-authentication-example-http'>
+                                HTTP
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" role='tabpanel' tabindex='0'
+                            aria-labelledby='token-service-authentication-curl-tab'
+                            id="request-token-service-authentication-example-curl">
+                            <pre><code class="hljs curl">curl -X GET "{{base_url}}/data-access-api/auth"</code></pre>
+                        </div>
+                        <div class="tab-pane fade" role='tabpanel' tabindex='0'
+                            aria-labelledby='token-service-authentication-http-tab'
+                            id="request-token-service-authentication-example-http">
+                            <pre><code class="hljs http">GET %7B%7Bbase_url%7D%7D/data-access-api/auth HTTP/1.1
+Host: </code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                <hr>
+            </div>
+            
+
+        </div>
+        
+        
+        <div class="endpoints-group">
+            <h3 id="folder-user-data-service">
+                User Data Service
+                <a href="#folder-user-data-service"><i class="bi bi-link-45deg"></i></a>
+            </h3>
+
+            <div><p>The endpoints here serve to create/update, read, and delete user data. User data in LabCAS refers to &ldquo;favorites&rdquo;:</p>
+
+<ul>
+<li>Favorite data collections</li>
+<li>Favorite datasets</li>
+<li>Favorite files</li>
+</ul>
+</div>
+
+            
+            
+            <div class="request">
+
+                <h4 id="request-user-data-service-create">
+                    Create
+                    <a href="#request-user-data-service-create"><i class="bi bi-link-45deg"></i></a>
+                </h4>
+
+                <div><p>The &ldquo;create&rdquo; endpoint creates (or updates) user data (favorite data collections, favorite datasets, and favorite files). Note you can create only your own user data, i.e., the username of the <code>id</code> parameter must match the username in the HTTP Basic Authentication or in the JWT bearer authorization header.</p>
+
+<p>The payload for this request is a JSON dictionary with the following fields:</p>
+
+<ul>
+<li><code>id</code> which must also match the <code>id</code> query parameter</li>
+<li><code>FavoriteCollections</code> which is a list of strings naming each favorite data collection</li>
+<li><code>FavoriteDatasets</code> which is a list of strings naming each favorite dataset</li>
+<li><code>FavoriteFiles</code> which is a list of strings naming each favorite file</li>
+</ul>
+</div>
+
+                <div>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="nav-item">
+                            <button class='nav-link active' data-bs-toggle='tab' type='button' role='tab'
+                                id='user-data-service-create-curl-tab'
+                                data-bs-target='#request-user-data-service-create-example-curl'
+                                aria-controls='request-user-data-service-create-example-curl'>
+                                Curl
+                            </button>
+                        </li>
+                        <li role="presentation" class='nav-item'>
+                            <button class='nav-link' data-bs-toggle='tab' type='button' role='tab'
+                                id='user-data-service-create-http-tab'
+                                data-bs-target='#request-user-data-service-create-example-http'
+                                aria-controls='request-user-data-service-create-example-http'>
+                                HTTP
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" role='tabpanel' tabindex='0'
+                            aria-labelledby='user-data-service-create-curl-tab'
+                            id="request-user-data-service-create-example-curl">
+                            <pre><code class="hljs curl">curl -X POST -d '{
+    "id": "{{username}}",
+    "FavoriteCollections": [],
+    "FavoriteDatasets": [],
+    "FavoriteFiles": []
+}' "{{base_url}}/data-access-api/userdata/create"</code></pre>
+                        </div>
+                        <div class="tab-pane fade" role='tabpanel' tabindex='0'
+                            aria-labelledby='user-data-service-create-http-tab'
+                            id="request-user-data-service-create-example-http">
+                            <pre><code class="hljs http">POST %7B%7Bbase_url%7D%7D/data-access-api/userdata/create HTTP/1.1
+Host: 
+
+{
+    "id": "{{username}}",
+    "FavoriteCollections": [],
+    "FavoriteDatasets": [],
+    "FavoriteFiles": []
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                <hr>
+            </div>
+            
+            
+            <div class="request">
+
+                <h4 id="request-user-data-service-read">
+                    Read
+                    <a href="#request-user-data-service-read"><i class="bi bi-link-45deg"></i></a>
+                </h4>
+
+                <div><p>This endpoint retrieves any user data saved under the given <code>id</code>. Note that the <code>id</code> must match the username in the HTTP Basic authentication or in the JWT bearer authorization.</p>
+
+<p>The JSON return value of this call is not the same as tha payload used in the <code>create</code> call. Rather, it is a raw Solr query response in JSON format, which includes search results metadata, which can be ignored. The real results are in the zeroth element of the <code>docs</code> key.</p>
+</div>
+
+                <div>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="nav-item">
+                            <button class='nav-link active' data-bs-toggle='tab' type='button' role='tab'
+                                id='user-data-service-read-curl-tab'
+                                data-bs-target='#request-user-data-service-read-example-curl'
+                                aria-controls='request-user-data-service-read-example-curl'>
+                                Curl
+                            </button>
+                        </li>
+                        <li role="presentation" class='nav-item'>
+                            <button class='nav-link' data-bs-toggle='tab' type='button' role='tab'
+                                id='user-data-service-read-http-tab'
+                                data-bs-target='#request-user-data-service-read-example-http'
+                                aria-controls='request-user-data-service-read-example-http'>
+                                HTTP
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" role='tabpanel' tabindex='0'
+                            aria-labelledby='user-data-service-read-curl-tab'
+                            id="request-user-data-service-read-example-curl">
+                            <pre><code class="hljs curl">curl -X GET "{{base_url}}/data-access-api/userdata/read?id={{username}}"</code></pre>
+                        </div>
+                        <div class="tab-pane fade" role='tabpanel' tabindex='0'
+                            aria-labelledby='user-data-service-read-http-tab'
+                            id="request-user-data-service-read-example-http">
+                            <pre><code class="hljs http">GET %7B%7Bbase_url%7D%7D/data-access-api/userdata/read?id={{username}} HTTP/1.1
+Host: </code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                <hr>
+            </div>
+            
+            
+            <div class="request">
+
+                <h4 id="request-user-data-service-delete">
+                    Delete
+                    <a href="#request-user-data-service-delete"><i class="bi bi-link-45deg"></i></a>
+                </h4>
+
+                <div><p>Deletes the user data associated with the given <code>id</code>. Note that the username given in the <code>id</code> must match the username in either the HTTP Basic authentication or the JWT bearer authorization.</p>
+
+<p>The return value is a JSON payload giving Solr metadata after deleting the data.</p>
+</div>
+
+                <div>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="nav-item">
+                            <button class='nav-link active' data-bs-toggle='tab' type='button' role='tab'
+                                id='user-data-service-delete-curl-tab'
+                                data-bs-target='#request-user-data-service-delete-example-curl'
+                                aria-controls='request-user-data-service-delete-example-curl'>
+                                Curl
+                            </button>
+                        </li>
+                        <li role="presentation" class='nav-item'>
+                            <button class='nav-link' data-bs-toggle='tab' type='button' role='tab'
+                                id='user-data-service-delete-http-tab'
+                                data-bs-target='#request-user-data-service-delete-example-http'
+                                aria-controls='request-user-data-service-delete-example-http'>
+                                HTTP
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" role='tabpanel' tabindex='0'
+                            aria-labelledby='user-data-service-delete-curl-tab'
+                            id="request-user-data-service-delete-example-curl">
+                            <pre><code class="hljs curl">curl -X POST "{{base_url}}/data-access-api/userdata/delete?id={{username}}"</code></pre>
+                        </div>
+                        <div class="tab-pane fade" role='tabpanel' tabindex='0'
+                            aria-labelledby='user-data-service-delete-http-tab'
+                            id="request-user-data-service-delete-example-http">
+                            <pre><code class="hljs http">POST %7B%7Bbase_url%7D%7D/data-access-api/userdata/delete?id={{username}} HTTP/1.1
+Host: </code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                <hr>
+            </div>
+            
+
+        </div>
+        
+        
+        <div class="endpoints-group">
+            <h3 id="folder-download-service">
+                Download Service
+                <a href="#folder-download-service"><i class="bi bi-link-45deg"></i></a>
+            </h3>
+
+            <div><p>The Download Service contains a single ReST endpoint that support the downloading of individual files from the Data Commons.</p>
+</div>
+
+            
+            
+            <div class="request">
+
+                <h4 id="request-download-service-download">
+                    Download
+                    <a href="#request-download-service-download"><i class="bi bi-link-45deg"></i></a>
+                </h4>
+
+                <div><p>The download endpoint begins the transfer of a data file over HTTP. The file to be downloaded is named via its identifier, or <code>id</code>.</p>
+</div>
+
+                <div>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="nav-item">
+                            <button class='nav-link active' data-bs-toggle='tab' type='button' role='tab'
+                                id='download-service-download-curl-tab'
+                                data-bs-target='#request-download-service-download-example-curl'
+                                aria-controls='request-download-service-download-example-curl'>
+                                Curl
+                            </button>
+                        </li>
+                        <li role="presentation" class='nav-item'>
+                            <button class='nav-link' data-bs-toggle='tab' type='button' role='tab'
+                                id='download-service-download-http-tab'
+                                data-bs-target='#request-download-service-download-example-http'
+                                aria-controls='request-download-service-download-example-http'>
+                                HTTP
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" role='tabpanel' tabindex='0'
+                            aria-labelledby='download-service-download-curl-tab'
+                            id="request-download-service-download-example-curl">
+                            <pre><code class="hljs curl">curl -X GET "{{base_url}}/data-access-api/download?id={{file_id}}"</code></pre>
+                        </div>
+                        <div class="tab-pane fade" role='tabpanel' tabindex='0'
+                            aria-labelledby='download-service-download-http-tab'
+                            id="request-download-service-download-example-http">
+                            <pre><code class="hljs http">GET %7B%7Bbase_url%7D%7D/data-access-api/download?id={{file_id}} HTTP/1.1
+Host: </code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                <hr>
+            </div>
+            
+
+        </div>
+        
+        
+        <div class="endpoints-group">
+            <h3 id="folder-list-service">
+                List Service
+                <a href="#folder-list-service"><i class="bi bi-link-45deg"></i></a>
+            </h3>
+
+            <div><p>Endpoints in the list service return lists of files that match given criteria. These lists are newline-separated strings of URLs that use refer to the Download Service for file data retrieval.</p>
+</div>
+
+            
+            
+            <div class="request">
+
+                <h4 id="request-list-service-collections">
+                    Collections
+                    <a href="#request-list-service-collections"><i class="bi bi-link-45deg"></i></a>
+                </h4>
+
+                <div><p>The Collections List endpoint returns a list of files found within collections, one per line.</p>
+</div>
+
+                <div>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="nav-item">
+                            <button class='nav-link active' data-bs-toggle='tab' type='button' role='tab'
+                                id='list-service-collections-curl-tab'
+                                data-bs-target='#request-list-service-collections-example-curl'
+                                aria-controls='request-list-service-collections-example-curl'>
+                                Curl
+                            </button>
+                        </li>
+                        <li role="presentation" class='nav-item'>
+                            <button class='nav-link' data-bs-toggle='tab' type='button' role='tab'
+                                id='list-service-collections-http-tab'
+                                data-bs-target='#request-list-service-collections-example-http'
+                                aria-controls='request-list-service-collections-example-http'>
+                                HTTP
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" role='tabpanel' tabindex='0'
+                            aria-labelledby='list-service-collections-curl-tab'
+                            id="request-list-service-collections-example-curl">
+                            <pre><code class="hljs curl">curl -X GET "{{base_url}}/data-access-api/collections/list?q=*:*&fq&start=0&rows=1"</code></pre>
+                        </div>
+                        <div class="tab-pane fade" role='tabpanel' tabindex='0'
+                            aria-labelledby='list-service-collections-http-tab'
+                            id="request-list-service-collections-example-http">
+                            <pre><code class="hljs http">GET %7B%7Bbase_url%7D%7D/data-access-api/collections/list?q=*:*&fq&start=0&rows=1 HTTP/1.1
+Host: </code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                <hr>
+            </div>
+            
+            
+            <div class="request">
+
+                <h4 id="request-list-service-datasets">
+                    Datasets
+                    <a href="#request-list-service-datasets"><i class="bi bi-link-45deg"></i></a>
+                </h4>
+
+                <div><p>The Datasets List endpoint returns a list of files found within datasets, one per line.</p>
+</div>
+
+                <div>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="nav-item">
+                            <button class='nav-link active' data-bs-toggle='tab' type='button' role='tab'
+                                id='list-service-datasets-curl-tab'
+                                data-bs-target='#request-list-service-datasets-example-curl'
+                                aria-controls='request-list-service-datasets-example-curl'>
+                                Curl
+                            </button>
+                        </li>
+                        <li role="presentation" class='nav-item'>
+                            <button class='nav-link' data-bs-toggle='tab' type='button' role='tab'
+                                id='list-service-datasets-http-tab'
+                                data-bs-target='#request-list-service-datasets-example-http'
+                                aria-controls='request-list-service-datasets-example-http'>
+                                HTTP
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" role='tabpanel' tabindex='0'
+                            aria-labelledby='list-service-datasets-curl-tab'
+                            id="request-list-service-datasets-example-curl">
+                            <pre><code class="hljs curl">curl -X GET "{{base_url}}/data-access-api/collections/list?q=*:*&fq&start=0&rows=1"</code></pre>
+                        </div>
+                        <div class="tab-pane fade" role='tabpanel' tabindex='0'
+                            aria-labelledby='list-service-datasets-http-tab'
+                            id="request-list-service-datasets-example-http">
+                            <pre><code class="hljs http">GET %7B%7Bbase_url%7D%7D/data-access-api/collections/list?q=*:*&fq&start=0&rows=1 HTTP/1.1
+Host: </code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                <hr>
+            </div>
+            
+            
+            <div class="request">
+
+                <h4 id="request-list-service-files">
+                    FIles
+                    <a href="#request-list-service-files"><i class="bi bi-link-45deg"></i></a>
+                </h4>
+
+                <div><p>The Files List endpoint returns a list of files matching given query criteria, one per line.</p>
+</div>
+
+                <div>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="nav-item">
+                            <button class='nav-link active' data-bs-toggle='tab' type='button' role='tab'
+                                id='list-service-files-curl-tab'
+                                data-bs-target='#request-list-service-files-example-curl'
+                                aria-controls='request-list-service-files-example-curl'>
+                                Curl
+                            </button>
+                        </li>
+                        <li role="presentation" class='nav-item'>
+                            <button class='nav-link' data-bs-toggle='tab' type='button' role='tab'
+                                id='list-service-files-http-tab'
+                                data-bs-target='#request-list-service-files-example-http'
+                                aria-controls='request-list-service-files-example-http'>
+                                HTTP
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" role='tabpanel' tabindex='0'
+                            aria-labelledby='list-service-files-curl-tab'
+                            id="request-list-service-files-example-curl">
+                            <pre><code class="hljs curl">curl -X GET "{{base_url}}/data-access-api/collections/list?q=*:*&fq&start=0&rows=1"</code></pre>
+                        </div>
+                        <div class="tab-pane fade" role='tabpanel' tabindex='0'
+                            aria-labelledby='list-service-files-http-tab'
+                            id="request-list-service-files-example-http">
+                            <pre><code class="hljs http">GET %7B%7Bbase_url%7D%7D/data-access-api/collections/list?q=*:*&fq&start=0&rows=1 HTTP/1.1
+Host: </code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                <hr>
+            </div>
+            
+
+        </div>
+        
+        
+        <div class="endpoints-group">
+            <h3 id="folder-query-service">
+                Query Service
+                <a href="#folder-query-service"><i class="bi bi-link-45deg"></i></a>
+            </h3>
+
+            <div><p>The Query Service endpoints enable you to send queries to the Data Commons&rsquo; Solr service and receive search results (metadata) back.</p>
+</div>
+
+            
+            
+            <div class="request">
+
+                <h4 id="request-query-service-collections">
+                    Collections
+                    <a href="#request-query-service-collections"><i class="bi bi-link-45deg"></i></a>
+                </h4>
+
+                <div><p>Search for and retrieve data collections in LabCAS. This request is passed onto <a href="https://solr.apache.org">Solr</a> which handles the metadata within the Data Commons.</p>
+</div>
+
+                <div>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="nav-item">
+                            <button class='nav-link active' data-bs-toggle='tab' type='button' role='tab'
+                                id='query-service-collections-curl-tab'
+                                data-bs-target='#request-query-service-collections-example-curl'
+                                aria-controls='request-query-service-collections-example-curl'>
+                                Curl
+                            </button>
+                        </li>
+                        <li role="presentation" class='nav-item'>
+                            <button class='nav-link' data-bs-toggle='tab' type='button' role='tab'
+                                id='query-service-collections-http-tab'
+                                data-bs-target='#request-query-service-collections-example-http'
+                                aria-controls='request-query-service-collections-example-http'>
+                                HTTP
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" role='tabpanel' tabindex='0'
+                            aria-labelledby='query-service-collections-curl-tab'
+                            id="request-query-service-collections-example-curl">
+                            <pre><code class="hljs curl">curl -X GET "{{base_url}}/data-access-api/collections/select?q=*:*&wt=json&indent=true&rows=10&sort=id asc&start=0"</code></pre>
+                        </div>
+                        <div class="tab-pane fade" role='tabpanel' tabindex='0'
+                            aria-labelledby='query-service-collections-http-tab'
+                            id="request-query-service-collections-example-http">
+                            <pre><code class="hljs http">GET %7B%7Bbase_url%7D%7D/data-access-api/collections/select?q=*:*&wt=json&indent=true&rows=10&sort=id asc&start=0 HTTP/1.1
+Host: </code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                <hr>
+            </div>
+            
+            
+            <div class="request">
+
+                <h4 id="request-query-service-datasets">
+                    Datasets
+                    <a href="#request-query-service-datasets"><i class="bi bi-link-45deg"></i></a>
+                </h4>
+
+                <div><p>Search for and retrieve datasets in LabCAS. This request is passed onto <a href="https://solr.apache.org">Solr</a> and accepts all <a href="https://solr.apache.org/guide/6_6/common-query-parameters.html">Solr query parameters</a>.</p>
+</div>
+
+                <div>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="nav-item">
+                            <button class='nav-link active' data-bs-toggle='tab' type='button' role='tab'
+                                id='query-service-datasets-curl-tab'
+                                data-bs-target='#request-query-service-datasets-example-curl'
+                                aria-controls='request-query-service-datasets-example-curl'>
+                                Curl
+                            </button>
+                        </li>
+                        <li role="presentation" class='nav-item'>
+                            <button class='nav-link' data-bs-toggle='tab' type='button' role='tab'
+                                id='query-service-datasets-http-tab'
+                                data-bs-target='#request-query-service-datasets-example-http'
+                                aria-controls='request-query-service-datasets-example-http'>
+                                HTTP
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" role='tabpanel' tabindex='0'
+                            aria-labelledby='query-service-datasets-curl-tab'
+                            id="request-query-service-datasets-example-curl">
+                            <pre><code class="hljs curl">curl -X GET "{{base_url}}/data-access-api/datasets/select?q=*:*&wt=json&indent=true&rows=10&sort=id asc&start=0"</code></pre>
+                        </div>
+                        <div class="tab-pane fade" role='tabpanel' tabindex='0'
+                            aria-labelledby='query-service-datasets-http-tab'
+                            id="request-query-service-datasets-example-http">
+                            <pre><code class="hljs http">GET %7B%7Bbase_url%7D%7D/data-access-api/datasets/select?q=*:*&wt=json&indent=true&rows=10&sort=id asc&start=0 HTTP/1.1
+Host: </code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                <hr>
+            </div>
+            
+            
+            <div class="request">
+
+                <h4 id="request-query-service-files">
+                    Files
+                    <a href="#request-query-service-files"><i class="bi bi-link-45deg"></i></a>
+                </h4>
+
+                <div><p>Search for and retrieve data files in LabCAS. This request is passed onto <a href="https://solr.apache.org">Solr</a> and accepts all <a href="https://solr.apache.org/guide/6_6/common-query-parameters.html">Solr query parameters</a>. This does not return the actual file data, but metadata about the files.</p>
+</div>
+
+                <div>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="nav-item">
+                            <button class='nav-link active' data-bs-toggle='tab' type='button' role='tab'
+                                id='query-service-files-curl-tab'
+                                data-bs-target='#request-query-service-files-example-curl'
+                                aria-controls='request-query-service-files-example-curl'>
+                                Curl
+                            </button>
+                        </li>
+                        <li role="presentation" class='nav-item'>
+                            <button class='nav-link' data-bs-toggle='tab' type='button' role='tab'
+                                id='query-service-files-http-tab'
+                                data-bs-target='#request-query-service-files-example-http'
+                                aria-controls='request-query-service-files-example-http'>
+                                HTTP
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" role='tabpanel' tabindex='0'
+                            aria-labelledby='query-service-files-curl-tab'
+                            id="request-query-service-files-example-curl">
+                            <pre><code class="hljs curl">curl -X GET "{{base_url}}/data-access-api/files/select?q=*:*&wt=json&indent=true&rows=10&sort=id asc&start=0"</code></pre>
+                        </div>
+                        <div class="tab-pane fade" role='tabpanel' tabindex='0'
+                            aria-labelledby='query-service-files-http-tab'
+                            id="request-query-service-files-example-http">
+                            <pre><code class="hljs http">GET %7B%7Bbase_url%7D%7D/data-access-api/files/select?q=*:*&wt=json&indent=true&rows=10&sort=id asc&start=0 HTTP/1.1
+Host: </code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                <hr>
+            </div>
+            
+
+        </div>
+        
+    </div>
+</div>
+<!-- -*- mode: HTML; tab-width: 4 -*- -->

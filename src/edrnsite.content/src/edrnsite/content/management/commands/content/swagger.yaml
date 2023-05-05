@@ -1,0 +1,386 @@
+openapi: 3.0.0
+info:
+  title: LabCAS Backend
+  description: >-
+    This is a collection of ReST endpoints supported by LabCAS, the software
+    that powers the Data Commons of the Early Detection Research Network (EDRN)
+    and the National Institute of Standards and Technologies (NIST).
+
+
+    The base URLs are:
+
+
+    - For EDRN, https://edrn-labcas.jpl.nasa.gov
+
+    - For NIST, https://labcas.jpl.nasa.gov/nist
+        
+
+    Note that all endpoints require authentication to function. This can be
+    provided using either:
+
+
+    - HTTP Basic authentication with a username and password.
+
+    - JSON Web Token (JWT) bearer authorization by first passing a username and
+    password with HTTP Basic authentication to the `/auth` endpoint to generate
+    a JWT, which can then be passed all other endpoints.
+  version: 1.0.0
+servers:
+  - url: http://{{base_url}}
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+security:
+  - basicAuth: []
+tags:
+  - name: Token Service
+    description: >-
+      The Token service has a single endpoint whose responsibility is to
+      generate JSON Web Tokens (JWTs) for use with the other ReST API endpoints.
+  - name: User Data Service
+    description: >-
+      The endpoints here serve to create/update, read, and delete user data.
+      User data in LabCAS refers to "favorites":
+
+
+      - Favorite data collections
+
+      - Favorite datasets
+
+      - Favorite files
+  - name: Download Service
+    description: >-
+      The Download Service contains a single ReST endpoint that support the
+      downloading of individual files from the Data Commons.
+  - name: List Service
+    description: >-
+      Endpoints in the list service return lists of files that match given
+      criteria. These lists are newline-separated strings of URLs that use refer
+      to the Download Service for file data retrieval.
+  - name: Query Service
+    description: >-
+      The Query Service endpoints enable you to send queries to the Data
+      Commons' Solr service and receive search results (metadata) back.
+paths:
+  /data-access-api/auth:
+    get:
+      tags:
+        - Token Service
+      summary: Authentication
+      description: >-
+        This endpoint generates a JSON Web Token (JWT) given a valid username
+        and password with HTTP Basic authentication. The JWT can then be used as
+        the bearer authorization in future ReST endpoint calls.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /data-access-api/userdata/create:
+    post:
+      tags:
+        - User Data Service
+      summary: Create
+      description: >-
+        The "create" endpoint creates (or updates) user data (favorite data
+        collections, favorite datasets, and favorite files). Note you can create
+        only your own user data, i.e., the username of the `id` parameter must
+        match the username in the HTTP Basic Authentication or in the JWT bearer
+        authorization header.
+
+
+        The payload for this request is a JSON dictionary with the following
+        fields:
+
+
+        - `id` which must also match the `id` query parameter
+
+        - `FavoriteCollections` which is a list of strings naming each favorite
+        data collection
+
+        - `FavoriteDatasets` which is a list of strings naming each favorite
+        dataset
+
+        - `FavoriteFiles` which is a list of strings naming each favorite file
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                id: '{{username}}'
+                FavoriteCollections: []
+                FavoriteDatasets: []
+                FavoriteFiles: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /data-access-api/userdata/read:
+    get:
+      tags:
+        - User Data Service
+      summary: Read
+      description: >-
+        This endpoint retrieves any user data saved under the given `id`. Note
+        that the `id` must match the username in the HTTP Basic authentication
+        or in the JWT bearer authorization.
+
+
+        The JSON return value of this call is not the same as tha payload used
+        in the `create` call. Rather, it is a raw Solr query response in JSON
+        format, which includes search results metadata, which can be ignored.
+        The real results are in the zeroth element of the `docs` key.
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: string
+          description: Username of the user data to retrieve
+          example: '{{username}}'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /data-access-api/userdata/delete:
+    post:
+      tags:
+        - User Data Service
+      summary: Delete
+      description: >-
+        Deletes the user data associated with the given `id`. Note that the
+        username given in the `id` must match the username in either the HTTP
+        Basic authentication or the JWT bearer authorization.
+
+
+        The return value is a JSON payload giving Solr metadata after deleting
+        the data.
+      requestBody:
+        content: {}
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: string
+          description: Username of the user data to delete
+          example: '{{username}}'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /data-access-api/download:
+    get:
+      tags:
+        - Download Service
+      summary: Download
+      description: >-
+        The download endpoint begins the transfer of a data file over HTTP. The
+        file to be downloaded is named via its identifier, or `id`.
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: string
+          description: Identifier of the file to download
+          example: '{{file_id}}'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /data-access-api/collections/list:
+    get:
+      tags:
+        - List Service
+      summary: FIles
+      description: >-
+        The Files List endpoint returns a list of files matching given query
+        criteria, one per line.
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+          description: Solr query
+          example: '*:*'
+        - name: fq
+          in: query
+          schema:
+            type: string
+          description: Filter query
+        - name: start
+          in: query
+          schema:
+            type: integer
+          description: Row number to start (pagination)
+          example: '0'
+        - name: rows
+          in: query
+          schema:
+            type: integer
+          description: Number of rows to match (pagination)
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /data-access-api/collections/select:
+    get:
+      tags:
+        - Query Service
+      summary: Collections
+      description: >-
+        Search for and retrieve data collections in LabCAS. This request is
+        passed onto [Solr](https://solr.apache.org) which handles the metadata
+        within the Data Commons.
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+          description: Query
+          example: '*:*'
+        - name: wt
+          in: query
+          schema:
+            type: string
+          description: Response writer (output format), such as json or xml
+          example: json
+        - name: indent
+          in: query
+          schema:
+            type: boolean
+          description: Whether to indent the output
+          example: 'true'
+        - name: rows
+          in: query
+          schema:
+            type: integer
+          description: How many rows to return (pagination)
+          example: '10'
+        - name: sort
+          in: query
+          schema:
+            type: string
+          description: Sort fields
+          example: id asc
+        - name: start
+          in: query
+          schema:
+            type: integer
+          description: Starting index of row to return (pagination)
+          example: '0'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /data-access-api/datasets/select:
+    get:
+      tags:
+        - Query Service
+      summary: Datasets
+      description: >-
+        Search for and retrieve datasets in LabCAS. This request is passed onto
+        [Solr](https://solr.apache.org) and accepts all [Solr query
+        parameters](https://solr.apache.org/guide/6_6/common-query-parameters.html).
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+          description: Query
+          example: '*:*'
+        - name: wt
+          in: query
+          schema:
+            type: string
+          description: Response writer (output format), such as json or xml
+          example: json
+        - name: indent
+          in: query
+          schema:
+            type: boolean
+          description: Whether to indent the output
+          example: 'true'
+        - name: rows
+          in: query
+          schema:
+            type: integer
+          description: How many rows to return (pagination)
+          example: '10'
+        - name: sort
+          in: query
+          schema:
+            type: string
+          description: Sort fields
+          example: id asc
+        - name: start
+          in: query
+          schema:
+            type: integer
+          description: Starting index of row to return (pagination)
+          example: '0'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /data-access-api/files/select:
+    get:
+      tags:
+        - Query Service
+      summary: Files
+      description: >-
+        Search for and retrieve data files in LabCAS. This request is passed
+        onto [Solr](https://solr.apache.org) and accepts all [Solr query
+        parameters](https://solr.apache.org/guide/6_6/common-query-parameters.html).
+        This does not return the actual file data, but metadata about the files.
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+          description: Query
+          example: '*:*'
+        - name: wt
+          in: query
+          schema:
+            type: string
+          description: Response writer (output format), such as json or xml
+          example: json
+        - name: indent
+          in: query
+          schema:
+            type: boolean
+          description: Whether to indent the output
+          example: 'true'
+        - name: rows
+          in: query
+          schema:
+            type: integer
+          description: How many rows to return (pagination)
+          example: '10'
+        - name: sort
+          in: query
+          schema:
+            type: string
+          description: Sort fields
+          example: id asc
+        - name: start
+          in: query
+          schema:
+            type: integer
+          description: Starting index of row to return (pagination)
+          example: '0'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}

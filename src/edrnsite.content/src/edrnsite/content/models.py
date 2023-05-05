@@ -3,13 +3,15 @@
 '''😌 EDRN site content's models.'''
 
 
-from ._dataset_metadata_form import DatasetMetadataFormPage  #noqa
+from ._dataset_metadata_form import DatasetMetadataFormPage  # noqa
 from ._metadata_collection_form import MetadataCollectionFormPage  # noqa
 from ._spec_ref_set_form import SpecimenReferenceSetRequestFormPage  # noqa
 from django import forms
 from django.db import models
+from django.conf import settings
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from edrnsite.streams import blocks
 from modelcluster.fields import ParentalKey
@@ -200,6 +202,42 @@ class EmailFormField(LimitedFormField):
 
 class CaptchaEmailFormField(LimitedFormField):
     page = ParentalKey(CaptchaEmailForm, on_delete=models.CASCADE, related_name='form_fields')
+
+
+class TaxonomyPage(Page):
+    page_description = 'A page that displays an interactive taxonomy'
+    template = 'edrnsite.content/taxonomy-page.html'
+    taxonomy = models.ForeignKey(
+        'wagtaildocs.Document', null=True, blank=False, verbose_name='Taxonomy JavaScript file',
+        on_delete=models.SET_NULL, related_name='taxonomy_page')
+    content_panels = Page.content_panels + [FieldPanel('taxonomy')]
+
+
+class PostmanAPIPage(Page):
+    page_description = 'A page that shows an Application Programmer Interface specified by Postman and formatted by Postmanerator'
+    template = 'edrnsite.content/postman-api-page.html'
+    postman = models.TextField(null=False, blank=False, help_text='Postman JSON Export')
+    swagger = models.TextField(null=False, blank=False, help_text='OpenAPI YAML Conversion')
+    postmanerator = models.TextField(null=False, blank=True, help_text='Postmanerator documentation using EDRN Portal Theme')
+    content_panels = Page.content_panels + [FieldPanel('postman'), FieldPanel('swagger'), FieldPanel('postmanerator')]
+
+    def serve(self, request: HttpRequest) -> HttpResponse:
+        if request.GET.get('download'):
+            response = HttpResponse(charset=settings.DEFAULT_CHARSET)
+            fn_prefix = slugify(self.title)
+            if request.GET.get('download') == 'postman':
+                response.headers['Content-Type'] = 'application/json'
+                response.headers['Content-Disposition'] = f'attachment; filename="{fn_prefix}.json"'
+                response.content = self.postman.encode(settings.DEFAULT_CHARSET)
+            elif request.GET.get('download') == 'openapi':
+                response.headers['Content-Type'] = 'application/yaml'  # Note: this mime type is currently in draft
+                response.headers['Content-Disposition'] = f'attachment; filename="{fn_prefix}.yaml"'
+                response.content = self.swagger.encode(settings.DEFAULT_CHARSET)
+            else:
+                raise ValueError('Expected "postman" or "openapi"')
+            return response
+        else:
+            return super().serve(request)
 
 
 @register_snippet

@@ -1,0 +1,693 @@
+{
+	"info": {
+		"_postman_id": "c73af22a-3ef6-4fbc-a3c5-9e00433251a5",
+		"name": "LabCAS Backend",
+		"description": "This is a collection of ReST endpoints supported by LabCAS, the software that powers the Data Commons of the Early Detection Research Network (EDRN) and the National Institute of Standards and Technologies (NIST).\n\nThe base URLs are:\n\n- For EDRN, https://edrn-labcas.jpl.nasa.gov\n- For NIST, https://labcas.jpl.nasa.gov/nist\n    \n\nNote that all endpoints require authentication to function. This can be provided using either:\n\n- HTTP Basic authentication with a username and password.\n- JSON Web Token (JWT) bearer authorization by first passing a username and password with HTTP Basic authentication to the `/auth` endpoint to generate a JWT, which can then be passed all other endpoints.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10615558"
+	},
+	"item": [
+		{
+			"name": "Token Service",
+			"item": [
+				{
+					"name": "Authentication",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response body longer than 40 characters\", function () {",
+									"    pm.expect(pm.response.text().length).to.be.above(80);",
+									"});",
+									"pm.test(\"Response body contains dot\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\".\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/data-access-api/auth",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"data-access-api",
+								"auth"
+							]
+						},
+						"description": "This endpoint generates a JSON Web Token (JWT) given a valid username and password with HTTP Basic authentication. The JWT can then be used as the bearer authorization in future ReST endpoint calls."
+					},
+					"response": []
+				}
+			],
+			"description": "The Token service has a single endpoint whose responsibility is to generate JSON Web Tokens (JWTs) for use with the other ReST API endpoints."
+		},
+		{
+			"name": "User Data Service",
+			"item": [
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response body contains status code zero\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.responseHeader.status).to.eql(0);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"{{username}}\",\n    \"FavoriteCollections\": [],\n    \"FavoriteDatasets\": [],\n    \"FavoriteFiles\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/data-access-api/userdata/create",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"data-access-api",
+								"userdata",
+								"create"
+							]
+						},
+						"description": "The \"create\" endpoint creates (or updates) user data (favorite data collections, favorite datasets, and favorite files). Note you can create only your own user data, i.e., the username of the `id` parameter must match the username in the HTTP Basic Authentication or in the JWT bearer authorization header.\n\nThe payload for this request is a JSON dictionary with the following fields:\n\n- `id` which must also match the `id` query parameter\n- `FavoriteCollections` which is a list of strings naming each favorite data collection\n- `FavoriteDatasets` which is a list of strings naming each favorite dataset\n- `FavoriteFiles` which is a list of strings naming each favorite file"
+					},
+					"response": []
+				},
+				{
+					"name": "Read",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"username = pm.environment.get(\"username\");",
+									"pm.test(\"Ensure username matches in JSON response\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.response.docs[0].id).to.eql(username);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/data-access-api/userdata/read?id={{username}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"data-access-api",
+								"userdata",
+								"read"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{username}}",
+									"description": "Username of the user data to retrieve"
+								}
+							]
+						},
+						"description": "This endpoint retrieves any user data saved under the given `id`. Note that the `id` must match the username in the HTTP Basic authentication or in the JWT bearer authorization.\n\nThe JSON return value of this call is not the same as tha payload used in the `create` call. Rather, it is a raw Solr query response in JSON format, which includes search results metadata, which can be ignored. The real results are in the zeroth element of the `docs` key."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Ensure response status code is 0\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.responseHeader.status).to.eql(0);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/data-access-api/userdata/delete?id={{username}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"data-access-api",
+								"userdata",
+								"delete"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{username}}",
+									"description": "Username of the user data to delete"
+								}
+							]
+						},
+						"description": "Deletes the user data associated with the given `id`. Note that the username given in the `id` must match the username in either the HTTP Basic authentication or the JWT bearer authorization.\n\nThe return value is a JSON payload giving Solr metadata after deleting the data."
+					},
+					"response": []
+				}
+			],
+			"description": "The endpoints here serve to create/update, read, and delete user data. User data in LabCAS refers to \"favorites\":\n\n- Favorite data collections\n- Favorite datasets\n- Favorite files"
+		},
+		{
+			"name": "Download Service",
+			"item": [
+				{
+					"name": "Download",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"const responseSize = responseBody? responseBody.length : 0;",
+									"pm.test(\"Response body is longer than 80 bytes\", function() {",
+									"    pm.expect(responseSize).to.be.above(80);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/data-access-api/download?id={{file_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"data-access-api",
+								"download"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{file_id}}",
+									"description": "Identifier of the file to download"
+								}
+							]
+						},
+						"description": "The download endpoint begins the transfer of a data file over HTTP. The file to be downloaded is named via its identifier, or `id`."
+					},
+					"response": []
+				}
+			],
+			"description": "The Download Service contains a single ReST endpoint that support the downloading of individual files from the Data Commons."
+		},
+		{
+			"name": "List Service",
+			"item": [
+				{
+					"name": "Collections",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"const responseSize = responseBody? responseBody.length : 0;",
+									"pm.test(\"Response body is longer than 120 bytes\", function() {",
+									"    pm.expect(responseSize).to.be.above(120);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/data-access-api/collections/list?q=*:*&fq&start=0&rows=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"data-access-api",
+								"collections",
+								"list"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "*:*",
+									"description": "Solr query"
+								},
+								{
+									"key": "fq",
+									"value": null,
+									"description": "Filter query"
+								},
+								{
+									"key": "start",
+									"value": "0",
+									"description": "Row number to start (pagination)"
+								},
+								{
+									"key": "rows",
+									"value": "1",
+									"description": "Number of rows to match (pagination)"
+								}
+							]
+						},
+						"description": "The Collections List endpoint returns a list of files found within collections, one per line."
+					},
+					"response": []
+				},
+				{
+					"name": "Datasets",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"const responseSize = responseBody? responseBody.length : 0;",
+									"pm.test(\"Response body is longer than 120 bytes\", function() {",
+									"    pm.expect(responseSize).to.be.above(120);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/data-access-api/collections/list?q=*:*&fq&start=0&rows=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"data-access-api",
+								"collections",
+								"list"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "*:*",
+									"description": "Solr query"
+								},
+								{
+									"key": "fq",
+									"value": null,
+									"description": "Filter query"
+								},
+								{
+									"key": "start",
+									"value": "0",
+									"description": "Row number to start (pagination)"
+								},
+								{
+									"key": "rows",
+									"value": "1",
+									"description": "Number of rows to match (pagination)"
+								}
+							]
+						},
+						"description": "The Datasets List endpoint returns a list of files found within datasets, one per line."
+					},
+					"response": []
+				},
+				{
+					"name": "FIles",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"const responseSize = responseBody? responseBody.length : 0;",
+									"pm.test(\"Response body is longer than 120 bytes\", function() {",
+									"    pm.expect(responseSize).to.be.above(120);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/data-access-api/collections/list?q=*:*&fq&start=0&rows=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"data-access-api",
+								"collections",
+								"list"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "*:*",
+									"description": "Solr query"
+								},
+								{
+									"key": "fq",
+									"value": null,
+									"description": "Filter query"
+								},
+								{
+									"key": "start",
+									"value": "0",
+									"description": "Row number to start (pagination)"
+								},
+								{
+									"key": "rows",
+									"value": "1",
+									"description": "Number of rows to match (pagination)"
+								}
+							]
+						},
+						"description": "The Files List endpoint returns a list of files matching given query criteria, one per line."
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints in the list service return lists of files that match given criteria. These lists are newline-separated strings of URLs that use refer to the Download Service for file data retrieval."
+		},
+		{
+			"name": "Query Service",
+			"item": [
+				{
+					"name": "Collections",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Found some matches\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.response.numFound).to.above(0);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/data-access-api/collections/select?q=*:*&wt=json&indent=true&rows=10&sort=id asc&start=0",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"data-access-api",
+								"collections",
+								"select"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "*:*",
+									"description": "Query"
+								},
+								{
+									"key": "wt",
+									"value": "json",
+									"description": "Response writer (output format), such as json or xml"
+								},
+								{
+									"key": "indent",
+									"value": "true",
+									"description": "Whether to indent the output"
+								},
+								{
+									"key": "rows",
+									"value": "10",
+									"description": "How many rows to return (pagination)"
+								},
+								{
+									"key": "sort",
+									"value": "id asc",
+									"description": "Sort fields"
+								},
+								{
+									"key": "start",
+									"value": "0",
+									"description": "Starting index of row to return (pagination)"
+								}
+							]
+						},
+						"description": "Search for and retrieve data collections in LabCAS. This request is passed onto [Solr](https://solr.apache.org) which handles the metadata within the Data Commons."
+					},
+					"response": []
+				},
+				{
+					"name": "Datasets",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Found some matches\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.response.numFound).to.above(0);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/data-access-api/datasets/select?q=*:*&wt=json&indent=true&rows=10&sort=id asc&start=0",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"data-access-api",
+								"datasets",
+								"select"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "*:*",
+									"description": "Query"
+								},
+								{
+									"key": "wt",
+									"value": "json",
+									"description": "Response writer (output format), such as json or xml"
+								},
+								{
+									"key": "indent",
+									"value": "true",
+									"description": "Whether to indent the output"
+								},
+								{
+									"key": "rows",
+									"value": "10",
+									"description": "How many rows to return (pagination)"
+								},
+								{
+									"key": "sort",
+									"value": "id asc",
+									"description": "Sort fields"
+								},
+								{
+									"key": "start",
+									"value": "0",
+									"description": "Starting index of row to return (pagination)"
+								}
+							]
+						},
+						"description": "Search for and retrieve datasets in LabCAS. This request is passed onto [Solr](https://solr.apache.org) and accepts all [Solr query parameters](https://solr.apache.org/guide/6_6/common-query-parameters.html)."
+					},
+					"response": []
+				},
+				{
+					"name": "Files",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Found some matches\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.response.numFound).to.above(0);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/data-access-api/files/select?q=*:*&wt=json&indent=true&rows=10&sort=id asc&start=0",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"data-access-api",
+								"files",
+								"select"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "*:*",
+									"description": "Query"
+								},
+								{
+									"key": "wt",
+									"value": "json",
+									"description": "Response writer (output format), such as json or xml"
+								},
+								{
+									"key": "indent",
+									"value": "true",
+									"description": "Whether to indent the output"
+								},
+								{
+									"key": "rows",
+									"value": "10",
+									"description": "How many rows to return (pagination)"
+								},
+								{
+									"key": "sort",
+									"value": "id asc",
+									"description": "Sort fields"
+								},
+								{
+									"key": "start",
+									"value": "0",
+									"description": "Starting index of row to return (pagination)"
+								}
+							]
+						},
+						"description": "Search for and retrieve data files in LabCAS. This request is passed onto [Solr](https://solr.apache.org) and accepts all [Solr query parameters](https://solr.apache.org/guide/6_6/common-query-parameters.html). This does not return the actual file data, but metadata about the files."
+					},
+					"response": []
+				}
+			],
+			"description": "The Query Service endpoints enable you to send queries to the Data Commons' Solr service and receive search results (metadata) back."
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "{{password}}",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "{{username}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

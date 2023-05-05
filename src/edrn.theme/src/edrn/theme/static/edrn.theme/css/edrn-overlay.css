@@ -177,3 +177,57 @@ legend {
 b {
     font-weight: 1000;
 }
+.taxonomy-container {
+    width: 1400px !important;
+}
+.taxonomy-container div svg {
+    width: 1400px !important;
+    height: 600px !important;
+}
+.infobox {
+    font-weight: 300;
+    position: absolute;
+    padding: 10px 30px 20px 20px;
+    top: 10px;
+    left: 10px;
+    text-align: left;
+    width: 420px;
+    height: auto;
+    background-color: #e0e0e0F4;
+    border-radius: 8px;
+}
+.nodeid {
+    font-size: 8px;
+    font-weight: bold;
+}
+.nodename {
+    width: 320px;
+    margin: 12px 0 18px 0;
+    padding: 2px 8px 2px 10px;
+    background: white;
+    font-weight: lighter;
+    border-radius: 3px;
+    display: block;
+    text-transform: uppercase;
+    font-size: 16px;
+}
+.nodeparent {
+    width: 120px;
+    margin: 12px 0 0 0;
+    padding: 2px 8px 2px 10px;
+    border: 1px solid white;
+    background: #909090;
+    color: white;
+    border-radius: 3px;
+    display: block;
+    font-size: 11px;
+}
+.nodechild {
+    width: auto;
+    margin: 0 8px 8px 0;
+    padding: 2px 8px 2px 10px;
+    border: 1px solid black;
+    background: white;
+    border-radius: 3px;
+    font-size: 13px;
+}

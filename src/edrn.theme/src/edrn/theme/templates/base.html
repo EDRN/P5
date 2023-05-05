@@ -43,7 +43,7 @@
         {% endblock header_scripts %}
         {% edrn_analytics 'h' %}
     </head>
-    <body class='{% block body_class %}{% endblock body_class %}'>
+    <body class='{% block body_class %}{% endblock body_class %}' onload='{% block body_onload %}{% endblock body_onload %}'>
         {% wagtailuserbar %}
         {% include 'includes/dev-warning.html' %}
         {% include 'includes/header.html' %}

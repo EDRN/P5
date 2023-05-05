@@ -4,9 +4,9 @@
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from edrnsite.content.models import MetadataCollectionFormPage, DatasetMetadataFormPage, FlexPage
+from edrnsite.content.models import MetadataCollectionFormPage, DatasetMetadataFormPage, FlexPage, PostmanAPIPage
 from edrnsite.policy.management.commands.utils import set_site
-from wagtail.models import Page
+from wagtail.models import Page, PageViewRestriction
 from wagtail.rich_text import RichText
 import pkg_resources
 
@@ -22,6 +22,25 @@ class Command(BaseCommand):
         assert dest is not None
         if mcfp.get_parent() != dest:
             mcfp.move(dest, pos='last-child')
+
+    def _append_link_to_page(self, dest, link_text, page):
+        '''Append a link to a ``page`` with the given ``link_text`` to the body stream on the ``dest`` page.
+
+        There has GOT to be a better way of doing this!
+        '''
+        blocks = dest.body.get_prep_value()
+        while True:
+            try:
+                dest.body.pop()
+            except IndexError:
+                break
+        for block in blocks:
+            if block['type'] == 'rich_text':
+                dest.body.append(('rich_text', RichText(block['value'])))
+            else:
+                raise ValueError(f'Unexpected block type {block["type"]}')
+        dest.body.append(('rich_text', RichText(f'<p><a id="{page.pk}" linktype="page">{link_text}</a></p>')))
+        dest.save()
 
     def _install_forms(self, home_page):
         self.stdout.write('Installing new dataset metadata form')
@@ -40,20 +59,30 @@ class Command(BaseCommand):
         )
         dest.add_child(instance=page)
         page.save()
-
-        # Append the link to the dataset form. There has GOT to be a better way of doing this!
-        blocks = dest.body.get_prep_value()
-        try:
-            dest.body.pop()
-        except IndexError:
-            pass
-        for block in blocks:
-            if block['type'] == 'rich_text':
-                dest.body.append(('rich_text', RichText(block['value'])))
-            else:
-                raise ValueError(f'Unexpected block type {block["type"]}')
-        dest.body.append(('rich_text', RichText(f'<p><a id="{page.pk}" linktype="page">Dataset Metadata Form</a></p>')))
+        self._append_link_to_page(dest, 'Dataset Metadata Form', page)
         dest.save()
+
+    def _install_api(self, home_page):
+        self.stdout.write('Installing LabCAS API page')
+        PostmanAPIPage.objects.all().delete()
+        dest = FlexPage.objects.descendant_of(home_page).filter(slug='labcas-metadata-and-common-data-elements').first()
+        assert dest is not None
+        postman = pkg_resources.resource_string(__name__, 'content/postman.json').decode('utf-8').strip()
+        swagger = pkg_resources.resource_string(__name__, 'content/swagger.yaml').decode('utf-8').strip()
+        postmanerator = pkg_resources.resource_string(__name__, 'content/postmanerator.html').decode('utf-8').strip()
+        page = PostmanAPIPage(
+            title='LabCAS API',
+            postman=postman,
+            swagger=swagger,
+            postmanerator=postmanerator,
+            live=True,
+            show_in_menus=False
+        )
+        dest.add_child(instance=page)
+        page.save()
+        self._append_link_to_page(dest, 'LabCAS API', page)
+        pvr = PageViewRestriction(restriction_type=PageViewRestriction.LOGIN, page=page)
+        pvr.save()
 
     def handle(self, *args, **options):
         self.stdout.write('Moving existing metadata forms to the LabCAS CDE page')
@@ -65,6 +94,7 @@ class Command(BaseCommand):
             site, home_page = set_site()
             self._move_forms(home_page)
             self._install_forms(home_page)
+            self._install_api(home_page)
 
         finally:
             settings.WAGTAILREDIRECTS_AUTO_CREATE = old
