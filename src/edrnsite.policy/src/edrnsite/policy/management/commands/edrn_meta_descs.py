@@ -16,7 +16,7 @@ class Command(BaseCommand):
     help = 'Add meta descriptions to various objects'
 
     def add_arguments(self, parser: argparse.ArgumentParser):
-        parser.add_argument('phase', help='Which phase of meta descs to add, 1 or 2')
+        parser.add_argument('phase', help='Which phase of meta descs to add, 1..6')
 
     def _phase_1(self):
         self.stdout.write('Adding meta descs to biomarkers')
@@ -83,6 +83,7 @@ class Command(BaseCommand):
             if count % 100 == 0 and count > 0:
                 self.stdout.write(f'{count} miscellaneous resources to go')
 
+    def _phase_3(self):
         self.stdout.write('Adding meta descs to flex pages with recurring themes: group calls')
         for page in FlexPage.objects.filter(title__contains='Group Call'):
             if not page.search_description:
@@ -95,6 +96,8 @@ class Command(BaseCommand):
                 page.search_description = 'This was a conference call held in the past'
                 page.save()
             del page
+
+    def _phase_4(self):
         self.stdout.write('Adding meta descs to flex pages with recurring themes: ending with "Call"')
         for page in FlexPage.objects.filter(title__endswith='Call'):
             if not page.search_description:
@@ -107,6 +110,8 @@ class Command(BaseCommand):
                 page.search_description = 'This was a group meeting held in the past'
                 page.save()
             del page
+
+    def _phase_5(self):
         self.stdout.write('Adding meta descs to flex pages with recurring themes: workshop')
         for page in FlexPage.objects.filter(title__contains='Workshop'):
             if not page.search_description:
@@ -131,6 +136,8 @@ class Command(BaseCommand):
                 page.search_description = 'This was a web-based seminar held in the past'
                 page.save()
             del page
+
+    def _phase_6(self):
         self.stdout.write('Adding meta descs to flex pages with recurring themes: teleconference')
         for page in FlexPage.objects.filter(title__contains='Teleconference'):
             if not page.search_description:
@@ -159,9 +166,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         '''Handle the EDRN `edrn_meta_descs` command.'''
 
-        if options['phase'] == '1':
-            self._phase_1()
-        elif options['phase'] == '2':
-            self._phase_2()
-        else:
-            raise ValueError('Please specify phase of 1 or 2')
+        phase = options['phase']
+        method = getattr(self, f'_phase_{phase}')
+        method()

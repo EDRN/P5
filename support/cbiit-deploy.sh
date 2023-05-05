@@ -133,8 +133,14 @@ docker compose --project-name edrn exec portal django-admin collectstatic --no-i
 docker compose --project-name edrn exec portal django-admin edrndevreset &&\
 docker compose --project-name edrn exec portal django-admin edrn_forms &&\
 docker compose --project-name edrn exec portal django-admin edrn_meta_descs 1 &&\
-docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2" || exit 1
-
+docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
+docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
+docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
+docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 &&\
+docker compose --project-name edrn exec portal django-admin edrn_meta_descs 3 &&\
+docker compose --project-name edrn exec portal django-admin edrn_meta_descs 4 &&\
+docker compose --project-name edrn exec portal django-admin edrn_meta_descs 5 &&\
+docker compose --project-name edrn exec portal django-admin edrn_meta_descs 6" || exit 1
 echo ""
 echo "🤷‍♀️ Restarting the portal and stopping search engine"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
