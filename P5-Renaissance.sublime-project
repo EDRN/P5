@@ -18,12 +18,18 @@
             ".eggs",
             "venv",
             "media",
-            "build",
             "./static",
+            "build",
             "xxx",
             ".venv"
          ],
          "path" : "."
-      }
+      },
+      {
+         "folder_include_patterns" : [
+            "static"
+         ],
+         "path" : "src"
+      },
    ]
 }
