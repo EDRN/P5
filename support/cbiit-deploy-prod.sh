@@ -131,6 +131,13 @@ docker compose --project-name edrn exec portal django-admin edrn_meta_descs 1 &&
 docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
 docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
 docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
+docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
+docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
+docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
+docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
+docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
+docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
+docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
 docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 &&\
 docker compose --project-name edrn exec portal django-admin edrn_meta_descs 3 &&\
 docker compose --project-name edrn exec portal django-admin edrn_meta_descs 4 &&\
