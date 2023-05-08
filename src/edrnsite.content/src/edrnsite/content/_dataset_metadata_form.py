@@ -13,9 +13,6 @@ from io import StringIO
 from urllib.parse import urlparse
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel
 from wagtail.contrib.forms.models import EmailFormMixin
-import mimetypes
-
-mimetypes.init()
 
 
 def _collections():
@@ -32,11 +29,21 @@ def _assays():
         ('RNA-Seq', 'RNA-Seq'),
         ('Single-cell Seq', 'Single-cell Seq'),
         ('WES', 'WES'),
+        ('Not Applicable', 'N/A'),
     )
 
 
 def _content_types():
-    return sorted(list(set([(i, i) for i in mimetypes.types_map.values()])))
+    return (
+        ('Ancillary Data', 'Ancillary Data'),
+        ('Biospecimen', 'Biospecimen'),
+        ('Clinical', 'Clinical'),
+        ('Documentation', 'Documentation'),
+        ('Instrument Output', 'Instrument Output'),
+        ('Metadata', 'Metadata'),
+        ('SOP', 'SOP'),
+        ('Summary', 'Summary', ),
+    )
 
 
 def _specimen_types():
@@ -87,7 +94,7 @@ class DatasetMetadataForm(AbstractEDRNForm):
         required=False, label='Assay', widget=forms.RadioSelect, choices=_assays
     )
     content_type = forms.MultipleChoiceField(
-        required=False, label='Content Type', help_text='MIME types of the data in this dataset', choices=_content_types
+        required=False, label='Content Type', help_text='Types of the data in this dataset', choices=_content_types
     )
     specimen_type = forms.MultipleChoiceField(
         required=False, help_text='Select the kinds of specimens collected', choices=_specimen_types
