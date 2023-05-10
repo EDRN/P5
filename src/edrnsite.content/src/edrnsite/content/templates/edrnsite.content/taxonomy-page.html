@@ -6,7 +6,6 @@
     {% if self.taxonomy %}
         <script src='{{self.taxonomy.url}}'></script>
     {% endif %}
-    <script>let opennodelist=['Science'];</script>
 {% endblock header_scripts %}
 {% block body_onload %}taxonomy_main();{% endblock body_onload %}
 {% block content %}

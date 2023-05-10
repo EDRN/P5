@@ -173,29 +173,29 @@ function makeSimpleHorizontalTree(flattree) {
 }
 
 function aggregateJPLTree() {
-    for (let i in flattree) {
-        let info="<div class=nodeid>["+i+"]</div>";
-        let p=flattree[i].parent;
-        let parents="";
-        while (p!="") {
-            let pi=-1;
-            for (let index in flattree) if (flattree[index].name==p) pi=index;
-            if (pi>=0) {
-               parents="<div class=nodeparent>"+flattree[pi].name+"</div>"+parents;
-               p=flattree[pi].parent;
-            } else p="";
-        }
-        info+=parents;
-        info+="<div class=nodename>"+flattree[i].name+"</div>";
-        for (let j in flattree) {
-            if (flattree[j].parent==flattree[i].name)
-                info+="<div class=nodechild>"+flattree[j].name+"</div>";
-        }
-        flattree[i]['info']=info;
-    }
+    // for (let i in flattree) {
+    //     let info="<div class=nodeid>["+i+"]</div>";
+    //     let p=flattree[i].parent;
+    //     let parents="";
+    //     while (p!="") {
+    //         let pi=-1;
+    //         for (let index in flattree) if (flattree[index].name==p) pi=index;
+    //         if (pi>=0) {
+    //            parents="<div class=nodeparent>"+flattree[pi].name+"</div>"+parents;
+    //            p=flattree[pi].parent;
+    //         } else p="";
+    //     }
+    //     info+=parents;
+    //     info+="<div class=nodename>"+flattree[i].name+"</div>";
+    //     for (let j in flattree) {
+    //         if (flattree[j].parent==flattree[i].name)
+    //             info+="<div class=nodechild>"+flattree[j].name+"</div>";
+    //     }
+    //     flattree[i]['info']=info;
+    // }
 }
 function taxonomy_main() {
      infobox=d3.select('.infobox').style('visibility','hidden');
-     aggregateJPLTree();
+     // aggregateJPLTree();
      makeSimpleHorizontalTree(flattree);
 }

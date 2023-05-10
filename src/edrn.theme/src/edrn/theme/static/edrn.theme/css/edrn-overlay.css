@@ -231,3 +231,6 @@ b {
     border-radius: 3px;
     font-size: 13px;
 }
+.nodelabel {
+    font-size: 6px;
+}
