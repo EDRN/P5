@@ -4,7 +4,7 @@
 
 
 from .utils import (
-    find_pubs_without_pis, find_data_without_biomarkers, find_data_collections_without_pis, 
+    find_pubs_without_pis, find_data_without_biomarkers, find_data_collections_without_pis,
     find_biomarkers_without_publications, find_biomarkers_without_data
 )
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
