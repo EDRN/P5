@@ -39,7 +39,6 @@ class IngestControlPanel(Component):
             'ingest_running': lock.locked(),
             'knowledge_folders': folders,
             'my_ip': my_ip,
-            'my_path': os.environ.get('PATH', '«undefined»')
         }
         return render_to_string('eke.knowledge/ingest-controls.html', context, request=self.request)
 
