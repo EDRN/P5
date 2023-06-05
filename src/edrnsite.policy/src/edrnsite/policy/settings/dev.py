@@ -64,6 +64,7 @@ INSTALLED_APPS += [  # noqa
     # 'debug_toolbar',
     'wagtail.contrib.styleguide',
     'django_extensions',
+    'edrnsite.test'
 ]
 MIDDLEWARE = [
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',

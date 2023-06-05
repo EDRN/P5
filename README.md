@@ -35,6 +35,7 @@ $ .venv/bin/pip install --editable 'src/edrnsite.search[dev]'
 $ .venv/bin/pip install --editable 'src/edrn.theme[dev]'
 $ .venv/bin/pip install --editable 'src/edrnsite.ploneimport[dev]'
 $ .venv/bin/pip install --editable 'src/edrnsite.policy[dev]'
+$ .venv/bin/pip install --editable 'src/edrnsite.test[dev]'
 $ .venv/bin/django-admin migrate --pythonpath . --settings local
 $ .venv/bin/django-admin createsuperuser --pythonpath . --settings local --username root --email edrn-ic@jpl.nasa.gov
 ```
@@ -163,6 +164,8 @@ Or by hand:
     .venv/bin/python -m build --outdir dist src/eke.biomarkers
     .venv/bin/python -m build --outdir dist src/edrnsite.ploneimport
     .venv/bin/python -m build --outdir dist src/edrnsite.policy
+
+You don't need `src/edrnsite.test` since it's just used for testing.
 
 Repeat this for any other source directory in `src`. Then build the image:
 
