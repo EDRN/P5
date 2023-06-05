@@ -131,8 +131,7 @@ docker compose --project-name edrn exec portal django-admin migrate &&\
 docker compose --project-name edrn exec portal django-admin fixtree &&\
 docker compose --project-name edrn exec portal django-admin collectstatic --no-input --clear &&\
 docker compose --project-name edrn exec portal django-admin edrndevreset &&\
-docker compose --project-name edrn exec portal django-admin edrn_explorer &&\
-docker compose --project-name edrn exec portal django-admin clear_cache --all" || exit 1
+docker compose --project-name edrn exec portal django-admin edrn_explorer" || exit 1
 echo ""
 echo "🤷‍♀️ Restarting the portal and stopping search engine"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
