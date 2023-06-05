@@ -124,25 +124,7 @@ ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn exec portal django-admin makemigrations &&\
 docker compose --project-name edrn exec portal django-admin migrate &&\
 docker compose --project-name edrn exec portal django-admin fixtree &&\
-docker compose --project-name edrn exec portal django-admin collectstatic --no-input --clear &&\
-docker compose --project-name edrn exec portal django-admin edrn_forms &&\
-docker compose --project-name edrn exec portal django-admin edrn_meta_descs 1 &&\
-docker compose --project-name edrn exec portal django-admin edrn_meta_descs 1 &&\
-docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
-docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
-docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
-docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
-docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
-docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
-docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
-docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
-docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
-docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
-docker compose --project-name edrn exec portal django-admin edrn_meta_descs 2 ||: &&\
-docker compose --project-name edrn exec portal django-admin edrn_meta_descs 3 ||: &&\
-docker compose --project-name edrn exec portal django-admin edrn_meta_descs 4 ||: &&\
-docker compose --project-name edrn exec portal django-admin edrn_meta_descs 5 ||: &&\
-docker compose --project-name edrn exec portal django-admin edrn_meta_descs 6 ||:" || exit 1
+docker compose --project-name edrn exec portal django-admin collectstatic --no-input --clear" || exit 1
 
 echo ""
 echo "🤷‍♀️ Restarting the portal and stopping search engine"
