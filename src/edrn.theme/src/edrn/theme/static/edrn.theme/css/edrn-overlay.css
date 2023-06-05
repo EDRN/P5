@@ -234,3 +234,6 @@ b {
 .nodelabel {
     font-size: 6px;
 }
+.tree_view_annotation {
+    display: none;
+}

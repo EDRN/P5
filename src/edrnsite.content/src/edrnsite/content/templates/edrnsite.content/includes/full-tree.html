@@ -1,0 +1,411 @@
+<ul>
+    <li data-jstree=''>
+        LabCAS Common Data Elements
+        <div class='tree_view_annotation'>
+            <h3>LabCAS CDEs</h3>
+            <p>
+                The LabCAS Common Data Elements are used throughout the Laboratory
+                Catalog and Archive System.
+            </p>
+        </div>
+        <ul>
+            <li>
+                Collections
+                <div class='tree_view_annotation'>
+                    <h3>Collections</h3>
+                    <p>
+                        A collection is the highest-level structural element for organizing
+                        data in LabCAS. Collections contain datasets.
+                    </p>
+                </div>
+                <ul>
+                    <li>
+                        <em>Attributes</em>
+                        <div class='tree_view_annotation'>
+                            <h3>Collection Attributes</h3>
+                            <p>
+                                The attributes of a collection are used to describe high-level details
+                                of entire sets of data and files.
+                            </p>
+                        </div>
+                        <ul>
+                            <li>
+                                CDE: CollectionName
+                                <div class='tree_view_annotation'>
+                                    <h3>CollectionName</h3>
+                                    <dl>
+                                        <dt>Required</dt>
+                                        <dd>Yes</dd>
+                                        <dt>Purpose</dt>
+                                        <dd>A short name for high level data collection</dd>
+                                        <dt>Data Type</dt>
+                                        <dd>Free text</dd>
+                                    </dl>
+                                </div>
+                            </li>
+                            <li>
+                                CDE: CollectionDescription
+                                <div class='tree_view_annotation'>
+                                    <h3>CollectionDescription</h3>
+                                    <dl>
+                                        <dt>Required</dt>
+                                        <dd>Yes</dd>
+                                        <dt>Purpose</dt>
+                                        <dd>A description of the data captured in this data collection</dd>
+                                        <dt>Data Type</dt>
+                                        <dd>Free text</dd>
+                                    </dl>
+                                </div>
+                            </li>
+                            <li>
+                                CDE: LeadPIID
+                                <div class='tree_view_annotation'>
+                                    <h3>LeadPIID</h3>
+                                    <dl>
+                                        <dt>Required</dt>
+                                        <dd>Yes</dd>
+                                        <dt>Purpose</dt>
+                                        <dd>The lead prinicipal investigators or co-investigators person ID from eSIS</dd>
+                                        <dt>Data Type</dt>
+                                        <dd>Numeric</dd>
+                                    </dl>
+                                </div>
+                            </li>
+                            <li>
+                                CDE: LeadPIName
+                                <div class='tree_view_annotation'>
+                                    <h3>LeadPIName </h3>
+                                    <dl>
+                                        <dt>Required</dt>
+                                        <dd>populate from person ID</dd>
+                                        <dt>Purpose</dt>
+                                        <dd>The lead prinicipal investigators or co-investigators person name from eSIS</dd>
+                                        <dt>Data Type</dt>
+                                        <dd>Free text</dd>
+                                    </dl>
+                                </div>
+                            </li>
+                            <li>
+                                CDE: DataCustodian
+                                <div class='tree_view_annotation'>
+                                    <h3>DataCustodian</h3>
+                                    <dl>
+                                        <dt>Required</dt>
+                                        <dd>No</dd>
+                                        <dt>Purpose</dt>
+                                        <dd>The person responsible for this data collection</dd>
+                                        <dt>Data Type</dt>
+                                        <dd>Free text</dd>
+                                    </dl>
+                                </div>
+                            </li>
+                            <li>
+                                CDE: DataCustodianEmail
+                                <div class='tree_view_annotation'>
+                                    <h3>DataCustodianEmail</h3>
+                                    <dl>
+                                        <dt>Required</dt>
+                                        <dd>No</dd>
+                                        <dt>Purpose</dt>
+                                        <dd>Data custodian's email address</dd>
+                                        <dt>Data Type</dt>
+                                        <dd>Free text</dd>
+                                    </dl>
+                                </div>
+                            </li>
+                            <li>
+                                CDE: InstitutionID
+                                <div class='tree_view_annotation'>
+                                    <h3>InstitutionID</h3>
+                                    <dl>
+                                        <dt>Required</dt>
+                                        <dd>Yes</dd>
+                                        <dt>Purpose</dt>
+                                        <dd>The institutionID(s)that collected this data</dd>
+                                        <dt>Data Type</dt>
+                                        <dd>Numeric</dd>
+                                    </dl>
+                                </div>
+                            </li>
+                            <li>
+                                CDE: InstitutionName
+                                <div class='tree_view_annotation'>
+                                    <h3>InstitutionName</h3>
+                                    <dl>
+                                        <dt>Required</dt>
+                                        <dd>Yes</dd>
+                                        <dt>Purpose</dt>
+                                        <dd>The institution name(s) that collected this data</dd>
+                                        <dt>Data Type</dt>
+                                        <dd>Free text</dd>
+                                    </dl>
+                                </div>
+                            </li>
+                            <li>
+                                CDE: ProtocolID
+                                <div class='tree_view_annotation'>
+                                    <h3>ProtocolID</h3>
+                                    <dl>
+                                        <dt>Required</dt>
+                                        <dd>Yes</dd>
+                                        <dt>Purpose</dt>
+                                        <dd>The protocol ID assigned by the DMCC</dd>
+                                        <dt>Data Type</dt>
+                                        <dd>Numeric</dd>
+                                    </dl>
+                                </div>
+                            </li>
+                            <li>
+                                CDE: ProtocolName
+                                <div class='tree_view_annotation'>
+                                    <h3>ProtocolName</h3>
+                                    <dl>
+                                        <dt>Required</dt>
+                                        <dd>populate from ProtocolID</dd>
+                                        <dt>Purpose</dt>
+                                        <dd>The protocol protocol title that describes the study this data was captured under. This is assigned by the DMCC</dd>
+                                        <dt>Data Type</dt>
+                                        <dd>Free text</dd>
+                                    </dl>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <em>Contained Objects</em>
+                        <div class='tree_view_annotation'>
+                            <h3>Objects Within Collections</h3>
+                            <p>Collections contain datasets, which themselelves may contain datasets.</p>
+                        </div>
+                        <ul>
+                            <li>
+                                Datasets
+                                <div class='tree_view_annotation'>
+                                    <h3>Datasets</h3>
+                                    <p>
+                                        A dataset contains a set of data files but can also contain other
+                                        datasets, forming a nested composition. Datasets containing files
+                                        cannot contain other datasets.
+                                    </p>
+                                    <p>
+                                        Attributes that are not specified for a dataset inherit their values
+                                        from their parent datasets or parent collection.
+                                    </p>
+                                </div>
+                                <ul>
+                                    <li>
+                                        <em>Attributes</em>
+                                        <div class='tree_view_annotation'>
+                                            <h3>Dataset Attributes</h3>
+                                            <p>
+                                                The attributes of a dataset inherit values from their parent
+                                                dataset or collection if not otherwise specified.
+                                            </p>
+                                        </div>
+                                        <ul>
+                                            <li>
+                                                CDE: DatasetName
+                                                <div class='tree_view_annotation'>
+                                                    <h3>DatasetName</h3>
+                                                    <dl>
+                                                        <dt>Required</dt>
+                                                        <dd>Yes</dd>
+                                                        <dt>Purpose</dt>
+                                                        <dd>A short name for the dataset.</dd>
+                                                        <dt>Data Type</dt>
+                                                        <dd>Free text</dd>
+                                                    </dl>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                CDE: DatasetDescription
+                                                <div class='tree_view_annotation'>
+                                                    <h3>DatasetDescription</h3>
+                                                    <dl>
+                                                        <dt>Required</dt>
+                                                        <dd>Yes</dd>
+                                                        <dt>Purpose</dt>
+                                                        <dd>A summary of the data captured by this dataset.</dd>
+                                                        <dt>Data Type</dt>
+                                                        <dd>Free text</dd>
+                                                    </dl>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <em>Contained Objects</em>
+                                        <div class='tree_view_annotation'>
+                                            <h3>Objects Within Datasets</h3>
+                                            <p>
+                                                Datasets can contain other nested datasets. "Leaf" datasets
+                                                may also contain Core Files, Pathology Imaging Extensions,
+                                                BRSI Imaging Extensions, and DICOM Extensions.
+                                            </p>
+                                        </div>
+                                        <ul>
+                                            <li>
+                                                Core Files
+                                                <div class='tree_view_annotation'>
+                                                    <h3>Core Files</h3>
+                                                    <p>
+                                                        Core files are the actual computer files of data that comprise
+                                                        the scientific instrument output of observations, experiments,
+                                                        and so forth. Core Files do not contain any child objects.
+                                                    </p>
+                                                    <p>
+                                                         Attributes that are not specified for a dataset inherit their
+                                                         values from their parent datasets or parent collection.
+                                                    </p>
+                                                </div>
+                                                <ul>
+                                                    <li>
+                                                        <em>Attributes</em>
+                                                        <div class='tree_view_annotation'>
+                                                            <h3>Dataset Attributes</h3>
+                                                            <p>
+                                                                The attributes of a file inherit values from their parent
+                                                                dataset or collection if not otherwise specified.
+                                                            </p>
+                                                        </div>
+                                                        <ul>
+                                                            <li>
+                                                                CDE: FileName
+                                                                <div class='tree_view_annotation'>
+                                                                    <h3>FileName</h3>
+                                                                    <dl>
+                                                                        <dt>Required</dt>
+                                                                        <dd>Yes</dd>
+                                                                        <dt>Purpose</dt>
+                                                                        <dd>The name of the file being uploaded</dd>
+                                                                        <dt>Data Type</dt>
+                                                                        <dd>Free text</dd>
+                                                                    </dl>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                CDE: DateFileGenerated
+                                                                <div class='tree_view_annotation'>
+                                                                    <h3>DateFileGenerated</h3>
+                                                                    <dl>
+                                                                        <dt>Required</dt>
+                                                                        <dd>No</dd>
+                                                                        <dt>Purpose</dt>
+                                                                        <dd>The date the file being uploaded was generated</dd>
+                                                                        <dt>Data Type</dt>
+                                                                        <dd>ISO-8601 date</dd>
+                                                                    </dl>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                CDE: SubmittingSiteID
+                                                                <div class='tree_view_annotation'>
+                                                                    <h3>SubmittingSiteID</h3>
+                                                                    <dl>
+                                                                        <dt>Required</dt>
+                                                                        <dd>Yes</dd>
+                                                                        <dt>Purpose</dt>
+                                                                        <dd>The institutionID(s)that is submitting the data</dd>
+                                                                        <dt>Data Type</dt>
+                                                                        <dd>Numeric</dd>
+                                                                    </dl>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                CDE: SubmittingPersonID
+                                                                <div class='tree_view_annotation'>
+                                                                    <h3>SubmittingPersonID</h3>
+                                                                    <dl>
+                                                                        <dt>Required</dt>
+                                                                        <dd>Yes</dd>
+                                                                        <dt>Purpose</dt>
+                                                                        <dd>The lead person submitting the data</dd>
+                                                                        <dt>Data Type</dt>
+                                                                        <dd>Numeric</dd>
+                                                                    </dl>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                CDE: ProcessingLevel
+                                                                <div class='tree_view_annotation'>
+                                                                    <h3>ProcessingLevel</h3>
+                                                                    <dl>
+                                                                        <dt>Required</dt>
+                                                                        <dd>Yes</dd>
+                                                                        <dt>Purpose</dt>
+                                                                        <dd>The amount of processing done on the data</dd>
+                                                                        <dt>Data Type</dt>
+                                                                        <dd>
+                                                                            Permissible values:
+                                                                            <ul>
+                                                                                <li>Raw</li>
+                                                                                <li>Intermediate</li>
+                                                                                <li>Processed</li>
+                                                                            </ul>
+                                                                        </dd>
+                                                                    </dl>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                CDE: ContentType
+                                                                <div class='tree_view_annotation'>
+                                                                    <h3>ContentType</h3>
+                                                                    <dl>
+                                                                        <dt>Required</dt>
+                                                                        <dd>Yes</dd>
+                                                                        <dt>Purpose</dt>
+                                                                        <dd>The kind of data</dd>
+                                                                        <dt>Data Type</dt>
+                                                                        <dd>
+                                                                            Permissible values:
+                                                                            <ul>
+                                                                                <li>Clinical</li>
+                                                                                <li>Biospecimen</li>
+                                                                                <li>SOP</li>
+                                                                                <li>Documentation</li>
+                                                                                <li>Instrument Output</li>
+                                                                                <li>Metadata</li>
+                                                                                <li>Ancillary Data</li>
+                                                                                <li>Summary</li>
+                                                                            </ul>
+                                                                        </dd>
+                                                                    </dl>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                        <em>Contained Objects</em>
+                                                        <div class='tree_view_annotation'>
+                                                            <h3>Objects Within Core Files</h3>
+                                                            <p>Core files do not contain child objects.</p>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li>Pathology Imaging Extension</li>
+                                            <li>BRSI Imaging Extension</li>
+                                            <li>DICOM Extension</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li>Other CDEs
+        <div class='tree_view_annotation'>
+            <h3>Other CDEs</h3>
+            <p>
+                TBD.
+            </p>
+        </div>
+        <ul>
+            <li>TBD</li>
+        </ul>
+    </li>
+</ul>

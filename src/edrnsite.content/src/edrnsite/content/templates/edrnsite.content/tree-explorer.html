@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags %}
+{% block extra_css %}
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.15/themes/default/style.min.css' rel='stylesheet'/>
+{% endblock extra_css %}
+{% block header_scripts %}
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.15/jstree.min.js'></script>
+{% endblock header_scripts %}
+{% block content %}
+    <div class='row'>
+        <div class='col-md-8 offset-md-0'>
+            <h1>{{page.title}}</h1>
+        </div>
+    </div>
+    <p class='row'>
+        {# intro body #}
+    </p>
+    <div class='row mb-3'>
+        <div id='jstree_goes_here' class='col-sm-6 col-md-6'>
+            {% if page.demo_mode == 'compact' %}
+                {% include 'edrnsite.content/includes/compact-tree.html' %}
+            {% elif page.demo_mode == 'full' %}
+                {% include 'edrnsite.content/includes/full-tree.html' %}
+            {% else %}
+                <ul>
+                    <li>Unknown tree</li>
+                </ul>
+            {% endif %}
+        </div>
+        <div id='details' class='col-sm-6 col-md-6'></div>
+    </div>
+{% endblock content %}
+
+{% block extra_js %}
+    <script>
+        $(function () {
+            $('#jstree_goes_here')
+                .on(
+                    'changed.jstree', function(e, data) {
+                        console.log('My node id = ' +  data.node.id);
+                        let selector = '#' + data.node.id + ' .tree_view_annotation';
+                        console.log('Selector is therefore = ' + selector);
+                        let annotation = $(selector).html();
+                        if (annotation === undefined) annotation = '';
+                        console.log('And the html there = %o ', annotation);
+                        $('#details').html(annotation);
+                    }
+                )
+                .jstree({
+                    'plugins': ['wholerow'],
+                    'core': {
+                        'multiple': false,
+                        'themes': {
+                            'variant': 'large',
+                            'responsive': true,
+                            'icons': true,
+                            'ellipsis': false,
+                            'stripes': false
+                        }
+                    },
+                    'search': {
+                        'fuzzy': true
+                    }
+                });
+            // 🔮 TODO: add search box
+        });
+    </script>
+{% endblock extra_js %}
+</div>
+{# -*- Django HTML -*- #}

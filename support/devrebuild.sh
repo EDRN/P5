@@ -46,13 +46,15 @@ createdb "edrn" 'P5 for the Early Detection Research Network'
 rsync --checksum --no-motd --recursive --delete --progress tumor.jpl.nasa.gov:/usr/local/edrn/portal/ops-nci/media .
 scp tumor.jpl.nasa.gov:/usr/local/edrn/portal/ops-nci/edrn.sql.bz2 .
 bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --quiet
+
 ./manage.sh makemigrations
 ./manage.sh migrate
 ./manage.sh collectstatic --no-input --clear --link
 ./manage.sh edrndevreset
-./manage.sh edrn_forms
+./manage.sh edrn_explorer
 # This may be optional if you want to save time:
 ./manage.sh rdfingest
+./manage.sh clear_cache --all
 
 echo '🏁 Done! You can start it with:'
 echo './manage.sh runserver 6468'

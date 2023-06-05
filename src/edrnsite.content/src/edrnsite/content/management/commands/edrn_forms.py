@@ -10,10 +10,9 @@ from wagtail.documents.models import Document
 from wagtail.models import Page, PageViewRestriction
 from wagtail.rich_text import RichText
 from edrnsite.content.models import (
-    MetadataCollectionFormPage, DatasetMetadataFormPage, FlexPage, PostmanAPIPage, TaxonomyPage
+    MetadataCollectionFormPage, DatasetMetadataFormPage, FlexPage, PostmanAPIPage, SantiagoTaxonomyPage,
+    TreeExplorerPage
 )
-
-
 import pkg_resources
 
 
@@ -92,17 +91,31 @@ class Command(BaseCommand):
 
     def _install_taxonomy(self, home_page):
         self.stdout.write('Installing LabCAS taxonomy diagram')
-        TaxonomyPage.objects.all().delete()
+        SantiagoTaxonomyPage.objects.all().delete()
         dest = FlexPage.objects.descendant_of(home_page).filter(slug='labcas-metadata-and-common-data-elements').first()
         assert dest is not None
         with pkg_resources.resource_stream(__name__, 'content/labcas-tax.js') as io:
             file = File(io, name='labcas-tax.js')
             doc = Document(title='LabCAS Taxonomy JavaScript', file=file)
             doc.save()
-        page = TaxonomyPage(title='LabCAS API Taxonomy', taxonomy=doc, live=True, show_in_menus=False)
+        page = SantiagoTaxonomyPage(
+            title='LabCAS CDE Taxonomy', taxonomy=doc, live=True, show_in_menus=False,
+            search_description='A branching view of the LabCAS Common Data Elements.'
+        )
         dest.add_child(instance=page)
         page.save()
         self._append_link_to_page(dest, 'LabCAS Taxonomy', page)
+
+        self.stdout.write('Installing CDE explorer')
+        TreeExplorerPage.objects.all().delete()
+        dest.refresh_from_db()
+        page = TreeExplorerPage(
+            title='CDE Explorer', live=True, show_in_menus=False,
+            search_description='A tree-like explorer of Common Data Elements (CDEs).'
+        )
+        dest.add_child(instance=page)
+        page.save()
+        self._append_link_to_page(dest, 'CDE Explorer', page)
 
     def handle(self, *args, **options):
         self.stdout.write('Moving existing metadata forms to the LabCAS CDE page')

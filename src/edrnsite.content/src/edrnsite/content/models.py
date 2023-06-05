@@ -15,6 +15,7 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from edrnsite.streams import blocks
 from modelcluster.fields import ParentalKey
+from modelcluster.models import ClusterableModel
 from wagtail import blocks as wagtail_core_blocks
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
 from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
@@ -204,13 +205,37 @@ class CaptchaEmailFormField(LimitedFormField):
     page = ParentalKey(CaptchaEmailForm, on_delete=models.CASCADE, related_name='form_fields')
 
 
-class TaxonomyPage(Page):
-    page_description = 'A page that displays an interactive taxonomy'
+class SantiagoTaxonomyPage(Page):
+    page_description = "A page that displays an interactive taxonomy using Santiago's D3 JavaScript"
     template = 'edrnsite.content/taxonomy-page.html'
     taxonomy = models.ForeignKey(
         'wagtaildocs.Document', null=True, blank=False, verbose_name='Taxonomy JavaScript file',
         on_delete=models.SET_NULL, related_name='taxonomy_page')
     content_panels = Page.content_panels + [FieldPanel('taxonomy')]
+
+
+class TreeExplorerPage(Page):
+    page_description = 'A page that displays an interactive explorer-like interface'
+    template = 'edrnsite.content/tree-explorer.html'
+    DEMO_MODES = [
+        ('compact', 'Compact'),
+        ('full', 'Full')
+    ]
+    demo_mode = models.CharField(max_length=7, null=False, blank=False, default='compact', choices=DEMO_MODES)
+    content_panels = [FieldPanel('demo_mode')]
+
+
+class MetadataObject(Page):
+    page_description = 'A kind of object defined with metadata attributes'
+    template = 'edrnsite.content/metadata-object.html'
+    content_panels = []
+
+
+class MetadataSet(Page):
+    page_description = 'A page that shows common data elements as part of a set of metadata'
+    template = 'edrnsite.content/metadata-page.html'
+    content_panels = []
+    subpage_types = [MetadataObject]
 
 
 class PostmanAPIPage(Page):
