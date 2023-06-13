@@ -101,7 +101,7 @@ services:
     #
     # Port 5432, non-published.
     db:
-        image: postgres:15.2-alpine3.17
+        image: postgres:15.3-alpine3.18
         volumes:
             -
                 type: bind
@@ -123,7 +123,7 @@ services:
     #
     # Port 6379, not published.
     cache:
-        image: redis:7.0.9-alpine3.17
+        image: redis:7.0.11-alpine3.18
         networks:
             -   lattice
         restart: on-failure
@@ -136,7 +136,7 @@ services:
     #
     # Ports 9200 and 9300, not published.
     search:
-        image: elasticsearch:7.17.9
+        image: elasticsearch:7.17.10
         # :crystal-ball-emoji: TODO: user ID 500/26013 issue … do we need a custom elasticsearch image?
         volumes:
             -
