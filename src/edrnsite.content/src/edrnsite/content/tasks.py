@@ -13,7 +13,7 @@ def do_send_email(from_addr, to, subject, body, attachment, delay):
     _logger.info('Sending email to "%s" from "%s" with delay %d', to, from_addr, delay)
     time.sleep(delay)
     if attachment:
-        a = [(attachment['name'], attachment['data'], attachment['content_type'])]
+        a = [(attachment['name'], base64.b64decode(attachment['data']), attachment['content_type'])]
         _logger.info('Making EmailMessage, subject = %s', subject)
         _logger.info('from_email = %s', from_addr)
         _logger.info('to = %r', to)
