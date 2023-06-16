@@ -17,7 +17,7 @@ def do_send_email(from_addr, to, subject, body, attachment, delay):
         _logger.info('Making EmailMessage, subject = %s', subject)
         _logger.info('from_email = %s', from_addr)
         _logger.info('to = %r', to)
-        _logger.info('attachents = %r', a)
+        _logger.info('attachments = %r', a)
         _logger.info('body = %s', body)
         message = EmailMessage(subject=subject, from_email=from_addr, to=to, attachments=a, body=body)
     else:
