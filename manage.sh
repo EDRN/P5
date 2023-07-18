@@ -22,7 +22,7 @@ fi
 
 if [ ! -d ".venv" ]; then
     echo "⚠️ Local Python virtual environment missing; attempting to re-create it" 1>&2
-    python3.10 -m venv .venv
+    python3.11 -m venv .venv
     .venv/bin/pip install --quiet --upgrade setuptools pip wheel build
     # We cannot do these in one command; it results in pip expanding the `eke` directory in the .venv
     # and no longer being in "editable" mode.
@@ -42,7 +42,7 @@ if [ ! -d ".venv" ]; then
     .venv/bin/pip install --editable 'src/edrnsite.test[dev]'
 
     # When wagtail/wagtail#10184 is fixed, we can remove this:
-    patch --directory ${PWD}/.venv/lib/python3.10/site-packages --input ${PWD}/patches/wagtail-users-utils.patch --strip 0
+    patch --directory ${PWD}/.venv/lib/python3.11/site-packages --input ${PWD}/patches/wagtail-users-utils.patch --strip 0
 fi
 
 command="$1"
