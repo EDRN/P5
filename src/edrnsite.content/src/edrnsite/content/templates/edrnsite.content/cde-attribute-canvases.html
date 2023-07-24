@@ -1,0 +1,8 @@
+{% load edrnsite_content_tags %}
+{% for attribute in attributes %}
+    {% render_cde_attribute_canvas attribute %}
+{% endfor %}
+{% for child in children %}
+    {% render_cde_attribute_canvases child %}
+{% endfor %}
+{# -*- Django HTML -*- #}

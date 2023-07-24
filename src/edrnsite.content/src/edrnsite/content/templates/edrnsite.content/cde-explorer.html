@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags edrnsite_content_tags %}
+{% block extra_css %}
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.15/themes/default/style.min.css' rel='stylesheet'/>
+{% endblock extra_css %}
+{% block header_scripts %}
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.15/jstree.min.js'></script>
+{% endblock header_scripts %}
+{% block content %}
+    <div class='row'>
+        <div class='col-md-12'>
+            {% if request.user.is_staff or request.user.is_superuser %}
+                {% if page.spreadsheet_id %}
+                    <div class='float-end'>
+                        <a href='{{page.url}}?update=true' role='button' class='btn btn-primary'>Update from Google Drive</a>
+                    </div>
+                {% endif %}
+            {% endif %}
+            <h1>{{page.title}}</h1>
+        </div>
+        {% if request.user.is_staff or request.user.is_superuser %}
+            {% if page.spreadsheet_id %}
+                <div class='row'>
+                    <div class='col-md-12'>
+                        <p>
+                            <a class='btn btn-primary' data-bs-toggle='collapse' href='#log-file' role='button'
+                                aria-expanded='false' aria-controls='log-file'>
+                                View Update Log
+                            </a>
+                        </p>
+                        <div class='collapse' id='log-file'>
+                            <div class='card card-body'>
+                                {% if page.update_log %}
+                                    <pre>{{page.update_log}}</pre>
+                                {% else %}
+                                    <p class='small'>No update log available</p>
+                                {% endif %}
+                                <p class='small'>
+                                    (Note: this information appears to content editors only.)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+    <p class='row'>
+        {# intro body? #}
+        {% if page.spreadsheet_id %}
+            <a href='https://docs.google.com/spreadsheets/d/{{page.spreadsheet_id}}/' class>
+                <i class="bi bi-box-arrow-up-right"></i> View as a spreadsheet
+            </a>
+        {% endif %}
+    </p>
+
+    <div class='row mb-3'>
+        <div id='jstree_goes_here' class='col-sm-6 col-md-6'>
+            <ul>
+                {% for root in page.root_objects.all %}
+                    {% render_cde_node root %}
+                {% endfor %}
+            </ul>
+        </div>
+        <div id='details' class='col-sm-6 col-md-6'></div>
+    </div>
+
+{% for root in page.root_objects.all %}
+    {% render_cde_attribute_canvases root %}
+{% endfor %}
+
+{% endblock content %}
+
+{% block extra_js %}
+    <script>
+        $(function () {
+            $('#jstree_goes_here')
+                .on(
+                    'changed.jstree', function(e, data) {
+                        let selector = '#' + data.node.id + ' .tree_view_annotation';
+                        let annotation = $(selector).html();
+                        if (annotation === undefined) annotation = '';
+                        $('#details').html(annotation);
+                    }
+                )
+                .jstree({
+                    'plugins': ['wholerow'],
+                    'core': {
+                        'multiple': false,
+                        'themes': {
+                            'variant': 'large',
+                            'responsive': true,
+                            'icons': false,
+                            'ellipsis': false,
+                            'stripes': false
+                        }
+                    },
+                    'search': {
+                        'fuzzy': true
+                    }
+                });
+            // 🔮 TODO: add search box
+        });
+
+    </script>
+{% endblock extra_js %}
+
+{# -*- Django HTML -*- #}

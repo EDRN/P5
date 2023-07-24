@@ -3,19 +3,19 @@
 '''😌 EDRN site content's models.'''
 
 
-from ._dataset_metadata_form import DatasetMetadataFormPage  # noqa
-from ._metadata_collection_form import MetadataCollectionFormPage  # noqa
-from ._spec_ref_set_form import SpecimenReferenceSetRequestFormPage  # noqa
+from ._dataset_metadata_form import DatasetMetadataFormPage  # noqa: F401
+from ._metadata_collection_form import MetadataCollectionFormPage  # noqa: F401
+from ._spec_ref_set_form import SpecimenReferenceSetRequestFormPage  # noqa: F401
+from ._explorer import CDEExplorerPage, CDEExplorerObject, CDEExplorerAttribute, CDEPermissibleValue  # noqa: F401
 from django import forms
-from django.db import models
 from django.conf import settings
+from django.db import models
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from edrnsite.streams import blocks
 from modelcluster.fields import ParentalKey
-from modelcluster.models import ClusterableModel
 from wagtail import blocks as wagtail_core_blocks
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
 from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
@@ -205,37 +205,41 @@ class CaptchaEmailFormField(LimitedFormField):
     page = ParentalKey(CaptchaEmailForm, on_delete=models.CASCADE, related_name='form_fields')
 
 
-class SantiagoTaxonomyPage(Page):
-    page_description = "A page that displays an interactive taxonomy using Santiago's D3 JavaScript"
-    template = 'edrnsite.content/taxonomy-page.html'
-    taxonomy = models.ForeignKey(
-        'wagtaildocs.Document', null=True, blank=False, verbose_name='Taxonomy JavaScript file',
-        on_delete=models.SET_NULL, related_name='taxonomy_page')
-    content_panels = Page.content_panels + [FieldPanel('taxonomy')]
+# Turns out we are not going to use this
+# class SantiagoTaxonomyPage(Page):
+#     page_description = "A page that displays an interactive taxonomy using Santiago's D3 JavaScript"
+#     template = 'edrnsite.content/taxonomy-page.html'
+#     taxonomy = models.ForeignKey(
+#         'wagtaildocs.Document', null=True, blank=False, verbose_name='Taxonomy JavaScript file',
+#         on_delete=models.SET_NULL, related_name='taxonomy_page')
+#     content_panels = Page.content_panels + [FieldPanel('taxonomy')]
 
 
-class TreeExplorerPage(Page):
-    page_description = 'A page that displays an interactive explorer-like interface'
-    template = 'edrnsite.content/tree-explorer.html'
-    DEMO_MODES = [
-        ('compact', 'Compact'),
-        ('full', 'Full')
-    ]
-    demo_mode = models.CharField(max_length=7, null=False, blank=False, default='compact', choices=DEMO_MODES)
-    content_panels = [FieldPanel('demo_mode')]
+# Turns out we are not going to use this
+# class TreeExplorerPage(Page):
+#     page_description = 'A page that displays an interactive explorer-like interface'
+#     template = 'edrnsite.content/tree-explorer.html'
+#     DEMO_MODES = [
+#         ('compact', 'Compact'),
+#         ('full', 'Full')
+#     ]
+#     demo_mode = models.CharField(max_length=7, null=False, blank=False, default='compact', choices=DEMO_MODES)
+#     content_panels = [FieldPanel('demo_mode')]
 
 
-class MetadataObject(Page):
-    page_description = 'A kind of object defined with metadata attributes'
-    template = 'edrnsite.content/metadata-object.html'
-    content_panels = []
+# Delete this# Turns out we are not going to use this
+# class MetadataObject(Page):
+#     page_description = 'A kind of object defined with metadata attributes'
+#     template = 'edrnsite.content/metadata-object.html'
+#     content_panels = []
 
 
-class MetadataSet(Page):
-    page_description = 'A page that shows common data elements as part of a set of metadata'
-    template = 'edrnsite.content/metadata-page.html'
-    content_panels = []
-    subpage_types = [MetadataObject]
+# Delete this# Turns out we are not going to use this
+# class MetadataSet(Page):
+#     page_description = 'A page that shows common data elements as part of a set of metadata'
+#     template = 'edrnsite.content/metadata-page.html'
+#     content_panels = []
+#     subpage_types = [MetadataObject]
 
 
 class PostmanAPIPage(Page):

@@ -1,0 +1,33 @@
+{% load wagtailcore_tags edrnsite_content_tags %}
+<li>
+    {{name}}
+    <div class='tree_view_annotation'>
+        <h3>{{name}}</h3>
+        {% if description %}
+            <p>{{description}}</p>
+        {% else %}
+            <p class='small'>(No description of this object is available.)</p>
+        {% endif %}
+
+        <h4>Attributes</h4>
+        {% if attributes %}
+            <p style='line-height: 2rem;'>
+                {% for attribute in attributes %}
+                    {% render_cde_attribute_button attribute %}
+                {% endfor %}
+            </p>
+        {% else %}
+            <p class='small'>(This object has no attributes defined at this time.)</p>
+        {% endif %}
+    </div>
+    {% if children %}
+        <ul>
+            {% for child in children %}
+                {% render_cde_node child %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+</li>
+
+
+{# -*- Django HTML -*- #}
