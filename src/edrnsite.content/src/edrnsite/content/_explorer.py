@@ -91,7 +91,8 @@ class CDEExplorerPage(Page):
         fd, fn = tempfile.mkstemp('.xlsx')
         os.close(fd)
         self._log(f'Downloading {self.spreadsheet_id} from Gdrive')
-        gdown.download(id=self.spreadsheet_id, output=fn, quiet=True, format='xlsx')
+        # use_cookies must be False to work on tumor.jpl.nasa.gov
+        gdown.download(id=self.spreadsheet_id, output=fn, quiet=True, use_cookies=False, format='xlsx')
         return fn
 
     def _parse_attributes(self, name, sheet):
