@@ -1,6 +1,7 @@
 {% load wagtailcore_tags edrnsite_content_tags %}
-<a class='btn btn-outline-primary btn-sm' data-bs-toggle='offcanvas' href='#{{id}}' role='button'
+<a class='btn btn-sm{% if required %} btn-outline-danger{% else %} btn-outline-primary{% endif %}'
+    data-bs-toggle='offcanvas' href='#{{id}}' role='button'
     data-bs-target='#{{id}}' aria-controls='{{id}}'>
-    {{text}}
+    {% if required %}<i class='bi bi-key-fill'></i>{% endif %} {{text}}
 </a>
 {# -*- Django HTML -*- #}

@@ -67,6 +67,11 @@ class CDEExplorerPage(Page):
 
     content_panels = Page.content_panels + [FieldPanel('spreadsheet_id')]
 
+    def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
+        context = super().get_context(request, args, kwargs)
+        context['root_objects'] = self.root_objects.all().order_by('name')
+        return context
+
     def _log(self, message):
         '''Log a timestampped message to our update log and also to the _logger.'''
         _logger.warning(message)
@@ -92,7 +97,11 @@ class CDEExplorerPage(Page):
         os.close(fd)
         self._log(f'Downloading {self.spreadsheet_id} from Gdrive')
         # use_cookies must be False to work on tumor.jpl.nasa.gov
-        gdown.download(id=self.spreadsheet_id, output=fn, quiet=True, use_cookies=False, format='xlsx')
+        fn = gdown.download(id=self.spreadsheet_id, output=fn, quiet=True, use_cookies=False, format='xlsx')
+        # gdown doesn't raise an exception on error, but returns None as the filename—even when we pass
+        # in the filename we want to use; see wkentaro/gdown#276
+        if fn is None:
+            raise ValueError('Error reading from gdown; check console log as gdown does not pass this info along')
         return fn
 
     def _parse_attributes(self, name, sheet):
@@ -148,7 +157,7 @@ class CDEExplorerPage(Page):
         self._log(f'Total root objects: {len(roots)}: {", ".join([i.name for i in roots])}')
         return roots
 
-    def _update_nodes(self):
+    def update_nodes(self):
         '''Update the CDE nodes of this page.
 
         ⚠️ Not re-entrant!
@@ -189,7 +198,7 @@ class CDEExplorerPage(Page):
         if request.GET.get('update') == 'true':
             if request.user.is_staff or request.user.is_superuser:
                 if self.spreadsheet_id:
-                    return HttpResponseRedirect(self._update_nodes())
+                    return HttpResponseRedirect(self.update_nodes())
                 else:
                     # No way to get here unless you have permissions and manually craft the request
                     return HttpResponse("No spreadsheet ID defined")

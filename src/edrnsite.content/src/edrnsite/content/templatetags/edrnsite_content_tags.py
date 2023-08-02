@@ -23,7 +23,7 @@ def render_cde_node(node: CDEExplorerObject) -> dict:
         'name': node.name,
         'description': node.description,
         'attributes': node.attributes.all(),
-        'children': node.children.all()
+        'children': node.children.all().order_by('name')
     }
 
 
@@ -31,7 +31,8 @@ def render_cde_node(node: CDEExplorerObject) -> dict:
 def render_cde_attribute_button(attribute: CDEExplorerAttribute) -> dict:
     return {
         'id': f'cde-{slugify(attribute.obj.name)}-{slugify(attribute.text)}',
-        'text': attribute.text
+        'text': attribute.text,
+        'required': attribute.required == 'Required'
     }
 
 

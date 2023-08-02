@@ -9,15 +9,14 @@
             <p class='small'>(No description of this object is available.)</p>
         {% endif %}
 
-        <h4>Attributes</h4>
         {% if attributes %}
+            <h4>Attributes</h4>
+            <p class='small'>Attributes shown with <i class='text-danger bi bi-key-fill'></i> are <em>required</em>.</p>
             <p style='line-height: 2rem;'>
                 {% for attribute in attributes %}
                     {% render_cde_attribute_button attribute %}
                 {% endfor %}
             </p>
-        {% else %}
-            <p class='small'>(This object has no attributes defined at this time.)</p>
         {% endif %}
     </div>
     {% if children %}

@@ -28,24 +28,25 @@ class Command(BaseCommand):
                 dest.body.append(('rich_text', RichText(block['value'])))
             else:
                 raise ValueError(f'Unexpected block type {block["type"]}')
-        dest.body.append(('rich_text', RichText(f'<p><a id="{page.pk}" linktype="page">{link_text}</a></p>')))
+        dest.body.append(('rich_text', RichText(f'<p><strong>New</strong>: explore the <a id="{page.pk}" linktype="page">{link_text}</a>.</p>')))
         dest.save()
 
     def _install_cde_explorer(self, home_page):
         self.stdout.write('Installing the official CDE Explorer')
 
         CDEExplorerPage.objects.all().delete()
-        dest = FlexPage.objects.descendant_of(home_page).filter(slug='labcas-metadata-and-common-data-elements').first()
+        dest = FlexPage.objects.descendant_of(home_page).filter(slug='cde').first()
         assert dest is not None
 
         page = CDEExplorerPage(
-            title='LabCAS CDEs', live=True, show_in_menus=False,
-            spreadsheet_id='1xrtQkEO0kkuJQbK7cqQR70sep_prsL_X3vvCU-dT3a0',
-            search_description='A tree-like explorer of the Common Data Elements (CDEs) of LabCAS.',
+            title='EDRN Data Model', live=True, show_in_menus=False,
+            spreadsheet_id='1PAVUvmi0J-j6fK5dpltRIW8vRzVjh4kzpNReGFOQIe4',
+            search_description='A tree-like explorer of the Common Data Elements (CDEs) of the Early Detection Research Network.',
         )
         dest.add_child(instance=page)
         page.save()
-        self._append_link_to_page(dest, 'LabCAS CDE Explorer', page)
+        page.update_nodes()
+        self._append_link_to_page(dest, 'EDRN Data Model', page)
 
     def handle(self, *args, **options):
         self.stdout.write('Installing explorers')
