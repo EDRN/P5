@@ -32,7 +32,8 @@ def render_cde_attribute_button(attribute: CDEExplorerAttribute) -> dict:
     return {
         'id': f'cde-{slugify(attribute.obj.name)}-{slugify(attribute.text)}',
         'text': attribute.text,
-        'required': attribute.required == 'Required'
+        'required': attribute.required == 'Required',
+        'inheritance': attribute.inheritance
     }
 
 
@@ -53,5 +54,6 @@ def render_cde_attribute_canvas(attribute: CDEExplorerAttribute) -> dict:
         'required': attribute.required,
         'data_type': attribute.data_type,
         'note': attribute.explanatory_note,
-        'pvs': attribute.permissible_values.all()
+        'pvs': attribute.permissible_values.all(),
+        'inheritance': attribute.inheritance
     }

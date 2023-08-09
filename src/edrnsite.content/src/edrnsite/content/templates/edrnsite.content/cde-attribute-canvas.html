@@ -24,6 +24,14 @@
                     <small>(Information not provided.)</small>
                 {% endif %}
             </dd>
+            <dt>Inheritance</dt>
+            <dd>
+                {% if inheritance %}
+                    If no values are specified, this attribute inherits values from other objects.
+                {% else %}
+                    This attribute does not inherit values from other objects.
+                {% endif %}
+            </dd>
             <dt>Data Type</dt>
             <dd>
                 {% if data_type %}

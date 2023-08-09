@@ -11,7 +11,10 @@
 
         {% if attributes %}
             <h4>Attributes</h4>
-            <p class='small'>Attributes shown with <i class='text-danger bi bi-key-fill'></i> are <em>required</em>.</p>
+            <p class='small'>
+                Attributes shown with <i class='text-danger bi bi-key-fill'></i> are <em>required</em>, while
+                those with <i class="text-secondary bi bi-box-seam"></i> inherit values from other objects.
+            </p>
             <p style='line-height: 2rem;'>
                 {% for attribute in attributes %}
                     {% render_cde_attribute_button attribute %}

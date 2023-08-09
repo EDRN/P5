@@ -1,7 +1,14 @@
 {% load wagtailcore_tags edrnsite_content_tags %}
-<a class='btn btn-sm{% if required %} btn-outline-danger{% else %} btn-outline-primary{% endif %}'
+<a class='btn btn-sm
+    {% if required %}
+        btn-outline-danger
+    {% elif inheritance %}
+        btn-outline-secondary
+    {% else %}
+        btn-outline-primary
+    {% endif %}'
     data-bs-toggle='offcanvas' href='#{{id}}' role='button'
     data-bs-target='#{{id}}' aria-controls='{{id}}'>
-    {% if required %}<i class='bi bi-key-fill'></i>{% endif %} {{text}}
+    {% if required %}<i class='bi bi-key-fill'></i>{% endif %}{% if inheritance %}<i class="bi bi-box-seam"></i>{% endif %} {{text}}
 </a>
 {# -*- Django HTML -*- #}

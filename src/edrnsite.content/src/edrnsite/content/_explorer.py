@@ -22,12 +22,13 @@ class _Attribute:
     data_type: str
     explanatory_note: str
     permissible_values: list[str]
+    inheritance: bool
     def __hash__(self):
         return hash(self.text)
     def instantiate(self, obj):
         attr_obj = CDEExplorerAttribute(
             text=self.text, definition=self.definition, required=self.required, data_type=self.data_type,
-            explanatory_note=self.explanatory_note, obj=obj
+            explanatory_note=self.explanatory_note, obj=obj, inheritance=self.inheritance
         )
         attr_obj.save()
         for pv in self.permissible_values:
@@ -106,13 +107,15 @@ class CDEExplorerPage(Page):
 
     def _parse_attributes(self, name, sheet):
         '''Using the data in ``sheet``, find the tab ``name`` and get all the attributes there.'''
+        self._log(f'Parsing attributes in tab "{name}"')
+
         frame = sheet[name]
         row_number, attrs = 0, []
         for text in frame['Text']:
             # Gather data from the spreadsheet tab
             pvs_text, defn = frame['Permissible Values'][row_number], frame['Definition'][row_number]
             req, dt = frame['Requirement'][row_number], frame['Data Type'][row_number]
-            note = frame['Explanatory Note'][row_number]
+            note, inheritance = frame['Explanatory Note'][row_number], frame['Inheritance'][row_number]
 
             # Handle the empty cells
             pvs  = [] if pandas.isna(pvs_text) else [i.strip() for i in pvs_text.split('\n')]
@@ -120,9 +123,10 @@ class CDEExplorerPage(Page):
             req  = '' if pandas.isna(req) else req
             dt   = '' if pandas.isna(dt) else dt
             note = '' if pandas.isna(note) else note
+            inh  = False if pandas.isna(inheritance) else inheritance
 
             # Create the temporary attribute and add it to the sequence
-            attrs.append(_Attribute(text, defn, req, dt, note, pvs))
+            attrs.append(_Attribute(text, defn, req, dt, note, pvs, inh))
             row_number += 1
         return attrs
 
@@ -225,13 +229,15 @@ class CDEExplorerAttribute(models.Model):
     required = models.CharField(null=False, blank=True, max_length=50, help_text='Required, not, or something else?')
     data_type = models.CharField(null=False, blank=True, max_length=30, help_text='Kind of data')
     explanatory_note = models.TextField(null=False, blank=True, help_text='Note helping explain use of the CDE')
+    inheritance = models.BooleanField(null=False, blank=False, default=False, help_text='Attribute inherits values')
     panels = [
         FieldPanel('text'),
         FieldPanel('obj'),
         FieldPanel('definition'),
         FieldPanel('required'),
         FieldPanel('data_type'),
-        FieldPanel('explanatory_note')
+        FieldPanel('explanatory_note'),
+        FieldPanel('inheritance')
     ]
     def __str__(self):
         return self.text
