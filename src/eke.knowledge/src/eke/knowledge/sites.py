@@ -150,6 +150,9 @@ class Site(KnowledgeObject):
     investigators = ParentalManyToManyField(
         'ekeknowledge.Person', blank=True, verbose_name='Investigators', related_name='site_i_investigate',
     )
+    publications = ParentalManyToManyField(
+        Publication, blank=True, verbose_name='Publications made by this site', related_name='site_that_wrote_this'
+    )
     specialty = RichTextField(blank=True, null=False, help_text="What the site's really good at")
     proposal = models.CharField(
         blank=True, null=False, max_length=250, help_text='BDL-only proposal title that produced this site'
@@ -301,9 +304,7 @@ class Person(KnowledgeObject):
                 if protocol.finish_date: closed.append(protocol)
                 else: opened.append(protocol)
             context['opened'], context['closed'] = opened, closed
-
-            pubs = Publication.objects.filter(siteID=my_site.identifier).public().live().order_by(Lower('title'))
-            context['publications'] = pubs
+            context['publications'] = my_site.publications.order_by(Lower('title'))
         return context
 
 

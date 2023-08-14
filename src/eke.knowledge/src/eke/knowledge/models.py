@@ -5,7 +5,7 @@
 
 from .committees import CommitteeIndex
 from .knowledge import KnowledgeObject, KnowledgeFolder, RDFSource
-from .publications import Publication, PublicationIndex, PMCID
+from .publications import Publication, PublicationIndex, PMCID, PublicationSubjectURI
 from .bodysystems import BodySystem, BodySystemIndex
 from .diseases import Disease, DiseaseIndex
 from .miscresources import MiscellaneousResource, MiscellaneousResourceIndex
@@ -53,6 +53,7 @@ __all__ = [
     ProtocolIndex,
     Publication,
     PublicationIndex,
+    PublicationSubjectURI,
     RDFIngest,
     RDFSource,
     Site,

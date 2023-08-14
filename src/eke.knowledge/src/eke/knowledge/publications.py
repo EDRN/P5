@@ -6,28 +6,26 @@ from .utils import edrn_schema_uri as esu
 from .utils import Ingestor as BaseIngestor
 from Bio import Entrez
 from contextlib import closing
-from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import F, Q
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.utils.text import slugify
 from django_plotly_dash import DjangoDash
 from edrnsite.controls.models import Informatics
 from html import escape as html_escape
+from http.client import HTTPException
 from modelcluster.fields import ParentalKey
 from plotly.express import bar
 from rdflib import URIRef
 from urllib.error import HTTPError
-from urllib.parse import urlparse
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.fields import RichTextField
 from wagtail.models import Orderable
-from wagtail.models import Site
+from wagtail.models import Site as WagtailSite
 from wagtail.search import index
 import dash_core_components as dcc
 import dash_html_components as html
-import pandas, re, logging
+import pandas, re, logging, rdflib, time, random
 
 
 _logger = logging.getLogger(__name__)
@@ -52,10 +50,13 @@ class Publication(KnowledgeObject):
     pubMedID = models.CharField(max_length=20, blank=True, null=False, help_text='Entrez Medline ID code number')
     year = models.IntegerField(blank=True, null=True, help_text='Year of publication')
     pubURL = models.URLField(blank=True, null=False, help_text='URL to read the publication')
+
+    # siteID should be deleted and use the site_that_wrote_this relation instead
     siteID = models.CharField(
         max_length=MAX_URI_LENGTH, blank=True, null=False,
         help_text='RDF subject URI of site that wrote the publication'
     )
+
     abstract = RichTextField(
         'abstract',
         blank=True, null=False,
@@ -83,7 +84,6 @@ class Publication(KnowledgeObject):
         FieldPanel('pubMedID'),
         FieldPanel('year'),
         FieldPanel('pubURL'),
-        FieldPanel('siteID'),
         FieldPanel('abstract'),
         InlinePanel('authors', label='Authors')
     ]
@@ -105,198 +105,328 @@ class Publication(KnowledgeObject):
     #     }
 
 
+class PublicationSubjectURI(Orderable):
+    '''An RDF subject URI that is used to refer to a single publication.'''
+    identifier = models.CharField(
+        'Subject URI',
+        blank=False, null=False, primary_key=False, unique=True, max_length=MAX_URI_LENGTH,
+        help_text='RDF subject URI that uniquely identifies this object',
+    )
+    page = ParentalKey(Publication, on_delete=models.CASCADE, related_name='subject_uris')
+    panels = [FieldPanel('identifier')]
+    def __str__(self):
+        return self.identifier
+
+
 class Author(Orderable):
     '''An author of a publication.'''
     value = models.CharField(max_length=255, blank=False, null=False, default='Name', help_text='Author name')
     page = ParentalKey(Publication, on_delete=models.CASCADE, related_name='authors')
     panels = [FieldPanel('value')]
+    def __str__(self):
+        return self.value
 
 
 class Ingestor(BaseIngestor):
     '''Publications use a special ingest based on PubMedIDs and grant numbers, not the statements made in
     the RDF.
     '''
-    _pubMedIDExpr         = re.compile(r'[0-9]+')                 # What PubMed IDs should look like
-    _pubFetchSize         = 100                                   # How many pubs to get at once
-    _grantSearchSize      = 10                                    # How many grants to get at once
-    _pubMedPredicate      = URIRef(esu('pmid'))                   # RDF predicate for PubMed ID
-    _siteIDPredicate      = URIRef(esu('site'))                   # RDF predicate for site ID
-    _grantNumberURIPrefix = 'urn:edrn:knowledge:pub:via-grants:'  # How we'll identify pubs from grant numbers
+    _grant_search_size = 17                                                   # How many grants to get at once
+    _max_failures      = 5                                                    # Accept no more HTTP failures than this
+    _pub_med_predicate = URIRef(esu('pmid'))                                  # RDF predicate for PubMed ID
+    _pub_type          = 'http://edrn.nci.nih.gov/rdf/types.rdf#Publication'  # RDF type URI for publications
+    _pubmed_fetch_size = 67                                                   # How many pubs to get at once
+    _pubmed_pattern    = re.compile(r'[0-9]+')                                # What PubMed IDs should look like
+    _site_id_predicate = URIRef(esu('site'))                                  # RDF predicate for site ID
+    _wait_time         = 13                                                   # Seconds to wait between hitting API
 
-    def slugify(self, pubMedID: str, title: str, identifier: str) -> str:
+    # def slugify(self, pubMedID: str, title: str, identifier: str) -> str:
+    #     '''Make an appropriate URI slug component for a publication.'''
+    #     lastpath = urlparse(identifier).path.split('/')[-1]
+    #     return slugify(f'{pubMedID} {lastpath} {title}')[:MAX_SLUG_LENGTH]
+
+    def slugify(self, pubMedID: str, title: str) -> str:
         '''Make an appropriate URI slug component for a publication.'''
-        lastpath = urlparse(identifier).path.split('/')[-1]
-        return slugify(f'{pubMedID} {lastpath} {title}')[:MAX_SLUG_LENGTH]
+        return slugify(f'{pubMedID} {title}')[:MAX_SLUG_LENGTH]
 
-    def configureEntrez(self):
+    def configure_entrez(self):
         '''Set up the Entrez API.
 
         Before we attempt to access Entrez for PubMed info, we need to configure it with our tool ID
         and an email address.
         '''
-        informatics = Informatics.for_site(Site.objects.filter(is_default_site=True).first())
+        informatics = Informatics.for_site(WagtailSite.objects.filter(is_default_site=True).first())
         Entrez.tool = informatics.entrez_id
         Entrez.email = informatics.entrez_email
+        if informatics.entrez_api_key:
+            Entrez.api_key = informatics.entrez_api_key
 
-    def addPublicationsBasedOnGrantNumbers(self, subjectURItoPMIDs: dict):
-        '''Insert grant-based publications.
+    def miriam_uri(self, pmid: str) -> str:
+        '''Make a MIRIAM-style PubMed URI for the given ``pmid``.'''
+        return f'urn:miriam:pubmed:{pmid}'
 
-        This asks PubMed for publications based on the grant numbers in our PublicationIndex and adds
-        them to ``subjectURItoPMIDs``.
+    def parse_statements(self, statements: dict) -> tuple:
+        '''Parse the ``statements`` and return a triple of a set of discovered pubmed IDs,
+        a mapping of pubmed IDs to sets of site RDF URIs, and a mapping of pubmed IDs to sets
+        of RDF subject URIs.
         '''
+        pmids, pmids_to_sites, pmids_to_uris = set(), dict(), dict()
+
+        # Go through every subject
+        for subject, predicates in statements.items():
+            # First, make sure it's a publication being described
+            kind = predicates.get(rdflib.RDF.type, [''])[0].strip()
+            if kind != self._pub_type:
+                _logger.warning('Got a non-publication in publication RDF for subject %s; skipping', subject)
+                continue
+
+            # Next make sure there's a pubmed ID
+            pmid = predicates.get(self._pub_med_predicate, [''])[0].strip()
+            if not self._pubmed_pattern.match(pmid):
+                _logger.warning('Got a weird "pubmed" ID «%s» for subject %s that I am skipping', pmid, subject)
+                continue
+
+            # Good pubmed ID so far
+            pmids.add(pmid)
+
+            # Now get the site mentioned, if any. Note that the data from the DMCC is that there's only ever
+            # going to be one site, but that doesn't make sense in reality. So on the off chance there's multiple,
+            # let's handle that case.
+            site_ids = set([str(i).strip() for i in predicates.get(self._site_id_predicate, [])])
+            sites_so_far = pmids_to_sites.get(pmid, set())
+            sites_so_far |= site_ids
+            pmids_to_sites[pmid] = sites_so_far
+
+            # Do the same thing for subject URis
+            uris_so_far = pmids_to_uris.get(pmid, set())
+            uris_so_far.add(str(subject))
+            pmids_to_uris[pmid] = uris_so_far
+
+        return pmids, pmids_to_sites, pmids_to_uris
+
+    def get_pmids_fromt_grants(self) -> set:
+        '''Return the pubmed IDs for all the grant numbers specified in this folder.'''
+
+        pmids, last_group = set(), False
 
         # This list→set→list makes grant numbers unique and in sliceable form:
-        grantNumbers = list(set([i.value for i in self.folder.grant_numbers.all()]))
+        grant_numbers = list(set([i.value for i in self.folder.grant_numbers.all()]))
+        random.shuffle(grant_numbers)
+        if not grant_numbers:
+            _logger.info('No grant numbers found in %r; skipping grant number lookup', self.folder)
+            return pmids
 
-        if not grantNumbers:
-            _logger.info('No grant numbers in %r, so skipping lookup of additional pubs', self.folder)
-            return
-
-        currentPMIDs = set([i[0] for i in subjectURItoPMIDs.values()])  # What pub med IDs do we have so far?
-        missing      = set()                                            # And here's where we gather new ones
-
-        def divide(grantNumbers):
-            while len(grantNumbers) > 0:
-                group, grantNumbers = grantNumbers[:self._grantSearchSize], grantNumbers[self._grantSearchSize:]
+        # Batching
+        def divide():
+            '''Divide the grant_numbers in groups for API sensitivty.'''
+            nonlocal grant_numbers, last_group
+            while len(grant_numbers) > 0:
+                group, grant_numbers = grant_numbers[:self._grant_search_size], grant_numbers[self._grant_search_size:]
+                if len(grant_numbers) == 0:
+                    last_group = True
                 yield group
 
-        for group in divide(grantNumbers):
-            searchTerm = u' OR '.join([u'({}[Grant Number])'.format(i) for i in group])
+        # Find pmids for grant numbers
+        for group in divide():
+            _logger.info('Querying Entrez for grants «%r»', group)
+            search_term = u' OR '.join([u'({}[Grant Number])'.format(i) for i in group])
             # #80: PubMed API is really unreliable; try to press on even if it fails
             try:
                 # FIXME: This'll break if it returns more than 9999 publications 😅
-                with closing(Entrez.esearch(db='pubmed', rettype='medline', retmax=9999, term=searchTerm)) as es:
+                with closing(Entrez.esearch(db='pubmed', rettype='medline', retmax=9999, term=search_term)) as es:
                     record = Entrez.read(es)
                     if not record: continue
-                    pubMedIDs = set(record.get('IdList', []))
-                    if not pubMedIDs: continue
-                    missing |= pubMedIDs - currentPMIDs
-            except HTTPError as ex:
-                _logger.warning('Entrez search failed with %d for «%s» but pressing on', ex.getcode(), searchTerm)
-        for newPubMed in missing:
-            subjectURItoPMIDs[self._grantNumberURIPrefix + newPubMed] = (newPubMed, '')
+                    found = set(record.get('IdList', []))
+                    if not found: continue
+                    pmids |= found
+                    if last_group:
+                        # We're immediately going to do pubmed queries after these grant queries, so wait at
+                        # least a little bit after the last group instead of immediately relinquishing control.
+                        time.sleep(self._wait_time / 2)
+                    else:
+                        time.sleep(self._wait_time)
+            except (HTTPError, HTTPException) as ex:
+                _logger.warning('Entrez search failed for «%s» but pressing on', ex.getcode(), search_term)
 
-    def filterExistingPublications(self, subjectURItoPMIDs: dict):
-        '''Remove existing publications from the to-do list.
+        # That's it
+        return pmids
 
-        This finds all publications in our container by RDF subject URI and removes them from the
-        ``subjectURItoPMIDs`` dictionary.
-        '''
-        results = Publication.objects.child_of(self.folder).filter(identifier__in=subjectURItoPMIDs.keys())
-        for identifier in [i.identifier for i in results]:
-            try:
-                del subjectURItoPMIDs[identifier]
-            except KeyError:
-                # See https://github.com/EDRN/P5/issues/65
-                pass
-
-    def setAuthors(self, pub: Publication, medline):
-        '''Annotate the ``pub`` with author information in the ``medline``.'''
-        authorList = medline[u'MedlineCitation'][u'Article'].get(u'AuthorList', [])
+    def get_authors(self, record) -> list:
+        '''Get the authors from the given medline ``record``.'''
+        author_list = record['MedlineCitation']['Article'].get('AuthorList', [])
         names = []
-        for author in authorList:
-            lastName = author.get(u'LastName', None)
-            if not lastName:
-                initials = author.get(u'Initials', None)
+        for author in author_list:
+            last_name = author.get('LastName', None)
+            if not last_name:
+                initials = author.get('Initials', None)
                 if not initials: continue
-            initials = author.get(u'Initials', None)
-            name = u'{} {}'.format(lastName, initials) if initials else lastName
+            initials = author.get('Initials', None)
+            if last_name and initials:
+                name = f'{last_name} {initials}'
+            else:
+                name = last_name
             names.append(name)
         names.sort()
-        pub.authors.add(*[Author(value=i) for i in names])
+        return names
 
-    def createMissingPublications(self, subjectURItoPMIDs: dict) -> set:
-        '''Create publications described in ``subjectURItoPMIDs that are missing from our folder.
-
-        Return a set of newly created Publications.
+    def get_pubmed_details(self, pmids: set) -> dict:
+        '''Query Entrez for details about the publications identified in ``pmids``.
         '''
-        def divvy(mapping):
-            '''Divide the ``mapping`` into manageable groups.
 
-            This helps us avoid overwhelming the Entrez API.
-            '''
-            items = list(mapping.items())
-            while len(items) > 0:
-                group, items = items[:self._pubFetchSize], items[self._pubFetchSize:]
+        pmids, last_group, details = list(pmids), False, dict()
+        random.shuffle(pmids)
+
+        # Batching
+        def divide():
+            '''Divide the pubmed IDs into groups for API sensitivity.'''
+            nonlocal pmids, last_group
+            while len(pmids) > 0:
+                group, pmids = pmids[:self._pubmed_fetch_size], pmids[self._pubmed_fetch_size:]
+                if len(pmids) == 0:
+                    last_group = True
                 yield group
 
-        for group in divvy(subjectURItoPMIDs):
-            identifiers, pubInfo = [i[0] for i in group], [i[1] for i in group]
-            # At this point identifiers is a sequence of unicode subjectUrIs and
-            # pubInfo is a sequence of two-pair tuples of (unicode PubMedID, unicode site ID URI or None if unk)
-            pubInfoDict = dict(pubInfo)
-            # pubInfoDict is now a mapping of unicode PubMedID to unicode site ID URI (or None if unknwon)
-            pubMedIDs = list(pubInfoDict.keys())
-            # pubMedIDs is a sequence of unicode PubMedIDs
-            try:
-                with closing(Entrez.efetch(db='pubmed', retmode='xml', rettype='medline', id=pubMedIDs)) as ef:
-                    records = Entrez.read(ef)
-                    for i in zip(identifiers, records['PubmedArticle']):
-                        identifier, medline = str(i[0]), i[1]
-                        pubMedID = str(medline['MedlineCitation']['PMID'])
-                        # 🔮 TODO: find a better way to break these titles
-                        # And maybe keep a separate full_title attribute
-                        title = str(medline['MedlineCitation']['Article']['ArticleTitle'])[:250]
-                        slug = self.slugify(pubMedID, title, identifier)
-                        if Publication.objects.child_of(self.folder).filter(slug=slug).count() > 0:
-                            _logger.debug('Publication %s “%s” already exists, skipping', pubMedID, slug)
-                            continue
-                        abstract = medline['MedlineCitation']['Article'].get('Abstract')
-                        pub = Publication(
-                            title=title, seo_title=title, draft_title=title, live=True,
-                            slug=slug, identifier=identifier, pubMedID=pubMedID,
-                            search_description='This is a publication by a member of the Early Detection Research Network.'
-                        )
-                        if abstract:
-                            paragraphs = abstract.get('AbstractText', [])
-                            if len(paragraphs) > 0:
-                                pub.abstract = '\n'.join([u'<p>{}</p>'.format(html_escape(j)) for j in paragraphs])
-                        issue = medline['MedlineCitation']['Article']['Journal']['JournalIssue'].get('Issue')
-                        if issue: pub.issue = str(issue)
-                        volume = medline['MedlineCitation']['Article']['Journal']['JournalIssue'].get('Volume')
-                        if volume: pub.volume = str(volume)
-                        year = medline['MedlineCitation']['Article']['Journal']['JournalIssue']['PubDate'].get('Year')
-                        if year: pub.year = int(year)
-                        try:
-                            pub.journal = str(medline[u'MedlineCitation'][u'Article'][u'Journal'][u'ISOAbbreviation'])
-                        except KeyError:
-                            _logger.info(u'🤔 No journal with ISOAbbreviation available for pub %s', pubMedID)
-                            pub.journal = u'«unknown»'
-                        if pubInfoDict[pubMedID]: pub.siteID = pubInfoDict[pubMedID]
-                        self.setAuthors(pub, medline)
-                        self.folder.add_child(instance=pub)
-                        try:
-                            pub.save()
-                        except ValidationError:
-                            _logger.exception('Cannot save publication %s; pressing on', identifier)
-            except HTTPError as ex:
-                _logger.warning('Entrez retrieval failed with %d for «%r» but pressing on', ex.getcode(), pubMedIDs)
-                _logger.debug('Entrez failed URL was «%s»', ex.geturl())
-        return set()
+        for group in divide():
+            failures = 0
+            while True:
+                try:
+                    _logger.info('Querying Entrez for pmids «%r»', group)
+                    with closing(Entrez.efetch(db='pubmed', retmode='xml', rettype='medline', id=group)) as ef:
+                        records = Entrez.read(ef)
+                        for record in records['PubmedArticle']:
+                            pubmed_id = str(record['MedlineCitation']['PMID'])
+                            title = str(record['MedlineCitation']['Article']['ArticleTitle'])
+                            abstract = record['MedlineCitation']['Article'].get('Abstract')
+                            if abstract:
+                                paragraphs = abstract.get('AbstractText', [])
+                                if len(paragraphs) > 0:
+                                    abstract = '\n'.join([f'<p>{html_escape(str(j))}</p>' for j in paragraphs])
+                                else:
+                                    abstract = ''
+                            else:
+                                abstract = ''
+                            issue = str(record['MedlineCitation']['Article']['Journal']['JournalIssue'].get('Issue'))
+                            year = str(record['MedlineCitation']['Article']['Journal']['JournalIssue']['PubDate'].get('Year'))
+                            journal = str(record['MedlineCitation']['Article']['Journal']['ISOAbbreviation'])
+                            authors = self.get_authors(record)
+                            details[pubmed_id] = (title, abstract, issue, year, journal, authors)
+                        break
+                except (HTTPError, HTTPException) as ex:
+                    failures += 1
+                    if failures >= self._max_failures:
+                        raise RuntimeError(f'Too many failures ({failures})') from ex
+                    _logger.warning('Entrez failed for batch «%r»; will re-attempt', group)
+                    if hasattr(ex, 'geturl'):
+                        _logger.warning('Entrez failed URL was «%s»', ex.geturl())
+                    if hasattr(ex, 'getcode'):
+                        _logger.warning('Status code was %d', ex.getcode())
+                    time.sleep(self._wait_time)
+            if not last_group:
+                time.sleep(self._wait_time)
+        return details
+
+    def associate_publication(self, publication: Publication, pmids_to_sites: dict, pmids_to_uris: dict):
+        '''Associate the ``publication`` with ``Site`` and RDF ``PublicationSubjectURI`` objects.
+
+        Return True if we made any udpates to either, False otherwise.
+        '''
+        modifications = False
+
+        from .sites import Site
+        site_uris = pmids_to_sites.get(publication.pubMedID, set())
+
+        existing_site_uris = set([i for i in publication.site_that_wrote_this.all().values_list('identifier', flat=True)])
+        if site_uris != existing_site_uris:
+            modifications = True
+            publication.site_that_wrote_this.set(Site.objects.filter(identifier__in=site_uris), clear=True)
+
+        subject_uris = pmids_to_uris.get(publication.pubMedID, set())
+        existing_subject_uris = set([i for i in publication.subject_uris.all().values_list('identifier', flat=True)])
+        if subject_uris != existing_subject_uris:
+            modifications = True
+            publication.subject_uris.set([PublicationSubjectURI(identifier=i) for i in subject_uris], clear=True)
+
+        if modifications: publication.save()
+        return modifications
+
+    def create_new_publications(self, pmids: set, pmids_to_sites: dict, pmids_to_uris: dict) -> set:
+        '''Create brand new publication objects for the pubmed IDs in ``pmids``.
+
+        Map those objects to sites in ``pmids_to_sites`` and to subject URIs in ``pmids_to_uris``.
+        Return a set of the newly created objects.
+        '''
+        new_pubs = set()
+        details = self.get_pubmed_details(pmids)
+        for pmid in pmids:
+            deets = details.get(pmid)
+            if not deets:
+                _logger.warning('No pubmed info found for PMID «%s», cannot create an object for it', pmid)
+                continue
+            title, abstract, issue, year, journal, authors = deets
+            p = Publication(
+                # 🔮 Maybe truncate titles better?
+                title=title[:255], live=True, slug=self.slugify(pmid, title),
+                identifier=self.miriam_uri(pmid), pubMedID=pmid,
+                search_description='This is a pbulication by a member of the Early Detection Research Network.'
+            )
+            self.folder.add_child(instance=p)
+            p.save()
+            p.authors.add(*[Author(value=i) for i in authors])
+            self.associate_publication(p, pmids_to_sites, pmids_to_uris)
+            new_pubs.add(p)
+        return new_pubs
+
+    def update_existing_publications(self, pmids: set, pmids_to_sites: dict, pmids_to_uris: dict) -> set:
+        '''Update existing publication objects for the pubmed IDs in ``pmids``.
+
+        Map those objects to sites in ``pmids_to_sites`` and to subject URIs in ``pmids_to_uris``
+        as needed for changes. Note that data from Entrez API is not updated. We assume it's correct
+        eternally. If that's not the case, manually delete the publication object and re-ingest.
+
+        Return a set of publication objects that actually got updated. The cardinally of that
+        set will always be equal to or lower than the cardinality of ``pmids``, and frequently
+        much lower.
+        '''
+        modified = set()
+        for pub in Publication.objects.filter(pubMedID__in=pmids):
+            if self.associate_publication(pub, pmids_to_sites, pmids_to_uris):
+                modified.add(pub)
+        return modified
+
+    def delete_obsolete_publications(self, pmids: set) -> set:
+        '''Delete publication objects identified by the given ``pmids``.
+
+        Return the same set.
+        '''
+        Publication.objects.filter(pubMedID__in=pmids).delete()
+        return pmids
+
+    def update_publications(self, pmids: set, pmids_to_sites: dict, pmids_to_uris: dict) -> tuple:
+        '''Update publications.
+
+        Go through the currently populated publications and the given set of ``pmids`` to figure out
+        the publications to be created, to be updated, and to be deleted. Return a tuple of the
+        newly created publications, the updated ones, and the deleted ones.
+        '''
+
+        current_pmids = set([i for i in Publication.objects.child_of(self.folder).values_list('pubMedID', flat=True)])
+        pmids_to_create = pmids - current_pmids
+        pmids_to_update = current_pmids & pmids
+        pmids_to_delete = current_pmids - pmids
+
+        new = self.create_new_publications(pmids_to_create, pmids_to_sites, pmids_to_uris)
+        updated = self.update_existing_publications(pmids_to_update, pmids_to_sites, pmids_to_uris)
+        deleted = self.delete_obsolete_publications(pmids_to_delete)
+
+        return new, updated, deleted
 
     def ingest(self):
-        self.configureEntrez()
+        self.configure_entrez()
         statements = self.readRDF()
-        subjectURItoPMIDs, pmIDtoSubjectURIs = {}, {}
-        for subjectURI, predicates in statements.items():
-            pmID = str(predicates.get(self._pubMedPredicate, [''])[0]).strip()
-            if not pmID or not self._pubMedIDExpr.match(pmID):
-                _logger.warning('Got a weird "pubmed" ID «%s» from %s that looks wrong', pmID, subjectURI)
-                continue
-            if pmID in pmIDtoSubjectURIs:
-                _logger.warning('PubMed %s already has pub %s but duplicating anyway', pmID, pmIDtoSubjectURIs[pmID])
-                # At this point I would do
-                #     continue
-                # and skip making extra Publication objects except that some subject URIs from various
-                # parts of the knowledge environment end up using the same pubmed ID and we have to
-                # accommodate all of them
-            siteID = str(predicates.get(self._siteIDPredicate, [''])[0])
-            subjectURItoPMIDs[str(subjectURI)] = (pmID, siteID)
-            pmIDtoSubjectURIs[pmID] = str(subjectURI)
-        self.addPublicationsBasedOnGrantNumbers(subjectURItoPMIDs)
-        self.filterExistingPublications(subjectURItoPMIDs)
-        new = self.createMissingPublications(subjectURItoPMIDs)
-        return new, set(), set()  # We only ever create new pubs; no updating or deleting
+        pmids, pmids_to_sites, pmids_to_uris = self.parse_statements(statements)
+        pmids |= self.get_pmids_fromt_grants()
+        new, updated, deleted = self.update_publications(pmids, pmids_to_sites, pmids_to_uris)
+        return new, updated, deleted
 
 
 class PublicationIndex(KnowledgeFolder):

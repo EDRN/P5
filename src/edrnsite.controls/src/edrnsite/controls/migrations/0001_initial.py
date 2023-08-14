@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
                 ('in_development', models.BooleanField(default=True, help_text='True if this site is in development')),
                 ('entrez_email', models.EmailField(default='sean.kelly@nih.gov', help_text='Entrez registered user email', max_length=254)),
                 ('entrez_id', models.CharField(default='edrn-portal', help_text='Entrez (PubMed API) tool identification', max_length=64)),
-                ('dmcc_url', models.URLField(default='https://www.compass.fhcrc.org/enterEDRN/?cl=3&amp;dl=0.9&amp;param1=dmcc&amp;extra_param=plin', help_text='URL to the DMCC "secure site"')),
+                ('dmcc_url', models.URLField(default='https://www.compass.fhcrc.org/enterEDRN/?cl=3&amp;dl=0.9&amp;param1=dmcc&amp;extra_param=plin', help_text='URL to the DMCC "secure" site')),
                 ('site', models.OneToOneField(editable=False, on_delete=django.db.models.deletion.CASCADE, to='wagtailcore.site')),
             ],
             options={

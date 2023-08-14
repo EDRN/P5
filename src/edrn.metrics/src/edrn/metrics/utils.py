@@ -4,19 +4,12 @@
 
 
 from eke.biomarkers.biomarker import Biomarker, BiomarkerBodySystem, BodySystemStudy
-from eke.knowledge.models import DataCollection, Publication, Site
+from eke.knowledge.models import DataCollection, Publication
+from django.db.models import Count
 
 
 def find_pubs_without_pis():
-    pubs = set()
-    for pub in Publication.objects.all():
-        if pub.siteID is None:
-            pubs.add(pub)
-        else:
-            site = Site.objects.filter(identifier=pub.siteID).first()
-            if site is None:
-                pubs.add(pub)
-    return pubs
+    return set([i for i in Publication.objects.annotate(num_sites=Count('site_that_wrote_this')).filter(num_sites=0)])
 
 
 def find_data_without_biomarkers():

@@ -5,6 +5,7 @@
 from .constants import DepictableSections as ds
 from .utils import qualify_biomarker_predicate as qbp
 from django.db import models
+from django.db.models.fields import Field
 from django.db.models.functions import Lower
 from django.http import HttpRequest
 from eke.knowledge.models import KnowledgeObject, Protocol, Publication, MiscellaneousResource, DataCollection
@@ -34,6 +35,12 @@ class PhasedObject(models.Model):
         abstract = True
     class RDFMeta:
         fields = {qbp('Phase'): RDFAttribute('phase', scalar=True)}
+
+
+class _PublicationSubjectURIRDFAttribute(RelativeRDFAttribute):
+    def modify_field(self, obj: object, values: list, modelField: Field, predicates: dict) -> bool:
+        results = Publication.objects.filter(subject_uris__identifier__in=values).values_list('identifier', flat=True)
+        return super().modify_field(obj, [str(i) for i in results], modelField, predicates)
 
 
 class ResearchedObject(models.Model):
@@ -66,7 +73,7 @@ class ResearchedObject(models.Model):
         abstract = True
     class RDFMeta:
         fields = {
-            qbp('referencedInPublication'): RelativeRDFAttribute('publications', scalar=False),
+            qbp('referencedInPublication'): _PublicationSubjectURIRDFAttribute('publications', scalar=False),
             qbp('referencesResource'): RelativeRDFAttribute('resources', scalar=False),
             qbp('AssociatedDataset'): RelativeRDFAttribute('science_data', scalar=False),
         }

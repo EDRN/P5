@@ -136,10 +136,11 @@ docker compose --project-name edrn start portal" || exit 1
 
 echo ""
 echo "🆙 Applying upgrades"
-
-(There are none at this time.)
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal django-admin edrn_explorer" || exit 1
+docker compose --project-name edrn exec portal django-admin edrn_explorer &&
+docker compose --project-name edrn exec portal django-admin edrn_pubmed" || exit 1
+
+# ↑ We might need to repeat that edrn_pubmed step several times if memory is an issue
 
 echo ""
 echo "🤷‍♀️ Final portal restart and restart of search engine"

@@ -61,14 +61,19 @@ class Informatics(BaseSiteSetting):
     entrez_id = models.CharField(
         default='edrn-portal', null=False, max_length=64, help_text='Entrez (PubMed API) tool identification'
     )
+    entrez_api_key = models.CharField(
+        null=False, blank=True, default='', max_length=64, help_text='Optional Entrez API key'
+    )
     dmcc_url = models.URLField(
         default='https://www.compass.fhcrc.org/enterEDRN/?cl=3&amp;dl=0.9&amp;param1=dmcc&amp;extra_param=plin',
-        null=False, help_text='URL to the DMCC "secure site"', blank=False
+        null=False, help_text='URL to the DMCC "secure" site', blank=False
     )
     panels = [
         FieldPanel('in_development'),
         FieldPanel('entrez_email'),
         FieldPanel('entrez_id'),
+        FieldPanel('entrez_api_key'),
+        FieldPanel('dmcc_url')
     ]
 
 

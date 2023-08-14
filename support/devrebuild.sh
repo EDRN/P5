@@ -54,6 +54,7 @@ bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --qu
 
 # Add additional upgrade steps here:
 ./manage.sh edrn_explorer
+./manage.sh edrn_pubmed
 
 # None at this time
 
