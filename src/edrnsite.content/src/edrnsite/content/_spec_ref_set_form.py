@@ -29,21 +29,15 @@ _closing_default = (
 
 
 def _ref_sets():
-    choices = (
-        'MSA/bladder',
-        'Benign Breast Disease',
-        'Breast Reference Set and Imaging',
-        'Cancers in women—BRSCW',
-        'Colon Cancer',
-        'DCP/Liver Rapid set',
-        'DCP/Liver Validation set',
-        'Lung Ref Set A Phase 2 Validation (Retrospective)',
-        'Lung Ref Set B (Retrospective)',
-        'Pancreatic cancer',
-        'Prostate cancer (from PCA3)',
-        'Panc Cyst',
-    )
-    return [(slugify(i), i) for i in choices]
+    from .models import ReferenceSetSnippet
+    return [(i.reference_set_code, i.label) for i in ReferenceSetSnippet.objects.all().order_by('label')]
+
+
+def _specimen_kinds():
+    from .models import SpecimenTypeSnippet
+    kinds = [(i.specimen_type_code, i.label) for i in SpecimenTypeSnippet.objects.all().order_by('label')]
+    kinds.append(('other', 'Other, specify'))
+    return kinds
 
 
 class SpecimenReferenceSetRequestForm(AbstractEDRNForm):
@@ -92,18 +86,7 @@ class SpecimenReferenceSetRequestForm(AbstractEDRNForm):
         required=True,
         label='Specimen Type',
         help_text='Select the kind of specimen; if you select Other, fill in the next blank.',
-        choices=(
-            ('buffy coat', 'Buffy Coat'),
-            ('cystic fluid', 'Cystic Fluid'),
-            ('data-only', 'Data only'),
-            ('imaging', 'Imaging'),
-            ('plasma', 'Plasma'),
-            ('serum', 'Serum'),
-            ('stool', 'Stool'),
-            ('tissue', 'Tissue'),
-            ('urine', 'Urine'),
-            ('other', 'Other, specify'),
-        )
+        choices=_specimen_kinds
     )
     other_specimen_type = forms.CharField(
         required=False, help_text='If you selected "Other", enter the desired specimen type.'

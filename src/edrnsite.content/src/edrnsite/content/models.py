@@ -297,3 +297,29 @@ class CertificationSnippet(models.Model):
     panels = [FieldPanel('url'), FieldPanel('label'), FieldPanel('description')]
     def __str__(self):
         return self.label
+
+
+@register_snippet
+class ReferenceSetSnippet(models.Model):
+    '''Specimen reference sets.'''
+    reference_set_code = models.CharField(
+        primary_key=True, max_length=80, blank=False, null=False, unique=True, help_text='Reference set ID code',
+        default='code'
+    )
+    label = models.CharField(blank=False, null=False, max_length=80, default='label', help_text='Name of reference set')
+    panels = [FieldPanel('reference_set_code'), FieldPanel('label')]
+    def __str__(self):
+        return self.label
+
+
+@register_snippet
+class SpecimenTypeSnippet(models.Model):
+    '''Types of specimen s in reference sets.'''
+    specimen_type_code = models.CharField(
+        primary_key=True, max_length=80, blank=False, null=False, unique=True, help_text='Specimen type ID code',
+        default='code'
+    )
+    label = models.CharField(blank=False, null=False, max_length=80, default='label', help_text='Kind of specimen')
+    panels = [FieldPanel('specimen_type_code'), FieldPanel('label')]
+    def __str__(self):
+        return self.label
