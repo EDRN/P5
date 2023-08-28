@@ -143,6 +143,16 @@ echo ""
 echo "🆙 Applying upgrades"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn exec portal django-admin edrn_explorer &&
+docker compose --project-name edrn exec portal django-admin edrn_pubmed || true &&
+docker compose --project-name edrn exec portal django-admin edrn_pubmed || true &&
+docker compose --project-name edrn exec portal django-admin edrn_pubmed || true &&
+docker compose --project-name edrn exec portal django-admin edrn_pubmed || true &&
+docker compose --project-name edrn exec portal django-admin edrn_pubmed || true &&
+docker compose --project-name edrn exec portal django-admin edrn_pubmed || true &&
+docker compose --project-name edrn exec portal django-admin edrn_pubmed || true &&
+docker compose --project-name edrn exec portal django-admin edrn_pubmed || true &&
+docker compose --project-name edrn exec portal django-admin edrn_pubmed || true &&
+docker compose --project-name edrn exec portal django-admin edrn_pubmed || true &&
 docker compose --project-name edrn exec portal django-admin edrn_pubmed &&
 docker compose --project-name edrn exec portal django-admin edrn_forms" || exit 1
 
