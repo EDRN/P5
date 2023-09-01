@@ -22,6 +22,7 @@ def render_cde_node(node: CDEExplorerObject) -> dict:
     return {
         'name': node.name,
         'description': node.description,
+        'stewardship': node.stewardship,
         'attributes': node.attributes.all(),
         'children': node.children.all().order_by('name')
     }

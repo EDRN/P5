@@ -42,12 +42,15 @@ class _Node:
     '''A temporary node in a tree before getting serialized into Django objects.'''
     name: str
     description: str
+    stewardship: str
     attributes: list[_Attribute]
     children: set[object] = dataclasses.field(default_factory=set, init=False, compare=False)
     def __hash__(self):
         return hash(self.name)
     def instantiate(self, parent=None):
-        explorer_obj = CDEExplorerObject(name=self.name, description=self.description, parent=parent)
+        explorer_obj = CDEExplorerObject(
+            name=self.name, description=self.description, stewardship=self.stewardship, parent=parent
+        )
         explorer_obj.save()
         for c in self.children:
             c.instantiate(explorer_obj)
@@ -137,9 +140,10 @@ class CDEExplorerPage(Page):
         self._log('Parsing overall structure in the "Structure" tab and looking for referenced tabs')
         row_number, nodes, roots, structure = 0, {}, [], sheet['Structure']
         for name in structure['Object']:
-            description = structure['Description'][row_number]
+            description, stewardship = structure['Description'][row_number], structure['Stewardship'][row_number]
             attributes = self._parse_attributes(name, sheet)
-            nodes[name] = _Node(name, description, attributes)
+            stewardship = '' if pandas.isna(stewardship) else stewardship
+            nodes[name] = _Node(name, description, stewardship, attributes)
             row_number += 1
 
         # Now connect parents to children and gather the roots
@@ -215,6 +219,7 @@ class CDEExplorerPage(Page):
 class CDEExplorerObject(models.Model):
     name = models.CharField(null=False, blank=False, max_length=200, help_text='Name of this object in a CDE hierarchy')
     description = models.TextField(null=False, blank=True, help_text='A nice long description of this object')
+    stewardship = models.TextField(null=False, blank=True, help_text="Who's responsible for this object")
     parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE, related_name='children')
     page = models.ForeignKey(CDEExplorerPage, blank=True, null=True, on_delete=models.SET_NULL, related_name='root_objects')
     panels = [FieldPanel('name'), FieldPanel('description'), FieldPanel('parent'), FieldPanel('page')]
