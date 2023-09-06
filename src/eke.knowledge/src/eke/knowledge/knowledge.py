@@ -8,7 +8,7 @@ from django.db import models
 from django.db.models import Q
 from django.db.models.functions import Lower
 from django.http import HttpRequest
-from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
+from django.http import HttpResponse, JsonResponse
 from django.http.request import QueryDict
 from modelcluster.fields import ParentalKey
 from wagtail.admin.panels import FieldPanel, InlinePanel

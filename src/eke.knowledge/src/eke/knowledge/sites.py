@@ -33,7 +33,7 @@ from wagtail.models import Orderable, Page
 from wagtail.search import index
 import dash_core_components as dcc
 import dash_html_components as html
-import pandas, logging, rdflib, tempfile, libgravatar
+import pandas, logging, rdflib, tempfile, libgravatar, re
 
 
 _logger                     = logging.getLogger(__name__)
@@ -43,6 +43,7 @@ _interalProposalPredicate   = 'urn:internal:propsoal'
 _internalOrganPredicate     = 'urn:internal:organ'
 _surname_predicate_uri      = rdflib.URIRef('http://xmlns.com/foaf/0.1/surname')
 _default_person_icon        = 'mp'
+_data_sharing_splitter      = re.compile(r'\s*(\S+)')
 
 
 def get_predicate_value(uri: rdflib.URIRef, predicates: dict) -> str:
@@ -157,6 +158,9 @@ class Site(KnowledgeObject):
     proposal = models.CharField(
         blank=True, null=False, max_length=250, help_text='BDL-only proposal title that produced this site'
     )
+    dataSharingPolicy = models.CharField(
+        max_length=30, blank=True, null=False, help_text='When was the data sharing policy made'
+    )
     content_panels = KnowledgeObject.content_panels + [
         FieldPanel('abbreviation'),
         FieldPanel('fundingStartDate'),
@@ -166,6 +170,7 @@ class Site(KnowledgeObject):
         FieldPanel('sponsor'),
         FieldPanel('specialty'),
         FieldPanel('proposal'),
+        FieldPanel('dataSharingPolicy'),
         InlinePanel('organs', label='Organs'),
         FieldPanel('pi'),
         FieldPanel('coPIs'),
@@ -189,6 +194,9 @@ class Site(KnowledgeObject):
         context = super().get_context(request, *args, **kwargs)
         context['showSponsor'] = self._shouldSponsorBeShown()
 
+        if match := _data_sharing_splitter.match(self.dataSharingPolicy):
+            context['dataSharingPolicy'] = match.group(1)
+
         anointed = set()
         if self.pi: anointed.add(self.pi.identifier)
         for field in ('coPIs', 'coIs', 'investigators'):
@@ -200,7 +208,6 @@ class Site(KnowledgeObject):
         return context
 
     class Meta:
-        # indexes = [models.Index(fields=['pubMedID']), models.Index(fields=['year'])]
         pass
 
     class RDFMeta:
@@ -213,10 +220,9 @@ class Site(KnowledgeObject):
             esu('url'): RDFAttribute('homePage', scalar=True),
             esu('sponsor'): RelativeRDFAttribute('sponsor', scalar=True),
             esu('program'): RDFAttribute('specialty', scalar=True),
+            esu('dataSharingPolicyDateTime'): RDFAttribute('dataSharingPolicy', scalar=True),
             _interalProposalPredicate: RDFAttribute('proposal', scalar=True),
             _internalOrganPredicate: RDFAttribute('organs', scalar=False),
-            # esu('year'): RDFAttribute('year', scalar=True, rel=False),
-            # str(rdflib.DCTERMS.creator): RDFAttribute('authors', scalar=False, rel=False),
             **KnowledgeObject.RDFMeta.fields
         }
 
@@ -308,6 +314,16 @@ class Person(KnowledgeObject):
         return context
 
 
+class Interest(Orderable):
+    '''An interest of a person.'''
+    name = models.CharField(max_length=500, blank=False, null=False, default='Name', help_text='Name of the interest')
+    description = models.TextField(blank=False, null=False, default='Description', help_text='Summary of the interest')
+    page = ParentalKey(Person, on_delete=models.CASCADE, related_name='interests')
+    panels = [FieldPanel('value')]
+    def __str__(self):
+        return self.name
+
+
 class OrganizationalGroup(Page):
     '''An organizational group in EDRN consisting of a name and related sites.'''
     content_panels = Page.content_panels + [InlinePanel('group_members', label='Group Members')]
@@ -333,7 +349,10 @@ class Ingestor(BaseIngestor):
     _coPIPredicateURI       = rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#copi')
     _coIPredicateURI        = rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#coi')
     _iPredicateURI          = rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#investigator')
+    _interestNamePredURI    = rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#interestName')
+    _interestDescPredURI    = rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#interestDescription')
     _api_fetch_size         = 20
+    _count_stripper         = re.compile(r'^[0-9][0-9][0-9][0-9] (.*)')
 
     def _get_dmcc_code(self, uri: rdflib.URIRef) -> str:
         return urlparse(uri).path.split('/')[-1]
@@ -394,6 +413,15 @@ class Ingestor(BaseIngestor):
         if degrees:
             person.degrees = degrees
 
+    def assign_interests(self, person: Person, predicates: dict):
+        names = predicates.get(self._interestNamePredURI, [])
+        descs = predicates.get(self._interestDescPredURI, [])
+        for name, desc in zip(names, descs):
+            name_match, desc_match = self._count_stripper.match(name), self._count_stripper.match(desc)
+            if name_match and desc_match:
+                name, desc = name_match.group(1), desc_match.group(1)
+                person.interests.add(Interest(name=name, description=desc))
+
     def _compute_search_promotion_for_person(self, name: str, predicates: dict) -> str:
         title = get_predicate_value(rdflib.URIRef(esu('edrnTitle')), predicates)
         if not title:
@@ -446,6 +474,7 @@ class Ingestor(BaseIngestor):
             modelField = person._meta.get_field(rdfAttribute.name)
             rdfAttribute.modify_field(person, values, modelField, predicates)
         self.assign_academic_degree(person, predicates)
+        self.assign_interests(person, predicates)
         try:
             site.add_child(instance=person)
             person.save()

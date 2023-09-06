@@ -20,6 +20,10 @@
                     <dt>Sponsor</dt>
                     <dd><a href='{{page.sponsor.url}}'>{{page.sponsor.title}}</a></dd>
                 {% endif %}
+                {% if page.dataSharingPolicy %}
+                    <dt>Data Sharing Policy Date/Time</dt>
+                    <dd>{{page.dataSharingPolicy}}</dd>
+                {% endif %}
             </dl>
             <h3>People</h3>
             <dl class='row'>
