@@ -302,6 +302,7 @@ class Person(KnowledgeObject):
         if (request.user.is_staff or request.user.is_superuser) and self.account_name:
             context['account_name'] = self.account_name
         my_site = Site.objects.filter(pi=self).first()
+        context['has_interests'] = self.interests.count() > 0
         if my_site:
             from eke.knowledge.protocols import Protocol
             opened, closed = [], []

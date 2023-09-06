@@ -61,7 +61,7 @@
             {% endif %}
 
             <h3 class='mt-3'>Interests</h3>
-            {% if page.interests %}
+            {% if has_interests %}
                 <dl>
                     {% for interest in page.interests.all %}
                         <dt>{{interest.name}}</dt>
@@ -72,10 +72,10 @@
                 <small>No interests found at the present moment.</small>
             {% endif %}
 
-            <small>
+            <p class='small mt-3'>
                 To update protocols, publications, biomarkers, or science data, please contact the
                 <a href='mailto:ic-portal@jpl.nasa.gvo'>Informatics Center</a>.
-            </small>
+            </p>
 
         </div>
         <div class='col-lg-3'>
