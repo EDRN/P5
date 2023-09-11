@@ -104,9 +104,11 @@ def find_members(request: HttpRequest) -> HttpResponse:
     else:
         return render(request, 'eke.knowledge/member-finder.html', {})
 
-    # if query:
-    #     results = Page.objects.live().search(query)
-    #     Query.get(query).add_hit()
-    # else:
-    #     results = Page.objects.none()
-    # controls = Search.for_request(request)
+
+def show_data_sharing_agreements(request: HttpRequest) -> HttpResponse:
+    '''Data sharing agreements view.'''
+    rendering = {
+        'agreed': Site.objects.exclude(dataSharingPolicy='').all().order_by('title'),
+        'not_agreed': Site.objects.filter(dataSharingPolicy='').all().order_by('title'),
+    }
+    return render(request, 'eke.knowledge/data-sharing.html', rendering)

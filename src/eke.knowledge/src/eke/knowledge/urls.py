@@ -3,7 +3,10 @@
 '''💁‍♀️ EDRN Knowledge Environment: base knowledge URL patterns.'''
 
 
-from .views import start_full_ingest, reindex_all_content, sync_ldap_groups, dispatch_data, find_members, fix_tree
+from .views import (
+    start_full_ingest, reindex_all_content, sync_ldap_groups, dispatch_data, find_members, fix_tree,
+    show_data_sharing_agreements
+)
 from django.urls import path, include
 
 
@@ -15,4 +18,5 @@ urlpatterns = [
     path('django_plotly_dash/', include('django_plotly_dash.urls')),
     path('@@dataDispatch', dispatch_data, name='dispatch_data'),
     path('find-members', find_members, name='find-members'),
+    path('data-sharing', show_data_sharing_agreements, name='data-sharing')
 ]
