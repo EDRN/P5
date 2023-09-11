@@ -49,6 +49,7 @@ command="$1"
 shift
 exec /usr/bin/env \
     LDAP_BIND_PASSWORD="$edrn_service_password" \
+    LDAP_URI="ldaps://172.16.16.88:1636" \
     DATABASE_URL="postgresql://:@/edrn" \
     ".venv/bin/django-admin" $command --settings local --pythonpath . "$@"
 

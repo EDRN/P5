@@ -43,8 +43,9 @@ echo "🏃‍♀️Here we go"
 dropdb --force --if-exists "edrn"
 createdb "edrn" 'P5 for the Early Detection Research Network'
 # Must use --checksum here because the nightly refresh from NCI to tumor munges all the timestamps
-rsync --checksum --no-motd --recursive --delete --progress tumor.jpl.nasa.gov:/usr/local/edrn/portal/ops-nci/media .
-scp tumor.jpl.nasa.gov:/usr/local/edrn/portal/ops-nci/edrn.sql.bz2 .
+# rsync --checksum --no-motd --recursive --delete --progress tumor.jpl.nasa.gov:/usr/local/edrn/portal/ops-nci/media .
+rsync --checksum --no-motd --recursive --delete --progress 172.16.16.88:/Users/kelly/Documents/Clients/JPL/Cancer/Portal/Development/P6/media .
+scp 172.16.16.88:/Users/kelly/Documents/Clients/JPL/Cancer/Portal/Development/P6/edrn.sql.bz2 .
 bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --quiet
 
 ./manage.sh makemigrations
