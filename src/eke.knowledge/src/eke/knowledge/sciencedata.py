@@ -8,6 +8,7 @@ from .knowledge import KnowledgeObject, KnowledgeFolder
 from .protocols import Protocol
 from .rdf import RelativeRDFAttribute, RDFAttribute
 from .utils import Ingestor as BaseIngestor, filter_by_user, ghetto_plotly_legend
+from dash_dangerously_set_inner_html import DangerouslySetInnerHTML
 from django.contrib.auth.models import Group
 from django.db import models
 from django.db.models import Q
@@ -19,11 +20,11 @@ from django_plotly_dash import DjangoDash
 from modelcluster.fields import ParentalManyToManyField, ParentalKey
 from urllib.parse import urlparse
 from wagtail.admin.panels import FieldPanel, InlinePanel
+from wagtail.fields import RichTextField
 from wagtail.models import Orderable, PageViewRestriction
 from wagtail.search import index
 import dash_core_components as dcc
 import dash_html_components as html
-from dash_dangerously_set_inner_html import DangerouslySetInnerHTML
 import logging, rdflib, plotly.express, collections, pandas
 
 _logger = logging.getLogger(__name__)
@@ -227,13 +228,18 @@ class DataCollectionIndex(KnowledgeFolder):
     subpage_types = [DataCollection, DataStatistic]
     page_description = 'Container for data collections'
 
+    preamble = RichTextField(blank=True, null=False, help_text='Text to appear at the top of the page')
+
     metadata_collection_form = models.ForeignKey(
         'edrnsitecontent.MetadataCollectionFormPage', null=True, blank=True,
         verbose_name='Metadata Collection Form', related_name='+',
         help_text='Which page to use as the metadata collection form',
         on_delete=models.SET_NULL
     )
-    content_panels = KnowledgeFolder.content_panels + [FieldPanel('metadata_collection_form')]
+    content_panels = KnowledgeFolder.content_panels + [
+        FieldPanel('preamble'),
+        FieldPanel('metadata_collection_form')
+    ]
 
     def get_vocabulary(self, name) -> list:
         '''Get a "vocabulary" of known values for the field ``name`` for our contained subpage.'''
