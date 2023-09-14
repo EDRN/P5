@@ -9,7 +9,7 @@ assignees: nutjob4life
 
 # ✋ Hold it!
 
-Before you submit this request, remember that P5 is a _content management system_. Why not [try doing it yourself](https://edrn.nci.nih.gov/login)?
+Before you submit this request, remember that P5 is a _content management system_. Why not [try doing it yourself](https://edrn.nci.nih.gov/admin)?
 
 
 ## 📕 Summary
