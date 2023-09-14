@@ -151,7 +151,7 @@ class Committee(Page):
         future = CommitteeEvent.objects.child_of(self).filter(when__gte=now).live().order_by('-when')
         past = CommitteeEvent.objects.child_of(self).filter(when__lte=now).live().order_by('-when')
         have_events = future.count() > 0 or past.count() > 0
-        docs = self.get_children().exclude(content_type=event_content_type).live().all().order_by('last_published_at')
+        docs = self.get_children().exclude(content_type=event_content_type).live().all()
 
         context['future_events'], context['past_events'], context['have_events'] = future, past, have_events
         context['documents'] = docs
