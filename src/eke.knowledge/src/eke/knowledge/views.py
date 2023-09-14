@@ -3,12 +3,14 @@
 '''💁‍♀️ EDRN Knowledge Environment: views.'''
 
 from .knowledge import KnowledgeObject
-from .tasks import do_full_ingest, do_reindex, do_ldap_group_sync, do_fix_tree
 from .sites import Site, Person
-from edrn.auth.views import logged_in_or_basicauth
-from django.shortcuts import render
+from .tasks import do_full_ingest, do_reindex, do_ldap_group_sync, do_fix_tree
 from django.db.models import Q
 from django.db.models.functions import Lower
+from django.shortcuts import render
+from edrn.auth.views import logged_in_or_basicauth
+from edrnsite.controls.models import Informatics
+from wagtail.models import Site as WagtailSite
 from django.http import (
     HttpRequest, HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseNotFound, HttpResponseBadRequest
 )
@@ -107,8 +109,20 @@ def find_members(request: HttpRequest) -> HttpResponse:
 
 def show_data_sharing_agreements(request: HttpRequest) -> HttpResponse:
     '''Data sharing agreements view.'''
+
+    informatics = Informatics.for_site(WagtailSite.objects.filter(is_default_site=True).first())
+
+    # These are the only sites to consider when it comes to the data sharing agreements
+    q = Q(memberType__in=[
+        'Biomarker Characterization Center',
+        'Biomarker Developmental Laboratories',
+        'Biomarker Reference Laboratories',
+        'Clinical Validation Center',
+        'Data Management and Coordinating Center',
+    ])
     rendering = {
-        'agreed': Site.objects.exclude(dataSharingPolicy='').all().order_by('title'),
-        'not_agreed': Site.objects.filter(dataSharingPolicy='').all().order_by('title'),
+        'agreed': Site.objects.filter(q).exclude(dataSharingPolicy='').all().order_by('title'),
+        'not_agreed': Site.objects.filter(q).filter(dataSharingPolicy='').all().order_by('title'),
+        'funding_cycle': informatics.funding_cycle
     }
     return render(request, 'eke.knowledge/data-sharing.html', rendering)

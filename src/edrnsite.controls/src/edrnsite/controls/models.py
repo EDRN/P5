@@ -68,12 +68,14 @@ class Informatics(BaseSiteSetting):
         default='https://www.compass.fhcrc.org/enterEDRN/?cl=3&amp;dl=0.9&amp;param1=dmcc&amp;extra_param=plin',
         null=False, help_text='URL to the DMCC "secure" site', blank=False
     )
+    funding_cycle = models.CharField(default='Ⅴ', max_length=8, null=False, blank=False, help_text='EDRN Funding Cycle')
     panels = [
         FieldPanel('in_development'),
         FieldPanel('entrez_email'),
         FieldPanel('entrez_id'),
         FieldPanel('entrez_api_key'),
-        FieldPanel('dmcc_url')
+        FieldPanel('dmcc_url'),
+        FieldPanel('funding_cycle'),
     ]
 
 

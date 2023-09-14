@@ -1,15 +1,14 @@
 {% extends 'base.html' %}
-{% load wagtailcore_tags static knowledge_tags %}
 
-{% block title %}Data Sharing Policies{% endblock title %}
+{% block title %}External Data Sharing and Reuse Policy{% endblock title %}
 
 {% block content %}
     <div class='row mt-3'>
         <div class='col-auto'>
-            <h1>Data Sharing Policies</h1>
+            <h1>EDRN External Data Sharing and Reuse Policy Funding Cycle {{funding_cycle}}</h1>
             <p>The following shows which sites have data sharing policies and which do not.
 
-            <h2>Sites with Data Sharing Policies</h2>
+            <h2>Sites With Signed Data Sharing Policies</h2>
             <p>Number of sites: {{agreed|length}}</p>
             <ul class='list-unstyled'>
                 {% for site in agreed %}
@@ -19,7 +18,7 @@
                 {% endfor %}
             </ul>
 
-            <h2>Sites without Data Sharing Policies</h2>
+            <h2>Sites Pending Signed Data Sharing Policies</h2>
             <p>Number of sites: {{not_agreed|length}}</p>
             <ul class='list-unstyled'>
                 {% for site in not_agreed %}
