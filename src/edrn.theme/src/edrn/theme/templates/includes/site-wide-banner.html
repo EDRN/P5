@@ -1,0 +1,12 @@
+{# 🔮 TODO: caching #}
+{% load wagtailcore_tags %}
+{% if settings.edrnsitecontrols.Informatics.site_wide_banner %}
+    <div class='container py-3 px-3 mb-3 rounded shadow'>
+        <div class='row'>
+            <div class='col-auto'>
+                {{settings.edrnsitecontrols.Informatics.site_wide_banner|richtext}}
+            </div>
+        </div>
+    </div>
+{% endif %}
+{# -*- Django HTML -*- #}

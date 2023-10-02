@@ -7,6 +7,7 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from wagtail.admin.panels import FieldPanel
 from wagtail.contrib.settings.models import BaseSiteSetting, register_setting
+from wagtail.fields import RichTextField
 from wagtail.snippets.models import register_snippet
 
 
@@ -69,6 +70,7 @@ class Informatics(BaseSiteSetting):
         null=False, help_text='URL to the DMCC "secure" site', blank=False
     )
     funding_cycle = models.CharField(default='Ⅴ', max_length=8, null=False, blank=False, help_text='EDRN Funding Cycle')
+    site_wide_banner = RichTextField(blank=True, help_text='Banner to display site-wide at the top of every page')
     panels = [
         FieldPanel('in_development'),
         FieldPanel('entrez_email'),
@@ -76,6 +78,7 @@ class Informatics(BaseSiteSetting):
         FieldPanel('entrez_api_key'),
         FieldPanel('dmcc_url'),
         FieldPanel('funding_cycle'),
+        FieldPanel('site_wide_banner'),
     ]
 
 

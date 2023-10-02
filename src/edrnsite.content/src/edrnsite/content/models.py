@@ -93,6 +93,12 @@ class HomePage(MetadataPageMixin, Page):
         ('title', blocks.TitleBlock()),
         ('section_cards', blocks.SiteSectionCardsBlock()),
         ('carousel', blocks.CarouselBlock()),
+        ('raw_html', wagtail_core_blocks.RawHTMLBlock(help_text='Raw HTML (use with care)')),
+        ('rich_text', wagtail_core_blocks.RichTextBlock(
+            label='Rich Text',
+            icon='doc-full',
+            help_text='Richly formatted text',
+        )),
     ], null=True, blank=True, use_json_field=True)
     content_panels = Page.content_panels + [FieldPanel('body')]
     class Meta:
@@ -107,6 +113,12 @@ class SectionPage(MetadataPageMixin, Page):
     body = StreamField([
         ('title', blocks.TitleBlock()),
         ('section_cards', blocks.SiteSectionCardsBlock()),
+        ('raw_html', wagtail_core_blocks.RawHTMLBlock(help_text='Raw HTML (use with care)')),
+        ('rich_text', wagtail_core_blocks.RichTextBlock(
+            label='Rich Text',
+            icon='doc-full',
+            help_text='Richly formatted text',
+        )),
     ], null=True, blank=True, use_json_field=True)
     content_panels = Page.content_panels + [FieldPanel('body')]
     class Meta:
