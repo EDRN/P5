@@ -137,7 +137,13 @@ docker compose --project-name edrn start portal" || exit 1
 echo ""
 echo "🆙 Applying upgrades"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal django-admin edrn_explorer" || exit 1
+docker compose --project-name edrn exec portal django-admin edrn_nukephotos ||\
+docker compose --project-name edrn exec portal django-admin edrn_nukephotos ||\
+docker compose --project-name edrn exec portal django-admin edrn_nukephotos ||\
+docker compose --project-name edrn exec portal django-admin edrn_nukephotos ||\
+docker compose --project-name edrn exec portal django-admin edrn_nukephotos ||\
+docker compose --project-name edrn exec portal django-admin edrn_nukephotos ||\
+docker compose --project-name edrn exec portal django-admin edrn_nukephotos" || exit 1
 
 echo ""
 echo "🤷‍♀️ Final portal restart and restart of search engine"

@@ -96,23 +96,29 @@ class _ImageIngestingRDFAttribute(RDFAttribute):
 
     def _get_surname(self, predicates: dict) -> str:
         name = str(predicates.get(_surname_predicate_uri, [''])[0])
-        if not name:
-            name = str(predicates.get(rdflib.term.URIRef('urn:internal:id'), [''])[0])
-            if not name:
-                name = '«unknown»'
-        return name
+        int_id = str(predicates.get(rdflib.term.URIRef('urn:internal:id'), [''])[0])
+        name = name if name else '«unknown name»'
+        int_id = int_id if int_id else '«unknown id»'
+        return f'{name} ({int_id})'
 
     def compute_new_value(self, modelField: Field, value: str, predicates: dict) -> object:
-        # Curiously, we can't pass a URL stream to ImageFile, since Django's ImageFile expects
-        # to be able to do seek() operations on it. So we have to download to a temporary file:
         name = self._get_surname(predicates)
+        image_title = f'Photograph of {name}'
+
+        # #290 check if the photo already exists and use it
+        existing_image = Image.objects.filter(title=image_title).first()
+        if existing_image: return existing_image
+
+        # Not found, so create it from scratch given the URL in ``value``
         try:
+            # Curiously, we can't pass a URL stream to ImageFile, since Django's ImageFile expects
+            # to be able to do seek() operations on it. So we have to download to a temporary file.
             with tempfile.TemporaryFile() as out_file:
                 with urlopen(value) as image_stream:
                     out_file.write(image_stream.read())
                 image_file = ImageFile(out_file, name=self._get_file_name(value))
                 image = Image(
-                    title=f'Photo of {name}', file=image_file,
+                    title=image_title, file=image_file,
                     # These values only make sense for the photos from the DMCC:
                     focal_point_x=66, focal_point_y=52, focal_point_height=76, focal_point_width=57
                 )

@@ -6,7 +6,7 @@
 # Download the latest production database, apply migrations, and get ready to rock and roll.
 
 
-jpl_sys_ipv4=172.16.16.18
+jpl_sys_ipv4=172.16.16.25
 
 
 # Argument check
@@ -57,8 +57,7 @@ bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --qu
 ./manage.sh edrndevreset
 
 # Add additional upgrade steps here:
-./manage.sh edrn_explorer
-
+./manage.sh edrn_nukephotos  # 6.7
 
 # This may be optional if you want to save time:
 ./manage.sh rdfingest
