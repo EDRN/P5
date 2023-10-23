@@ -9,11 +9,19 @@
             <h3>Open Protocols</h3>
             {% if opened %}
                 <table class='table'>
-                    <thead><tr><th>Protocol Name</th><th>Biomarkers</th><th>Datasets</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>Protocol Name</th>
+                            <th>Investigatory Role</th>
+                            <th>Biomarkers</th>
+                            <th>Public Data Collections</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         {% for protocol in opened %}
                             <tr>
                                 <td><a href='{{protocol.url}}'>{{protocol.title}}</a></td>
+                                <td>{{protocol.role}}</td>
                                 <td>{% protocol_counts protocol 'biomarkers' %}</td>
                                 <td>{% protocol_counts protocol 'data' %}</td>
                             </tr>
@@ -27,11 +35,19 @@
             <h3 class='mt-3'>Closed Protocols</h3>
             {% if closed %}
                 <table class='table'>
-                    <thead><tr><th>Protocol Name</th><th>Biomarkers</th><th>Datasets</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>Protocol Name</th>
+                            <th>Investigatory Role</th>
+                            <th>Biomarkers</th>
+                            <th>Public Data Collections</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         {% for protocol in closed %}
                             <tr>
                                 <td><a href='{{protocol.url}}'>{{protocol.title}}</a></td>
+                                <td>{{protocol.role}}</td>
                                 <td>{% protocol_counts protocol 'biomarkers' %}</td>
                                 <td>{% protocol_counts protocol 'data' %}</td>
                             </tr>

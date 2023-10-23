@@ -12,6 +12,7 @@ from .utils import Ingestor as BaseIngestor
 from django.core.exceptions import ValidationError
 from django.core.files.images import ImageFile
 from django.db import models
+from django.db.models import Q, Case, When, Value, BooleanField
 from django.db.models.fields import Field
 from django.db.models.functions import Lower
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
@@ -311,11 +312,24 @@ class Person(KnowledgeObject):
         context['has_interests'] = self.interests.count() > 0
         if my_site:
             from eke.knowledge.protocols import Protocol
-            opened, closed = [], []
-            protocols = Protocol.objects.filter(involvedInvestigatorSites=my_site).order_by(Lower('title'))
-            for protocol in protocols:
-                if protocol.finish_date: closed.append(protocol)
-                else: opened.append(protocol)
+
+            # Whew, this was "fun"
+            q = Q(coordinatingInvestigatorSite=my_site)
+            q |= Q(leadInvestigatorSite=my_site)
+            q |= Q(involvedInvestigatorSites=my_site)
+            protocols = Protocol.objects.filter(q).distinct().annotate(role=Case(
+                When(coordinatingInvestigatorSite=my_site, then=Value('Coordinating')),
+                When(leadInvestigatorSite=my_site, then=Value('Leading')),
+                When(involvedInvestigatorSites=my_site, then=Value('Involved')),
+                default=Value('unknown'),
+                output_field=models.CharField()
+            )).annotate(finish_blank=Case(
+                When(finish_date='', then=Value(True)),
+                default=Value(False),
+                output_field=BooleanField()
+            )).order_by(Lower('title'))
+
+            opened, closed = protocols.filter(finish_blank=True), protocols.filter(finish_blank=False)
             context['opened'], context['closed'] = opened, closed
             context['publications'] = my_site.publications.order_by(Lower('title'))
         return context
