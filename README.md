@@ -224,10 +224,14 @@ To set up the initial database and its schema inside a Docker Composition, we st
 Next, run the Django database migrations (again, with the environment set):
 
     docker compose --project-name edrn --file docker/docker-compose.yaml \
+        exec portal django-admin makemigrations
+    docker compose --project-name edrn --file docker/docker-compose.yaml \
         exec portal django-admin migrate
 
 
 #### 👴 Import Content from Plone
+
+👉 **Note:** This is no longer necessary. Plone hasn't been used in a while now; instead you just upgrade from the previous Wagtail-based version. However, I'm leaving this information intact for posterity and reference. Skip down to "Populate the Rest of the Content".
 
 The next step is to bring the content from the older Plone-based site into the new Wagtailb-ased site. You will need the following:
 
@@ -263,11 +267,15 @@ You can then populate the rest of the database with EDRN content, maps, menus, a
 
     docker compose --project-name edrn --file docker/docker-compose.yaml \
         exec portal django-admin collectstatic --no-input
+
+This step is no longer necessary; it was used only for the first instance of the Wagtail-based site. I'm leaving it here for future reference. Don't try to run it; it won't work.
+
     env AWS_ACCESS_KEY_ID=KEY AWS_SECRET_ACCESS_KEY=SECRET docker compose --project-name edrn \
         --file docker/docker-compose.yaml \
         exec portal django-admin edrnbloom --hostname HOSTNAME
-    docker compose --project-name edrn --file docker/docker-compose.yaml \
-        exec portal django-admin investigator_addresses --import
+
+Instead, skip down to this next step:
+
     docker compose --project-name edrn --file docker/docker-compose.yaml \
         exec portal django-admin ldap_group_sync
     docker compose --project-name edrn --file docker/docker-compose.yaml \

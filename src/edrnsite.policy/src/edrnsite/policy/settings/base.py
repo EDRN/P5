@@ -30,14 +30,6 @@ INSTALLED_APPS = edrnSiteSearchSettings.INSTALLED_APPS + ekeKnowlegeSettings.INS
     'edrnsite.ploneimport',
     'edrn.metrics',
 
-    # Django:
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-
     # Wagtail:
     'wagtail.contrib.redirects',
     'wagtail.contrib.settings',
@@ -49,9 +41,17 @@ INSTALLED_APPS = edrnSiteSearchSettings.INSTALLED_APPS + ekeKnowlegeSettings.INS
     'wagtail.images',
     'wagtail.search',
     'wagtail.admin',
-    'wagtail.core',
+    'wagtail',
     'taggit',
     'modelcluster',
+
+    # Django:
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
 
     # Sitemap generation
     'wagtail.contrib.sitemaps',

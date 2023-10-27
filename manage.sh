@@ -40,9 +40,6 @@ if [ ! -d ".venv" ]; then
     .venv/bin/pip install --editable 'src/edrn.metrics[dev]'
     .venv/bin/pip install --editable 'src/edrnsite.policy[dev]'
     .venv/bin/pip install --editable 'src/edrnsite.test[dev]'
-
-    # When wagtail/wagtail#10184 is fixed, we can remove this:
-    patch --directory ${PWD}/.venv/lib/python3.11/site-packages --input ${PWD}/patches/wagtail-users-utils.patch --strip 0
 fi
 
 command="$1"

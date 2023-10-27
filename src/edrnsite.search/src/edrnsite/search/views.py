@@ -5,18 +5,15 @@
 from django.core.paginator import Paginator, InvalidPage
 from django.shortcuts import render
 from edrnsite.controls.models import Search
-from wagtail.contrib.search_promotions.models import SearchPromotion
+from wagtail.contrib.search_promotions.models import Query, SearchPromotion
 from wagtail.models import Page
-from wagtail.search.models import Query
-from wagtail.search.utils import parse_query_string
 
 
 def search(request):
     '''Extremely basic search.'''
     query = request.GET.get('query')
     if query:
-        _, parsed = parse_query_string(query)  # Not doing anything with filters as of yet
-        results, promotions = Page.objects.live().search(parsed), Query.get(query).editors_picks.all()
+        results, promotions = Page.objects.live().autocomplete(query), Query.get(query).editors_picks.all()
         Query.get(query).add_hit()
     else:
         results, promotions = Page.objects.none(), SearchPromotion.objects.none()

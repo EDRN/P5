@@ -58,7 +58,7 @@ RUN \
     :
 
 RUN \
-    build_deps="automake bzip2-dev cyrus-sasl-dev g++ gcc libffi-dev libjpeg-turbo-dev libwebp-dev libxml2-dev libxslt-dev make musl-dev openjpeg-dev openldap-dev openssl-dev pcre-dev python3-dev postgresql-dev su-exec tiff-dev zlib-dev " &&\
+    build_deps="automake bzip2-dev cyrus-sasl-dev git g++ gcc libffi-dev libjpeg-turbo-dev libwebp-dev libxml2-dev libxslt-dev make musl-dev openjpeg-dev openldap-dev openssl-dev pcre-dev python3-dev postgresql-dev su-exec tiff-dev zlib-dev " &&\
     run_deps="curl krb5-libs libgcc libjpeg-turbo libldap libpq libsasl libstdc++ libwebp libxml2 libxslt netcat-openbsd openjpeg python3 rsync tiff tidyhtml" &&\
     py_deps="py3-numpy py3-pandas py3-pillow py3-psycopg2" &&\
     /sbin/apk update --quiet &&\

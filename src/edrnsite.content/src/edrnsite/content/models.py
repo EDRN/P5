@@ -148,6 +148,7 @@ class FlexPage(MetadataPageMixin, Page):
     ]
     search_fields = Page.search_fields + [
         index.SearchField('body'),
+        index.AutocompleteField('body'),
     ]
     class Meta(object):
         verbose_name = 'web page'

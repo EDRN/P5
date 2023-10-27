@@ -6,7 +6,7 @@
 # Download the latest production database, apply migrations, and get ready to rock and roll.
 
 
-jpl_sys_ipv4=172.16.16.25
+jpl_sys_ipv4=172.16.16.17
 
 
 # Argument check
@@ -53,6 +53,7 @@ bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --qu
 
 ./manage.sh makemigrations
 ./manage.sh migrate
+./manage.sh copy_daily_hits_from_wagtailsearch  # Wagtail 5
 ./manage.sh collectstatic --no-input --clear --link
 ./manage.sh edrndevreset
 

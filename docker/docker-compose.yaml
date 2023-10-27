@@ -66,6 +66,7 @@ services:
             CSRF_TRUSTED_ORIGINS:
             FORCE_SCRIPT_NAME:
             LDAP_BIND_PASSWORD:
+            LDAP_URI:
             POSTGRES_PASSWORD:
             SIGNING_KEY:
             EMAIL_HOST:
@@ -136,7 +137,7 @@ services:
     #
     # Ports 9200 and 9300, not published.
     search:
-        image: elasticsearch:7.17.10
+        image: elasticsearch:8.10.2
         # :crystal-ball-emoji: TODO: user ID 500/26013 issue … do we need a custom elasticsearch image?
         volumes:
             -
@@ -184,6 +185,7 @@ services:
         environment:
             POSTGRES_PASSWORD:
             LDAP_BIND_PASSWORD:
+            LDAP_URI:
             SIGNING_KEY:
             AWS_ACCESS_KEY_ID:
             AWS_SECRET_ACCESS_KEY:

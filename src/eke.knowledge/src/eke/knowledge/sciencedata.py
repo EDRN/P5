@@ -92,8 +92,8 @@ class DataCollection(KnowledgeObject):
         InlinePanel('data_collection_categories', label='Data Categories'),
     ]
     search_fields = KnowledgeObject.search_fields + [
-        index.RelatedFields('generating_protocol', [index.SearchField('title')]),
-        index.RelatedFields('associated_organs', [index.SearchField('title')]),
+        index.RelatedFields('generating_protocol', [index.AutocompleteField('title')]),
+        index.RelatedFields('associated_organs', [index.AutocompleteField('title')]),
         index.SearchField('investigator_name'),
     ]
 

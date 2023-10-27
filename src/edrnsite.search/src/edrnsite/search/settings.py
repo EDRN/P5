@@ -36,7 +36,7 @@ INSTALLED_APPS = [
 
 WAGTAILSEARCH_BACKENDS = {
     'default': {
-        'BACKEND': 'wagtail.search.backends.elasticsearch7',
+        'BACKEND': 'wagtail.search.backends.elasticsearch8',
         'AUTO_UPDATE': True,
         'ATOMIC_REBUILD': True,
         'INDEX': 'wagtail',

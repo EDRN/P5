@@ -48,7 +48,8 @@ class KnowledgeObject(MetadataPageMixin, Page):
     content_panels = Page.content_panels + [FieldPanel('identifier'), FieldPanel('description')]
     search_fields = Page.search_fields + [
         index.SearchField('identifier'),
-        index.SearchField('description')
+        index.SearchField('description'),
+        index.AutocompleteField('description')
     ]
 
     def data_table(self) -> dict:
