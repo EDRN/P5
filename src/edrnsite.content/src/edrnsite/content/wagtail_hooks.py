@@ -3,36 +3,37 @@
 '''😌 EDRN Site content: hooks for Wagtail.'''
 
 
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register, ModelAdminGroup
 from .models import CDEPermissibleValue, CDEExplorerAttribute, CDEExplorerObject
+from wagtail.snippets.models import register_snippet
+from wagtail.snippets.views.snippets import SnippetViewSet, SnippetViewSetGroup
 
 
-class CDEPermissibleValueAdmin(ModelAdmin):
+class CDEPermissibleValueAdmin(SnippetViewSet):
     model = CDEPermissibleValue
     menu_label = 'Permissible Values'
-    menu_icon = 'tag'
+    icon = 'tag'
     list_display = ('value',)
 
 
-class CDEExplorerAttributeAdmin(ModelAdmin):
+class CDEExplorerAttributeAdmin(SnippetViewSet):
     model = CDEExplorerAttribute
     menu_label = 'Attributes'
-    menu_icon = 'list-ul'
+    icon = 'list-ul'
     list_display = ('text', 'required')
 
 
-class CDEExplorerObjectAdmin(ModelAdmin):
+class CDEExplorerObjectAdmin(SnippetViewSet):
     model = CDEExplorerObject
     menu_label = 'Objects'
-    menu_icon = 'folder'
+    icon = 'folder'
     list_display = ('name',)
 
 
-class CDEGroup(ModelAdminGroup):
+class CDEGroup(SnippetViewSetGroup):
     menu_label = 'CDEs'
-    menu_icon = 'folder-open-inverse'
+    icon = 'folder-open-inverse'
     menu_order = 475
     items = (CDEExplorerObjectAdmin, CDEExplorerAttributeAdmin, CDEPermissibleValueAdmin)
 
 
-modeladmin_register(CDEGroup)
+register_snippet(CDEGroup)
