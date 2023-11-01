@@ -35,7 +35,7 @@ def protocol_counts(protocol: Protocol, statistic: str) -> str:
     if statistic == 'biomarkers':
         result = str(Biomarker.objects.filter(protocols=protocol).public().live().count())
     elif statistic == 'data':
-        result = str(DataCollection.objects.filter(generating_protocol=protocol).public().live().count())
+        result = str(DataCollection.objects.filter(generating_protocol=protocol).live().count())
     return mark_safe(result)
 
 
