@@ -67,6 +67,10 @@
 
         </div>
         <div class='col-md-2'>
+            {% if page.nci_program_director %}
+                <h3>NCI Program Director</h3>
+                <p>{{page.nci_program_director}}</p>
+            {% endif %}
             {% if page.chair %}
                 <h3>Chair</h3>
                 <p><a href='{{page.chair.url}}'>{{page.chair.title}}</a></p>
