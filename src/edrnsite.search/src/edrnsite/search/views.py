@@ -13,7 +13,10 @@ def search(request):
     '''Extremely basic search.'''
     query = request.GET.get('query')
     if query:
-        results, promotions = Page.objects.live().autocomplete(query), Query.get(query).editors_picks.all()
+        promotions = Query.get(query).editors_picks.all()
+        results = Page.objects.live().autocomplete(query)
+        if not results:
+            results = Page.objects.live().search(query)
         Query.get(query).add_hit()
     else:
         results, promotions = Page.objects.none(), SearchPromotion.objects.none()
