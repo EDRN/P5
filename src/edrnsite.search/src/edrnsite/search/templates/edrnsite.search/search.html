@@ -132,7 +132,7 @@
                 <ul class='list-group list-group-flush'>
                     {% for promotion in promotions %}
                         <li class='list-group-item'>
-                            <a href='{{promotion.page.url}}' title='{{promotion.description}}'>
+                            <a class='promoted' href='{{promotion.page.url}}' title='{{promotion.description}}'>
                                 {{promotion.page.title}}
                             </a>
                             <small>({{promotion.page.content_type.name|capfirst}})</small>
