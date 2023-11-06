@@ -1,4 +1,5 @@
 {% extends 'eke.knowledge/knowledge-object.html' %}
+{% load knowledge_filters %}
 {# 🔮 TODO: caching #}
 {% block knowledge_description %}{% endblock %}
 {% block knowledge_content %}
@@ -48,7 +49,7 @@
             </dl>
 
             <h2>Abstact</h2>
-            <p>{{page.description|safe|cut:"&#060;br&#062;"}}</p>
+            <p>{{page.description|safe|replace_brs}}</p>
 
             <h2>Aims</h2>
             <p>{{page.aims|safe}}</p>

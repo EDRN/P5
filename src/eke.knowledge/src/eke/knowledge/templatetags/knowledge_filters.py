@@ -31,3 +31,9 @@ def knowledge_value_joined(items: Orderable, separator=', ') -> str:
     separating each.
     '''
     return separator.join([i.value for i in items.all()])
+
+
+@register.filter
+def replace_brs(value: str) -> str:
+    '''Certain protocols have abstracts with tons of <br>s in them. Change those to spaces.'''
+    return value.replace('&#060;br&#062;', ' ')
