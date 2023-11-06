@@ -5,16 +5,24 @@
 
 from ..biomarker import BiomarkerBodySystemCertification, BodySystemStudy
 from ..constants import DepictableSections as ds
-from ..constants import PRIVATE_BIOMARKER_BOILERPLATE_ID
 from django import template
 from django.db.models.functions import Lower
 from django.template.context import Context
+from django.urls import reverse
 from django.utils.text import slugify
-from edrnsite.content.models import BoilerplateSnippet, CertificationSnippet
+from edrnsite.content.models import CertificationSnippet
 from wagtail.admin.templatetags.wagtailuserbar import get_page_instance  # Feels odd importing from here
 
 
 register = template.Library()
+
+
+def _authentication(request) -> dict:
+    return {
+        'authenticated': request.user.is_authenticated,
+        'logout': reverse('logout') + '?next=' + request.path,
+        'login': reverse('wagtailcore_login') + '?next=' + request.path
+    }
 
 
 @register.inclusion_tag('eke.biomarkers/biomarker-basics.html', takes_context=True)
@@ -28,6 +36,7 @@ def biomarker_basics(context: Context) -> dict:
         'qa_state': biomarker.qa_state,
         'biomarker_type': biomarker.biomarker_type,
         'hgnc_name': biomarker.hgnc_name,
+        'request': context.get('request')
     }
 
 
@@ -37,7 +46,8 @@ def biomarker_studies(context: Context) -> dict:
     biomarker = get_page_instance(context)
     return {
         'visible': ds.STUDIES in context['visible_sections'],
-        'protocols': biomarker.sorted_protocols
+        'protocols': biomarker.sorted_protocols,
+        'request': context.get('request')        
     }
 
 
@@ -47,7 +57,8 @@ def biomarker_resources(context: Context) -> dict:
     biomarker = get_page_instance(context)
     return {
         'visible': ds.RESOURCES in context['visible_sections'],
-        'resources': biomarker.sorted_resources
+        'resources': biomarker.sorted_resources,
+        'request': context.get('request')        
     }
 
 
@@ -57,7 +68,8 @@ def biomarker_publications(context: Context) -> dict:
     biomarker = get_page_instance(context)
     return {
         'visible': ds.PUBLICATIONS in context['visible_sections'],
-        'publications': biomarker.sorted_publications
+        'publications': biomarker.sorted_publications,
+        'request': context.get('request')
     }
 
 
@@ -67,7 +79,8 @@ def biomarker_datacollections(context: Context) -> dict:
     biomarker = get_page_instance(context)
     return {
         'visible': ds.DATA_COL in context['visible_sections'],
-        'data_collections': biomarker.sorted_science_data
+        'data_collections': biomarker.sorted_science_data,
+        'request': context.get('request')        
     }
 
 
@@ -89,16 +102,22 @@ def biomarker_organs(context: Context) -> dict:
     return {
         'supplemental_visible': ds.SUPPLEMENTAL in context['visible_sections'],
         'biomarker': biomarker,
-        'organs': [(slugify(i.title), i, i.qa_state == 'Accepted' or visible) for i in organs]
+        'organs': [(slugify(i.title), i, i.qa_state == 'Accepted' or visible) for i in organs],
+        'request': context.get('request')
     }
 
 
 @register.inclusion_tag('eke.biomarkers/private-biomarker.html', takes_context=True)
 def private_biomarker(context: Context) -> dict:
     '''For explaining why portions of a biomarker aren't visible.'''
-    boilerplate = BoilerplateSnippet.objects.filter(bp_code__exact=PRIVATE_BIOMARKER_BOILERPLATE_ID).first()
-    text = boilerplate.text if boilerplate and boilerplate.text else '🤫'
-    return {'boilerplate': text}
+    request = context.get('request')
+    return _authentication(request)
+
+
+@register.inclusion_tag('eke.biomarkers/private-biomarkers.html', takes_context=True)
+def private_biomarkers(context: Context) -> dict:
+    request = context.get('request')
+    return _authentication(request)
 
 
 @register.inclusion_tag('eke.biomarkers/certification.html', takes_context=False)

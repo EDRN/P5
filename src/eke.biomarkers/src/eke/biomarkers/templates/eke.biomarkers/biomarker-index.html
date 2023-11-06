@@ -1,7 +1,7 @@
 {% extends 'eke.knowledge/knowledge-folder.html' %}
 {# 🧫 Biomarker Index #}
 {# 🔮 TODO: caching #}
-{% load wagtailcore_tags knowledge_tags plotly_dash static edrnsite_content_tags plotly_dash %}
+{% load wagtailcore_tags knowledge_tags plotly_dash static edrnsite_content_tags plotly_dash biomarker_tags %}
 {% block extra_css %}
     {% plotly_header %}
     <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.12.1/b-2.2.3/b-colvis-2.2.3/b-html5-2.2.3/b-print-2.2.3/fh-3.2.4/kt-2.7.0/r-2.3.0/datatables.min.css'/>
@@ -86,7 +86,7 @@
     {% endif %}
     <div class='row mb-4'>
         <div class='col-lg-12'>
-            {% edrn_boilerplate "private-biomarker-admonition" %}
+            {% private_biomarkers %}
         </div>
     </div>
 {% endblock knowledge_content %}

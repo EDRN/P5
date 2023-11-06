@@ -4,11 +4,11 @@
         <h4 class='alert-heading'><i class='bi bi-incognito'></i> Non-Public Biomarker</h4>
         <p>
             {% if authenticated %}
-                Organ-specific information for this biomarker is currently being annotated or is "under review".
+                Organ-specific information for some biomarkers are currently being annotated or are "under review".
                 <a href='{{logout}}'>Logging out</a> and then <a href='{{login}}'>back in</a> using an account
                 with access may give you privileges to view additional information.
             {% else %}
-                Organ-specific information for this biomarker is currently being annotated or is "under review".
+                Organ-specific information for some biomarkers are currently being annotated or are "under review".
                 <a href='{{login}}'>Logging in</a> may give you privileges to view additional information.
             {% endif %}
             Contact the <a href="mailto:ic-portal@jpl.nasa.gov">Informatics Center</a> if you believe you
