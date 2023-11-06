@@ -137,24 +137,19 @@ services:
     #
     # Ports 9200 and 9300, not published.
     search:
-        image: opensearchproject/opensearch:2.11.0
+        image: elasticsearch:8.10.2
         # :crystal-ball-emoji: TODO: user ID 500/26013 issue … do we need a custom elasticsearch image?
         volumes:
             -
                 type: volume
                 source: elasticdata
-                target: /usr/share/opensearch/data
+                target: /usr/share/elasticsearch/data
         networks:
             -   lattice
         environment:
-            cluster.name: 'search'
-            node.name: 'search'
-            discovery.type: 'single-node'
+            node.name: search
+            discovery.type: single-node
             xpack.security.enabled: 'false'
-            DISABLE_INSTALL_DEMO_CONFIG: 'true'
-            DISABLE_SECURITY_PLUGIN: 'true'
-            bootstrap.memory_lock: 'true'
-            OPENSEARCH_JAVA_OPTS: '-Xms512m -Xmx512m'
         ulimits:
             nofile:
                 soft: 1048576
