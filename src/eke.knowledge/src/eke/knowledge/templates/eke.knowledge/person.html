@@ -81,7 +81,16 @@
                 <dl>
                     {% for interest in page.interests.all %}
                         <dt>{{interest.name}}</dt>
-                        <dd>{{interest.description}}</dd>
+                        {% comment %}
+                            Using |safe here is not actually safe! See this comment:
+                                https://github.com/EDRN/P5/issues/299#issuecomment-1802052995
+                            The issue is that the DMCC's data is a mess; if we treat it as
+                            plain text, we get HTML entities and markup appearing. But if we treat
+                            it as HTML, there are errors in the upstream data of improperly
+                            encoded entities. And using `|safe` makes me leery since we're trusting
+                            the upstream data from the DMCC which, we've seen, is suspect.
+                        {% endcomment %}
+                        <dd>{{interest.description|safe}}</dd>
                     {% endfor %}
                 </dl>
             {% else %}
@@ -90,7 +99,7 @@
 
             <p class='small mt-3'>
                 To update protocols, publications, biomarkers, or science data, please contact the
-                <a href='mailto:ic-portal@jpl.nasa.gvo'>Informatics Center</a>.
+                <a href='mailto:edrndmcc@fredhutch.org'>Data Management and Coordinating Center</a>.
             </p>
 
         </div>
