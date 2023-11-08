@@ -14,10 +14,16 @@ import logging, urllib.parse, rdflib
 
 _logger = logging.getLogger(__name__)
 
-_chair      = rdflib.term.URIRef('http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#chair')
-_co_chair   = rdflib.term.URIRef('http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#coChair')
-_member     = rdflib.term.URIRef('http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#member')
-_consultant = rdflib.term.URIRef('http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#consultant')
+_chair             = rdflib.term.URIRef('http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#chair')
+_co_chair          = rdflib.term.URIRef('http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#coChair')
+_member            = rdflib.term.URIRef('http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#member')
+_project_scientist = rdflib.term.URIRef('urn:edrn:rdf:predicates:project_scientist')
+_program_officer   = rdflib.term.URIRef('urn:edrn:rdf:predicates:program_officer')
+_consultant        = rdflib.term.URIRef('http://edrn.nci.nih.gov/xml/rdf/edrn.rdf#consultant')
+
+# Note: at one time Heather Kincaid was the sole "consultant" in the RDF; there are none now,
+# however I'm leaving the predicate ↑ in here in case any more show up. Here in P5 we treat
+# them as just additional members.
 
 
 class Ingestor(BaseIngestor):
@@ -49,8 +55,14 @@ class Ingestor(BaseIngestor):
                 if person:
                     committee.co_chair = person
             new_members = set(predicates.get(_member, [])) | set(predicates.get(_consultant, []))
-            people = Person.objects.filter(identifier__in=new_members).order_by('title')
-            committee.members.set(people, bulk=True, clear=True)
+            members = Person.objects.filter(identifier__in=new_members).order_by('title')
+            committee.members.set(members, bulk=True, clear=True)
+            new_scientists = set(predicates.get(_project_scientist, []))
+            scientists = Person.objects.filter(identifier__in=new_scientists).order_by('title')
+            committee.project_scientists.set(scientists, bulk=True, clear=True)
+            new_officers = set(predicates.get(_program_officer, []))
+            officers = Person.objects.filter(identifier__in=new_officers).order_by('title')
+            committee.program_officers.set(officers, bulk=True, clear=True)
             try:
                 committee.save()
             except ValidationError:
@@ -64,11 +76,13 @@ class CommitteeIndex(KnowledgeFolder):
     '''A committee index contains committees.'''
     subpage_types = [Page]
     template = 'eke.knowledge/committee-index.html'
+
     def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
         context = super().get_context(request, *args, **kwargs)
         cbs = Page.objects.child_of(self).live().filter(title__endswith='Cancers Research Group').order_by(Lower('title'))
         others = Page.objects.child_of(self).live().exclude(title__endswith='Cancers Research Group').order_by(Lower('title'))
         context['collaborative_groups'], context['other_groups'] = cbs, others
         return context
+
     class RDFMeta:
         ingestor = Ingestor

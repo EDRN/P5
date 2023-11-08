@@ -118,9 +118,6 @@ class Committee(Page):
 
     id_number = models.CharField(blank=True, max_length=10, help_text='DMCC-assigned identification number')
     description = models.TextField(blank=True, null=False, help_text='A summary or descriptive abstract')
-    nci_program_director = models.CharField(
-        blank=True, null=False, max_length=120, help_text='Optional name of the director of this program at NCI'
-    )
     chair = models.ForeignKey(
         Person, null=True, blank=True, verbose_name='Chair', related_name='committees_I_chair',
         on_delete=models.SET_NULL
@@ -132,14 +129,21 @@ class Committee(Page):
     members = ParentalManyToManyField(
         Person, blank=True, verbose_name='Members', related_name='committees_I_belong_to'
     )
+    program_officers = ParentalManyToManyField(
+        Person, blank=True, verbose_name='Program Officers', related_name='committees_I_officiate'
+    )
+    project_scientists = ParentalManyToManyField(
+        Person, blank=True, verbose_name='Project Scientists', related_name='committess_I_do_science_for'
+    )
 
     content_panels = Page.content_panels + [
         FieldPanel('id_number'),
         FieldPanel('description'),
-        FieldPanel('nci_program_director'),
         FieldPanel('chair'),
         FieldPanel('co_chair'),
         FieldPanel('members'),
+        FieldPanel('program_officers'),
+        FieldPanel('project_scientists'),
     ]
 
     def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
