@@ -80,10 +80,22 @@
                         {% endfor %}
                     </ul>
                 {% endif %}
-                {% if invisible_collections == 1 %}
-                    <p class='small'>There is one collection of data that has not yet been made public.</p>
-                {% elif invisible_collections > 1 %}
-                    <p class='small'>There are {{invisible_collections}} collections of data that have not yet been made public.</p>
+                {% if invisible_collections %}
+                    <p class='small'>
+                        {% if invisible_collections == 1 %}
+                            There is one collection of data that has not yet been made public.
+                        {% elif invisible_collections > 1 %}
+                            There are {{invisible_collections}} collections of data that have not yet been made public.
+                        {% endif %}
+                        {% if authenticated %}
+                            You are currently logged in, but not with an account that can view the names of the
+                            non-public data collections.
+                            <a href='{{login}}'>Logging in with a different account</a> may give you access.
+                        {% else %}
+                            <a href='{{login}}'>Logging in</a> may you give you access to the names of the
+                            non-public data collections.
+                        {% endif %}
+                    </p>
                 {% endif %}
             {% else %}
                 <ul>

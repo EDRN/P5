@@ -17,6 +17,7 @@ from django.db.models.fields import Field
 from django.db.models.functions import Lower
 from django.http import HttpRequest
 from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils.text import slugify
 from django_plotly_dash import DjangoDash
 from modelcluster.fields import ParentalManyToManyField
@@ -147,6 +148,12 @@ class Protocol(KnowledgeObject):
             str(rdflib.DCTERMS.description): _ComplexDescriptionRDFAttribute('description', scalar=True),
             esu('protocolType'): RDFAttribute('kind', scalar=True)
         }
+    def _authentication(self, request: HttpRequest) -> dict:
+        '''Given a request, determine if the user is authenticated and what the login link would be if not.'''
+        params = {'authenticated': request.user.is_authenticated}
+        if not params['authenticated']:
+            params['login'] = reverse('wagtailcore_login') + '?next=' + request.path
+        return params
     def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
         '''Get the context for the page template.'''
         context = super().get_context(request, args, kwargs)
@@ -158,6 +165,8 @@ class Protocol(KnowledgeObject):
         total_collections = dcs.count()
         dcs = filter_by_user(dcs, request.user)
         invisible_collections = total_collections - dcs.count()
+        if invisible_collections:
+            context.update(self._authentication(request))
         context['data_collections'] = dcs
         context['invisible_collections'] = invisible_collections
         from eke.biomarkers.biomarker import Biomarker
