@@ -9,6 +9,7 @@ from .publications import Publication
 from .rdf import RDFAttribute, RelativeRDFAttribute
 from .utils import edrn_schema_uri as esu
 from .utils import Ingestor as BaseIngestor
+from .viewsupport import MemberFinderPage
 from django.core.exceptions import ValidationError
 from django.core.files.images import ImageFile
 from django.db import models
@@ -16,6 +17,7 @@ from django.db.models import Q, Case, When, Value, BooleanField
 from django.db.models.fields import Field
 from django.db.models.functions import Lower
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 from django.utils.text import slugify
 from django_plotly_dash import DjangoDash
 from eke.geocoding.models import InvestigatorAddress
@@ -709,6 +711,15 @@ class SiteIndex(KnowledgeFolder):
         app.layout = html.Div(className='row', children=[
             dcc.Graph(id='map-of-edrn-sites', figure=figure)
         ])
+
+        # Use the new MemberFinderPage if available, otherwise fall back to the view
+        mfp = MemberFinderPage.objects.first()
+        if mfp:
+            member_finder_url = mfp.url
+        else:
+            member_finder_url = reverse('find-members')
+        context['member_finder_url'] = member_finder_url
+
         return context
 
     class Meta:

@@ -12,6 +12,7 @@ from .miscresources import MiscellaneousResource, MiscellaneousResourceIndex
 from .protocols import ProtocolIndex, Protocol
 from .sciencedata import DataCollection, DataCollectionIndex
 from .sites import Site, SiteIndex, Person, OrganizationalGroup
+from .viewsupport import MemberFinderPage
 from django.db import models
 from wagtail.contrib.settings.models import BaseSiteSetting, register_setting
 from wagtail.admin.panels import FieldPanel
@@ -44,6 +45,7 @@ __all__ = [
     DiseaseIndex,
     KnowledgeFolder,
     KnowledgeObject,
+    MemberFinderPage,
     MiscellaneousResource,
     MiscellaneousResourceIndex,
     OrganizationalGroup,
