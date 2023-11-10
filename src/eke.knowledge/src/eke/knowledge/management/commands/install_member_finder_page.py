@@ -4,6 +4,7 @@
 
 from django.core.cache import caches
 from django.core.management.base import BaseCommand
+from edrnsite.content.models import FlexPage
 from eke.knowledge.models import MemberFinderPage
 from wagtail.models import Site, Page
 
@@ -17,6 +18,12 @@ class Command(BaseCommand):
         '''Handle the EDRN `install_member_finder_page` command.'''
         site = Site.objects.filter(is_default_site=True).first()
         assert site.site_name == 'Early Detection Research Network'
+
+        self.stdout.write('Renaming any existing Member Finder FlexPage')
+        existing_flex = FlexPage.objects.descendant_of(site.root_page).filter(slug='member-finder').first()
+        if existing_flex:
+            existing_flex.slug = 'member-finder-landing'
+            existing_flex.save()
 
         self.stdout.write('Deleting any existing MemberFinderPages')
         MemberFinderPage.objects.descendant_of(site.root_page).delete()
