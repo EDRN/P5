@@ -8,7 +8,7 @@ from .knowledge import KnowledgeObject, KnowledgeFolder
 from .rdf import RDFAttribute, RelativeRDFAttribute
 from .sites import Site
 from .utils import edrn_schema_uri as esu
-from .utils import Ingestor as BaseIngestor, ghetto_plotly_legend
+from .utils import Ingestor as BaseIngestor, ghetto_plotly_legend, filter_by_user
 from dash_dangerously_set_inner_html import DangerouslySetInnerHTML
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -155,7 +155,11 @@ class Protocol(KnowledgeObject):
         context['nonEDRNProtocol'] = self.protocolID >= limit
         from .sciencedata import DataCollection
         dcs = DataCollection.objects.filter(generating_protocol=self).live().order_by(Lower('title'))
+        total_collections = dcs.count()
+        dcs = filter_by_user(dcs, request.user)
+        invisible_collections = total_collections - dcs.count()
         context['data_collections'] = dcs
+        context['invisible_collections'] = invisible_collections
         from eke.biomarkers.biomarker import Biomarker
         bms = Biomarker.objects.filter(protocols=self).live().order_by(Lower('title'))
         context['biomarkers'] = bms

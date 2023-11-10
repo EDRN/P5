@@ -72,14 +72,24 @@
             </ul>
 
             <h2>Data Collections</h2>
-            <ul>
-                {% for dc in data_collections %}
-                    <li><a href='{{dc.identifier}}'>{{dc.title}}</a></li>
-                {% empty %}
-                    <li class='small'>No data available at this time for this protocol</li>
-                {% endfor %}
-            </ul>
-
+            {% if data_collections or invisible_collections %}
+                {% if data_collections %}
+                    <ul>
+                        {% for dc in data_collections %}
+                            <li><a href='{{dc.identifier}}'>{{dc.title}}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% if invisible_collections == 1 %}
+                    <p class='small'>There is one collection of data that has not yet been made public.</p>
+                {% elif invisible_collections > 1 %}
+                    <p class='small'>There are {{invisible_collections}} collections of data that have not yet been made public.</p>
+                {% endif %}
+            {% else %}
+                <ul>
+                    <li class='small'>No data collections available at this time for thie protocol</li>
+                </ul>
+            {% endif %}
 
         </div>
         <div class='col-lg-3'>
