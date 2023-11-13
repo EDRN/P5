@@ -1,0 +1,3708 @@
+{
+	"info": {
+		"_postman_id": "9dbe02c4-e236-4384-9e9d-76b3ba491f82",
+		"name": "EDRN P5",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10615558"
+	},
+	"item": [
+		{
+			"name": "Header",
+			"item": [
+				{
+					"name": "Luggage tag logo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Luggage tag status is OK', () => {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test('Luggage tag is PNG image', () => {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('image/png');",
+									"});",
+									"pm.test('Luggage tag image is over 6KB in size', () => {",
+									"    const cl_str = pm.response.headers.get('Content-Length');",
+									"    const cl_bytes = parseInt(cl_str, 10)",
+									"    pm.expect(cl_bytes).to.be.above(6*1024);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/static/edrn.theme/images/luggage-tag.png",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"static",
+								"edrn.theme",
+								"images",
+								"luggage-tag.png"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Personal log in link",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Page status is OK', () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Log in link present', () => {",
+									"    const body = pm.response.text();",
+									"    pm.expect(body).to.include(\"<a href='/_util/login/?next=/'>Log in</a>\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Box",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Page status is OK', () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Search box found', () => {",
+									"    const body = pm.response.text();",
+									"    const exp = /input.*name=.query..*type=.search..*placeholder=.search./;",
+									"    pm.expect(body).to.match(exp);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Footer",
+			"item": [
+				{
+					"name": "Section 508 links",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Page status is OK', () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Accessibilty link found', () => {",
+									"    const body = pm.response.text();",
+									"    const exp = /Policies.*https:\\/\\/www\\.cancer\\.gov\\/policies\\/accessibility.*Accessibility/;",
+									"    pm.expect(body).to.match(exp);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NIH motto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Page status is OK', () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test('NIH motto found', () => {",
+									"    const body = pm.response.text();",
+									"    const exp = /NIH … Turning Discovery Into Health®/;",
+									"    pm.expect(body).to.match(exp);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Social media links",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Page status is OK', () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Facebook link', () => {",
+									"    const body = pm.response.text();",
+									"    const exp = /https:\\/\\/www\\.facebook\\.com\\/cancer\\.gov.*Facebook/;",
+									"    pm.expect(body).to.match(exp);",
+									"});",
+									"pm.test('Twitter link', () => {",
+									"    const body = pm.response.text();",
+									"    const exp = /https:\\/\\/twitter\\.com\\/NCIPrevention.*Twitter/;",
+									"    pm.expect(body).to.match(exp);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Contact DCP link",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Page status is OK', () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Contact us link', () => {",
+									"    const body = pm.response.text();",
+									"    const exp = /href=.\\/administrivia\\/contact-us\\/.>Contact Us/;",
+									"    pm.expect(body).to.match(exp);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Organizational links",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Page status is OK', () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Health and Human Services', () => {",
+									"    const body = pm.response.text();",
+									"    const exp = /http:\\/\\/www\\.hhs\\.gov\\/.*U\\.S\\. Department of Health and Human Services/;",
+									"    pm.expect(body).to.match(exp);",
+									"});",
+									"pm.test('National Institutes of Health', () => {",
+									"    const body = pm.response.text();",
+									"    const exp = /http:\\/\\/www\\.nih\\.gov\\/.*National Institutes of Health/;",
+									"    pm.expect(body).to.match(exp);",
+									"});",
+									"pm.test('National Cancer Institute', () => {",
+									"    const body = pm.response.text();",
+									"    const exp = /https:\\/\\/www\\.cancer\\.gov\\/.*National Cancer Institute/;",
+									"    pm.expect(body).to.match(exp);",
+									"});",
+									"pm.test('United States Government', () => {",
+									"    const body = pm.response.text();",
+									"    const exp = /http:\\/\\/usa\\.gov\\/.*USA\\.gov/;",
+									"    pm.expect(body).to.match(exp);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Static content",
+			"item": [
+				{
+					"name": "Ancient content",
+					"item": [
+						{
+							"name": "Data and Resources",
+							"item": [
+								{
+									"name": "Statistical resources",
+									"item": [
+										{
+											"name": "Statistical resources page",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('Page status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"pm.test('Zheng group link', () => {",
+															"    const body = pm.response.text();",
+															"    const exp = /href=.\\/data-and-resources\\/statistical-resources\\/zheng-group\\/.>Zheng Group/;",
+															"    pm.expect(body).to.match(exp);",
+															"});",
+															"pm.test('Huang group link', () => {",
+															"    const body = pm.response.text();",
+															"    const exp = /href=.\\/data-and-resources\\/statistical-resources\\/huang-group\\/.>Huang Group/;",
+															"    pm.expect(body).to.match(exp);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/data-and-resources/statistical-resources/",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"data-and-resources",
+														"statistical-resources",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Zheng group page",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('Page status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/data-and-resources/statistical-resources/zheng-group/",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"data-and-resources",
+														"statistical-resources",
+														"zheng-group",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Huang group page",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('Page status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/data-and-resources/statistical-resources/huang-group/",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"data-and-resources",
+														"statistical-resources",
+														"huang-group",
+														""
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Standard op procedures",
+									"item": [
+										{
+											"name": "SOP page",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('Page status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"pm.test('Ovarian blood SOP', () => {",
+															"    const body = pm.response.text();",
+															"    const exp = /href=.\\/documents\\/[^\\/]+\\/Ovarian_Blood_SOP\\.pdf.>Ovarian Blood SOP/;",
+															"    pm.expect(body).to.match(exp);",
+															"});",
+															"pm.test('Ovarian uterine lavage SOP', () => {",
+															"    const body = pm.response.text();",
+															"    const exp = /href=.\\/documents\\/[^\\/]+\\/Ovarian_Uterine_Lavage_SOP\\.pdf.>Ovarian Uterine Lavage SOP/;",
+															"    pm.expect(body).to.match(exp);",
+															"});",
+															"pm.test('Pancreas blood SOP', () => {",
+															"    const body = pm.response.text();",
+															"    const exp = /href=.\\/documents\\/[^\\/]+\\/Pancreas_Blood_SOP\\.pdf.>Pancreas Blood SOP/;",
+															"    pm.expect(body).to.match(exp);",
+															"});",
+															"pm.test('Pancreas cyst fluid SOP', () => {",
+															"    const body = pm.response.text();",
+															"    const exp = /href=.\\/documents\\/[^\\/]+\\/Pancreas_Cyst_Fluid_SOP\\.pdf.>Pancreas Cyst Fluid SOP/;",
+															"    pm.expect(body).to.match(exp);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/data-and-resources/standard-operating-procedures/",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"data-and-resources",
+														"standard-operating-procedures",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Ovarian blood SOP PDF",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"})",
+															"pm.test('File is PDF', () => {",
+															"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+															"});",
+															"pm.test('File size is large enough', () => {",
+															"    const cl_str = pm.response.headers.get('Content-Length');",
+															"    const cl_bytes = parseInt(cl_str, 10)",
+															"    pm.expect(cl_bytes).to.be.above(530000);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/documents/4/Ovarian_Blood_SOP.pdf",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"documents",
+														"4",
+														"Ovarian_Blood_SOP.pdf"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Ovarian uterine lavage SOP PDF",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"})",
+															"pm.test('File is PDF', () => {",
+															"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+															"});",
+															"pm.test('File size is large enough', () => {",
+															"    const cl_str = pm.response.headers.get('Content-Length');",
+															"    const cl_bytes = parseInt(cl_str, 10)",
+															"    pm.expect(cl_bytes).to.be.above(350000);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/documents/3/Ovarian_Uterine_Lavage_SOP.pdf",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"documents",
+														"3",
+														"Ovarian_Uterine_Lavage_SOP.pdf"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Pancreas blood SOP PDF",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"})",
+															"pm.test('File is PDF', () => {",
+															"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+															"});",
+															"pm.test('File size is large enough', () => {",
+															"    const cl_str = pm.response.headers.get('Content-Length');",
+															"    const cl_bytes = parseInt(cl_str, 10)",
+															"    pm.expect(cl_bytes).to.be.above(1100000);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/documents/2/Pancreas_Blood_SOP.pdf",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"documents",
+														"2",
+														"Pancreas_Blood_SOP.pdf"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Pancreas cyst fluid SOP PDF",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"})",
+															"pm.test('File is PDF', () => {",
+															"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+															"});",
+															"pm.test('File size is large enough', () => {",
+															"    const cl_str = pm.response.headers.get('Content-Length');",
+															"    const cl_bytes = parseInt(cl_str, 10)",
+															"    pm.expect(cl_bytes).to.be.above(1200000);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/documents/1/Pancreas_Cyst_Fluid_SOP.pdf",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"documents",
+														"1",
+														"Pancreas_Cyst_Fluid_SOP.pdf"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Work with EDRN",
+							"item": [
+								{
+									"name": "Public-private partnerships",
+									"item": [
+										{
+											"name": "Public-private partnership page",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTO status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"pm.test('EDRN-PPP link', () => {",
+															"    const body = pm.response.text();",
+															"    const exp = /href=.\\/documents\\/[^\\/]+\\/PPP_Guidlelines\\.pdf.>EDRN-PPP Guidelines/;",
+															"    pm.expect(body).to.match(exp);",
+															"});",
+															"pm.test('IP rights and responsibilities link', () => {",
+															"    const body = pm.response.text();",
+															"    const exp = /href=.\\/documents\\/[^\\/]+\\/IP_Rights__Responsibilites_10-2014\\.pdf.>EDRN IP Rights and Responsibilities/;",
+															"    pm.expect(body).to.match(exp);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/work-with-edrn/public-private-partnerships/",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"work-with-edrn",
+														"public-private-partnerships",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "EDRN-PPP guidelines PDF",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"})",
+															"pm.test('File is PDF', () => {",
+															"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+															"});",
+															"pm.test('File size is large enough', () => {",
+															"    const cl_str = pm.response.headers.get('Content-Length');",
+															"    const cl_bytes = parseInt(cl_str, 10)",
+															"    pm.expect(cl_bytes).to.be.above(130000);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/documents/150/PPP_Guidlelines.pdf",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"documents",
+														"150",
+														"PPP_Guidlelines.pdf"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "IP rights and responsibilities PDF",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"})",
+															"pm.test('File is PDF', () => {",
+															"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+															"});",
+															"pm.test('File size is large enough', () => {",
+															"    const cl_str = pm.response.headers.get('Content-Length');",
+															"    const cl_bytes = parseInt(cl_str, 10)",
+															"    pm.expect(cl_bytes).to.be.above(190000);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/documents/151/IP_Rights__Responsibilites_10-2014.pdf",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"documents",
+														"151",
+														"IP_Rights__Responsibilites_10-2014.pdf"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Memoranda of understanding",
+									"item": [
+										{
+											"name": "Memoranda of understanding page",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"pm.test('Japan link', () => {",
+															"    const body = pm.response.text();",
+															"    const exp = /href=.\\/documents\\/[^\\/]+\\/NCC_MOU\\.pdf.>National Cancer Center, Japan/;",
+															"    pm.expect(body).to.match(exp);",
+															"});",
+															"pm.test('Turkey link', () => {",
+															"    const body = pm.response.text();",
+															"    const exp = /href=.\\/documents\\/[^\\/]+\\/31003_TurkishMinistryofHealth_NCI_MOU\\.pdf.>Cancer Control Department of the Ministry of Health, Turkey/;",
+															"    pm.expect(body).to.match(exp);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/work-with-edrn/memoranda-of-understanding/",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"work-with-edrn",
+														"memoranda-of-understanding",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Japan MOU PDF",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"})",
+															"pm.test('File is PDF', () => {",
+															"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+															"});",
+															"pm.test('File size is large enough', () => {",
+															"    const cl_str = pm.response.headers.get('Content-Length');",
+															"    const cl_bytes = parseInt(cl_str, 10)",
+															"    pm.expect(cl_bytes).to.be.above(90000);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/documents/152/NCC_MOU.pdf",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"documents",
+														"152",
+														"NCC_MOU.pdf"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "New Request",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"})",
+															"pm.test('File is PDF', () => {",
+															"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+															"});",
+															"pm.test('File size is large enough', () => {",
+															"    const cl_str = pm.response.headers.get('Content-Length');",
+															"    const cl_bytes = parseInt(cl_str, 10)",
+															"    pm.expect(cl_bytes).to.be.above(70000);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/documents/153/31003_TurkishMinistryofHealth_NCI_MOU.pdf",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"documents",
+														"153",
+														"31003_TurkishMinistryofHealth_NCI_MOU.pdf"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Advocacy groups page",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/work-with-edrn/advocacy-groups/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"work-with-edrn",
+												"advocacy-groups",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Validation study proposal page",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/work-with-edrn/propose-a-validation-study/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"work-with-edrn",
+												"propose-a-validation-study",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "News and Events",
+							"item": [
+								{
+									"name": "Webinars",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/news-and-events/webinars/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"news-and-events",
+												"webinars",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "About EDRN",
+							"item": [
+								{
+									"name": "FDA-Approved Tests",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/about-edrn/fda-approved-tests/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"about-edrn",
+												"fda-approved-tests",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "CLIA-Approved Markers",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/about-edrn/clia-approved-markers/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"about-edrn",
+												"clia-approved-markers",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Five-Phase Approach",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/about-edrn/five-phase-approach-and-prospective-specimen-collection-retrospective-blinded-evaluation-study-design/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"about-edrn",
+												"five-phase-approach-and-prospective-specimen-collection-retrospective-blinded-evaluation-study-design",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Informatics and Data Science",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/about-edrn/informatics-and-data-science/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"about-edrn",
+												"informatics-and-data-science",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "History",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/about-edrn/history-of-the-edrn/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"about-edrn",
+												"history-of-the-edrn",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Important content",
+					"item": [
+						{
+							"name": "Data and Resources",
+							"item": [
+								{
+									"name": "Specimen Reference Sets",
+									"item": [
+										{
+											"name": "Benign Breast Disease",
+											"item": [
+												{
+													"name": "Benign breast disease page",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('HTTP status is OK', () => {",
+																	"    pm.response.to.have.status(200);",
+																	"});",
+																	"pm.test('Link to summary document', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /href=.\\/documents\\/[^\\/]+\\/BBD_Refset_summary_document_2018-06-27\\.pdf.>BBD Reference Set Summary Document/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	"pm.test('Link to standard operating procedure', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /href=.\\/documents\\/[^\\/]+\\/final_bbd_protocol_for_validation_5-7-2014\\.pdf.>SOP For Selection of Benign Breast Disease Project/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	"",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/benign-breast-disease-tissue-resource-bbd/",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"data-and-resources",
+																"specimen-reference-sets",
+																"benign-breast-disease-tissue-resource-bbd",
+																""
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "BBD summary PDF",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('HTTP status is OK', () => {",
+																	"    pm.response.to.have.status(200);",
+																	"})",
+																	"pm.test('File is PDF', () => {",
+																	"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+																	"});",
+																	"pm.test('File size is large enough', () => {",
+																	"    const cl_str = pm.response.headers.get('Content-Length');",
+																	"    const cl_bytes = parseInt(cl_str, 10)",
+																	"    pm.expect(cl_bytes).to.be.above(310000);",
+																	"});",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/documents/24/BBD_Refset_summary_document_2018-06-27.pdf",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"documents",
+																"24",
+																"BBD_Refset_summary_document_2018-06-27.pdf"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "BBD SOP PDF",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('HTTP status is OK', () => {",
+																	"    pm.response.to.have.status(200);",
+																	"})",
+																	"pm.test('File is PDF', () => {",
+																	"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+																	"});",
+																	"pm.test('File size is large enough', () => {",
+																	"    const cl_str = pm.response.headers.get('Content-Length');",
+																	"    const cl_bytes = parseInt(cl_str, 10)",
+																	"    pm.expect(cl_bytes).to.be.above(50000);",
+																	"});",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/documents/17/final_bbd_protocol_for_validation_5-7-2014.pdf",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"documents",
+																"17",
+																"final_bbd_protocol_for_validation_5-7-2014.pdf"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Breast",
+											"item": [
+												{
+													"name": "Breast page",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('HTTP status is OK', () => {",
+																	"    pm.response.to.have.status(200);",
+																	"});",
+																	"pm.test('Link to summary document', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /href=.\\/documents\\/[^\\/]+\\/breast_refset_summary\\.pdf.>Breast Reference Set Summary/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	"pm.test('Link to protocol PDF', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /href=.\\/documents\\/[^\\/]+\\/breastrefset-protocol-v1.1\\.pdf.>Breast Reference Set Protocol/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	"pm.test('Link to clinical forms PDF', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /href=.\\/documents\\/[^\\/]+\\/breast_reference_set_forms\\.pdf.>Breast Reference Set Participant and Clinical Forms/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	"",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/breast-cancer-reference-sets/",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"data-and-resources",
+																"specimen-reference-sets",
+																"breast-cancer-reference-sets",
+																""
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Summary PDF",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('HTTP status is OK', () => {",
+																	"    pm.response.to.have.status(200);",
+																	"})",
+																	"pm.test('File is PDF', () => {",
+																	"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+																	"});",
+																	"pm.test('File size is large enough', () => {",
+																	"    const cl_str = pm.response.headers.get('Content-Length');",
+																	"    const cl_bytes = parseInt(cl_str, 10)",
+																	"    pm.expect(cl_bytes).to.be.above(70000);",
+																	"});",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/documents/34/breast_refset_summary.pdf",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"documents",
+																"34",
+																"breast_refset_summary.pdf"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Protocol PDF",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('HTTP status is OK', () => {",
+																	"    pm.response.to.have.status(200);",
+																	"})",
+																	"pm.test('File is PDF', () => {",
+																	"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+																	"});",
+																	"pm.test('File size is large enough', () => {",
+																	"    const cl_str = pm.response.headers.get('Content-Length');",
+																	"    const cl_bytes = parseInt(cl_str, 10)",
+																	"    pm.expect(cl_bytes).to.be.above(160000);",
+																	"});",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/documents/36/breastrefset-protocol-v1.1.pdf",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"documents",
+																"36",
+																"breastrefset-protocol-v1.1.pdf"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Clinical forms PDF",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('HTTP status is OK', () => {",
+																	"    pm.response.to.have.status(200);",
+																	"})",
+																	"pm.test('File is PDF', () => {",
+																	"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+																	"});",
+																	"pm.test('File size is large enough', () => {",
+																	"    const cl_str = pm.response.headers.get('Content-Length');",
+																	"    const cl_bytes = parseInt(cl_str, 10)",
+																	"    pm.expect(cl_bytes).to.be.above(700000);",
+																	"});",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/documents/32/breast_reference_set_forms.pdf",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"documents",
+																"32",
+																"breast_reference_set_forms.pdf"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Ovarian & Breast",
+											"item": [
+												{
+													"name": "Ovarian & breast page",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('HTTP status is OK', () => {",
+																	"    pm.response.to.have.status(200);",
+																	"});",
+																	"pm.test('Link to PDF', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /href=.\\/documents\\/[^\\/]+\\/BRSCW_final1_2-6-07LF\\.pdf.>Biomarker Reference Sets for Cancers in Women \\(BRSCW\\)/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/ovarian-breast-cancer-reference-sets/",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"data-and-resources",
+																"specimen-reference-sets",
+																"ovarian-breast-cancer-reference-sets",
+																""
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "BRSCW PDF",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('HTTP status is OK', () => {",
+																	"    pm.response.to.have.status(200);",
+																	"})",
+																	"pm.test('File is PDF', () => {",
+																	"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+																	"});",
+																	"pm.test('File size is large enough', () => {",
+																	"    const cl_str = pm.response.headers.get('Content-Length');",
+																	"    const cl_bytes = parseInt(cl_str, 10)",
+																	"    pm.expect(cl_bytes).to.be.above(30000);",
+																	"});",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/documents/38/BRSCW_final1_2-6-07LF.pdf",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"documents",
+																"38",
+																"BRSCW_final1_2-6-07LF.pdf"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Colon",
+											"item": [
+												{
+													"name": "Colon page",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('HTTP status is OK', () => {",
+																	"    pm.response.to.have.status(200);",
+																	"});",
+																	"pm.test('Link to PDF', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /href=.\\/documents\\/[^\\/]+\\/EDRN_colon_reference_set\\.pdf.>Colon Cancer Reference Set Documentation/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	"",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/colon-cancer-reference-sets/",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"data-and-resources",
+																"specimen-reference-sets",
+																"colon-cancer-reference-sets",
+																""
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Colon PDF",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('HTTP status is OK', () => {",
+																	"    pm.response.to.have.status(200);",
+																	"})",
+																	"pm.test('File is PDF', () => {",
+																	"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+																	"});",
+																	"pm.test('File size is large enough', () => {",
+																	"    const cl_str = pm.response.headers.get('Content-Length');",
+																	"    const cl_bytes = parseInt(cl_str, 10)",
+																	"    pm.expect(cl_bytes).to.be.above(30000);",
+																	"});",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/documents/7/EDRN_colon_reference_set.pdf",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"documents",
+																"7",
+																"EDRN_colon_reference_set.pdf"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Liver",
+											"item": [
+												{
+													"name": "Liver page",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('HTTP status is OK', () => {",
+																	"    pm.response.to.have.status(200);",
+																	"});",
+																	"pm.test('Link to PDF', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /href=.\\/documents\\/[^\\/]+\\/EDRN_HCC_Reference_Set\\.pdf.>Hepatocellular Carcinoma Reference Set Description/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/liver-hepatocellular-carcinoma-reference-set/",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"data-and-resources",
+																"specimen-reference-sets",
+																"liver-hepatocellular-carcinoma-reference-set",
+																""
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Liver PDF",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('HTTP status is OK', () => {",
+																	"    pm.response.to.have.status(200);",
+																	"})",
+																	"pm.test('File is PDF', () => {",
+																	"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+																	"});",
+																	"pm.test('File size is large enough', () => {",
+																	"    const cl_str = pm.response.headers.get('Content-Length');",
+																	"    const cl_bytes = parseInt(cl_str, 10)",
+																	"    pm.expect(cl_bytes).to.be.above(25000);",
+																	"});",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/documents/9/EDRN_HCC_Reference_Set.pdf",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"documents",
+																"9",
+																"EDRN_HCC_Reference_Set.pdf"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Lung",
+											"item": [
+												{
+													"name": "Lung page",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('HTTP status is OK', () => {",
+																	"    pm.response.to.have.status(200);",
+																	"});",
+																	"pm.test('Link to PDF', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /href=.\\/documents\\/[^\\/]+\\/lcbg_protocol_apr_14_2010\\.pdf.>Lung Cancer Reference Set Documentation/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/lung-cancer-reference-sets/",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"data-and-resources",
+																"specimen-reference-sets",
+																"lung-cancer-reference-sets",
+																""
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Lung PDF",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('HTTP status is OK', () => {",
+																	"    pm.response.to.have.status(200);",
+																	"})",
+																	"pm.test('File is PDF', () => {",
+																	"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+																	"});",
+																	"pm.test('File size is large enough', () => {",
+																	"    const cl_str = pm.response.headers.get('Content-Length');",
+																	"    const cl_bytes = parseInt(cl_str, 10)",
+																	"    pm.expect(cl_bytes).to.be.above(570000);",
+																	"});",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/documents/23/lcbg_protocol_apr_14_2010.pdf",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"documents",
+																"23",
+																"lcbg_protocol_apr_14_2010.pdf"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Pancreatic",
+											"item": [
+												{
+													"name": "Pancreatic page",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('HTTP status is OK', () => {",
+																	"    pm.response.to.have.status(200);",
+																	"});",
+																	"pm.test('Link to PDF', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /href=.\\/documents\\/[^\\/]+\\/EDRN_Pancreatic_Cancer_Reference_Set_Access_Information\\.pdf.>Pancreatic Cancer Reference Set Access Information/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/pancreatic-standard-specimen-reference-set/",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"data-and-resources",
+																"specimen-reference-sets",
+																"pancreatic-standard-specimen-reference-set",
+																""
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Pancreatic PDF",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('HTTP status is OK', () => {",
+																	"    pm.response.to.have.status(200);",
+																	"})",
+																	"pm.test('File is PDF', () => {",
+																	"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+																	"});",
+																	"pm.test('File size is large enough', () => {",
+																	"    const cl_str = pm.response.headers.get('Content-Length');",
+																	"    const cl_bytes = parseInt(cl_str, 10)",
+																	"    pm.expect(cl_bytes).to.be.above(20000);",
+																	"});",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/documents/11/EDRN_Pancreatic_Cancer_Reference_Set_Access_Information.pdf",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"documents",
+																"11",
+																"EDRN_Pancreatic_Cancer_Reference_Set_Access_Information.pdf"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Prostate",
+											"item": [
+												{
+													"name": "Prostate page",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('HTTP status is OK', () => {",
+																	"    pm.response.to.have.status(200);",
+																	"});",
+																	"pm.test('Link to ref set documentation PDF', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /href=.\\/documents\\/[^\\/]+\\/Prostate_Ref_SOP\\.pdf.>Prostate Reference Set Documentation/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	"pm.test('Link to protocol PDF', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /href=.\\/documents\\/[^\\/]+\\/pca3_protocol_v2.0_clean\\.pdf.>PCA3 Validation Trial and Urinary Reference Set Protocol/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/prostate-reference-sets/",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"data-and-resources",
+																"specimen-reference-sets",
+																"prostate-reference-sets",
+																""
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Prostate documentation PDF",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('HTTP status is OK', () => {",
+																	"    pm.response.to.have.status(200);",
+																	"})",
+																	"pm.test('File is PDF', () => {",
+																	"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+																	"});",
+																	"pm.test('File size is large enough', () => {",
+																	"    const cl_str = pm.response.headers.get('Content-Length');",
+																	"    const cl_bytes = parseInt(cl_str, 10)",
+																	"    pm.expect(cl_bytes).to.be.above(130000);",
+																	"});",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/documents/22/Prostate_Ref_SOP.pdf",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"documents",
+																"22",
+																"Prostate_Ref_SOP.pdf"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "PCA3 protocol PDF",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('HTTP status is OK', () => {",
+																	"    pm.response.to.have.status(200);",
+																	"})",
+																	"pm.test('File is PDF', () => {",
+																	"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+																	"});",
+																	"pm.test('File size is large enough', () => {",
+																	"    const cl_str = pm.response.headers.get('Content-Length');",
+																	"    const cl_bytes = parseInt(cl_str, 10)",
+																	"    pm.expect(cl_bytes).to.be.above(490000);",
+																	"});",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/documents/37/pca3_protocol_v2.0_clean.pdf",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"documents",
+																"37",
+																"pca3_protocol_v2.0_clean.pdf"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Specimen Reference Sets page",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('Page status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"pm.test('Link to ref set app form', () => {",
+															"    const body = pm.response.text();",
+															"    const exp = /href=.\\/data-and-resources\\/specimen-reference-sets\\/specimen-set-request-form\\/?.>Application Form for EDRN Reference Sets/;",
+															"    pm.expect(body).to.match(exp);",
+															"});",
+															"pm.test('Expected reference sets', () => {",
+															"    const body = pm.response.text();",
+															"    pm.expect(body).to.include('Bladder');",
+															"    pm.expect(body).to.include('Breast');",
+															"    pm.expect(body).to.include('Ovarian');",
+															"    pm.expect(body).to.include('Colon');",
+															"    pm.expect(body).to.include('Liver');",
+															"    pm.expect(body).to.include('Lung');",
+															"    pm.expect(body).to.include('Pancreas');",
+															"    pm.expect(body).to.include('Prostate');",
+															"});",
+															"pm.test('Expected panc cyst exception', () => {",
+															"    const body = pm.response.text();",
+															"    const exp = /href=.\\/data-and-resources\\/protocols\\/342-pancreatic-cystic-fluid-reference-set\\/.>Panc Cyst/;",
+															"    pm.expect(body).to.match(exp);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"data-and-resources",
+														"specimen-reference-sets",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Application form",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('Page status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/specimen-set-request-form/",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"data-and-resources",
+														"specimen-reference-sets",
+														"specimen-set-request-form",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Bladder page",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"})",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/msabladder-reference-set/",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"data-and-resources",
+														"specimen-reference-sets",
+														"msabladder-reference-set",
+														""
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Common data elements",
+									"item": [
+										{
+											"name": "CDE page",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"// Since this page is currently undergoing a number of pages, I'm not going to",
+															"// bother testing anything else in it or under it.",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/data-and-resources/cde/",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"data-and-resources",
+														"cde",
+														""
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Informatics",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('Page status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"pm.test('Link to LabCAS info', () => {",
+													"    const body = pm.response.text();",
+													"    const exp = /href=.+labcas-cancer-biomarker-data-commons\\//;",
+													"    pm.expect(body).to.match(exp);",
+													"});",
+													"pm.test('Link to JPL', () => {",
+													"    const body = pm.response.text();",
+													"    const exp = /href=.https:\\/\\/www\\.jpl\\.nasa\\.gov\\/.>Jet Propulsion Laboratory/;",
+													"    pm.expect(body).to.match(exp);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/data-and-resources/informatics/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"data-and-resources",
+												"informatics",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Work with EDRN",
+							"item": [
+								{
+									"name": "Associate membership program",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"// This page may have a \"paperless\" form some day soon",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/work-with-edrn/associate-membership-program/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"work-with-edrn",
+												"associate-membership-program",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Funding opportunities",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"// This page just has links to cancer.gov sites; perhaps it should be dynamic?\"\""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/work-with-edrn/funding-opportunities/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"work-with-edrn",
+												"funding-opportunities",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "News and events",
+							"item": [
+								{
+									"name": "EDRN newsletter",
+									"item": [
+										{
+											"name": "EDRN newsletter page",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"pm.test('Link to latest newsletter (April 2021)', () => {",
+															"    const body = pm.response.text();",
+															"    const exp = /href=.\\/documents\\/[^\\/]+\\/EDRN_eNewsletters_2021-04\\.pdf.>eNewsletter April 2021/;",
+															"    pm.expect(body).to.match(exp);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/news-and-events/edrn-newsletter/",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"news-and-events",
+														"edrn-newsletter",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Latest newsletter (April 2021)",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"pm.test('File is PDF', () => {",
+															"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+															"});",
+															"pm.test('File size is large enough', () => {",
+															"    const cl_str = pm.response.headers.get('Content-Length');",
+															"    const cl_bytes = parseInt(cl_str, 10)",
+															"    pm.expect(cl_bytes).to.be.above(220000);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/documents/137/EDRN_eNewsletters_2021-04.pdf",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"documents",
+														"137",
+														"EDRN_eNewsletters_2021-04.pdf"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Upcoming meetings",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"// This page is often in flux so we can't really test beyond this",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/news-and-events/upcoming-meetings/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"news-and-events",
+												"upcoming-meetings",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Meeting reports",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"pm.test('Link to 12th scientific meeting', () => {",
+													"    const body = pm.response.text();",
+													"    const exp = /href=.\\/about-edrn\\/groups\\/steering-committee\\/12th-scientific-workshop\\/?.>12th/;",
+													"    pm.expect(body).to.match(exp);",
+													"});",
+													"pm.test('Link to 35th Steering Committee meeting', () => {",
+													"    const body = pm.response.text();",
+													"    const exp = /href=.\\/about-edrn\\/groups\\/steering-committee\\/35th-steering-committee-meeting\\/?.>35th/;",
+													"    pm.expect(body).to.match(exp);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/news-and-events/meeting-reports/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"news-and-events",
+												"meeting-reports",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "About EDRN",
+							"item": [
+								{
+									"name": "Mission and structure",
+									"item": [
+										{
+											"name": "Mission and structure page",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"pm.test('Structure diagram', () => {",
+															"    const body = pm.response.text();",
+															"    const exp = /<img .*src=.\\/media\\/images\\/edrn_structure_.+\\.width-800\\.jpg/",
+															"    pm.expect(body).to.match(exp);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/about-edrn/mission-and-structure/",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"about-edrn",
+														"mission-and-structure",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Structure diagram",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"})",
+															"pm.test('File is JPEG', () => {",
+															"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('image/jpeg');",
+															"});",
+															"pm.test('File size is large enough', () => {",
+															"    const cl_str = pm.response.headers.get('Content-Length');",
+															"    const cl_bytes = parseInt(cl_str, 10)",
+															"    pm.expect(cl_bytes).to.be.above(40000);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/media/images/edrn_structure_003_hl2aR7X.width-800.jpg",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"media",
+														"images",
+														"edrn_structure_003_hl2aR7X.width-800.jpg"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Bookshelf",
+									"item": [
+										{
+											"name": "Bookshelf page",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"pm.test('Link to manual of operations', () => {",
+															"    const body = pm.response.text();",
+															"    const exp = /href=.\\/documents\\/[^\\/]+\\/MOO_clean_version_5\\.0\\.pdf.>EDRN Manual of Operations/;",
+															"    pm.expect(body).to.match(exp);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/about-edrn/bookshelf/",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"about-edrn",
+														"bookshelf",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Manual of operations",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"})",
+															"pm.test('File is PDF', () => {",
+															"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+															"});",
+															"pm.test('File size is large enough', () => {",
+															"    const cl_str = pm.response.headers.get('Content-Length');",
+															"    const cl_bytes = parseInt(cl_str, 10)",
+															"    pm.expect(cl_bytes).to.be.above(640000);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/documents/157/MOO_clean_version_5.0.pdf",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"documents",
+														"157",
+														"MOO_clean_version_5.0.pdf"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Ingested content",
+			"item": [
+				{
+					"name": "Data and resources",
+					"item": [
+						{
+							"name": "Biomarkers",
+							"item": [
+								{
+									"name": "Biomarker index page",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"pm.test('Phasing boxes', () => {",
+													"    const body = pm.response.text();",
+													"    const exp = /Biomarkers-organs in phase [0-9]/;",
+													"    pm.expect(body).to.match(exp);",
+													"});",
+													"pm.test('Graphics', () => {",
+													"    const body = pm.response.text();",
+													"    const exp = /_dash-loading/;",
+													"    pm.expect(body).to.match(exp);",
+													"});",
+													"pm.test('Data table', () => {",
+													"    const body = pm.response.text();",
+													"    const exp = /the-datatable/;",
+													"    pm.expect(body).to.match(exp);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/data-and-resources/biomarkers/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"data-and-resources",
+												"biomarkers",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Non-public biomarker",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"pm.test('Aliases', () => {",
+													"    const body = pm.response.text();",
+													"    const aliases = ['4D-ELF', '4DELF', 'Elastically scattering light fingerprinting'];",
+													"    aliases.forEach(alias => {",
+													"        pm.expect(body).to.include(alias);",
+													"    });",
+													"});",
+													"pm.test('Non-public biomarker', () => {",
+													"    const body = pm.response.text();",
+													"    const exp = /Non-Public Biomarker/;",
+													"    pm.expect(body).to.match(exp);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/data-and-resources/biomarkers/4delf",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"data-and-resources",
+												"biomarkers",
+												"4delf"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Public biomarker",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"pm.test('Aliases', () => {",
+													"    const body = pm.response.text();",
+													"    const aliases = [",
+													"        'B7 family member, H4', ",
+													"        'B7 superfamily member 1', ",
+													"        'B7-H4', ",
+													"        'B7h.5', ",
+													"        'B7H4', ",
+													"        'B7S1', ",
+													"        'B7X', ",
+													"        'DD-0110', ",
+													"        'FLJ22418', ",
+													"        'Immune costimulatory protein B7-H4', ",
+													"        'OV110', ",
+													"        'PRO1291', ",
+													"        'Protein B7S1', ",
+													"        'T-cell costimulatory molecule B7x', ",
+													"        'V-set domain containing T cell activation inhibitor 1', ",
+													"        'VCTN1', ",
+													"        'VTCN1', ",
+													"        'VTCN1', ",
+													"    ];",
+													"    aliases.forEach(alias => {",
+													"        pm.expect(body).to.include(alias);",
+													"    });",
+													"});",
+													"pm.test('Public biomarker', () => {",
+													"    const body = pm.response.text();",
+													"    const exp = /Non-Public Biomarker/;",
+													"    pm.expect(body).to.not.match(exp);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/data-and-resources/biomarkers/vtcn1",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"data-and-resources",
+												"biomarkers",
+												"vtcn1"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Science data",
+							"item": [
+								{
+									"name": "Data index page",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"pm.test('Summary count boxes', () => {",
+													"    const body = pm.response.text();",
+													"    pm.expect(body).to.match(/Collections.*[0-9]+/);",
+													"    pm.expect(body).to.match(/Datasets.*[0-9]+/);",
+													"    pm.expect(body).to.match(/Files.*[0-9]+/);",
+													"});",
+													"pm.test('Graphics', () => {",
+													"    const body = pm.response.text();",
+													"    const exp = /_dash-loading/;",
+													"    pm.expect(body).to.match(exp);",
+													"});",
+													"pm.test('Data table', () => {",
+													"    const body = pm.response.text();",
+													"    const exp = /the-datatable/;",
+													"    pm.expect(body).to.match(exp);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/data-and-resources/data/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"data-and-resources",
+												"data",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Data collection",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"pm.test('LabCAS link', () => {",
+													"    const r = pm.response.json();",
+													"    pm.expect(r.data[0].url).to.contain('edrn-labcas.jpl.nasa.gov');",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/data-and-resources/data/?ajax=json",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"data-and-resources",
+												"data",
+												""
+											],
+											"query": [
+												{
+													"key": "ajax",
+													"value": "json"
+												}
+											]
+										},
+										"description": "Note that the \"Data\" page doesn't link to other portal pages describing each data collection. Instead, it links to LabCAS. So for this test, we just look at the index page and ensure a link goes to LabCAS."
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Protocols",
+							"item": [
+								{
+									"name": "Protocols index page",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"pm.test('Graphics', () => {",
+													"    const body = pm.response.text();",
+													"    const exp = /_dash-loading/;",
+													"    pm.expect(body).to.match(exp);",
+													"});",
+													"pm.test('Data table', () => {",
+													"    const body = pm.response.text();",
+													"    const exp = /the-datatable/;",
+													"    pm.expect(body).to.match(exp);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/data-and-resources/protocols/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"data-and-resources",
+												"protocols",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Single protocol",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"pm.test('Protocol title', () => {",
+													"    const body = pm.response.text();",
+													"    pm.expect(body).to.contain('A Prospective Study to Establish a New Onset Hyperglycemia and Diabetes (NOD) Cohort');",
+													"});",
+													"pm.test('Protocol abbreviation', () => {",
+													"    const body = pm.response.text();",
+													"    pm.expect(body).to.contain('Abbreviated Name');",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/data-and-resources/protocols/434-a-prospective-study-to-establish-a-new-onset-hyperglycemia-and-diabetes-nod-cohort/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"data-and-resources",
+												"protocols",
+												"434-a-prospective-study-to-establish-a-new-onset-hyperglycemia-and-diabetes-nod-cohort",
+												""
+											]
+										},
+										"description": "Note that the \"Data\" page doesn't link to other portal pages describing each data collection. Instead, it links to LabCAS. So for this test, we just look at the index page and ensure a link goes to LabCAS."
+									},
+									"response": []
+								},
+								{
+									"name": "Single project",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"pm.test('Protocol title', () => {",
+													"    const body = pm.response.text();",
+													"    pm.expect(body).to.match(/A +Biomarker +Bakeoff +in +Early +Stage +Pancreatic +Cancer/);",
+													"});",
+													"pm.test('Protocol abbreviation', () => {",
+													"    const body = pm.response.text();",
+													"    pm.expect(body).to.contain('PaCa Bake Off 1');",
+													"});",
+													"pm.test('Team project badge', () => {",
+													"    const body = pm.response.text();",
+													"    pm.expect(body).to.match(/badge.*bi-award.*Team Project/);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/data-and-resources/protocols/421-a-biomarker-bakeoff-in-early-stage-pancreatic-cancer/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"data-and-resources",
+												"protocols",
+												"421-a-biomarker-bakeoff-in-early-stage-pancreatic-cancer",
+												""
+											]
+										},
+										"description": "Note that the \"Data\" page doesn't link to other portal pages describing each data collection. Instead, it links to LabCAS. So for this test, we just look at the index page and ensure a link goes to LabCAS."
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Publications",
+							"item": [
+								{
+									"name": "Publications index page",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"pm.test('Graphics', () => {",
+													"    const body = pm.response.text();",
+													"    const exp = /_dash-loading/;",
+													"    pm.expect(body).to.match(exp);",
+													"});",
+													"pm.test('Data table', () => {",
+													"    const body = pm.response.text();",
+													"    const exp = /the-datatable/;",
+													"    pm.expect(body).to.match(exp);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/data-and-resources/publications/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"data-and-resources",
+												"publications",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Single publication",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"pm.test('Publication title', () => {",
+													"    const body = pm.response.text();",
+													"    pm.expect(body).to.contain('proenzyme prostate specific antigen for prostate cancer detection: a national cancer institute early detection research network validation study');",
+													"});",
+													"pm.test('Author 1', () => {",
+													"    const body = pm.response.text();",
+													"    pm.expect(body).to.contain('Chan DW');",
+													"});",
+													"pm.test('Author 2', () => {",
+													"    const body = pm.response.text();",
+													"    pm.expect(body).to.contain('Feng Z');",
+													"});",
+													"pm.test('Author 3', () => {",
+													"    const body = pm.response.text();",
+													"    pm.expect(body).to.contain('Kagan J');",
+													"});",
+													"pm.test('PubMed hyperlink and ID', () => {",
+													"    const body = pm.response.text();",
+													"    pm.expect(body).to.match(/href=.https:\\/\\/pubmed.ncbi.nlm.nih.gov\\/18550118.>18550118/);",
+													"});",
+													"pm.test('Journal appearance', () => {",
+													"    const body = pm.response.text();",
+													"    pm.expect(body).to.contain('J Urol, 2008, 180 (2)');",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/data-and-resources/publications/18550118-1360-2proenzyme-prostate-specific-antigen-for-prostate-cancer-detection-a-national-cancer-institute-early-detection-research-network-validation-study/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"data-and-resources",
+												"publications",
+												"18550118-1360-2proenzyme-prostate-specific-antigen-for-prostate-cancer-detection-a-national-cancer-institute-early-detection-research-network-validation-study",
+												""
+											]
+										},
+										"description": "Note that the \"Data\" page doesn't link to other portal pages describing each data collection. Instead, it links to LabCAS. So for this test, we just look at the index page and ensure a link goes to LabCAS."
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Auxiliary ingested content",
+							"item": [
+								{
+									"name": "Body systems",
+									"item": [
+										{
+											"name": "Body systems index page",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"pm.test('Bladder organ (first)', () => {",
+															"    const body = pm.response.text();",
+															"    const exp = /href=.*bladder\\/['\"]>Bladder/;",
+															"    pm.expect(body).to.match(exp);",
+															"});",
+															"pm.test('Vagina organ (last)', () => {",
+															"    const body = pm.response.text();",
+															"    const exp = /href=.*vagina\\/['\"]>Vagina/;",
+															"    pm.expect(body).to.match(exp);",
+															"});"
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/data-and-resources/body-systems/",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"data-and-resources",
+														"body-systems",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Single body system",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"pm.test('Page title', () => {",
+															"    const body = pm.response.text();",
+															"    pm.expect(body).to.contain('<h1>Bladder</h1>');",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/data-and-resources/body-systems/bladder/",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"data-and-resources",
+														"body-systems",
+														"bladder",
+														""
+													]
+												},
+												"description": "Note that the \"Data\" page doesn't link to other portal pages describing each data collection. Instead, it links to LabCAS. So for this test, we just look at the index page and ensure a link goes to LabCAS."
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Diseases",
+									"item": [
+										{
+											"name": "Diseases index page",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"pm.test('Liver cell carcinoma (first)', () => {",
+															"    const body = pm.response.text();",
+															"    const exp = /href=.*liver-cell-carcinoma\\/['\"]>Liver cell carcinoma/;",
+															"    pm.expect(body).to.match(exp);",
+															"});",
+															"pm.test('Plasma cell leukaemia (last)', () => {",
+															"    const body = pm.response.text();",
+															"    const exp = /href=.*plasma-cell-leukaemia\\/['\"]>Plasma cell leukaemia/;",
+															"    pm.expect(body).to.match(exp);",
+															"});"
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/data-and-resources/diseases/",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"data-and-resources",
+														"diseases",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Single disease",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"pm.test('Page title', () => {",
+															"    const body = pm.response.text();",
+															"    pm.expect(body).to.contain('<h1>Malignant neoplasm of other and unspecified parts of mouth</h1>');",
+															"});",
+															"pm.test('ICD9 code', () => {",
+															"    const body = pm.response.text();",
+															"    pm.expect(body).to.contain('<code>145</code>');",
+															"});",
+															"pm.test('ICD10 code', () => {",
+															"    const body = pm.response.text();",
+															"    pm.expect(body).to.contain('<code>C06.</code>');",
+															"});",
+															"pm.test('Affected organs', () => {",
+															"    const body = pm.response.text();",
+															"    pm.expect(body).to.contain('Head &amp; neck, NOS');",
+															"    pm.expect(body).to.contain('Mouth');",
+															"    pm.expect(body).to.contain('Oral Cavity');",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/data-and-resources/diseases/malignant-neoplasm-of-other-and-unspecified-parts-of-mouth/",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"data-and-resources",
+														"diseases",
+														"malignant-neoplasm-of-other-and-unspecified-parts-of-mouth",
+														""
+													]
+												},
+												"description": "Note that the \"Data\" page doesn't link to other portal pages describing each data collection. Instead, it links to LabCAS. So for this test, we just look at the index page and ensure a link goes to LabCAS."
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Miscellaneous resources",
+									"item": [
+										{
+											"name": "Miscellaneous resources index page",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"pm.test('GeneCards entry for ANGPTL3', () => {",
+															"    const body = pm.response.text();",
+															"    const exp = /href=.*genecards-entry-for-angptl3\\/['\"]>GeneCards entry for ANGPTL3/;",
+															"    pm.expect(body).to.match(exp);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/data-and-resources/miscellaneous-resources/",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"data-and-resources",
+														"miscellaneous-resources",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Single disease",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test('HTTP status is OK', () => {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"pm.test('Page title', () => {",
+															"    const body = pm.response.text();",
+															"    pm.expect(body).to.contain('<h1>Malignant neoplasm of other and unspecified parts of mouth</h1>');",
+															"});",
+															"pm.test('ICD9 code', () => {",
+															"    const body = pm.response.text();",
+															"    pm.expect(body).to.contain('<code>145</code>');",
+															"});",
+															"pm.test('ICD10 code', () => {",
+															"    const body = pm.response.text();",
+															"    pm.expect(body).to.contain('<code>C06.</code>');",
+															"});",
+															"pm.test('Affected organs', () => {",
+															"    const body = pm.response.text();",
+															"    pm.expect(body).to.contain('Head &amp; neck, NOS');",
+															"    pm.expect(body).to.contain('Mouth');",
+															"    pm.expect(body).to.contain('Oral Cavity');",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/data-and-resources/diseases/malignant-neoplasm-of-other-and-unspecified-parts-of-mouth/",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"data-and-resources",
+														"diseases",
+														"malignant-neoplasm-of-other-and-unspecified-parts-of-mouth",
+														""
+													]
+												},
+												"description": "Note that the \"Data\" page doesn't link to other portal pages describing each data collection. Instead, it links to LabCAS. So for this test, we just look at the index page and ensure a link goes to LabCAS."
+											},
+											"response": []
+										}
+									]
+								}
+							],
+							"description": "Although these pages aren't included on menus and aren't generally presented to users (unless they search for them or know their URLs), they are referenced in other parts of the ingest and are populated, so we may as well."
+						}
+					]
+				},
+				{
+					"name": "About EDRN",
+					"item": [
+						{
+							"name": "Sites",
+							"item": [
+								{
+									"name": "Sites index page",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"pm.test('Map', () => {",
+													"    const body = pm.response.text();",
+													"    const exp = /_dash-loading/;",
+													"    pm.expect(body).to.match(exp);",
+													"});",
+													"pm.test('Page length is sufficient', () => {",
+													"    var body = pm.response.text();",
+													"    var body_size = Buffer.from(body).length;",
+													"    pm.expect(body_size).to.be.above(5000);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/about-edrn/sites/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"about-edrn",
+												"sites",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Single site",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"pm.test('Site title', () => {",
+													"    const body = pm.response.text();",
+													"    pm.expect(body).to.contain('<h1>Fred Hutchinson Cancer Center</h1>');",
+													"});",
+													"pm.test('DMCC Site ID', () => {",
+													"    const body = pm.response.text();",
+													"    pm.expect(body).to.contain('812');",
+													"});",
+													"pm.test('Principal investigator', () => {",
+													"    const body = pm.response.text();",
+													"    pm.expect(body).to.match(/href=..*paulovich-amanda..*Paulovich, Amanda/);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/about-edrn/sites/812-fred-hutchinson-cancer-center/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"about-edrn",
+												"sites",
+												"812-fred-hutchinson-cancer-center",
+												""
+											]
+										},
+										"description": "Note that the \"Data\" page doesn't link to other portal pages describing each data collection. Instead, it links to LabCAS. So for this test, we just look at the index page and ensure a link goes to LabCAS."
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Accessories",
+			"item": [
+				{
+					"name": "Search",
+					"item": [
+						{
+							"name": "Meth",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('HTTP status is OK', () => {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test('At least 4 pages of results', () => {",
+											"    const body = pm.response.text();",
+											"    const exp = /href=.\\?page=4/;",
+											"    pm.expect(body).to.match(exp);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/search/?query=meth",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"search",
+										""
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "meth"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CA125",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('HTTP status is OK', () => {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test('CA125 in main search matches', () => {",
+											"    const body = pm.response.text();",
+											"    const exp = /<h6 class=.mb-1.>CA125<\\/h6>/;",
+											"    pm.expect(body).to.match(exp);",
+											"});",
+											"pm.test('CA125 search description', () => {",
+											"    const body = pm.response.text();",
+											"    const exp = /From NCBI Gene: This gene encodes a protein that is a member of the mucin family./;",
+											"    pm.expect(body).to.match(exp);",
+											"});",
+											"pm.test('CA125 in promoted results', () => {",
+											"    const body = pm.response.text();",
+											"    const exp1 = /Looking for this\\?/;",
+											"    pm.expect(body).to.match(exp1);",
+											"    const exp2 = /<a class=.promoted. href=.\\/data-and-resources\\/biomarkers\\/muc16\\//;",
+											"    pm.expect(body).to.match(exp2);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/search/?query=ca125",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"search",
+										""
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "ca125"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

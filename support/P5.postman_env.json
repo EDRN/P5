@@ -1,0 +1,15 @@
+{
+	"id": "b07a4665-5168-47f6-b27c-df09e102a65d",
+	"name": "EDRN Portal Env",
+	"values": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:6468",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2023-11-13T21:56:33.841Z",
+	"_postman_exported_using": "Postman/10.19.17"
+}
