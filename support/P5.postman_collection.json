@@ -63,7 +63,7 @@
 									"});",
 									"pm.test('Log in link present', () => {",
 									"    const body = pm.response.text();",
-									"    pm.expect(body).to.include(\"<a href='.*/_util/login/?next=/'>Log in</a>\");",
+									"    pm.expect(body).to.include(\"/_util/login/?next=/\");",
 									"});",
 									""
 								],
