@@ -454,7 +454,8 @@ class PublicationIndex(KnowledgeFolder):
         return matches
 
     def get_contents(self, request: HttpRequest):
-        matches = Publication.objects.child_of(self).live().public().filter(year__isnull=False).order_by('-year')
+        matches = Publication.objects.filter(subject_uris__identifier__startswith='http://edrn.nci.nih.gov/data/pubs/')\
+            .child_of(self).live().public().filter(year__isnull=False).order_by('-year')
 
         journals = request.GET.getlist('journal')
         if journals: matches = matches.filter(journal__in=journals)
