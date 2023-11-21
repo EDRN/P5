@@ -454,6 +454,7 @@ class PublicationIndex(KnowledgeFolder):
         return matches
 
     def get_contents(self, request: HttpRequest):
+        '''Get the contents of this folder but only the DMCC curated publications.'''
         matches = Publication.objects.filter(subject_uris__identifier__startswith='http://edrn.nci.nih.gov/data/pubs/')\
             .child_of(self).live().public().filter(year__isnull=False).order_by('-year')
 
