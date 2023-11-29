@@ -76,7 +76,19 @@ class Publication(KnowledgeObject):
         appearances = ', '.join(appearances)
         if self.issue: appearances += ' ({})'.format(html_escape(self.issue))
         context['appearance'] = appearances
+
+        biomarkers = set([i for i in self.ekebiomarkers_biomarker_in_print.all()])
+        biomarker_body_systems = self.ekebiomarkers_biomarkerbodysystem_in_print.all()
+        for bbs in biomarker_body_systems:
+            biomarkers.add(bbs.biomarker)
+        body_system_studies = self.ekebiomarkers_bodysystemstudy_in_print.all()
+        for bss in body_system_studies:
+            biomarkers.add(bss.bbs.biomarker)
+        context['biomarkers'] = sorted(biomarkers, key=lambda i: i.title)
+        context['num_biomarkers'] = len(context['biomarkers'])
+
         return context
+
     content_panels = KnowledgeObject.content_panels + [
         FieldPanel('issue'),
         FieldPanel('volume'),

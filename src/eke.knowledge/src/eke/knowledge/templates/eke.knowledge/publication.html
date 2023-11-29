@@ -9,6 +9,23 @@
             {% autoescape off %}
                 {{page.abstract}}
             {% endautoescape %}
+
+            {% if num_biomarkers %}
+                <h2>Biomarkers</h2>
+
+                {% if num_biomarkers == 1 %}
+                    <p>One biomarker makes reference to this publication:</p>
+                {% else %}
+                    <p>The following biomarkers make reference to this publication:</p>
+                {% endif %}
+
+                <ul class='list-inline'>
+                    {% for biomarker in biomarkers %}
+                        <li class='list-inline-item'><a href='{{biomarker.url}}'>{{biomarker.title}}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
         </div>
         <div class='col-lg-3'>
             <h5>Authors</h5>
