@@ -1,0 +1,13 @@
+{% spaceless %}
+    <ul class='nav list-inline'>
+        {% for social in links %}
+            <li class='nav-item list-inline-item mb-2'>
+                <a href='{{social.url}}' class='nav-link p-0 text-light'>
+                    <i class='bi bi-{{social.icon}} fs-3'></i>
+                    <span class='visually-hidden-focusable'>{{social.name}}</span>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endspaceless %}
+{# -*- Django HTML -*- #}

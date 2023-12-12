@@ -2,12 +2,13 @@
 
 '''🎨 EDRN Theme: Django tags.'''
 
-from django.template.context import Context
 from django import template
+from django.template.context import Context
+from django.utils.safestring import mark_safe
+from edrnsite.controls.models import SocialMediaLink
+from importlib import import_module
 from wagtailmenus.models import FlatMenu
 from wagtailmenus.templatetags.menu_tags import flat_menu
-from django.utils.safestring import mark_safe
-from importlib import import_module
 
 register = template.Library()
 
@@ -37,3 +38,9 @@ def edrn_portal_version() -> str:
         # Okay, just use the theme's version
         from edrn.theme import VERSION as version
     return mark_safe(str(version))
+
+
+@register.inclusion_tag('edrn.theme/social-media.html', takes_context=False)
+def edrn_social_media_links() -> dict:
+    links = SocialMediaLink.objects.all().filter(enabled=True).order_by('name')
+    return {'links': [{'name': link.name, 'url': link.url, 'icon': link.bootstrap_icon} for link in links]}

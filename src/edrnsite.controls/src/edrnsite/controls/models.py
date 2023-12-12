@@ -11,15 +11,23 @@ from wagtail.fields import RichTextField
 from wagtail.snippets.models import register_snippet
 
 
-@register_setting
-class SocialMedia(BaseSiteSetting):
-    '''Social media controls.'''
-    facebook  = models.URLField(blank=True, help_text="URL to NCI's Facebook page")
-    twitter   = models.URLField(blank=True, help_text="URL to DCP's Twitter profile")
-    panels    = [
-        FieldPanel('facebook'),
-        FieldPanel('twitter'),
+@register_snippet
+class SocialMediaLink(models.Model):
+    '''Social media link.'''
+    name = models.CharField(blank=False, max_length=100, help_text='Name of the social media site', default='name')
+    url = models.URLField(blank=False, help_text="Link to EDRN's presence on this site", default='https://site')
+    bootstrap_icon = models.CharField(
+        blank=False, max_length=32, help_text='Name of the icon to signify this site', default='emoji-smile'
+    )
+    enabled = models.BooleanField(default=True, help_text='Whether to include this in the footer')
+    panels = [
+        FieldPanel('name'),
+        FieldPanel('url'),
+        FieldPanel('bootstrap_icon'),
+        FieldPanel('enabled')
     ]
+    def __str__(self):
+        return self.name
 
 
 @register_snippet

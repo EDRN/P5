@@ -9,14 +9,7 @@
             <div class='edrn-footer-menu-heading'>Follow DCP</div>
             {# 7 days #}
             {% cache 604800 global-footer-social-settings %}
-                <ul class='nav list-inline'>
-                    {% if settings.edrnsitecontrols.SocialMedia.twitter %}
-                        <li class='nav-item list-inline-item mb-2'><a href='{{settings.edrnsitecontrols.SocialMedia.twitter}}' class='nav-link p-0 text-light'><i class='bi bi-twitter fs-3'></i><span class='visually-hidden-focusable'>Twitter</span></a></li>
-                    {% endif %}
-                    {% if settings.edrnsitecontrols.SocialMedia.facebook %}
-                        <li class='nav-item list-inline-item mb-2'><a href='{{settings.edrnsitecontrols.SocialMedia.facebook}}' class='nav-link p-0 text-light'><i class='bi bi-facebook fs-3'></i><span class='visually-hidden-focusable'>Facebook</span></a></li>
-                    {% endif %}
-                </ul>
+                {% edrn_social_media_links %}
             {% endcache %}
         </div>
 

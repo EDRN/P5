@@ -6,7 +6,7 @@
 # Download the latest production database, apply migrations, and get ready to rock and roll.
 
 
-jpl_sys_ipv4=172.16.16.52
+jpl_sys_ipv4=172.16.16.3
 
 
 # Argument check
@@ -59,7 +59,8 @@ bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --qu
 
 # Add additional upgrade steps here:
 #
-# Currently for 6.8 there are no needed upgrade steps
+# Currently for 6.8 there is just this one
+./manage.sh edrn_update_social_media
 
 # This may be optional if you want to save time:
 ./manage.sh rdfingest
