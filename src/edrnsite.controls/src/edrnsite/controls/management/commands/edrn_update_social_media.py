@@ -1,5 +1,6 @@
 '''🎛 EDRN Site Controls: social media update.'''
 
+from django.core.cache import caches
 from django.core.management.base import BaseCommand
 from edrnsite.controls.models import SocialMediaLink
 
@@ -41,3 +42,7 @@ class Command(BaseCommand):
         )
 
         # Future: include threads and mastodon?
+
+        # Last step: since the social media links are "heavily cached", clear the caches
+        for cache in caches:
+            caches[cache].clear()
