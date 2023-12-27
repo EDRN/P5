@@ -1208,141 +1208,142 @@
 									"name": "Specimen Reference Sets",
 									"item": [
 										{
-											"name": "Benign Breast Disease",
-											"item": [
-												{
-													"name": "Benign breast disease page",
-													"event": [
-														{
-															"listen": "test",
-															"script": {
-																"exec": [
-																	"pm.test('HTTP status is OK', () => {",
-																	"    pm.response.to.have.status(200);",
-																	"});",
-																	"pm.test('Link to summary document', () => {",
-																	"    const body = pm.response.text();",
-																	"    const exp = /href=.+\\/documents\\/[^\\/]+\\/BBD_Refset_summary_document_2018-06-27\\.pdf.>BBD Reference Set Summary Document/;",
-																	"    pm.expect(body).to.match(exp);",
-																	"});",
-																	"pm.test('Link to standard operating procedure', () => {",
-																	"    const body = pm.response.text();",
-																	"    const exp = /href=.+\\/documents\\/[^\\/]+\\/final_bbd_protocol_for_validation_5-7-2014\\.pdf.>SOP For Selection of Benign Breast Disease Project/;",
-																	"    pm.expect(body).to.match(exp);",
-																	"});",
-																	"",
-																	"",
-																	""
-																],
-																"type": "text/javascript"
-															}
-														}
-													],
-													"request": {
-														"method": "GET",
-														"header": [],
-														"url": {
-															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/benign-breast-disease-tissue-resource-bbd/",
-															"host": [
-																"{{base_url}}"
-															],
-															"path": [
-																"data-and-resources",
-																"specimen-reference-sets",
-																"benign-breast-disease-tissue-resource-bbd",
-																""
-															]
-														}
-													},
-													"response": []
-												},
-												{
-													"name": "BBD summary PDF",
-													"event": [
-														{
-															"listen": "test",
-															"script": {
-																"exec": [
-																	"pm.test('HTTP status is OK', () => {",
-																	"    pm.response.to.have.status(200);",
-																	"})",
-																	"pm.test('File is PDF', () => {",
-																	"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
-																	"});",
-																	"pm.test('File size is large enough', () => {",
-																	"    const cl_str = pm.response.headers.get('Content-Length');",
-																	"    const cl_bytes = parseInt(cl_str, 10)",
-																	"    pm.expect(cl_bytes).to.be.above(310000);",
-																	"});",
-																	""
-																],
-																"type": "text/javascript"
-															}
-														}
-													],
-													"request": {
-														"method": "GET",
-														"header": [],
-														"url": {
-															"raw": "{{base_url}}/documents/24/BBD_Refset_summary_document_2018-06-27.pdf",
-															"host": [
-																"{{base_url}}"
-															],
-															"path": [
-																"documents",
-																"24",
-																"BBD_Refset_summary_document_2018-06-27.pdf"
-															]
-														}
-													},
-													"response": []
-												},
-												{
-													"name": "BBD SOP PDF",
-													"event": [
-														{
-															"listen": "test",
-															"script": {
-																"exec": [
-																	"pm.test('HTTP status is OK', () => {",
-																	"    pm.response.to.have.status(200);",
-																	"})",
-																	"pm.test('File is PDF', () => {",
-																	"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
-																	"});",
-																	"pm.test('File size is large enough', () => {",
-																	"    const cl_str = pm.response.headers.get('Content-Length');",
-																	"    const cl_bytes = parseInt(cl_str, 10)",
-																	"    pm.expect(cl_bytes).to.be.above(50000);",
-																	"});",
-																	""
-																],
-																"type": "text/javascript"
-															}
-														}
-													],
-													"request": {
-														"method": "GET",
-														"header": [],
-														"url": {
-															"raw": "{{base_url}}/documents/17/final_bbd_protocol_for_validation_5-7-2014.pdf",
-															"host": [
-																"{{base_url}}"
-															],
-															"path": [
-																"documents",
-																"17",
-																"final_bbd_protocol_for_validation_5-7-2014.pdf"
-															]
-														}
-													},
-													"response": []
-												}
-											]
-										},
-										{
 											"name": "Breast",
 											"item": [
+												{
+													"name": "Benign Breast Disease",
+													"item": [
+														{
+															"name": "Benign breast disease page",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test('HTTP status is OK', () => {",
+																			"    pm.response.to.have.status(200);",
+																			"});",
+																			"pm.test('Link to summary document', () => {",
+																			"    const body = pm.response.text();",
+																			"    const exp = /href=.+\\/documents\\/[^\\/]+\\/BBD_Refset_summary_document_2018-06-27\\.pdf.>BBD Reference Set Summary Document/;",
+																			"    pm.expect(body).to.match(exp);",
+																			"});",
+																			"pm.test('Link to standard operating procedure', () => {",
+																			"    const body = pm.response.text();",
+																			"    const exp = /href=.+\\/documents\\/[^\\/]+\\/final_bbd_protocol_for_validation_5-7-2014\\.pdf.>SOP For Selection of Benign Breast Disease Project/;",
+																			"    pm.expect(body).to.match(exp);",
+																			"});",
+																			"",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "GET",
+																"header": [],
+																"url": {
+																	"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/breast-ovarian-specimen-reference-sets/benign-breast-disease-tissue-resource-bbd/",
+																	"host": [
+																		"{{base_url}}"
+																	],
+																	"path": [
+																		"data-and-resources",
+																		"specimen-reference-sets",
+																		"breast-ovarian-specimen-reference-sets",
+																		"benign-breast-disease-tissue-resource-bbd",
+																		""
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "BBD summary PDF",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test('HTTP status is OK', () => {",
+																			"    pm.response.to.have.status(200);",
+																			"})",
+																			"pm.test('File is PDF', () => {",
+																			"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+																			"});",
+																			"pm.test('File size is large enough', () => {",
+																			"    const cl_str = pm.response.headers.get('Content-Length');",
+																			"    const cl_bytes = parseInt(cl_str, 10)",
+																			"    pm.expect(cl_bytes).to.be.above(310000);",
+																			"});",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "GET",
+																"header": [],
+																"url": {
+																	"raw": "{{base_url}}/documents/24/BBD_Refset_summary_document_2018-06-27.pdf",
+																	"host": [
+																		"{{base_url}}"
+																	],
+																	"path": [
+																		"documents",
+																		"24",
+																		"BBD_Refset_summary_document_2018-06-27.pdf"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "BBD SOP PDF",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test('HTTP status is OK', () => {",
+																			"    pm.response.to.have.status(200);",
+																			"})",
+																			"pm.test('File is PDF', () => {",
+																			"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
+																			"});",
+																			"pm.test('File size is large enough', () => {",
+																			"    const cl_str = pm.response.headers.get('Content-Length');",
+																			"    const cl_bytes = parseInt(cl_str, 10)",
+																			"    pm.expect(cl_bytes).to.be.above(50000);",
+																			"});",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "GET",
+																"header": [],
+																"url": {
+																	"raw": "{{base_url}}/documents/17/final_bbd_protocol_for_validation_5-7-2014.pdf",
+																	"host": [
+																		"{{base_url}}"
+																	],
+																	"path": [
+																		"documents",
+																		"17",
+																		"final_bbd_protocol_for_validation_5-7-2014.pdf"
+																	]
+																}
+															},
+															"response": []
+														}
+													]
+												},
 												{
 													"name": "Breast page",
 													"event": [
@@ -1353,23 +1354,6 @@
 																	"pm.test('HTTP status is OK', () => {",
 																	"    pm.response.to.have.status(200);",
 																	"});",
-																	"pm.test('Link to summary document', () => {",
-																	"    const body = pm.response.text();",
-																	"    const exp = /href=.+\\/documents\\/[^\\/]+\\/breast_refset_summary\\.pdf.>Breast Reference Set Summary/;",
-																	"    pm.expect(body).to.match(exp);",
-																	"});",
-																	"pm.test('Link to protocol PDF', () => {",
-																	"    const body = pm.response.text();",
-																	"    const exp = /href=.+\\/documents\\/[^\\/]+\\/breastrefset-protocol-v1.1\\.pdf.>Breast Reference Set Protocol/;",
-																	"    pm.expect(body).to.match(exp);",
-																	"});",
-																	"pm.test('Link to clinical forms PDF', () => {",
-																	"    const body = pm.response.text();",
-																	"    const exp = /href=.+\\/documents\\/[^\\/]+\\/breast_reference_set_forms\\.pdf.>Breast Reference Set Participant and Clinical Forms/;",
-																	"    pm.expect(body).to.match(exp);",
-																	"});",
-																	"",
-																	"",
 																	""
 																],
 																"type": "text/javascript"
@@ -1380,14 +1364,14 @@
 														"method": "GET",
 														"header": [],
 														"url": {
-															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/breast-cancer-reference-sets/",
+															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/breast-ovarian-specimen-reference-sets/",
 															"host": [
 																"{{base_url}}"
 															],
 															"path": [
 																"data-and-resources",
 																"specimen-reference-sets",
-																"breast-cancer-reference-sets",
+																"breast-ovarian-specimen-reference-sets",
 																""
 															]
 														}
@@ -1520,91 +1504,6 @@
 											]
 										},
 										{
-											"name": "Ovarian & Breast",
-											"item": [
-												{
-													"name": "Ovarian & breast page",
-													"event": [
-														{
-															"listen": "test",
-															"script": {
-																"exec": [
-																	"pm.test('HTTP status is OK', () => {",
-																	"    pm.response.to.have.status(200);",
-																	"});",
-																	"pm.test('Link to PDF', () => {",
-																	"    const body = pm.response.text();",
-																	"    const exp = /href=.+\\/documents\\/[^\\/]+\\/BRSCW_final1_2-6-07LF\\.pdf.>Biomarker Reference Sets for Cancers in Women \\(BRSCW\\)/;",
-																	"    pm.expect(body).to.match(exp);",
-																	"});",
-																	""
-																],
-																"type": "text/javascript"
-															}
-														}
-													],
-													"request": {
-														"method": "GET",
-														"header": [],
-														"url": {
-															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/ovarian-breast-cancer-reference-sets/",
-															"host": [
-																"{{base_url}}"
-															],
-															"path": [
-																"data-and-resources",
-																"specimen-reference-sets",
-																"ovarian-breast-cancer-reference-sets",
-																""
-															]
-														}
-													},
-													"response": []
-												},
-												{
-													"name": "BRSCW PDF",
-													"event": [
-														{
-															"listen": "test",
-															"script": {
-																"exec": [
-																	"pm.test('HTTP status is OK', () => {",
-																	"    pm.response.to.have.status(200);",
-																	"})",
-																	"pm.test('File is PDF', () => {",
-																	"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf');",
-																	"});",
-																	"pm.test('File size is large enough', () => {",
-																	"    const cl_str = pm.response.headers.get('Content-Length');",
-																	"    const cl_bytes = parseInt(cl_str, 10)",
-																	"    pm.expect(cl_bytes).to.be.above(30000);",
-																	"});",
-																	""
-																],
-																"type": "text/javascript"
-															}
-														}
-													],
-													"request": {
-														"method": "GET",
-														"header": [],
-														"url": {
-															"raw": "{{base_url}}/documents/38/BRSCW_final1_2-6-07LF.pdf",
-															"host": [
-																"{{base_url}}"
-															],
-															"path": [
-																"documents",
-																"38",
-																"BRSCW_final1_2-6-07LF.pdf"
-															]
-														}
-													},
-													"response": []
-												}
-											]
-										},
-										{
 											"name": "Colon",
 											"item": [
 												{
@@ -1634,13 +1533,14 @@
 														"method": "GET",
 														"header": [],
 														"url": {
-															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/colon-cancer-reference-sets/",
+															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/colon-specimen-reference-sets/colon-cancer-reference-sets/",
 															"host": [
 																"{{base_url}}"
 															],
 															"path": [
 																"data-and-resources",
 																"specimen-reference-sets",
+																"colon-specimen-reference-sets",
 																"colon-cancer-reference-sets",
 																""
 															]
@@ -1719,13 +1619,14 @@
 														"method": "GET",
 														"header": [],
 														"url": {
-															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/liver-hepatocellular-carcinoma-reference-set/",
+															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/liver-specimen-reference-sets/liver-hepatocellular-carcinoma-reference-set/",
 															"host": [
 																"{{base_url}}"
 															],
 															"path": [
 																"data-and-resources",
 																"specimen-reference-sets",
+																"liver-specimen-reference-sets",
 																"liver-hepatocellular-carcinoma-reference-set",
 																""
 															]
@@ -1804,13 +1705,14 @@
 														"method": "GET",
 														"header": [],
 														"url": {
-															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/lung-cancer-reference-sets/",
+															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/lung-specimen-reference-sets/lung-cancer-reference-sets/",
 															"host": [
 																"{{base_url}}"
 															],
 															"path": [
 																"data-and-resources",
 																"specimen-reference-sets",
+																"lung-specimen-reference-sets",
 																"lung-cancer-reference-sets",
 																""
 															]
@@ -1889,13 +1791,14 @@
 														"method": "GET",
 														"header": [],
 														"url": {
-															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/pancreatic-standard-specimen-reference-set/",
+															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/pancreas-specimen-reference-sets/pancreatic-standard-specimen-reference-set/",
 															"host": [
 																"{{base_url}}"
 															],
 															"path": [
 																"data-and-resources",
 																"specimen-reference-sets",
+																"pancreas-specimen-reference-sets",
 																"pancreatic-standard-specimen-reference-set",
 																""
 															]
@@ -1979,13 +1882,14 @@
 														"method": "GET",
 														"header": [],
 														"url": {
-															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/prostate-reference-sets/",
+															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/prostate-specimen-reference-sets/prostate-reference-sets/",
 															"host": [
 																"{{base_url}}"
 															],
 															"path": [
 																"data-and-resources",
 																"specimen-reference-sets",
+																"prostate-specimen-reference-sets",
 																"prostate-reference-sets",
 																""
 															]
@@ -2180,13 +2084,14 @@
 												"method": "GET",
 												"header": [],
 												"url": {
-													"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/msabladder-reference-set/",
+													"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/bladder-secimen-reference-sets/msabladder-reference-set/",
 													"host": [
 														"{{base_url}}"
 													],
 													"path": [
 														"data-and-resources",
 														"specimen-reference-sets",
+														"bladder-secimen-reference-sets",
 														"msabladder-reference-set",
 														""
 													]
