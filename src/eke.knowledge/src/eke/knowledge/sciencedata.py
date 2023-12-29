@@ -70,6 +70,7 @@ class DataStatistic(KnowledgeObject):
 
 class DataCollection(KnowledgeObject):
     '''Corresponds to a single collection of data in LabCAS.'''
+    template = 'eke.knowledge/data-collection.html'
     page_description = 'Collection of data from the Data Commons (LabCAS)'
     parent_page_types = ['ekeknowledge.DataCollectionIndex']
     preview_modes = []
@@ -97,21 +98,30 @@ class DataCollection(KnowledgeObject):
         index.SearchField('investigator_name'),
     ]
 
-    def serve(self, request: HttpRequest) -> HttpResponse:
-        '''Overridden service.
+    def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
+        context = super().get_context(request, *args, **kwargs)
 
-        We override serve because you don't view data collections in the portal but get redirected
-        to LabCAS instead.
-        '''
-        return HttpResponseRedirect(self.identifier)
+        # Add in all the juicy detail that we otherwise provide via data_table
+        context.update(self.data_table())
+        # but improve on organ handling
+        context['organs'] = self.associated_organs.all().order_by('title')
+
+        # Now find all biomarkers
+        context['biomarkers'] = self.ekebiomarkers_biomarker_observed.all().order_by('title')
+        # 🔮 Note: data collections can also be referenced by ekebiomarkers_biomarkerbodysystem_observed
+        # and by ekebiomarkers_bodysystemstudy_observed. Note that none of these are filled in, though,
+        # because in the Biomarker Database, you can only associated data collections with biomarkers,
+        # despite the model allowing it.
+        #
+        # If the Biomarker Database is ever updated to the model and the edrn.bmdb RDF generation follows
+        # suit, then we'll need to update this too.
+
+        return context
 
     def data_table(self) -> dict:
-        '''Return the JSON-compatible dictionary describing this science data collection.
+        '''Return the JSON-compatible dictionary describing this science data collection.'''
 
-        Override the superclass's ``url`` attribute because we want to go directly to LabCAS for
-        scientific data.'''
         attributes = super().data_table()
-        attributes['url'] = self.identifier
 
         if self.generating_protocol:
             attributes['protocol'] = self.generating_protocol.title

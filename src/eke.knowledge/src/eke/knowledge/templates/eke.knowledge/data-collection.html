@@ -1,0 +1,75 @@
+{% extends 'eke.knowledge/knowledge-object.html' %}
+{% load knowledge_filters %}
+{# 🔮 TODO: caching #}
+{% block knowledge_content %}
+
+    <div class='row mb-3'>
+        <div class='col-auto'>
+            <p>
+                <a class='btn btn-outline-primary' href='{{page.identifier}}'>
+                    <i class='bi bi-box-arrow-up-right'></i> View this Data Collection in LabCAS
+                </a>
+                <br/>
+                <span class='small'>
+                    (Takes you to LabCAS, an external site. Login with your EDRN username and password
+                    may be required from within LabCAS.)
+                </span>
+            </p>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='col-md-9'>
+            <h2>Protocol</h2>
+            {% if protocol %}
+                <p>
+                    {% if protocol_url %}
+                        <a href='{{protocol_url}}'>
+                    {% endif %}
+                        {{protocol}}
+                    {% if protocol_url %}
+                        </a>
+                    {% endif %}
+                </p>
+            {% else %}
+                <p class='small'>No protocol has been identified for this data collection.</p>
+            {% endif %}
+            <h2>Biomarkers</h2>
+            <ul class='list-inline'>
+                {% for bm in biomarkers %}
+                    <li class='list-inline-item'>
+                        <a href='{{bm.url}}'>{{bm.title}}</a>
+                    </li>
+                {% empty %}
+                    <li class='list-inline-item'>No biomarkers reference this data collection.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class='col-md-3'>
+            <h3>Principal Investigator</h3>
+            {% if pi %}
+                <p>
+                    {% if pi_url %}
+                        <a href='{{pi_url}}'>
+                    {% endif %}
+                        {{pi}}
+                    {% if pi_url %}
+                        </a>
+                    {% endif %}
+                </p>
+            {% else %}
+                <p class='small'>No principal investigator has been identified for this data collection.</p>
+            {% endif %}
+
+            <h3>Organs</h3>
+            <ul class='list-unstyled'>
+                {% for organ in organs %}
+                    <li>{{organ}}</li>
+                {% empty %}
+                    <li>This data collection covers no known organs.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+{% endblock knowledge_content %}
+{# -*- Django HTML -*- #}
