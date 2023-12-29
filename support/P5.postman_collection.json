@@ -2818,7 +2818,69 @@
 									"response": []
 								},
 								{
-									"name": "Data collection",
+									"name": "Specific data collection",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test('HTTP status is OK', () => {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"pm.test('Button to go to LabCAS', () => {",
+													"    const body = pm.response.text();",
+													"    pm.expect(body).to.match(/btn btn-outline-primary.*href=.https:\\/\\/edrn-labcas.jpl.nasa.gov\\/labcas-ui\\/c\\/index.html\\?collection_id=Autoantibody_Biomarkers/);",
+													"});",
+													"pm.test('Protocol', () => {",
+													"    const body = pm.response.text();",
+													"    const protocolLink = /\\/data-and-resources\\/protocols\\/138-validation-of-protein-markers-for-lung-cancer-using-caret-sera-and-proteomics-techniques\\//;",
+													"    pm.expect(body).to.match(protocolLink);",
+													"    const protocolName = 'Validation of Protein Markers for Lung Cancer Using CARET Sera and Proteomics Techniques';",
+													"    pm.expect(body).to.contain(protocolName);",
+													"});",
+													"pm.test('Principal investigator', () => {",
+													"    const body = pm.response.text();",
+													"    const piLink = /\\/about-edrn\\/sites\\/151-the-university-of-texas-md-anderson-cancer-center\\/hanash-samir\\//;",
+													"    pm.expect(body).to.match(piLink);",
+													"    const piName = 'Hanash, Samir';",
+													"    pm.expect(body).to.contain(piName);",
+													"});",
+													"pm.test('Biomarkers', () => {",
+													"    const body = pm.response.text();",
+													"    const biomarkerLink = /\\/data-and-resources\\/biomarkers\\/ywhaq\\//;",
+													"    pm.expect(body).to.match(biomarkerLink);",
+													"    const biomarkerName = '14-3-3 theta';",
+													"    pm.expect(body).to.contain(biomarkerName);",
+													"});",
+													"pm.test('Organs', () => {",
+													"    pm.expect(pm.response.text()).to.contain('Lung');",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/data-and-resources/data/autoantibody-biomarkers/",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"data-and-resources",
+												"data",
+												"autoantibody-biomarkers",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Data collection data table",
 									"event": [
 										{
 											"listen": "test",
@@ -2829,7 +2891,7 @@
 													"});",
 													"pm.test('LabCAS link', () => {",
 													"    const r = pm.response.json();",
-													"    pm.expect(r.data[0].url).to.contain('edrn-labcas.jpl.nasa.gov');",
+													"    pm.expect(r.data[1].url).to.contain('/data-and-resources/data/autoantibody-biomarkers/');",
 													"});",
 													""
 												],
