@@ -38,7 +38,7 @@ fi
 # -----------
 #
 # There are 7+ gigabytes worth of blobs and they hardly change, so we
-# definitely take advantage of the timestamping and mirroring features of
+# definitely take advantage of the thumbprinting (checksum) features of
 # ``rsync`` in order to speed things up on subsequent runs.
 
 echo "📀 Retrieving blobs" 1>&2
