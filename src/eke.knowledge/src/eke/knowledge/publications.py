@@ -87,6 +87,15 @@ class Publication(KnowledgeObject):
         context['biomarkers'] = sorted(biomarkers, key=lambda i: i.title)
         context['num_biomarkers'] = len(context['biomarkers'])
 
+        from .protocols import Protocol
+        my_sites = self.site_that_wrote_this.all()
+        protocols = Protocol.objects.filter(coordinatingInvestigatorSite__in=my_sites) \
+            .union(Protocol.objects.filter(leadInvestigatorSite__in=my_sites)) \
+            .union(Protocol.objects.filter(involvedInvestigatorSites__in=my_sites)) \
+            .order_by('title')
+        context['protocols'] = protocols
+        context['num_protocols'] = protocols.count()
+
         return context
 
     content_panels = KnowledgeObject.content_panels + [

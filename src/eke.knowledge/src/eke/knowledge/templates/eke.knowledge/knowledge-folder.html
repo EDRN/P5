@@ -31,6 +31,7 @@
                         {% empty %}
                             <li class='list-inline-item'>This folder has no RDF sources.</li>
                         {% endfor %}
+                        {% block edrn_extra_sources %}{% endblock %}
                         <li class='list-inline-item small'>(This appears to super users only.)</li>
                     </ul>
                 </div>

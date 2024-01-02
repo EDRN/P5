@@ -6,9 +6,13 @@
     <div class='row'>
         <div class='col-lg-9'>
             <h2>Abstact</h2>
-            {% autoescape off %}
-                {{page.abstract}}
-            {% endautoescape %}
+            {% if page.abstract %}
+                {% autoescape off %}
+                    {{page.abstract}}
+                {% endautoescape %}
+            {% else %}
+                <p class='small'>No abstract available.</p>
+            {% endif %}
 
             {% if num_biomarkers %}
                 <h2>Biomarkers</h2>
@@ -25,6 +29,23 @@
                     {% endfor %}
                 </ul>
             {% endif %}
+
+            {% if num_protocols %}
+                <h2>Protocols</h2>
+
+                {% if num_protocols == 1 %}
+                    <p>One protocol is associated with this publication:</p>
+                {% else %}
+                    <p>The following {{num_protocols}} protocols are associated with this publication:</p>
+                {% endif %}
+
+                <ul>
+                    {% for protocol in protocols %}
+                        <li><a href='{{protocol.url}}'>{{protocol.title}}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
 
         </div>
         <div class='col-lg-3'>
