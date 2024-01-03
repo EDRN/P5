@@ -6,12 +6,12 @@
     {% plotly_header %}
     <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.12.1/b-2.2.3/b-colvis-2.2.3/b-html5-2.2.3/b-print-2.2.3/fh-3.2.4/kt-2.7.0/r-2.3.0/datatables.min.css'/>
 {% endblock %}
-    {% block edrn_extra_sources %}
-        <li>
-            Note: <strong>grant numbers</strong> provide an additional source of publication information
-            for this folder
-        </li>
-    {% endblock %}
+{% block edrn_extra_sources %}
+    <li>
+        Note: <strong>grant numbers</strong> provide an additional source of publication information
+        for this folder
+    </li>
+{% endblock %}
 {% block knowledge_content %}
 
     {% plotly_direct name='PubsByYear' %}
