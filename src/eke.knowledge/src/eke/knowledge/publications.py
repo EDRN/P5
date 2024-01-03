@@ -445,8 +445,25 @@ class Ingestor(BaseIngestor):
         self.configure_entrez()
         statements = self.readRDF()
         pmids, pmids_to_sites, pmids_to_uris = self.parse_statements(statements)
-        pmids |= self.get_pmids_fromt_grants()
-        new, updated, deleted = self.update_publications(pmids, pmids_to_sites, pmids_to_uris)
+        grant_pmids = self.get_pmids_fromt_grants()
+
+        both = pmids | grant_pmids
+
+        # Make a report of which publications come from the DMCC and which come from grant numbers;
+        # note that this works only if you disable the BMDB RDF source first.
+        #
+        # import csv
+        # with open('/tmp/pubs.csv', 'w', newline='') as f:
+        #     writer = csv.writer(f)
+        #     writer.writerow(['PubMed ID', 'Title', 'In DMCC', 'In Grants'])
+        #     for pubMedID in both:
+        #         qs = Publication.objects.filter(pubMedID=pubMedID).first()
+        #         title = qs.title if qs else '«unknown»'
+        #         in_dmcc = pubMedID in pmids
+        #         in_grants = pubMedID in grant_pmids
+        #         writer.writerow([pubMedID, title, in_dmcc, in_grants])
+
+        new, updated, deleted = self.update_publications(both, pmids_to_sites, pmids_to_uris)
         return new, updated, deleted
 
 
