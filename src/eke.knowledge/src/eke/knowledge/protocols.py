@@ -5,6 +5,7 @@
 from .constants import MAX_SLUG_LENGTH
 from .diseases import Disease
 from .knowledge import KnowledgeObject, KnowledgeFolder
+from .publications import Publication
 from .rdf import RDFAttribute, RelativeRDFAttribute
 from .sites import Site
 from .utils import edrn_schema_uri as esu
@@ -63,6 +64,12 @@ class _CollaborativeGroupRDFAttribute(RDFAttribute):
         return super().compute_new_value(modelField, self._aliases.get(value.strip(), value.strip()), predicates)
 
 
+class _PublicationSubjectURIRDFAttribute(RelativeRDFAttribute):
+    def modify_field(self, obj: object, values: list, modelField: Field, predicates: dict) -> bool:
+        results = Publication.objects.filter(subject_uris__identifier__in=values).values_list('identifier', flat=True)
+        return super().modify_field(obj, [str(i) for i in results], modelField, predicates)
+
+
 class Protocol(KnowledgeObject):
     template = 'eke.knowledge/protocol.html'
     parent_page_types = ['ekeknowledge.ProtocolIndex']
@@ -78,6 +85,9 @@ class Protocol(KnowledgeObject):
     piName = models.CharField(blank=True, null=False, max_length=200, help_text='De-normalized PI name from lead site')
     involvedInvestigatorSites = ParentalManyToManyField(
         Site, blank=True, verbose_name='Involved Investigator Sites', related_name='involving_protocols'
+    )
+    publications = ParentalManyToManyField(
+        Publication, blank=True, verbose_name='Publications', related_name='protocols'
     )
     cancer_types = ParentalManyToManyField(
         Disease, blank=True, verbose_name='Cancers Studied', related_name='protocols_analyzing'
@@ -117,6 +127,7 @@ class Protocol(KnowledgeObject):
         FieldPanel('finish_date'),
         FieldPanel('collaborativeGroup'),
         FieldPanel('kind'),
+        FieldPanel('publications'),
     ]
     search_fields = KnowledgeObject.search_fields + [
         index.SearchField('abbreviation'),
@@ -143,6 +154,7 @@ class Protocol(KnowledgeObject):
             esu('analyticMethod'): RDFAttribute('analyticMethod', scalar=True),
             esu('comments'): RDFAttribute('comments', scalar=True),
             esu('finishDate'): RDFAttribute('finish_date', scalar=True),
+            esu('publication'): _PublicationSubjectURIRDFAttribute('publications', scalar=False),
             _internalIDPredicate: RDFAttribute('protocolID', scalar=True),
             str(rdflib.DCTERMS.title): RDFAttribute('title', scalar=True),
             str(rdflib.DCTERMS.description): _ComplexDescriptionRDFAttribute('description', scalar=True),
@@ -173,6 +185,7 @@ class Protocol(KnowledgeObject):
         bms = Biomarker.objects.filter(protocols=self).live().order_by(Lower('title'))
         context['biomarkers'] = bms
         context['cancer_types'] = [i for i in self.cancer_types.all().order_by('title').values_list('title', flat=True)]
+        context['publications'] = [i for i in self.publications.order_by(Lower('title'))]
         return context
     def data_table(self) -> dict:
         if self.leadInvestigatorSite:

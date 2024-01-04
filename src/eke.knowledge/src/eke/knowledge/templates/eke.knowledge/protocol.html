@@ -49,25 +49,46 @@
             </dl>
 
             <h2>Abstact</h2>
-            <p>{{page.description|safe|replace_brs}}</p>
+            {% if page.description %}
+                <p>{{page.description|safe|replace_brs}}</p>
+            {% else %}
+                <p class='small'>No abstract availalbe.</p>
+            {% endif %}
 
             <h2>Aims</h2>
-            <p>{{page.aims|safe}}</p>
+            {% if page.aims %}
+                <p>{{page.aims|safe}}</p>
+            {% else %}
+                <p class='small'>No aims available.</p>
+            {% endif %}
 
             <h2>Analytic Method</h2>
-            <p>{{page.analyticMethod|safe}}</p>
+            {% if page.analyticMethod %}
+                <p>{{page.analyticMethod|safe}}</p>
+            {% else %}
+                <p class='small'>No analytic method available.</p>
+            {% endif %}
 
             {% if page.comments %}
                 <h3>Comments</h3>
                 <p>{{page.comments|safe}}</p>
             {% endif %}
 
+            <h2>Publications</h2>
+            <ul>
+                {% for publication in publications %}
+                    <li><a href='{{publication.url}}'>{{publication.title}}</a></li>
+                {% empty %}
+                   <li class='small'>No publications available at this time for this protocol.</li>
+                {% endfor %}
+            </ul>
+
             <h2>Biomarkers</h2>
             <ul>
                 {% for bm in biomarkers %}
                     <li><a href='{{bm.url}}'>{{bm.title}}</a></li>
                 {% empty %}
-                    <li class='small'>No biomarkers available at this time for this protocol</li>
+                    <li class='small'>No biomarkers available at this time for this protocol.</li>
                 {% endfor %}
             </ul>
 
@@ -99,7 +120,7 @@
                 {% endif %}
             {% else %}
                 <ul>
-                    <li class='small'>No data collections available at this time for thie protocol</li>
+                    <li class='small'>No data collections available at this time for this protocol.</li>
                 </ul>
             {% endif %}
 
