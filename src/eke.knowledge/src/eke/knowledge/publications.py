@@ -17,6 +17,7 @@ from http.client import HTTPException
 from modelcluster.fields import ParentalKey
 from plotly.express import bar
 from rdflib import URIRef
+from sortedcontainers import SortedList
 from urllib.error import HTTPError
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.fields import RichTextField
@@ -160,6 +161,7 @@ class Ingestor(BaseIngestor):
     _pubmed_pattern    = re.compile(r'[0-9]+')                                # What PubMed IDs should look like
     _site_id_predicate = URIRef(esu('site'))                                  # RDF predicate for site ID
     _wait_time         = 13                                                   # Seconds to wait between hitting API
+    _grant_prefix      = 'urn:edrn:knowledge:publication:via-grants:'         # URI subject prefix for a grant-based pub
 
     # def slugify(self, pubMedID: str, title: str, identifier: str) -> str:
     #     '''Make an appropriate URI slug component for a publication.'''
@@ -225,7 +227,7 @@ class Ingestor(BaseIngestor):
 
         return pmids, pmids_to_sites, pmids_to_uris
 
-    def get_pmids_fromt_grants(self) -> set:
+    def get_pmids_from_grants(self) -> set:
         '''Return the pubmed IDs for all the grant numbers specified in this folder.'''
 
         pmids, last_group = set(), False
@@ -444,10 +446,17 @@ class Ingestor(BaseIngestor):
     def ingest(self):
         self.configure_entrez()
         statements = self.readRDF()
-        pmids, pmids_to_sites, pmids_to_uris = self.parse_statements(statements)
-        grant_pmids = self.get_pmids_fromt_grants()
+        grant_pmids = self.get_pmids_from_grants()
 
-        both = pmids | grant_pmids
+        # Add grant publications as "statements" in the parsed RDF
+        for grant_pmid in grant_pmids:
+            predicates = {
+                self._pub_med_predicate: SortedList([rdflib.Literal(grant_pmid)]),
+                rdflib.RDF.type: SortedList([rdflib.Literal(self._pub_type)])
+            }
+            statements[rdflib.URIRef(self._grant_prefix + grant_pmid)] = predicates
+
+        pmids, pmids_to_sites, pmids_to_uris = self.parse_statements(statements)
 
         # Make a report of which publications come from the DMCC and which come from grant numbers;
         # note that this works only if you disable the BMDB RDF source first.
@@ -463,7 +472,7 @@ class Ingestor(BaseIngestor):
         #         in_grants = pubMedID in grant_pmids
         #         writer.writerow([pubMedID, title, in_dmcc, in_grants])
 
-        new, updated, deleted = self.update_publications(both, pmids_to_sites, pmids_to_uris)
+        new, updated, deleted = self.update_publications(pmids, pmids_to_sites, pmids_to_uris)
         return new, updated, deleted
 
 
@@ -494,8 +503,13 @@ class PublicationIndex(KnowledgeFolder):
     def get_contents(self, request: HttpRequest):
         '''Get the contents of this folder but only the DMCC curated publications.
         '''
-        matches = Publication.objects.filter(subject_uris__identifier__startswith='http://edrn.nci.nih.gov/data/pubs/')\
-            .child_of(self).live().public().filter(year__isnull=False).order_by('-year')
+        dmcc_pubs = Publication.objects.filter(
+            subject_uris__identifier__startswith='http://edrn.nci.nih.gov/data/pubs/'
+        ).child_of(self).live().public().filter(year__isnull=False)
+        grant_pubs = Publication.objects.filter(
+            subject_uris__identifier__startswith='urn:edrn:knowledge:publication:via-grants:'
+        ).child_of(self).live().public().filter(year__isnull=False)
+        matches = dmcc_pubs.union(grant_pubs).order_by('-year')
 
         journals = request.GET.getlist('journal')
         if journals: matches = matches.filter(journal__in=journals)
