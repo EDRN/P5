@@ -118,6 +118,9 @@ class Committee(Page):
 
     id_number = models.CharField(blank=True, max_length=10, help_text='DMCC-assigned identification number')
     description = models.TextField(blank=True, null=False, help_text='A summary or descriptive abstract')
+    documents_heading = models.TextField(
+        blank=False, default='Documents', help_text='What should the heading above the documents/agendas be?'
+    )
     chair = models.ForeignKey(
         Person, null=True, blank=True, verbose_name='Chair', related_name='committees_I_chair',
         on_delete=models.SET_NULL
@@ -139,6 +142,7 @@ class Committee(Page):
     content_panels = Page.content_panels + [
         FieldPanel('id_number'),
         FieldPanel('description'),
+        FieldPanel('documents_heading'),
         FieldPanel('chair'),
         FieldPanel('co_chair'),
         FieldPanel('members'),
