@@ -1982,6 +1982,203 @@
 											]
 										},
 										{
+											"name": "Application Form",
+											"item": [
+												{
+													"name": "Form presence",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('Page status is OK', () => {",
+																	"    pm.response.to.have.status(200);",
+																	"});",
+																	"pm.test('Content type correct', () => {",
+																	"    const contentType = pm.response.headers.get(\"Content-Type\");",
+																	"    pm.expect(contentType).to.contain('text/html');",
+																	"});"
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/specimen-set-request-form/",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"data-and-resources",
+																"specimen-reference-sets",
+																"specimen-set-request-form",
+																""
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Form fields",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test('Reference set types field', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /<select name=.ref_sets. class=.form-control. required id=.id_ref_sets. multiple>/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	"pm.test('Investigator field', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /<input type=.text. name=.investigator.+ class=.form-control. required id=\"id_investigator\">/",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	"pm.test('Institution field', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /<input type=.text. name=.institution.+ class=.form-control. required id=\"id_institution\">/",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	"pm.test('\"Your name\" field', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /<input type=.text. name=.name.+ class=.form-control. required id=\"id_name\">/",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	"pm.test('Email field', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /<input type=.email. name=.email.+ class=.form-control. required id=\"id_email\">/",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	"pm.test('Phone field', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /<input type=.text. name=.phone.+ class=.form-control.+id=\"id_phone\">/",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	"pm.test('Collaborative group checkboxes', () => {",
+																	"    const body = pm.response.text();",
+																	"    for (const value of ['breast-gyn', 'colorect-gi', 'lung', 'prostate']) {",
+																	"        const head = '<label for=.id_collaborative_group_oversight_..><input type=.checkbox. name=.collaborative_group_oversight. value=.';",
+																	"        const tail = '. id=.id_collaborative_group_oversight_..>';",
+																	"        const exp = RegExp(head + value + tail);",
+																	"        pm.expect(body).to.match(exp);",
+																	"    }",
+																	"});",
+																	"pm.test('Organ site field', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /<input type=.text. name=.organ_site. class=.form-control. required id=.id_organ_site.>/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	"pm.test('Study length field', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /<input type=.number. name=.study_length. min=.0. class=.form-control. required id=.id_study_length.>/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	"pm.test('Specimen type checkboxes', () => {",
+																	"    const body = pm.response.text();",
+																	"    for (const value of ['buffy-coat', 'cystic-fluid', 'data-only', 'imaging', 'plasma', 'serum', 'stool', 'tissue', 'urine', 'other']) {",
+																	"        const head = '<label for=.id_specimen_type_..><input type=.checkbox. name=.specimen_type. value=.'",
+																	"        const tail = '. id=.id_specimen_type_..>';",
+																	"        const exp = RegExp(head + value + tail);",
+																	"        pm.expect(body).to.match(exp);",
+																	"    }",
+																	"});",
+																	"pm.test('Other specimen type field', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /<input type=.text. name=.other_specimen_type. class=.form-control. id=.id_other_specimen_type.>/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	"pm.test('Minimum volume field', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /<textarea name=.min_volume..+required id=.id_min_volume.>/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	"pm.test('IRB radio buttons', () => {",
+																	"    const body = pm.response.text();",
+																	"    for (const value of ['yes', 'no', 'pending']) {",
+																	"        const head = '<input type=.radio. name=.irb_approval. value=.';",
+																	"        const tail = '. required id=.id_irb_approval_..>';",
+																	"        const exp = RegExp(head + value + tail);",
+																	"        pm.expect(body).to.match(exp);",
+																	"    }",
+																	"});",
+																	"pm.test('IRB elaboration field', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /<input type=.text. name=.irb_explanation. class=.form-control. id=.id_irb_explanation.>/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	"pm.test('NIH funding', () => {",
+																	"    const body = pm.response.text()",
+																	"    let exp = /<input type=.checkbox. name=.nih_funding. id=.id_nih_funding.>/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"    exp = /<input type=.text. name=.grant_number.*id=.id_grant_number.>/",
+																	"    pm.expect(body).to.match(exp);    ",
+																	"    exp = /<input type=.text. name=.annual_direct_costs.*id=.id_annual_direct_costs.>/",
+																	"    pm.expect(body).to.match(exp);    ",
+																	"    exp = /<input type=.text. name=.funding_period.*id=.id_funding_period.>/",
+																	"    pm.expect(body).to.match(exp);    ",
+																	"});",
+																	"pm.test('Other sponsorship', () => {",
+																	"    const body = pm.response.text()",
+																	"    const exp = /<input type=.checkbox. name=.other_sponsorship. id=.id_other_sponsorship.>/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	"pm.test('Other funding', () => {",
+																	"    const body = pm.response.text()",
+																	"    let exp = /<input type=.checkbox. name=.other_funding. id=.id_other_funding.>/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"    exp = /<textarea name=.funding_specification.*id=.id_funding_specification.>/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	"pm.test('Scientific proposal upload', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /<input type=.file. name=.proposal. class=.form-control. required id=.id_proposal.>/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	"pm.test('Affirmations', () => {",
+																	"    const body = pm.response.text();",
+																	"    for (const value of ['sale', 'completion', 'labcas']) {",
+																	"        const head = '<label for=.id_';",
+																	"        const tail = '. class=.is-required. class=.form-label.>';",
+																	"        const exp = RegExp(head + value + tail);",
+																	"        pm.expect(body).to.match(exp);",
+																	"    }",
+																	"});",
+																	"pm.test('Signature', () => {",
+																	"    const body = pm.response.text();",
+																	"    const exp = /<input type=.text. name=.signature.*required id=.id_signature.>/;",
+																	"    pm.expect(body).to.match(exp);",
+																	"});",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/specimen-set-request-form/",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"data-and-resources",
+																"specimen-reference-sets",
+																"specimen-set-request-form",
+																""
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
 											"name": "Specimen Reference Sets page",
 											"event": [
 												{
@@ -2024,40 +2221,6 @@
 													"path": [
 														"data-and-resources",
 														"specimen-reference-sets",
-														""
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Application form",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"pm.test('Page status is OK', () => {",
-															"    pm.response.to.have.status(200);",
-															"});",
-															""
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "GET",
-												"header": [],
-												"url": {
-													"raw": "{{base_url}}/data-and-resources/specimen-reference-sets/specimen-set-request-form/",
-													"host": [
-														"{{base_url}}"
-													],
-													"path": [
-														"data-and-resources",
-														"specimen-reference-sets",
-														"specimen-set-request-form",
 														""
 													]
 												}
@@ -3663,6 +3826,133 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Robots.txt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('HTTP status is OK', () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Content-type is \"text/plain\"', () => {",
+									"    const contentType = pm.response.headers.get(\"Content-Type\");",
+									"    pm.expect(contentType).to.equal('text/plain');",
+									"});",
+									"pm.test('Sitemap is present', () => {",
+									"    const body = pm.response.text();",
+									"    const exp = /Sitemap: http:\\/\\/edrn\\.nci\\.nih\\.gov\\/sitemap\\.xml/;",
+									"    pm.expect(body).to.match(exp);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/robots.txt",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"robots.txt"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Favicon",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('HTTP status is OK', () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Content-type is \"application/json\"', () => {",
+									"    const contentType = pm.response.headers.get(\"Content-Type\");",
+									"    pm.expect(contentType).to.equal('application/json');",
+									"});",
+									"pm.test('Manifest name is correct', () => {",
+									"    const manifest = pm.response.json();",
+									"    pm.expect(manifest.name).to.equal('Early Detection Research Network');",
+									"});",
+									"pm.test('Manifest theme color set', () => {",
+									"    const manifest = pm.response.json();",
+									"    pm.expect(manifest.theme_color).to.equal('#319fbe');",
+									"});",
+									"// We could check for the various images too, I suppose",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/manifest.json",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"manifest.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Global navigation menu",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('HTTP status is OK', () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Content-type is \"text/html\"', () => {",
+									"    const contentType = pm.response.headers.get(\"Content-Type\");",
+									"    pm.expect(contentType).to.contain('text/html');",
+									"});",
+									"pm.test('Navigation class in response', () => {",
+									"    const body = pm.response.text();",
+									"    const exp = /<nav class=.navbar navbar-expand-lg navbar nci-navbar.>/;",
+									"    pm.expect(body).to.match(exp);",
+									"});",
+									"pm.test('Drop-down menu', () => {",
+									"    const body = pm.response.text();",
+									"    const exp = /<ul class=.dropdown-menu. aria-labelledby=.ddtoggle_.+>/;",
+									"    pm.expect(body).to.match(exp);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
