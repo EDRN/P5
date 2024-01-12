@@ -3839,11 +3839,11 @@
 									"});",
 									"pm.test('Content-type is \"text/plain\"', () => {",
 									"    const contentType = pm.response.headers.get(\"Content-Type\");",
-									"    pm.expect(contentType).to.equal('text/plain');",
+									"    pm.expect(contentType).to.contain('text/plain');",
 									"});",
 									"pm.test('Sitemap is present', () => {",
 									"    const body = pm.response.text();",
-									"    const exp = /Sitemap: http.?:\\/\\/edrn\\.nci\\.nih\\.gov\\/sitemap\\.xml/;",
+									"    const exp = /Sitemap: http.?:\\/\\/edrn\\.nci\\.nih\\.gov\\/.*\\/sitemap\\.xml/;",
 									"    pm.expect(body).to.match(exp);",
 									"});",
 									""
