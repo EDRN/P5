@@ -32,6 +32,7 @@
             <li><a href='#assoc'>Associate Members</a></li>
             <li><a href='#spore'>SPOREs</a></li>
             <li><a href='#nonEDRN'>Non-EDRN Sites</a></li>
+            <li><a href='#ahead'>Advancement of Head and Neck Cancer Early Detection Research (AHEAD)</a></li>
         </ul>
 
         <h2><a name='bccs'>Biomarker Characterization Centers</a></h2>
@@ -158,6 +159,13 @@
             {% edrn_sites_by_type non %}
         {% else %}
             <p class='small'>There are no non-EDRN sites.</p>
+        {% endif %}
+
+        <h2><a name='ahead'>Advancement of Head and Neck Cancer Early Detection Research (AHEAD)</a></h2>
+        {% if ahead %}
+            {% edrn_sites_by_type ahead %}
+        {% else %}
+            <p class='small'>There are no non-AHEAD sites.</p>
         {% endif %}
 
     {% endif %}

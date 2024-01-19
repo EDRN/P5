@@ -667,6 +667,7 @@ class SiteIndex(KnowledgeFolder):
     _typeC             = 'Associate Member C'
     _spore             = 'SPOREs'
     _non               = 'Non-EDRN Site'
+    _ahead             = 'AHEAD'
     template           = 'eke.knowledge/site-index.html'
     subpage_types      = [Site, OrganizationalGroup]
 
@@ -683,6 +684,7 @@ class SiteIndex(KnowledgeFolder):
         context['typeC'] = Site.objects.child_of(self).live().public().filter(memberType=self._typeC)
         context['spore'] = Site.objects.child_of(self).live().public().filter(memberType=self._spore)
         context['non']   = Site.objects.child_of(self).live().public().filter(memberType=self._non)
+        context['ahead'] = Site.objects.child_of(self).live().public().filter(memberType=self._ahead)
 
         sites = Site.objects.child_of(self).live().public().specific().order_by(Lower('title'))
         map_data = sites.values('title', 'pi__title', 'pi__city', 'pi__lat', 'pi__lon').exclude(pi__lat__isnull=True)
