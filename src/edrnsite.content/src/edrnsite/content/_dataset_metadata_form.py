@@ -120,8 +120,9 @@ class DatasetMetadataForm(AbstractEDRNForm):
         label='Reference URL Description',
         help_text='Select the description of the resource found at the reference URL.',
         choices=(
-            ('gdc', 'Genomics Data Commons'),
             ('cd', 'Clinical Data'),
+            ('dbgap', 'dbGAP'),
+            ('gdc', 'Genomics Data Commons'),
             ('other', 'Other'),
         )
     )

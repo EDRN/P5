@@ -23,6 +23,24 @@ def pi_choices():
     ]
 
 
+def pi_site_choices():
+    '''Vocabulary for choices for principal investigators and their sites.'''
+
+    _kinds = {
+        'Clinical Validation Center', 'Data Management and Coordinating Center', 'National Cancer Institute',
+        'Biomarker Reference Laboratories', 'Associate Member A - EDRN Funded', 'Associate Member B',
+        'Associate Member C', 'Biomarker Characterization Center', 'Biomarker Developmental Laboratories'
+    }
+    return [
+        (
+            f'{site.dmccSiteID}-{site.pi.personID}',
+            f'{site.pi.title.strip()} ({site.title.strip()}, {site.memberType}, site ID {site.dmccSiteID})'
+        ) for site in Site.objects.filter(
+            memberType__in=_kinds
+        ).exclude(dmccSiteID=None).exclude(pi=None).exclude(pi__personID=None).order_by('pi__title')
+    ]
+
+
 def discipline_choices():
     '''Vocabulary for choices for disciplines.'''
     return [

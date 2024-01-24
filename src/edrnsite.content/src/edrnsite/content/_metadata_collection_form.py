@@ -3,7 +3,7 @@
 '''😌 EDRN Site Content: metadata collection form.'''
 
 from .base_forms import (
-    AbstractEDRNForm, institution_choices, pi_choices, discipline_choices, data_category_choices, ALL_USERS_DN
+    AbstractEDRNForm, pi_site_choices, discipline_choices, data_category_choices, ALL_USERS_DN
 )
 from .base_models import AbstractFormPage
 from captcha.fields import ReCaptchaField
@@ -46,8 +46,7 @@ class MetadataCollectionForm(AbstractEDRNForm):
     description = forms.CharField(label='Collection Description', help_text='A short summary of this collection.', widget=forms.Textarea)
     custodian = forms.CharField(label='Data Custodian', help_text='Genrally, this is your name.')
     custodian_email = forms.EmailField(label='Data Custodian Email', help_text='Email address for the data custodian.')
-    lead_pi = forms.ChoiceField(label='Lead PI', help_text='Select a primary investigator.', choices=pi_choices)
-    institution = forms.ChoiceField(label='Institution', help_text='Select the curating instutition.', choices=institution_choices)
+    pi_site = forms.ChoiceField(label='Lead PI and Institution', help_text='Select a primary investigator and the institution to which they belong.', choices=pi_site_choices)
     protocol = forms.ChoiceField(label='Protocol', help_text='Select the protocol that generated the data.', choices=_protocols)
     discipline = forms.MultipleChoiceField(label='Discipline', widget=forms.CheckboxSelectMultiple, choices=discipline_choices)
     cg = forms.ChoiceField(
@@ -80,8 +79,9 @@ class MetadataCollectionForm(AbstractEDRNForm):
         label='Reference URL Description',
         help_text='Select the description of the resource found at the reference URL.',
         choices=(
-            ('gdc', 'Genomics Data Commons'),
             ('cd', 'Clinical Data'),
+            ('dbgap', 'dbGAP'),
+            ('gdc', 'Genomics Data Commons'),
             ('other', 'Other'),
         )
     )
@@ -146,15 +146,17 @@ class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
         cp.set('Collection', 'CollectionName', data['collection_name'])
         cp.set('Collection', 'CollectionDescription', data['description'])
 
-        pi = Person.objects.filter(identifier=data['lead_pi']).first()
-        cp.set('Collection', 'LeadPIID', self._code(data['lead_pi']))
+        site_id, pi_id = data['pi_site'].split('-')
+
+        pi = Person.objects.filter(personID=pi_id).first()
+        cp.set('Collection', 'LeadPIID', pi_id)
         cp.set('Collection', 'LeadPIName', pi.title)
 
         cp.set('Collection', 'DataCustodian', data['custodian'])
         cp.set('Collection', 'DataCustodianEmail', data['custodian_email'])
 
-        site = Site.objects.filter(identifier=data['institution']).first()
-        cp.set('Collection', 'InstitutionID', self._code(data['institution']))
+        site = Site.objects.filter(dmccSiteID=site_id).first()
+        cp.set('Collection', 'InstitutionID', site_id)
         cp.set('Collection', 'InstitutionName', site.title)
 
         protocol = Protocol.objects.filter(identifier=data['protocol']).first()
