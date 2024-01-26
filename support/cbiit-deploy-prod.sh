@@ -112,6 +112,7 @@ echo "👷‍♀️ Upgrading production DB"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn exec db dropdb --force --if-exists --username=postgres edrn &&\
 docker compose --project-name edrn exec db createdb --username=postgres --encoding=UTF8 --owner=postgres edrn" || exit 1
+
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 [ -f /local/content/edrn/database-access/edrn.sql.bz2 ] &&\
 bzip2 --decompress --stdout /local/content/edrn/database-access/edrn.sql.bz2 | \
