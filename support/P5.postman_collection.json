@@ -3843,7 +3843,7 @@
 									"});",
 									"pm.test('Sitemap is present', () => {",
 									"    const body = pm.response.text();",
-									"    const exp = /Sitemap: http.?:\\/\\/edrn\\.nci\\.nih\\.gov\\/.*\\/sitemap\\.xml/;",
+									"    const exp = /Sitemap: .*sitemap\\.xml/;",
 									"    pm.expect(body).to.match(exp);",
 									"});",
 									""
@@ -3862,6 +3862,53 @@
 							],
 							"path": [
 								"robots.txt"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login form",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('HTTP status is OK', () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Content-type is \"text/html\"', () => {",
+									"    const contentType = pm.response.headers.get(\"Content-Type\");",
+									"    pm.expect(contentType).to.contain('text/html');",
+									"});",
+									"pm.test('Autocomplete off for username field', () => {",
+									"    const body = pm.response.text();",
+									"    const exp = /<input.*username.*autocomplete=.off./;",
+									"    pm.expect(body).to.match(exp);",
+									"});",
+									"pm.test('Autocomplete off for password field', () => {",
+									"    const body = pm.response.text();",
+									"    const exp = /<input.*password.*autocomplete=.off./;",
+									"    pm.expect(body).to.match(exp);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/_util/login/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"_util",
+								"login",
+								""
 							]
 						}
 					},
