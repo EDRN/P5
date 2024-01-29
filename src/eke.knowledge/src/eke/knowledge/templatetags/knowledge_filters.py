@@ -37,3 +37,9 @@ def knowledge_value_joined(items: Orderable, separator=', ') -> str:
 def replace_brs(value: str) -> str:
     '''Certain protocols have abstracts with tons of <br>s in them. Change those to spaces.'''
     return value.replace('&#060;br&#062;', ' ')
+
+
+@register.filter
+def strip_midnight(value: str) -> str:
+    '''Drop the "12:00AM" that the DMCC insists on putting in protocol start & finish dates.'''
+    return value.replace('12:00AM', '')

@@ -133,6 +133,19 @@
                 <h5><span class='badge bg-secondary'><i class='bi-asterisk'></i>  Non-EDRN Protocol</span></h5>
             {% endif %}
             <dl>
+                {% if page.start_date %}
+                    <dt>Start Date</dt>
+                    <dd>{{page.start_date|strip_midnight}}</dd>
+                {% endif %}
+                {% if page.estimated_finish_date %}
+                    <dt>Estimated Finish Date</dt>
+                    <dd>{{page.estimated_finish_date|strip_midnight}}</dd>
+                {% endif %}
+                {% if page.finish_date %}
+                    <dt>Finish Date</dt>
+                    <dd>{{page.finish_date|strip_midnight}}</dd>
+                {% endif %}
+
                 <dt>Protocol ID</dt>
                 <dd>{{page.protocolID}}</dd>
                 {% if page.kind %}

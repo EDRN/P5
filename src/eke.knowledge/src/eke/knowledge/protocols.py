@@ -107,6 +107,8 @@ class Protocol(KnowledgeObject):
     aims = models.TextField(null=False, blank=True, help_text='The long term goals of this protocol')
     analyticMethod = models.TextField(null=False, blank=True, help_text='How things in this protocol are analyzed')
     comments = models.TextField(null=False, blank=True, help_text='Your feedback on this protocol is appreciated!')
+    start_date = models.TextField(null=False, blank=True, help_text='When this protocol began')
+    estimated_finish_date = models.TextField(null=False, blank=True, help_text='A guess as to when this protocol will end')
     finish_date = models.TextField(null=False, blank=True, help_text='When this protocol ceased')
     # 🤬 Get bent    # collaborativeGroupsDeNormalized = models.CharField(max_length=400, blank=True, null=False, help_text='🙄')
     collaborativeGroup = models.CharField(max_length=400, blank=True, null=False, help_text='Collaborative Group')
@@ -124,6 +126,8 @@ class Protocol(KnowledgeObject):
         FieldPanel('aims'),
         FieldPanel('analyticMethod'),
         FieldPanel('comments'),
+        FieldPanel('start_date'),
+        FieldPanel('estimated_finish_date'),
         FieldPanel('finish_date'),
         FieldPanel('collaborativeGroup'),
         FieldPanel('kind'),
@@ -153,6 +157,8 @@ class Protocol(KnowledgeObject):
             esu('aims'): RDFAttribute('aims', scalar=True),
             esu('analyticMethod'): RDFAttribute('analyticMethod', scalar=True),
             esu('comments'): RDFAttribute('comments', scalar=True),
+            esu('startDate'): RDFAttribute('start_date', scalar=True),
+            esu('estimatedFinishDate'): RDFAttribute('estimated_finish_date', scalar=True),
             esu('finishDate'): RDFAttribute('finish_date', scalar=True),
             esu('publication'): _PublicationSubjectURIRDFAttribute('publications', scalar=False),
             _internalIDPredicate: RDFAttribute('protocolID', scalar=True),
