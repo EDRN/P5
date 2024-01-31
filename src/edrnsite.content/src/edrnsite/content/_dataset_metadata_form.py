@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 from .base_forms import (
-    AbstractEDRNForm, pi_choices, institution_choices, discipline_choices, data_category_choices, ALL_USERS_DN
+    AbstractEDRNForm, pi_site_choices, discipline_choices, data_category_choices, ALL_USERS_DN
 )
 from .base_models import AbstractFormPage
 from captcha.fields import ReCaptchaField
@@ -78,12 +78,7 @@ class DatasetMetadataForm(AbstractEDRNForm):
     )
     name = forms.CharField(max_length=250, label='Dataset Name', help_text='Enter the name of the dataset')
     description = forms.CharField(help_text='A short summary of this dataset', widget=forms.Textarea)
-    investigator = forms.ChoiceField(
-        required=False, label='Lead PI', help_text='Select a primary investigator.', choices=pi_choices
-    )
-    institution = forms.ChoiceField(
-        required=False, label='Institution', help_text='Select the curating instutition.', choices=institution_choices
-    )
+    pi_site = forms.ChoiceField(label='Lead PI and Institution', help_text='Select a primary investigator and the institution to which they belong.', choices=pi_site_choices)
     discipline = forms.MultipleChoiceField(
         required=False, label='Discipline', widget=forms.CheckboxSelectMultiple, choices=discipline_choices
     )
@@ -169,16 +164,15 @@ class DatasetMetadataFormPage(AbstractFormPage, EmailFormMixin):
         cp.set('Dataset', 'DatasetName', data['name'])
         cp.set('Dataset', 'DatasetDescription', data['description'])
 
-        if data['investigator']:
-            pi = Person.objects.filter(identifier=data['investigator']).first()
+        if data.get('pi_site'):
+            site_id, pi_id = data['pi_site'].split('-')
+            pi = Person.objects.filter(personID=pi_id).first()
             if pi:
-                cp.set('Dataset', 'InvestigatorID', self._code(data['investigator']))
+                cp.set('Dataset', 'InvestigatorID', pi_id)
                 cp.set('Dataset', 'InvestigatorName', pi.title)
-
-        if data['institution']:
-            site = Site.objects.filter(identifier=data['institution']).first()
+            site = Site.objects.filter(dmccSiteID=site_id).first()
             if site:
-                cp.set('Dataset', 'Institution', self._code(data['institution']))
+                cp.set('Dataset', 'Institution', site_id)
                 cp.set('Dataset', 'InstitutionName', site.title)
 
         if data['discipline']:
