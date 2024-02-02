@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load edrn_auth_tags i18n edrnsite_content_tags %}
+{% block content %}
+    <div class='row m-3 mb-4'>
+        <div class='col'>
+            <h1>Log In</h1>
+
+            {% if form.errors %}
+                <p class='text-warning'><strong>{% trans "Your username and password didn't match. Please try again." %}</strong></p>
+            {% endif %}
+
+            {% if next and request.user.is_authenticated %}
+                <p class='text-danger'><strong>{% trans "Your account doesn't have access to this page. To proceed, please log in with an account that has access." %}</strong></p>
+            {% endif %}
+
+            <div class='row mb-3'>
+                <div class='col-lg-12'>
+                    <p>
+                        Logging in tothe EDRN public portal may afford you access to
+                        additional biomarker and scientific data. Also, if you have the
+                        appropriate permissions, you can edit the pages, images, and files
+                        on this site. Use your EDRN username and password in the below form
+                        to log in.
+                    </p>
+                    <form method="post" action="{% url 'wagtailcore_login' %}" class='mb-4'>
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="submit" value="{% trans "Log in" %}" class="button" />
+                        <input type="hidden" name="next" value="{{ next }}" />
+                    </form>
+                </div>
+            </div>
+
+            {% edrn_boilerplate 'login-admonitions' %}
+        </div>
+    </div>
+{% endblock %}
+{# -*- Django HTML -*- #}

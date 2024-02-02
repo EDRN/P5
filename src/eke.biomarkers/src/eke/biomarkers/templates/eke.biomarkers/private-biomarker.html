@@ -5,11 +5,11 @@
         <p>
             {% if authenticated %}
                 Organ-specific information for this biomarker is currently being annotated or is "under review".
-                <a href='{{logout}}'>Logging out</a> and then <a href='{{login}}'>back in</a> using an account
+                <a href='{{logout}}'>Logging out</a> and then <a href='{{portal_login}}'>back in</a> using an account
                 with access may give you privileges to view additional information.
             {% else %}
                 Organ-specific information for this biomarker is currently being annotated or is "under review".
-                <a href='{{login}}'>Logging in</a> may give you privileges to view additional information.
+                <a href='{{portal_login}}'>Logging in</a> may give you privileges to view additional information.
             {% endif %}
             Contact the <a href="mailto:ic-portal@jpl.nasa.gov">Informatics Center</a> if you believe you
             should have access.

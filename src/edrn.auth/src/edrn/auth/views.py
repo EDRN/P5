@@ -2,12 +2,26 @@
 
 '''🔐 EDRN auth: views.'''
 
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.contrib.auth import views as auth_views
 from django.http import HttpRequest, HttpResponse
-from django.contrib import messages
-from django.conf import settings
-from django.contrib.auth import authenticate, login
+from django.urls import reverse
 import base64, http
+
+
+def authentication_context(request) -> dict:
+    '''Give the dictionary of authentication-related context for use in a page template.'''
+    return {
+        'authenticated': request.user.is_authenticated,
+        'logout': reverse('logout') + '?next=' + request.path,
+        # The "login" page is the full login with all the alternative destinations
+        'login': reverse('wagtailcore_login') + '?next=' + request.path,
+        # The "portal_login" page has just portal-related login, no alternative destinations like the
+        # "secure" site or LabCAS.
+        'portal_login': reverse('portal_login') + '?next=' + request.path,
+    }
 
 
 def view_or_basicauth(view, request: HttpRequest, test_func, realm: str = '', *args, **kwargs):

@@ -17,4 +17,7 @@ urlpatterns = [
     )),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('authentication-test', authentication_test_view, name='authentication-test'),
+    path('_util/portal-login', auth_views.LoginView.as_view(
+        authentication_form=EDRNAuthenticationForm, template_name='edrn.auth/portal-login.html'
+    ), name='portal_login')
 ]

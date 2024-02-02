@@ -8,21 +8,13 @@ from ..constants import DepictableSections as ds
 from django import template
 from django.db.models.functions import Lower
 from django.template.context import Context
-from django.urls import reverse
 from django.utils.text import slugify
+from edrn.auth.views import authentication_context
 from edrnsite.content.models import CertificationSnippet
 from wagtail.admin.templatetags.wagtailuserbar import get_page_instance  # Feels odd importing from here
 
 
 register = template.Library()
-
-
-def _authentication(request) -> dict:
-    return {
-        'authenticated': request.user.is_authenticated,
-        'logout': reverse('logout') + '?next=' + request.path,
-        'login': reverse('wagtailcore_login') + '?next=' + request.path
-    }
 
 
 @register.inclusion_tag('eke.biomarkers/biomarker-basics.html', takes_context=True)
@@ -111,13 +103,13 @@ def biomarker_organs(context: Context) -> dict:
 def private_biomarker(context: Context) -> dict:
     '''For explaining why portions of a biomarker aren't visible.'''
     request = context.get('request')
-    return _authentication(request)
+    return authentication_context(request)
 
 
 @register.inclusion_tag('eke.biomarkers/private-biomarkers.html', takes_context=True)
 def private_biomarkers(context: Context) -> dict:
     request = context.get('request')
-    return _authentication(request)
+    return authentication_context(request)
 
 
 @register.inclusion_tag('eke.biomarkers/certification.html', takes_context=False)
