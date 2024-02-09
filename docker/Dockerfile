@@ -60,7 +60,7 @@ RUN \
 RUN \
     build_deps="automake bzip2-dev cyrus-sasl-dev git g++ gcc libffi-dev libjpeg-turbo-dev libwebp-dev libxml2-dev libxslt-dev make musl-dev openjpeg-dev openldap-dev openssl-dev pcre-dev python3-dev postgresql-dev su-exec tiff-dev zlib-dev " &&\
     run_deps="curl krb5-libs libgcc libjpeg-turbo libldap libpq libsasl libstdc++ libwebp libxml2 libxslt netcat-openbsd openjpeg python3 rsync tiff tidyhtml" &&\
-    py_deps="py3-numpy py3-pandas py3-pillow py3-psycopg2" &&\
+    py_deps="py3-numpy py3-pandas py3-pillow py3-psycopg2 py3-biopython" &&\
     /sbin/apk update --quiet &&\
     /sbin/apk add --no-progress --quiet --virtual /edrn-build $build_deps &&\
     /sbin/apk add --no-progress --quiet $run_deps &&\
@@ -74,6 +74,7 @@ RUN [ "`/usr/bin/python3 -c 'import numpy; print(numpy.__version__)'`" = "1.24.4
 RUN [ "`/usr/bin/python3 -c 'import pandas; print(pandas.__version__)'`" = "1.5.3" ]
 RUN [ "`/usr/bin/python3 -c 'import PIL; print(PIL.__version__)'`" = "9.5.0" ]
 RUN [ "`/usr/bin/python3 -c 'import psycopg2; print(psycopg2.__version__)'`" = "2.9.6 (dt dec pq3 ext lo64)" ]
+RUN [ "`/usr/bin/python3 -c 'import Bio; print(Bio.__version__)'`" = "1.81" ]
 
 RUN \
     : See https://github.com/python-ldap/python-ldap/issues/432 for workaround to Python LDAP vs OpenLDAP 2.5 issue &&\
