@@ -27,7 +27,6 @@ $ .venv/bin/pip install --editable 'src/eke.geocoding[dev]'
 $ .venv/bin/pip install --editable 'src/edrnsite.streams[dev]'
 $ .venv/bin/pip install --editable 'src/edrnsite.controls[dev]'
 $ .venv/bin/pip install --editable 'src/edrnsite.content[dev]'
-$ .venv/bin/pip install --editable 'src/edrn.auth[dev]'
 $ .venv/bin/pip install --editable 'src/edrn.collabgroups[dev]'
 $ .venv/bin/pip install --editable 'src/eke.knowledge[dev]'
 $ .venv/bin/pip install --editable 'src/eke.biomarkers[dev]'
@@ -157,7 +156,6 @@ Or by hand:
     .venv/bin/python -m build --outdir dist src/edrnsite.controls
     .venv/bin/python -m build --outdir dist src/edrnsite.content
     .venv/bin/python -m build --outdir dist src/edrn.collabgroups
-    .venv/bin/python -m build --outdir dist src/edrn.auth
     .venv/bin/python -m build --outdir dist src/edrn.theme
     .venv/bin/python -m build --outdir dist src/edrnsite.search
     .venv/bin/python -m build --outdir dist src/eke.knowledge

@@ -30,7 +30,6 @@ if [ ! -d ".venv" ]; then
     .venv/bin/pip install --editable 'src/edrnsite.streams[dev]'
     .venv/bin/pip install --editable 'src/edrnsite.controls[dev]'
     .venv/bin/pip install --editable 'src/edrnsite.content[dev]'
-    .venv/bin/pip install --editable 'src/edrn.auth[dev]'
     .venv/bin/pip install --editable 'src/edrn.collabgroups[dev]'
     .venv/bin/pip install --editable 'src/eke.knowledge[dev]'
     .venv/bin/pip install --editable 'src/eke.biomarkers[dev]'

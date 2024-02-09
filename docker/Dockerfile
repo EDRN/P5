@@ -106,7 +106,6 @@ COPY --chown=edrn:edrn ./dist/*.whl /app/wheels/
 RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.controls-*.whl
 RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.streams-*.whl
 RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.content-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrn.auth-*.whl
 RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrn.collabgroups-*.whl
 RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrn.theme-*.whl
 RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.ploneimport-*.whl

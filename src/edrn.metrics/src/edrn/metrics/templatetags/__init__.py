@@ -1,3 +1,3 @@
 # encoding: utf-8
 
-'''🔐 EDRN Auth: template tags and filters.'''
+'''📐 EDRN Metrics: template tags and filters.'''

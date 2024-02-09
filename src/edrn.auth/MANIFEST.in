@@ -1,2 +1,0 @@
-graft src
-recursive-include src *.txt *.html *.css *.js *.png

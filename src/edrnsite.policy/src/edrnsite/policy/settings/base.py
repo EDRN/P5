@@ -300,14 +300,6 @@ CELERY_RESULT_BACKEND = 'django-db'
 CELERY_TIMEZONE = TIME_ZONE
 
 
-# Login Page
-# ----------
-#
-# 🔗 https://docs.wagtail.org/en/stable/advanced_topics/privacy.html?highlight=WAGTAIL_FRONTEND_LOGIN_TEMPLATE#setting-up-a-login-page
-
-WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'edrn.auth/login.html'
-
-
 # Caching
 # -------
 #
