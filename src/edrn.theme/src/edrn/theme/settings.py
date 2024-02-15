@@ -10,9 +10,7 @@
 #
 # 🔗 https://docs.djangoproject.com/en/3.2/ref/settings/#installed-apps
 
-INSTALLED_APPS = [
-    'edrn.auth'
-]
+INSTALLED_APPS = []
 
 
 # Migration Modules

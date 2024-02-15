@@ -21,6 +21,7 @@ import eke.biomarkers.settings as ekeBiomarkersSettings
 
 INSTALLED_APPS = edrnSiteSearchSettings.INSTALLED_APPS + ekeKnowlegeSettings.INSTALLED_APPS + edrnSiteContentSettings.INSTALLED_APPS + edrnThemeSettings.INSTALLED_APPS + [
     # Early Detection Research Network:
+    'edrn.auth',
     'edrn.theme',
     'edrnsite.content',
     'edrnsite.controls',
