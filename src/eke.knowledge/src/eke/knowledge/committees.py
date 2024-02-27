@@ -74,7 +74,7 @@ class Ingestor(BaseIngestor):
 
 class CommitteeIndex(KnowledgeFolder):
     '''A committee index contains committees.'''
-    subpage_types = [Page]
+    subpage_types = ['edrncollabgroups.Committee']
     template = 'eke.knowledge/committee-index.html'
 
     def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
