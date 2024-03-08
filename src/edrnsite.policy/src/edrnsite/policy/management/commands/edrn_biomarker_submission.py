@@ -35,7 +35,7 @@ class Command(BaseCommand):
             page = BiomarkerSubmissionFormPage(
                 title='Biomarker Submission Form', intro=_intro, outro=_outro, slug='biomarker-submission-form',
                 from_address='no-reply@nih.gov',
-                to_address='sean.kelly@jpl.nasa.gov',
+                to_address='heather.kincaid@jpl.nasa.gov,sean.kelly@jpl.nasa.gov',
                 subject='A new biomarker has been submitted'
             )
             parent.add_child(instance=page)
