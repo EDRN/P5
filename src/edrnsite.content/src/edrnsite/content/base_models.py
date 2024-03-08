@@ -93,4 +93,3 @@ class BaseEmailForm(Page):
     ]
     class Meta:
         abstract = True
-

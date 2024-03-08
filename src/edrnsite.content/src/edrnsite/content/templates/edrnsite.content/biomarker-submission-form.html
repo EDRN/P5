@@ -1,0 +1,103 @@
+{% if not form.is_valid and form.is_bound %}
+    <div class='alert alert-warning' role='alert'>
+        <i class='bi bi-exclamation-octagon-fill'></i> There's a problem with your submission.
+        Please double-check your entries below.
+    </div>
+{% endif %}
+
+<div class='row text-danger'>
+    <div class='col-auto'>
+        {{form.non_field_errors}}
+    </div>
+</div>
+
+<div class='row'>
+    <div class='{{form.submitter_name.css_classes}} col-sm-6 mb-3 form-group'>
+        {{form.submitter_name.label_tag}}
+        {{form.submitter_name.errors}}
+        {{form.submitter_name}}
+        <div class='form-text'>{{form.submitter_name.help_text|safe}}</div>
+    </div>
+    <div class='{{form.submitter_email.css_classes}} col-sm-6 mb-3 form-group'>
+        {{form.submitter_email.label_tag}}
+        {{form.submitter_email.errors}}
+        {{form.submitter_email}}
+        <div class='form-text'>{{form.submitter_email.help_text|safe}}</div>
+    </div>
+</div>
+
+<div class='row'>
+    <div class='col-sm-12'>
+        <h2>Biomarker(s) to Submit</h2>
+        <p>
+            Please <em>either</em> upload a file (PDF preferred but Word is acceptable) <em>or</em>
+            enter text in the box describing the biomarker(s).
+        </p>
+    </div>
+
+    <div class='{{form.biomarker_file.css_classes}} col-sm-6 mb-3 form-group'>
+        {{form.biomarker_file.label_tag}}
+        {{form.biomarker_file.errors}}
+        {{form.biomarker_file}}
+        <div class='form-text'>{{form.biomarker_file.help_text|safe}}</div>
+    </div>
+    <div class='{{form.biomarker_text.css_classes}} col-sm-6 mb-3 form-group'>
+        {{form.biomarker_text.label_tag}}
+        {{form.biomarker_text.errors}}
+        {{form.biomarker_text}}
+        <div class='form-text'>{{form.biomarker_text.help_text|safe}}</div>
+    </div>
+</div>
+
+<div class='row'>
+    <div class='{{form.pi_site.css_classes}} col-sm-12 mb-3 form-group'>
+        {{form.pi_site.label_tag}}
+        {{form.pi_site.errors}}
+        {{form.pi_site}}
+        <div class='form-text'>{{form.pi_site.help_text|safe}}</div>
+    </div>
+</div>
+
+<div class='row'>
+    <div class='{{form.protocol.css_classes}} col-sm-12 mb-3 form-group'>
+        {{form.protocol.label_tag}}
+        {{form.protocol.errors}}
+        {{form.protocol}}
+        <div class='form-text'>{{form.protocol.help_text|safe}}</div>
+    </div>
+</div>
+
+<div class='row'>
+    <div class='{{form.organs.css_classes}} mb-3 form-group col-sm-4'>
+        {{form.organs.label_tag}}
+        {{form.organs.errors}}
+        {{form.organs}}
+        <div class='form-text'>{{form.organs.help_text|safe}}</div>
+    </div>
+    <div class='{{form.biomarker_types.css_classes}} mb-3 form-group col-sm-4'>
+        {{form.biomarker_types.label_tag}}
+        {{form.biomarker_types.errors}}
+        {{form.biomarker_types}}
+        <div class='form-text'>{{form.biomarker_types.help_text|safe}}</div>
+    </div>
+    <div class='{{form.molecular_subtype.css_classes}} mb-3 form-group col-sm-4'>
+        {{form.molecular_subtype.label_tag}}
+        {{form.molecular_subtype.errors}}
+        {{form.molecular_subtype}}
+        <div class='form-text'>{{form.molecular_subtype.help_text|safe}}</div>
+    </div>
+</div>
+
+<div class='row'>
+    <div class='{{form.captcha.css_classes}} mb-3 form-group col-sm-4'>
+        {{form.captcha.label_tag}}
+        {{form.captcha.errors}}
+        {{form.captcha}}
+        <div class='form-text'>{{form.captcha.help_text|safe}}</div>
+    </div>
+</div>
+
+
+{% for field in hidden_fields %}{{field}}{% endfor %}
+
+{# -*- Django HTML -*- #}

@@ -59,8 +59,8 @@ bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --qu
 
 # Add additional upgrade steps here:
 #
-# Currently for 6.9 there is just this nada
-# ./manage.sh edrn_update_social_media
+# Currently for 6.11 there is just this
+./manage.sh edrn_biomarker_submission
 
 # This may be optional if you want to save time:
 ./manage.sh rdfingest

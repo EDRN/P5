@@ -3,7 +3,8 @@
 '''😌 EDRN Site Content: metadata collection form.'''
 
 from .base_forms import (
-    AbstractEDRNForm, pi_site_choices, discipline_choices, data_category_choices, ALL_USERS_DN
+    AbstractEDRNForm, pi_site_choices, discipline_choices, data_category_choices, ALL_USERS_DN,
+    protocol_choices, organ_choices
 )
 from .base_models import AbstractFormPage
 from captcha.fields import ReCaptchaField
@@ -15,14 +16,6 @@ from io import StringIO
 from urllib.parse import urlparse
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel
 from wagtail.contrib.forms.models import EmailFormMixin
-
-
-def _protocols():
-    return [(i.identifier, f'{i.title} ({i.protocolID})') for i in Protocol.objects.all().order_by('title')]
-
-
-def _organs():
-    return [(i.identifier, i.title) for i in BodySystem.objects.all().order_by('title')]
 
 
 def _species():
@@ -47,7 +40,7 @@ class MetadataCollectionForm(AbstractEDRNForm):
     custodian = forms.CharField(label='Data Custodian', help_text='Genrally, this is your name.')
     custodian_email = forms.EmailField(label='Data Custodian Email', help_text='Email address for the data custodian.')
     pi_site = forms.ChoiceField(label='Lead PI and Institution', help_text='Select a primary investigator and the institution to which they belong.', choices=pi_site_choices)
-    protocol = forms.ChoiceField(label='Protocol', help_text='Select the protocol that generated the data.', choices=_protocols)
+    protocol = forms.ChoiceField(label='Protocol', help_text='Select the protocol that generated the data.', choices=protocol_choices)
     biomarkers_researched = forms.CharField(
         required=False, label='Biomarkers Researched', widget=forms.Textarea, max_length=5000,
         help_text='Describe the cancer biomarkers being researched by this data.'
@@ -68,7 +61,7 @@ class MetadataCollectionForm(AbstractEDRNForm):
         label='Other Data Category', help_text='If you selected Other above ↑, enter the category here.',
         max_length=100, required=False
     )
-    organ = forms.ChoiceField(label='Organ', help_text='Select the body system.', choices=_organs)
+    organ = forms.ChoiceField(label='Organ', help_text='Select the body system.', choices=organ_choices)
     species = forms.ChoiceField(label='Species', help_text='Enter the species.', choices=_species)
     private = forms.BooleanField(required=False, label='Private Data', help_text='Check this box ↑ if this data collection is private.')
     access_groups = forms.CharField(

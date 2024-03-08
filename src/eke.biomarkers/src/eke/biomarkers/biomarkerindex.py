@@ -200,7 +200,7 @@ class Ingestor(BaseIngestor):
 
 class BiomarkerIndex(KnowledgeFolder):
     template = 'eke.biomarkers/biomarker-index.html'
-    subpage_types = [Biomarker]
+    subpage_types = [Biomarker, 'edrnsitecontent.BiomarkerSubmissionFormPage']
     page_description = 'Container for biomarkers'
 
     def get_vocabulary(self, name) -> list:
@@ -239,6 +239,10 @@ class BiomarkerIndex(KnowledgeFolder):
     def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
         context = super().get_context(request, *args, **kwargs)
         matches = context['knowledge_objects']
+
+        submission_form = self.get_children().filter(slug='biomarker-submission-form').first()
+        if submission_form:
+            context['submission_form'] = submission_form.url
 
         bbs = BiomarkerBodySystem.objects.filter(biomarker__in=matches).all()
         by_organs = {i: 0 for i in bbs.values_list('title', flat=True).distinct()}

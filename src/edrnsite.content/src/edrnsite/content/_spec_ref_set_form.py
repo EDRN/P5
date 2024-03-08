@@ -13,7 +13,6 @@ from django.db import models
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel
 from wagtail.contrib.forms.models import EmailFormMixin
 from wagtail.fields import RichTextField
-from django.utils.text import slugify
 
 
 _preamble_default = (

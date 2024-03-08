@@ -8,6 +8,15 @@
 {% endblock %}
 {% block knowledge_content %}
 
+    {% if submission_form %}
+        <div class='row'>
+            <p class='col-auto'>
+                Researching a biomarker not listed here?
+                Visit the <a href='{{submission_form}}'>biomarker submission form</a>.
+            </p>
+        </div>
+    {% endif %}
+
     <div class='row d-flex justify-content-center mb-3 mt-3'>
         <div class='col-sm-2'>
             <div class='card'>

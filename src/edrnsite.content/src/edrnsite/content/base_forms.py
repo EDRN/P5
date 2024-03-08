@@ -4,10 +4,17 @@
 
 from django import forms
 from django.forms.utils import ErrorList
-from eke.knowledge.models import Site, Person
-
+from eke.knowledge.models import Site, Person, Protocol, BodySystem
 
 ALL_USERS_DN = 'cn=All Users,dc=edrn,dc=jpl,dc=nasa,dc=gov'
+
+
+def protocol_choices():
+    return [(i.identifier, f'{i.title} ({i.protocolID})') for i in Protocol.objects.all().order_by('title')]
+
+
+def organ_choices():
+    return [(i.identifier, i.title) for i in BodySystem.objects.all().order_by('title')]
 
 
 def institution_choices():
