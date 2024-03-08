@@ -48,6 +48,10 @@ class MetadataCollectionForm(AbstractEDRNForm):
     custodian_email = forms.EmailField(label='Data Custodian Email', help_text='Email address for the data custodian.')
     pi_site = forms.ChoiceField(label='Lead PI and Institution', help_text='Select a primary investigator and the institution to which they belong.', choices=pi_site_choices)
     protocol = forms.ChoiceField(label='Protocol', help_text='Select the protocol that generated the data.', choices=_protocols)
+    biomarkers_researched = forms.CharField(
+        required=False, label='Biomarkers Researched', widget=forms.Textarea, max_length=5000,
+        help_text='Describe the cancer biomarkers being researched by this data.'
+    )
     discipline = forms.MultipleChoiceField(label='Discipline', widget=forms.CheckboxSelectMultiple, choices=discipline_choices)
     cg = forms.ChoiceField(
         label='Collaborative Group', help_text='Select the collaborative research group',
@@ -194,9 +198,17 @@ class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
 
         buffer = StringIO()
         cp.write(buffer)
+
         if data['comments']:
             buffer.write('\n\n\n')
             buffer.write('-' * 40)
             buffer.write('\n\nThe following was entered into the comments section:\n\n')
             buffer.write(data['comments'])
+
+        if data['biomarkers_researched']:
+            buffer.write('\n\n\n')
+            buffer.write('-' * 40)
+            buffer.write('\n\nThe following was entered into the "biomarkers researched" section:\n\n')
+            buffer.write(data['biomarkers_researched'])
+
         return buffer.getvalue()
