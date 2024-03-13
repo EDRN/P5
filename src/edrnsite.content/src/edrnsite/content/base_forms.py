@@ -13,6 +13,15 @@ def protocol_choices():
     return [(i.identifier, f'{i.title} ({i.protocolID})') for i in Protocol.objects.all().order_by('title')]
 
 
+# def protocol_choices_with_blank():
+#     choices = [('', '')]
+#     choices.extend(protocol_choices())
+
+#     def y():
+#         for i in choices:
+#             yield i
+
+
 def organ_choices():
     return [(i.identifier, i.title) for i in BodySystem.objects.all().order_by('title')]
 

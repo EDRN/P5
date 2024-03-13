@@ -3,8 +3,7 @@
 '''😌 EDRN Site Content: metadata collection form.'''
 
 from .base_forms import (
-    AbstractEDRNForm, pi_site_choices, discipline_choices, data_category_choices, ALL_USERS_DN,
-    protocol_choices, organ_choices
+    AbstractEDRNForm, pi_site_choices, protocol_choices, organ_choices
 )
 from .base_models import AbstractFormPage
 from captcha.fields import ReCaptchaField
@@ -12,7 +11,6 @@ from django import forms
 from .tasks import send_email
 from django.conf import settings
 from eke.knowledge.models import Person, Protocol, BodySystem, Site
-from io import StringIO
 from urllib.parse import urlparse
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel
 from wagtail.contrib.forms.models import EmailFormMixin
@@ -42,17 +40,26 @@ class BiomarkerSubmissionForm(AbstractEDRNForm):
         label='Biomarker(s) Researched', help_text=_text_help_text, required=False, max_length=5000,
         widget=forms.Textarea
     )
-    pi_site = forms.ChoiceField(label='Lead PI and Institution', help_text='Select a primary investigator and the institution to which they belong.', choices=pi_site_choices)
+    pi_site = forms.ChoiceField(
+        label='Lead PI and Institution',
+        help_text='Select a primary investigator and the institution to which they belong.',
+        choices=pi_site_choices,
+        required=False
+    )
 
     protocol = forms.ChoiceField(
-        label='Protocol', help_text='Select the protocol that generated the data.', choices=protocol_choices
+        label='Protocol ID',
+        help_text="Select the EDRN protocol/study from which the biomarker was researched. Contact the DMCC if you need to obtain an EDRN protocol.",
+        choices=protocol_choices,
+        required=False
     )
     organs = forms.MultipleChoiceField(
-        label='Organs', help_text='Select the body systems. You can select more than one.', choices=organ_choices
+        label='Organs', help_text='Select the body systems. You can select more than one.', choices=organ_choices,
+        required=False
     )
     biomarker_types = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple,
-        required=True,
+        required=False,
         label='Biomarker Type',
         help_text='Select the kinds of biomarker(s). You can select more than one, but check at least one.',
         choices=(
