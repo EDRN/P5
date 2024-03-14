@@ -50,6 +50,7 @@ class _ComplexDescriptionRDFAttribute(RDFAttribute):
             rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#objective'),
             rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#aims'),
             rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#outcome'),
+            rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#secureOutcome')
         ):
             text = predicates.get(pred, [''])[0]
             if text:
@@ -113,6 +114,8 @@ class Protocol(KnowledgeObject):
     # 🤬 Get bent    # collaborativeGroupsDeNormalized = models.CharField(max_length=400, blank=True, null=False, help_text='🙄')
     collaborativeGroup = models.CharField(max_length=400, blank=True, null=False, help_text='Collaborative Group')
     kind = models.CharField(max_length=80, blank=True, null=False, help_text='Protocol type')
+    outcome = models.TextField(null=False, blank=True, help_text="What this protocol's net result was")
+    secure_outcome = models.TextField(null=False, blank=True, help_text="What this protocol's secret net result was")
     content_panels = KnowledgeObject.content_panels + [
         FieldPanel('coordinatingInvestigatorSite'),
         FieldPanel('leadInvestigatorSite'),
@@ -132,6 +135,8 @@ class Protocol(KnowledgeObject):
         FieldPanel('collaborativeGroup'),
         FieldPanel('kind'),
         FieldPanel('publications'),
+        FieldPanel('outcome'),
+        FieldPanel('secure_outcome')
     ]
     search_fields = KnowledgeObject.search_fields + [
         index.SearchField('abbreviation'),
@@ -140,6 +145,8 @@ class Protocol(KnowledgeObject):
         index.FilterField('piName'),
         index.FilterField('collaborativeGroup'),
         index.FilterField('cancer_types'),
+        index.FilterField('outcome'),
+        index.FilterField('secure_outcome'),
     ]
     class Meta:
         pass
@@ -164,14 +171,18 @@ class Protocol(KnowledgeObject):
             _internalIDPredicate: RDFAttribute('protocolID', scalar=True),
             str(rdflib.DCTERMS.title): RDFAttribute('title', scalar=True),
             str(rdflib.DCTERMS.description): _ComplexDescriptionRDFAttribute('description', scalar=True),
+            esu('outcome'): _ComplexDescriptionRDFAttribute('outcome', scalar=True),
+            esu('secureOutcome'): _ComplexDescriptionRDFAttribute('secure_outcome', scalar=True),
             esu('protocolType'): RDFAttribute('kind', scalar=True)
         }
+
     def _authentication(self, request: HttpRequest) -> dict:
         '''Given a request, determine if the user is authenticated and what the login link would be if not.'''
         params = {'authenticated': request.user.is_authenticated}
         if not params['authenticated']:
             params['login'] = reverse('wagtailcore_login') + '?next=' + request.path
         return params
+
     def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
         '''Get the context for the page template.'''
         context = super().get_context(request, args, kwargs)
@@ -192,7 +203,12 @@ class Protocol(KnowledgeObject):
         context['biomarkers'] = bms
         context['cancer_types'] = [i for i in self.cancer_types.all().order_by('title').values_list('title', flat=True)]
         context['publications'] = [i for i in self.publications.order_by(Lower('title'))]
+
+        # Show the new secure outcome only for logged in users
+        context['show_secure_outcome'] = request and request.user.is_authenticated
+
         return context
+
     def data_table(self) -> dict:
         if self.leadInvestigatorSite:
             if self.leadInvestigatorSite.pi:

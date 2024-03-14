@@ -74,6 +74,16 @@
                 <p>{{page.comments|safe}}</p>
             {% endif %}
 
+            {% if page.outcome %}
+                <h3>Outcome</h3>
+                <p>{{page.outcome|safe}}</p>
+            {% endif %}
+
+            {% if page.secure_outcome and show_secure_outcome %}
+                <h3>Secure Outcome</h3>
+                <p>{{page.secure_outcome|safe}}</p>
+            {% endif %}
+
             <h2>Publications</h2>
             <ul>
                 {% for publication in publications %}
