@@ -205,7 +205,13 @@ class Protocol(KnowledgeObject):
         context['publications'] = [i for i in self.publications.order_by(Lower('title'))]
 
         # Show the new secure outcome only for logged in users
-        context['show_secure_outcome'] = request and request.user.is_authenticated
+        # context['show_secure_outcome'] = request and request.user.is_authenticated
+        #
+        # Actually …
+        #
+        # In https://github.com/EDRN/P5/issues/348#issuecomment-1998265624 @hoodriverheather requests
+        # that we don't show the secure outcome
+        context['show_secure_outcome'] = False
 
         return context
 
