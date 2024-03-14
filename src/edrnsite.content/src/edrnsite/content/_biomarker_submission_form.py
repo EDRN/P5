@@ -81,6 +81,11 @@ class BiomarkerSubmissionForm(AbstractEDRNForm):
             ('karyotypic', 'Karyotypic'),
         )
     )
+    associated_publication = forms.CharField(
+        required=False,
+        max_length=500,
+        help_text="Enter the associated publication's PubMed ID or its title."
+    )
 
     if not settings.DEBUG:
         captcha = ReCaptchaField()
@@ -177,6 +182,10 @@ class BiomarkerSubmissionFormPage(AbstractFormPage, EmailFormMixin):
         subtype = data.get('molecular_subtype')
         if subtype:
             rendered += f'\nMolecular Subtype: {subtype}'
+
+        associated_publication = data.get('associated_publication')
+        if associated_publication:
+            rendered += f'\nAssociated Publication: {associated_publication}'
 
         biomarker_file = form.cleaned_data['biomarker_file']
         if biomarker_file:
