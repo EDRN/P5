@@ -107,16 +107,19 @@ ssh -q $USER@$WEBSERVER "cd $WEBROOT && docker compose --project-name edrn ps"
 
 
 echo ""
-echo "👷‍♀️ Upgrading production DB"
+echo "👷‍♀️ Dropping and creating edrn database"
 
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn exec db dropdb --force --if-exists --username=postgres edrn &&\
 docker compose --project-name edrn exec db createdb --username=postgres --encoding=UTF8 --owner=postgres edrn" || exit 1
 
+echo ""
+echo "👷‍♀️ Applying dump from edrn.sql.bz2"
+
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 [ -f /local/content/edrn/database-access/edrn.sql.bz2 ] &&\
 bzip2 --decompress --stdout /local/content/edrn/database-access/edrn.sql.bz2 | \
-    docker compose --project-name edrn exec --no-TTY db psql --username=postgres --dbname=edrn --echo-errors --quiet" || exit 1
+    docker compose --project-name edrn exec --no-TTY db psql --username=postgres --dbname=edrn --echo-errors" || exit 1
 
 
 echo ""
