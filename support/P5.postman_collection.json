@@ -448,7 +448,7 @@
 															"});",
 															"pm.test('Ovarian blood SOP', () => {",
 															"    const body = pm.response.text();",
-															"    const exp = /href=.+\\/documents\\/[^\\/]+\\/Ovarian_Blood_SOP\\.pdf.>Ovarian Blood SOP/;",
+															"    const exp = /href=.+\\/documents\\/[^\\/]+\\/UL_Blood_SOP_v2\\.0_C\\.pdf.>Ovarian Blood SOP/;",
 															"    pm.expect(body).to.match(exp);",
 															"});",
 															"pm.test('Ovarian uterine lavage SOP', () => {",
@@ -468,7 +468,8 @@
 															"});",
 															""
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -509,7 +510,8 @@
 															"});",
 															""
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
