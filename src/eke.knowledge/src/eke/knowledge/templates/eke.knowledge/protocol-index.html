@@ -79,7 +79,7 @@
                         else
                             return '<a href="' + row['pi_url'] + '">' + data + '</a>';
                     }},
-                    {data: 'field'},
+                    {data: 'f_o_rs'},  // #351
                     {# {data: 'diseases'},  Turned off for #190 #}
                     {data: 'cg'}
                 ],
@@ -93,6 +93,7 @@
                 dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>B",
                 initComplete: function() {
+                    // Set up the collaborative group selector
                     var cg_col = this.api().column(4);
                     var select = $('<select><option value="">— Collab Group —</option></select>')
                         .appendTo($(cg_col.header()).empty())
@@ -105,7 +106,10 @@
                     select.append('<option value="Lung">Lung</option>');
                     select.append('<option value="Prostate">Prostate</option>');
                     select.append('<option value="UNKNOWN">UNKNOWN</option>');
-                    this.api().columns([2, 3]).every(function() {
+
+                    // Col 2 = PI; we used to do this on col 3 as well but now that it has multiple
+                    // values per protocol we need to handle it specially
+                    this.api().columns([2]).every(function() {
                         var column = this;
                         var label = this.footer().innerHTML;
                         var select = $('<select><option value="">— ' + label + ' —</option></select>')
@@ -118,6 +122,8 @@
                             select.append('<option value="' + d + '">' + d + '</option>');
                         });
                     });
+
+                    // Col 0 = protocol title, col 1 = abstract
                     this.api().columns([0, 1]).every(function() {
                         var that = this;
                         $('input', this.header()).on('keyup change clear', function() {
@@ -126,6 +132,27 @@
                             }
                         });
                     });
+
+                    // col 3 = field of research; requires special handling due to multiple values
+                    // per protocol; #351
+                    var f_o_r_column = this.api().column(3);
+                    var f_o_r_select = $('<select><option value="">— Field —</option></select>')
+                        .appendTo($(f_o_r_column.header()).empty())
+                        .on('change', function() {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            f_o_r_column.search(val? val : '', true, false).draw();
+                        });
+                    var f_o_r_retriever = new XMLHttpRequest();
+                    f_o_r_retriever.open('GET', '{% pageurl page %}?ajax=fields-of-research', true);
+                    f_o_r_retriever.onreadystatechange = function() {
+                        if (f_o_r_retriever.readyState === 4 && f_o_r_retriever.status === 200) {
+                            var f_o_rs = JSON.parse(f_o_r_retriever.responseText)['data'];
+                            f_o_rs.forEach(f_o_r => {
+                                f_o_r_select.append('<option value="' + f_o_r + '">' + f_o_r + '</option>');
+                            })
+                        }
+                    }
+                    f_o_r_retriever.send();
                 }
             });
         });

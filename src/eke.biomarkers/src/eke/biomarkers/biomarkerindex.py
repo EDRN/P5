@@ -204,7 +204,10 @@ class BiomarkerIndex(KnowledgeFolder):
     page_description = 'Container for biomarkers'
 
     def get_vocabulary(self, name) -> list:
-        '''Get a "vocabulary" of known values for the field ``name`` for our contained subpage.'''
+        '''Get a "vocabulary" of known values for the field ``name`` for our contained subpage.
+
+        This function is not used.
+        '''
         if name == 'organ':
             return BiomarkerBodySystem.objects.values_list('title', flat=True).distinct().order_by(Lower('title'))
         elif name == 'phase':
@@ -231,6 +234,7 @@ class BiomarkerIndex(KnowledgeFolder):
         return matches
 
     def faceted_markup(self, request):
+        '''Since we moved to DataTables, this function is no longer used.'''
         pages, rows = self.get_contents(request), []
         for page in pages:
             rows.append(render_to_string('eke.biomarkers/biomarker-row.html', {'biomarker': page.specific}))

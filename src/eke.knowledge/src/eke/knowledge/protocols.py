@@ -16,14 +16,15 @@ from django.db import models
 from django.db.models import Q
 from django.db.models.fields import Field
 from django.db.models.functions import Lower
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.text import slugify
 from django_plotly_dash import DjangoDash
-from modelcluster.fields import ParentalManyToManyField
+from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from urllib.parse import urlparse
-from wagtail.admin.panels import FieldPanel
+from wagtail.admin.panels import FieldPanel, InlinePanel
+from wagtail.models import Orderable
 from wagtail.search import index
 import dash_core_components as dcc
 import dash_html_components as html
@@ -103,7 +104,6 @@ class Protocol(KnowledgeObject):
     abbreviation = models.CharField(
         max_length=120, null=False, blank=True, help_text='Short and more convenient name for the protocol'
     )
-    fieldOfResearch = models.CharField(max_length=25, null=False, blank=True, help_text='Field this protocol studies')
     phasedStatus = models.PositiveIntegerField(blank=True, null=True, help_text='Not sure what this is')
     aims = models.TextField(null=False, blank=True, help_text='The long term goals of this protocol')
     analyticMethod = models.TextField(null=False, blank=True, help_text='How things in this protocol are analyzed')
@@ -117,6 +117,7 @@ class Protocol(KnowledgeObject):
     outcome = models.TextField(null=False, blank=True, help_text="What this protocol's net result was")
     secure_outcome = models.TextField(null=False, blank=True, help_text="What this protocol's secret net result was")
     content_panels = KnowledgeObject.content_panels + [
+        InlinePanel('fields_of_research', label='Fields of Research'),  # 351
         FieldPanel('coordinatingInvestigatorSite'),
         FieldPanel('leadInvestigatorSite'),
         FieldPanel('involvedInvestigatorSites'),
@@ -124,7 +125,6 @@ class Protocol(KnowledgeObject):
         FieldPanel('isProject'),
         FieldPanel('protocolID'),
         FieldPanel('abbreviation'),
-        FieldPanel('fieldOfResearch'),
         FieldPanel('phasedStatus'),
         FieldPanel('aims'),
         FieldPanel('analyticMethod'),
@@ -141,7 +141,6 @@ class Protocol(KnowledgeObject):
     search_fields = KnowledgeObject.search_fields + [
         index.SearchField('abbreviation'),
         index.SearchField('protocolID'),
-        index.FilterField('fieldOfResearch'),
         index.FilterField('piName'),
         index.FilterField('collaborativeGroup'),
         index.FilterField('cancer_types'),
@@ -158,7 +157,7 @@ class Protocol(KnowledgeObject):
             esu('cancerType'): RelativeRDFAttribute('cancer_types', scalar=False),
             esu('projectFlag'): _ProjectFlagRDFAttribute('isProject', scalar=True),
             esu('abbreviatedName'): RDFAttribute('abbreviation', scalar=True),
-            esu('fieldOfResearch'): RDFAttribute('fieldOfResearch', scalar=True),
+            esu('fieldOfResearch'): RDFAttribute('fields_of_research', scalar=False),  # #351
             esu('collaborativeGroupText'): _CollaborativeGroupRDFAttribute('collaborativeGroup', scalar=True),
             esu('phasedStatus'): RDFAttribute('phasedStatus', scalar=True),
             esu('aims'): RDFAttribute('aims', scalar=True),
@@ -213,6 +212,9 @@ class Protocol(KnowledgeObject):
         # that we don't show the secure outcome
         context['show_secure_outcome'] = False
 
+        # Fields of research ("f_o_rs") is multi-valued now #351
+        context['f_o_rs'] = [i for i in self.fields_of_research.all().order_by('value')]
+
         return context
 
     def data_table(self) -> dict:
@@ -232,15 +234,31 @@ class Protocol(KnowledgeObject):
             if cg == 'Breast': cg = 'Breast/Gyn'
             cgs.append(cg)
 
+        # #351 — f_o_rs = "fields of research", which I guess technically should be "fs_o_r" 😅
+        f_o_rs = ', '.join([i for i in self.fields_of_research.all().values_list('value', flat=True).order_by('value')])
+
         return {
             'pi_name': pi_name,
             'pi_url': pi_url,
-            'field': self.fieldOfResearch,
+            'f_o_rs': f_o_rs,
             # Turned off for #190
             # 'diseases': ', '.join([str(i) for i in self.cancer_types.values_list('title', flat=True).order_by('title')]),
             'cg': ', '.join(cgs),
             **super().data_table()
         }
+
+
+class ProtocolFieldOfResearch(Orderable):
+    '''Multi-valued support for RDF "fieldOfResearch" field.
+
+    Supports #351.
+    '''
+    value = models.CharField(
+        max_length=25, blank=False, null=False, default='Field of research', help_text='Field of research'
+    )
+    page = ParentalKey(Protocol, on_delete=models.CASCADE, related_name='fields_of_research')
+    panels = [FieldPanel('value')]
+    def __str__(self): return self.value  # noqa: E704
 
 
 class Ingestor(BaseIngestor):
@@ -324,7 +342,7 @@ class ProtocolIndex(KnowledgeFolder):
         pi, fields, cg = request.GET.get('piName'), request.GET.getlist('fieldOfResearch'), request.GET.get('collab_group')
         filter = {}
         if pi: filter['piName__exact'] = pi
-        if fields: filter['fieldOfResearch__in'] = fields
+        if fields: filter['fields_of_research__value__in'] = fields
         if cg: filter['collaborativeGroup'] = cg  # cannot use __contains or __icontains because ``search`` below balks
         q = Q(**filter)
         # According to https://docs.wagtail.org/en/stable/topics/search/indexing.html:
@@ -387,7 +405,7 @@ class ProtocolIndex(KnowledgeFolder):
         #     diseases_frame = pandas.DataFrame(diseases_facets.items(), columns=('Disease', 'Count'))
         # except AttributeError:
 
-        c = collections.Counter(matches.values_list('fieldOfResearch', flat=True))
+        c = collections.Counter(matches.values_list('fields_of_research__value', flat=True))
         fields, amounts = [i[0] for i in c.items()], [i[1] for i in c.items()]
         fields_frame = pandas.DataFrame({'Field': fields, 'Count': amounts})
         fields_legend = ghetto_plotly_legend([i[0] for i in c.most_common()], palette)
@@ -449,6 +467,17 @@ class ProtocolIndex(KnowledgeFolder):
             ]),
         ])
         return context
+
+    def serve(self, request: HttpRequest) -> HttpResponse:
+        '''Overridden service.
+
+        We override serve in order to handle the ``ajax=fields-of-research`` request. Supports #351.
+        '''
+        if request.GET.get('ajax') == 'fields-of-research':
+            f_o_rs = ProtocolFieldOfResearch.objects.distinct().values_list('value', flat=True).order_by('value')
+            return JsonResponse({'data': [i for i in f_o_rs]})
+        else:
+            return super().serve(request)
 
     class Meta:
         pass

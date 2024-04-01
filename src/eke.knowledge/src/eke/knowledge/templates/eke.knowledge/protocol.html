@@ -162,8 +162,19 @@
                     <dt>Protocol Type</dt>
                     <dd>{{page.kind}}</dd>
                 {% endif %}
-                <dt>Field of Research</dt>
-                <dd>{{page.fieldOfResearch}}</dd>
+
+                {% if f_o_rs %}
+                    {# #351 #}
+                    <dt>Fields of Research</dt>
+                    <dd>
+                        <ul class='list-unstyled'>
+                            {% for f_o_r in f_o_rs %}
+                                <li>{{f_o_r}}</li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
+                {% endif %}
+
                 <dt>Collaborative Group</dt>
                 <dd>
                     {% if page.collaborativeGroup %}
