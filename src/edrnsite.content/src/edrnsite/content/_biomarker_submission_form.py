@@ -25,8 +25,8 @@ class BiomarkerSubmissionForm(AbstractEDRNForm):
         return 'multipart/form-data'
 
     template_name = 'edrnsite.content/biomarker-submission-form.html'
-    _file_help_text = "A file describing new biomarker(s); PDF preferred but Word is acceptable. If you use this option, there's no need to enter any text in the next box." 
-    _text_help_text = "Describe the biomarker(s) being submitted. If you use this option, there's no need to upload a file."
+    _file_help_text = "A file listing the new biomarker(s); any file format is acceptable. If you use this option, there's no need to enter any text in the next box." 
+    _text_help_text = "List the biomarker(s) being submitted. If you use this option, there's no need to upload a file."
 
     submitter_name = forms.CharField(
         label='Submitter Name', help_text='The name of the person submitting a biomarker.', max_length=100
