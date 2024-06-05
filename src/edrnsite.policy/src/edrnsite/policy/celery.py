@@ -10,5 +10,3 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'edrnsite.policy.settings.ops')
 app = Celery('EDRN')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
-
-
