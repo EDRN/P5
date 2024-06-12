@@ -5,14 +5,13 @@
 
 from ._biomarker_submission_form import BiomarkerSubmissionFormPage  # noqa: F401
 from ._dataset_metadata_form import DatasetMetadataFormPage  # noqa: F401
+from ._explorer import CDEExplorerPage, CDEExplorerObject, CDEExplorerAttribute, CDEPermissibleValue  # noqa: F401
 from ._metadata_collection_form import MetadataCollectionFormPage  # noqa: F401
 from ._spec_ref_set_form import SpecimenReferenceSetRequestFormPage  # noqa: F401
-from ._explorer import CDEExplorerPage, CDEExplorerObject, CDEExplorerAttribute, CDEPermissibleValue  # noqa: F401
-from django import forms
+from .base_models import AbstractFormPage  # noqa: F401
 from django.conf import settings
 from django.db import models
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from edrnsite.streams import blocks
@@ -27,62 +26,6 @@ from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 from wagtailcaptcha.models import WagtailCaptchaEmailForm
 from wagtailmetadata.models import MetadataPageMixin
-
-
-class AbstractFormPage(Page):
-    '''Abstract base class for Wagtai pages holding Django forms.'''
-    intro = RichTextField(blank=True, help_text='Introductory text to appear above the form')
-    outro = RichTextField(blank=True, help_text='Text to appear below the form')
-    preview_modes = []
-    content_panels = Page.content_panels + [
-        FieldPanel('intro'),
-        FieldPanel('outro')
-    ]
-
-    def get_form(self) -> type:
-        '''Return the class of the form this page will display.'''
-        raise NotImplementedError('Subclasses must implement get_form')
-
-    def get_initial_values(self, request: HttpRequest) -> dict:
-        '''Return any initial values for the form. By default this is an empty dict.
-        Subclasses may override this.'''
-        return dict()
-
-    def process_submission(self, form: forms.Form) -> dict:
-        '''Process the submitted and cleaned ``form``.
-
-        Return a dict of any other parameters that may be needed in the thank you page.
-        '''
-        raise NotImplementedError('Subclasses must implement process_submission')
-
-    def get_landing_page(self) -> str:
-        '''Get the name of the landing (thank you) page for successful submission.'''
-        raise NotImplementedError('Subclasses must implement get_landing_page')
-
-    def _bootstrap(self, form: forms.Form):
-        '''Add Boostrap class to every widget except checkboxes & radio buttons.'''
-        for field in form.fields.values():
-            if not isinstance(
-                field.widget, (
-                    forms.widgets.CheckboxInput, forms.widgets.CheckboxSelectMultiple, forms.widgets.RadioSelect
-                )
-            ):
-                field.widget.attrs.update({'class': 'form-control'})
-
-    def serve(self, request: HttpRequest) -> HttpResponse:
-        form_class = self.get_form()
-        if request.method == 'POST':
-            form = form_class(request.POST, page=self)
-            if form.is_valid():
-                params = {'page': self, **self.process_submission(form)}
-                return render(request, self.get_landing_page(), params)
-        else:
-            form = form_class(initial=self.get_initial_values(request), page=self)
-        self._bootstrap(form)
-        return render(request, 'edrnsite.content/form.html', {'page': self, 'form': form})  # Fix this
-
-    class Meta:
-        abstract = True
 
 
 class HomePage(MetadataPageMixin, Page):
