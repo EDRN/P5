@@ -35,17 +35,26 @@ def _species():
 class MetadataCollectionForm(AbstractEDRNForm):
     '''Form to collect metadata.'''
 
-    collection_name = forms.CharField(label='Collection Name', help_text='Name of this collection.')
-    description = forms.CharField(label='Collection Description', help_text='A short summary of this collection.', widget=forms.Textarea)
-    custodian = forms.CharField(label='Data Custodian', help_text='Genrally, this is your name.')
-    custodian_email = forms.EmailField(label='Data Custodian Email', help_text='Email address for the data custodian.')
+    _desc_help = '''Provide a short description of the data in this collection. Explain the methods and
+procedures used to collect the data, including any equipment, software, or protocols utilized. Additionally,
+detail any processing or transformation steps applied to the data at the collection sites, such as
+normalization, filtering, or algorithmic processing.'''
+
+    collection_name = forms.CharField(label='Collection Name', help_text='The name or title of your data collection.')
+    description = forms.CharField(label='Collection Description', help_text=_desc_help, widget=forms.Textarea)
+    custodian = forms.CharField(label='Data Custodian', help_text='The name of the person that will be contacted with questions about this data collection.')
+    custodian_email = forms.EmailField(label='Data Custodian Email', help_text='The email of the person that will be contacted with questions about this data collection.')
     pi_site = forms.ChoiceField(label='Lead PI and Institution', help_text='Select a primary investigator and the institution to which they belong.', choices=pi_site_choices)
+    additional_site = forms.CharField(
+        label='Additional Researcher and Institution',
+        help_text='Additional researchers, separated by commas, in priority order.',
+        required=False, max_length=512
+    )
     protocol = forms.ChoiceField(label='Protocol', help_text='Select the protocol that generated the data.', choices=protocol_choices)
     biomarkers_researched = forms.CharField(
         required=False, label='Biomarkers Researched', widget=forms.Textarea, max_length=5000,
         help_text='Describe the cancer biomarkers being researched by this data.'
     )
-    discipline = forms.MultipleChoiceField(label='Discipline', widget=forms.CheckboxSelectMultiple, choices=discipline_choices)
     cg = forms.ChoiceField(
         label='Collaborative Group', help_text='Select the collaborative research group',
         widget=forms.RadioSelect,
@@ -56,6 +65,7 @@ class MetadataCollectionForm(AbstractEDRNForm):
             ('prostate', 'Prostate & Other Urologic Cancers Research Group'),
         )
     )
+    discipline = forms.MultipleChoiceField(label='Discipline', widget=forms.CheckboxSelectMultiple, choices=discipline_choices)
     category = forms.ChoiceField(label='Data Category', help_text='Categorize the data.', choices=data_category_choices)
     other_category = forms.CharField(
         label='Other Data Category', help_text='If you selected Other above ↑, enter the category here.',
@@ -68,13 +78,15 @@ class MetadataCollectionForm(AbstractEDRNForm):
         label='Shared Access', required=False, widget=forms.Textarea,
         help_text='If this data is private, enter the names of sites and/or people who should have access, ONE PER LINE.'
     )
-    results = forms.CharField(required=False, label='Results and Conclusion Summary', widget=forms.Textarea)
-    reference_url = forms.URLField(required=False, label='URL Link', help_text='Optional URL link to external or additional data described by this collection.')
+    results = forms.CharField(
+        required=False, label='Results and Conclusion Summary', widget=forms.Textarea,
+        help_text='The results and conclusions from this data collection.'
+    )
     reference_url_description = forms.ChoiceField(
         required=False,
         widget=forms.RadioSelect,
-        label='Reference URL Description',
-        help_text='Select the description of the resource found at the reference URL.',
+        label='URL Description',
+        help_text='Select the description of the reference URL used to reference additional information or point to data in external repositories. The URL is entered below.',
         choices=(
             ('cd', 'Clinical Data'),
             ('dbgap', 'dbGAP'),
@@ -84,14 +96,19 @@ class MetadataCollectionForm(AbstractEDRNForm):
     )
     reference_url_other = forms.CharField(
         required=False, label='Other', max_length=280,
-        help_text='If you selected "Other" above, enter the description of the reference URL.'
+        help_text='If you selected "Other" above, enter the description of the URL.'
     )
+    reference_url = forms.URLField(required=False, label='URL Link', help_text='URL link to external or additional data described by this collection.')
     pub_med_id = forms.CharField(required=False, label='PubMed ID', max_length=20)
-    doi = forms.CharField(required=False, label='DOI', max_length=150, help_text='Digital Object Identifier')
-    doi_url = forms.URLField(required=False, label='DOI URL', help_text='URL form of the DOI')
+    doi = forms.CharField(required=False, label='DOI', max_length=150, help_text='Digital Object Identifier that is associated with the data being described.')
+    doi_url = forms.URLField(required=False, label='DOI URL', help_text='URL form of the DOI that is associated with the data being described.')
     comments = forms.CharField(
         required=False, label='Comments or Questions', widget=forms.Textarea, max_length=5000,
         help_text='Have questions? Need to clarify something? Want to make some comments? Enter here.'
+    )
+    type_of_data = forms.CharField(
+        required=False, max_length=512, label='Type of data files to be uploaded',
+        help_text='Describe the type of data files that are to be uploaded.'
     )
     if not settings.DEBUG:
         captcha = ReCaptchaField()
@@ -203,5 +220,17 @@ class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
             buffer.write('-' * 40)
             buffer.write('\n\nThe following was entered into the "biomarkers researched" section:\n\n')
             buffer.write(data['biomarkers_researched'])
+
+        if data['additional_site']:
+            buffer.write('\n\n\n')
+            buffer.write('-' * 40)
+            buffer.write('\n\nThe following was entered into the "addtional researcher and institution" field:\n\n')
+            buffer.write(data['additional_site'])
+
+        if data['type_of_data']:
+            buffer.write('\n\n\n')
+            buffer.write('-' * 40)
+            buffer.write('\n\nThe following was entered into the "type of data" field:\n\n')
+            buffer.write(data['type_of_data'])
 
         return buffer.getvalue()
