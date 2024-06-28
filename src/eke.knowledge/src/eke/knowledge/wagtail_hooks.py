@@ -27,11 +27,13 @@ class IngestControlPanel(Component):
         settings = RDFIngest.for_request(self.request)
         folders = KnowledgeFolder.objects.all().order_by('ingest_order')
 
-        try:
-            with urlopen(self._ip_service) as f:
-                my_ip = f.read().decode('utf-8')
-        except Exception as ex:
-            my_ip = str(ex)
+        # ipify.org is having problems
+        # try:
+        #     with urlopen(self._ip_service) as f:
+        #         my_ip = f.read().decode('utf-8')
+        # except Exception as ex:
+        #     my_ip = str(ex)
+        my_ip = 'unknown'
 
         context = {
             'last_ingest_start': settings.last_ingest_start,
