@@ -79,6 +79,12 @@ class Informatics(BaseSiteSetting):
     )
     funding_cycle = models.CharField(default='Ⅴ', max_length=8, null=False, blank=False, help_text='EDRN Funding Cycle')
     site_wide_banner = RichTextField(blank=True, help_text='Banner to display site-wide at the top of every page')
+    ip_address = models.CharField(
+        default='unknown', max_length=40, null=False, blank=False, help_text='Last known source IP address of the portal'
+    )
+    ip_address_service = models.URLField(
+        default='https://api.ipify.org', null=False, blank=False, help_text='API endpoint of IP address service'
+    )
     panels = [
         FieldPanel('in_development'),
         FieldPanel('entrez_email'),
@@ -87,6 +93,8 @@ class Informatics(BaseSiteSetting):
         FieldPanel('dmcc_url'),
         FieldPanel('funding_cycle'),
         FieldPanel('site_wide_banner'),
+        FieldPanel('ip_address'),
+        FieldPanel('ip_address_service'),
     ]
 
 

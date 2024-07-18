@@ -8,8 +8,6 @@ from django.http import HttpRequest
 from django.template.loader import render_to_string
 from wagtail.admin.ui.components import Component
 from wagtail import hooks
-from urllib.request import urlopen
-import os
 
 
 class IngestControlPanel(Component):
@@ -27,20 +25,11 @@ class IngestControlPanel(Component):
         settings = RDFIngest.for_request(self.request)
         folders = KnowledgeFolder.objects.all().order_by('ingest_order')
 
-        # ipify.org is having problems
-        # try:
-        #     with urlopen(self._ip_service) as f:
-        #         my_ip = f.read().decode('utf-8')
-        # except Exception as ex:
-        #     my_ip = str(ex)
-        my_ip = 'unknown'
-
         context = {
             'last_ingest_start': settings.last_ingest_start,
             'last_ingest_duration': settings.last_ingest_duration,
             'ingest_running': lock.locked(),
             'knowledge_folders': folders,
-            'my_ip': my_ip,
         }
         return render_to_string('eke.knowledge/ingest-controls.html', context, request=self.request)
 

@@ -1,0 +1,18 @@
+{% load wagtailadmin_tags %}
+<section class='panel summary nice-padding'>
+    <div style='display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 1rem;
+        grid-auto-rows: minmax(100px, auto);'>
+        <div>
+            <h2 class='title-wrapper'>EDRN Site Controls</h2>
+            <dl>
+                <dt>My IP</dt>
+                <dd>{{my_ip}}</dd>
+            </dl>
+
+        </div>
+        <div>
+            <a href='{% url "update_my_ip" %}' class='button button-longrunning' role='button'>Update my IP</a>
+        </div>
+    </div>
+</section>
+{# -*- Django HTML -*- #}
