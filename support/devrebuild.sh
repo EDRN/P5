@@ -61,7 +61,7 @@ bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --qu
 #
 # Currently for 6.11 there is just this
 # ./manage.sh edrn_biomarker_submission
-# For 6.12 there's nothing yet
+# For 6.13 there's nothing yet
 
 # This may be optional if you want to save time:
 ./manage.sh rdfingest
