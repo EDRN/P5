@@ -39,11 +39,20 @@ class MetadataCollectionForm(AbstractEDRNForm):
 procedures used to collect the data, including any equipment, software, or protocols utilized. Additionally,
 detail any processing or transformation steps applied to the data at the collection sites, such as
 normalization, filtering, or algorithmic processing.'''
+    _method_details_help = '''A comprehensive description of the methodologies and procedures used in the
+collection and processing of the dataset. This includes information on the experimental design, data collection
+techniques, equipment used, protocols followed, and any specific conditions or settings applied during the data
+acquisition process. Additionally, it captures details about any tools, software, or algorithms utilized in
+data processing and analysis, ensuring transparency and reproducibility of the research.'''
+    _instrument_help = '''The specific device or apparatus used to generate the data. This can include mass
+spectrometers, sequencers, imaging devices (e.g., MRI, CT, Mammogram), and other specialized tools employed
+in the data collection process.'''
 
     collection_name = forms.CharField(label='Collection Name', help_text='The name or title of your data collection.')
     description = forms.CharField(label='Collection Description', help_text=_desc_help, widget=forms.Textarea)
     custodian = forms.CharField(label='Data Custodian', help_text='The name of the person that will be contacted with questions about this data collection.')
     custodian_email = forms.EmailField(label='Data Custodian Email', help_text='The email of the person that will be contacted with questions about this data collection.')
+    method_details = forms.CharField(label='Method Details', help_text=_method_details_help, widget=forms.Textarea)
     pi_site = forms.ChoiceField(label='Lead PI and Institution', help_text='Select a primary investigator and the institution to which they belong.', choices=pi_site_choices)
     additional_site = forms.CharField(
         label='Additional Researcher and Institution',
@@ -71,6 +80,7 @@ normalization, filtering, or algorithmic processing.'''
         label='Other Data Category', help_text='If you selected Other above ↑, enter the category here.',
         max_length=100, required=False
     )
+    instrument = forms.CharField(label='Instrument', help_text=_instrument_help, max_length=100)
     organ = forms.ChoiceField(label='Organ', help_text='Select the body system.', choices=organ_choices)
     species = forms.ChoiceField(label='Species', help_text='Enter the species.', choices=_species)
     private = forms.BooleanField(required=False, label='Private Data', help_text='Check this box ↑ if this data collection is private.')
@@ -232,5 +242,17 @@ class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
             buffer.write('-' * 40)
             buffer.write('\n\nThe following was entered into the "type of data" field:\n\n')
             buffer.write(data['type_of_data'])
+
+        if data['method_details']:
+            buffer.write('\n\n\n')
+            buffer.write('-' * 40)
+            buffer.write('\n\nThe following was entered into the "method details" field:\n\n')
+            buffer.write(data['method_details'])
+
+        if data['instrument']:
+            buffer.write('\n\n\n')
+            buffer.write('-' * 40)
+            buffer.write('\n\nThe following was entered into the "instrument" field:\n\n')
+            buffer.write(data['instrument'])
 
         return buffer.getvalue()
