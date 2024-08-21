@@ -52,7 +52,6 @@ in the data collection process.'''
     description = forms.CharField(label='Collection Description', help_text=_desc_help, widget=forms.Textarea)
     custodian = forms.CharField(label='Data Custodian', help_text='The name of the person that will be contacted with questions about this data collection.')
     custodian_email = forms.EmailField(label='Data Custodian Email', help_text='The email of the person that will be contacted with questions about this data collection.')
-    method_details = forms.CharField(label='Method Details', help_text=_method_details_help, widget=forms.Textarea)
     pi_site = forms.ChoiceField(label='Lead PI and Institution', help_text='Select a primary investigator and the institution to which they belong.', choices=pi_site_choices)
     additional_site = forms.CharField(
         label='Additional Researcher and Institution',
@@ -75,21 +74,17 @@ in the data collection process.'''
         )
     )
     discipline = forms.MultipleChoiceField(label='Discipline', widget=forms.CheckboxSelectMultiple, choices=discipline_choices)
+    method_details = forms.CharField(label='Method Details', help_text=_method_details_help, widget=forms.Textarea)
+    instrument = forms.CharField(label='Instrument', help_text=_instrument_help, max_length=100)
     category = forms.ChoiceField(label='Data Category', help_text='Categorize the data.', choices=data_category_choices)
     other_category = forms.CharField(
         label='Other Data Category', help_text='If you selected Other above ↑, enter the category here.',
         max_length=100, required=False
     )
-    instrument = forms.CharField(label='Instrument', help_text=_instrument_help, max_length=100)
     organ = forms.ChoiceField(label='Organ', help_text='Select the body system.', choices=organ_choices)
     species = forms.ChoiceField(label='Species', help_text='Enter the species.', choices=_species)
-    private = forms.BooleanField(required=False, label='Private Data', help_text='Check this box ↑ if this data collection is private.')
-    access_groups = forms.CharField(
-        label='Shared Access', required=False, widget=forms.Textarea,
-        help_text='If this data is private, enter the names of sites and/or people who should have access, ONE PER LINE.'
-    )
     results = forms.CharField(
-        required=False, label='Results and Conclusion Summary', widget=forms.Textarea,
+        required=True, label='Results and Conclusion Summary', widget=forms.Textarea,
         help_text='The results and conclusions from this data collection.'
     )
     reference_url_description = forms.ChoiceField(
@@ -112,6 +107,11 @@ in the data collection process.'''
     pub_med_id = forms.CharField(required=False, label='PubMed ID', max_length=20)
     doi = forms.CharField(required=False, label='DOI', max_length=150, help_text='Digital Object Identifier that is associated with the data being described.')
     doi_url = forms.URLField(required=False, label='DOI URL', help_text='URL form of the DOI that is associated with the data being described.')
+    access_groups = forms.CharField(
+        label='Shared Access', required=False, widget=forms.Textarea,
+        help_text='If this data is private, enter the names of sites and/or people who should have access, ONE PER LINE.'
+    )
+    private = forms.BooleanField(required=False, label='Private Data', help_text='Check this box ↑ if this data collection is private.')
     comments = forms.CharField(
         required=False, label='Comments or Questions', widget=forms.Textarea, max_length=5000,
         help_text='Have questions? Need to clarify something? Want to make some comments? Enter here.'
