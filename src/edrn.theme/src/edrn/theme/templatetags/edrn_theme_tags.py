@@ -5,6 +5,7 @@
 from django import template
 from django.template.context import Context
 from django.utils.safestring import mark_safe
+from edrnsite.controls.models import Informatics
 from edrnsite.controls.models import SocialMediaLink
 from importlib import import_module
 from wagtailmenus.models import FlatMenu
@@ -26,17 +27,22 @@ def request_restoring_flat_menu(context: Context, original_context: Context, **k
     return rc
 
 
-@register.simple_tag(takes_context=False)
-def edrn_portal_version() -> str:
-    version = None
-    try:
-        module = import_module('edrnsite.policy')  # No circular dependency here
-        version = getattr(module, 'VERSION', None)
-    except ModuleNotFoundError:
-        pass
-    if not version:
-        # Okay, just use the theme's version
-        from edrn.theme import VERSION as version
+@register.simple_tag(takes_context=True)
+def edrn_portal_version(context: Context) -> str:
+    '''Use the overidden version if set, else the policy verison, else the theme version.'''
+    informatics = Informatics.for_request(context.get('request'))
+    if informatics and informatics.override_version:
+        version = informatics.override_version
+    else:
+        version = None
+        try:
+            module = import_module('edrnsite.policy')  # No circular dependency here
+            version = getattr(module, 'VERSION', None)
+        except ModuleNotFoundError:
+            pass
+        if not version:
+            # Okay, just use the theme's version
+            from edrn.theme import VERSION as version
     return mark_safe(str(version))
 
 

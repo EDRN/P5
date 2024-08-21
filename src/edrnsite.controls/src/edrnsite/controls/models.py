@@ -85,6 +85,11 @@ class Informatics(BaseSiteSetting):
     ip_address_service = models.URLField(
         default='https://api.ipify.org', null=False, blank=False, help_text='API endpoint of IP address service'
     )
+    override_version = models.CharField(
+        default='', null=False, blank=True,
+        help_text='Version number to override in footer; blank determines from software'
+    )
+
     panels = [
         FieldPanel('in_development'),
         FieldPanel('entrez_email'),
@@ -95,6 +100,7 @@ class Informatics(BaseSiteSetting):
         FieldPanel('site_wide_banner'),
         FieldPanel('ip_address'),
         FieldPanel('ip_address_service'),
+        FieldPanel('override_version'),
     ]
 
 
