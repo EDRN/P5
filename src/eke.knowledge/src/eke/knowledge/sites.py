@@ -26,7 +26,7 @@ from modelcluster.fields import ParentalKey
 from modelcluster.fields import ParentalManyToManyField
 from plotly.express import scatter_mapbox
 from rdflib import URIRef
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
 from urllib.request import urlopen
 from wagtail.admin.panels import FieldPanel, InlinePanel
@@ -128,7 +128,10 @@ class _ImageIngestingRDFAttribute(RDFAttribute):
                 image.save()
             return image
         except HTTPError:
-            _logger.warning('😡 The URL to image «%s» is invalid', value)
+            _logger.exception('😡 The URL to image «%s» produced an HTTPError', value)
+            return None
+        except URLError:
+            _logger.exception("😲 The URL to image «%s» produced a URLError", value)
             return None
 
 
