@@ -162,7 +162,7 @@ class DatasetMetadataFormPage(AbstractFormPage, EmailFormMixin):
         return urlparse(identifier).path.split('/')[-1]
     def render_email(self, form):
         data = form.cleaned_data
-        cp = ConfigParser()
+        cp = ConfigParser(interpolation=None)
         cp.optionxform = lambda option: option
         cp.add_section('Dataset')
         cp.set('Dataset', 'DatasetName', data['name'])

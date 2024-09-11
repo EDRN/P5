@@ -168,7 +168,7 @@ class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
         return urlparse(identifier).path.split('/')[-1]
     def render_email(self, form):
         data = form.cleaned_data
-        cp = ConfigParser()
+        cp = ConfigParser(interpolation=None)
         cp.optionxform = lambda option: option
         cp.add_section('Collection')
         cp.set('Collection', 'CollectionName', data['collection_name'])
