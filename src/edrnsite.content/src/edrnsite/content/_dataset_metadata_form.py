@@ -82,6 +82,10 @@ class DatasetMetadataForm(AbstractEDRNForm):
     discipline = forms.MultipleChoiceField(
         required=False, label='Discipline', widget=forms.CheckboxSelectMultiple, choices=discipline_choices
     )
+    other_discipline = forms.CharField(
+        required=False, label='Other Discipline', max_length=60,
+        help_text='If choosing "Other" above ↑, please enter the name of the discipline.'
+    )
     category = forms.ChoiceField(
         required=False, label='Data Category', help_text='Categorize the data.', choices=data_category_choices
     )
@@ -177,10 +181,8 @@ class DatasetMetadataFormPage(AbstractFormPage, EmailFormMixin):
 
         if data['discipline']:
             cp.set('Dataset', 'Discipline', '|'.join(data['discipline']))
-
         if data['content_type']:
             cp.set('Dataset', 'ContentType', '|'.join(data['content_type']))
-
         if data['specimen_type']:
             cp.set('Dataset', 'SpecimenType', '|'.join(data['specimen_type']))
 
@@ -208,4 +210,11 @@ class DatasetMetadataFormPage(AbstractFormPage, EmailFormMixin):
 
         buffer = StringIO()
         cp.write(buffer)
+
+        if data['other_discipline']:
+            buffer.write('\n\n\n')
+            buffer.write('-' * 40)
+            buffer.write('\n\nThe following was entered into the "other discipline" field:\n\n')
+            buffer.write(data['other_discipline'])
+
         return buffer.getvalue()

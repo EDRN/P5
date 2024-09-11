@@ -74,6 +74,10 @@ in the data collection process.'''
         )
     )
     discipline = forms.MultipleChoiceField(label='Discipline', widget=forms.CheckboxSelectMultiple, choices=discipline_choices)
+    other_discipline = forms.CharField(
+        required=False, label='Other Discipline', max_length=60,
+        help_text='If choosing "Other" above ↑, please enter the name of the discipline.'
+    )
     method_details = forms.CharField(label='Method Details', help_text=_method_details_help, widget=forms.Textarea)
     instrument = forms.CharField(label='Instrument', help_text=_instrument_help, max_length=100)
     category = forms.ChoiceField(label='Data Category', help_text='Categorize the data.', choices=data_category_choices)
@@ -254,5 +258,11 @@ class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
             buffer.write('-' * 40)
             buffer.write('\n\nThe following was entered into the "instrument" field:\n\n')
             buffer.write(data['instrument'])
+
+        if data['other_discipline']:
+            buffer.write('\n\n\n')
+            buffer.write('-' * 40)
+            buffer.write('\n\nThe following was entered into the "other discipline" field:\n\n')
+            buffer.write(data['other_discipline'])
 
         return buffer.getvalue()

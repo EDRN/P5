@@ -61,12 +61,13 @@ def discipline_choices():
     '''Vocabulary for choices for disciplines.'''
     return [
         ('genomics', 'Genomics'),
+        ('metabolomics', 'Metabolomics'),
         ('proteomics', 'Proteomics'),
-        ('pathology-images', 'Pathology Imagess'),
+        ('pathology-images', 'Pathology Images'),
         ('radiology', 'Radiology'),
         ('immunology', 'Immunology'),
         ('pathology', 'Pathology'),
-        ('undefined', 'Undefined')
+        ('other', 'Other'),
     ]
 
 
