@@ -125,9 +125,8 @@ class Committee(Page):
         Person, null=True, blank=True, verbose_name='Chair', related_name='committees_I_chair',
         on_delete=models.SET_NULL
     )
-    co_chair = models.ForeignKey(
-        Person, null=True, blank=True, verbose_name='Co-Chair', related_name='committees_I_co_chair',
-        on_delete=models.SET_NULL
+    co_chairs = ParentalManyToManyField(
+        Person, blank=True, verbose_name='Co-Chair(s)', related_name='committees_I_co_chair'
     )
     members = ParentalManyToManyField(
         Person, blank=True, verbose_name='Members', related_name='committees_I_belong_to'
@@ -144,7 +143,7 @@ class Committee(Page):
         FieldPanel('description'),
         FieldPanel('documents_heading'),
         FieldPanel('chair'),
-        FieldPanel('co_chair'),
+        FieldPanel('co_chairs'),
         FieldPanel('members'),
         FieldPanel('program_officers'),
         FieldPanel('project_scientists'),

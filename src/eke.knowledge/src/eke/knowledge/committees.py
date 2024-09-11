@@ -49,11 +49,10 @@ class Ingestor(BaseIngestor):
                 person = Person.objects.filter(identifier=new_chair).first()
                 if person:
                     committee.chair = person
-            new_co_chair = predicates.get(_co_chair, [None])[0]
-            if new_co_chair:
-                person = Person.objects.filter(identifier=new_co_chair).first()
-                if person:
-                    committee.co_chair = person
+
+            new_co_chairs = set(predicates.get(_co_chair, []))
+            co_chairs = Person.objects.filter(identifier__in=new_co_chairs).order_by('title')
+            committee.co_chairs.set(co_chairs, bulk=True, clear=True)
             new_members = set(predicates.get(_member, [])) | set(predicates.get(_consultant, []))
             members = Person.objects.filter(identifier__in=new_members).order_by('title')
             committee.members.set(members, bulk=True, clear=True)

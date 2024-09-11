@@ -89,11 +89,19 @@
                 {% endif %}
             {% endwith %}
 
+            {% with count=page.co_chairs.all|length %}
+                {% if count %}
+                    <h3>Co-Chair{{count|pluralize}}</h3>
+                    <ul class='list-unstyled'>
+                        {% for person in page.co_chairs.all %}
+                            <li><a href='{{person.url}}'>{{person.title}}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
 
-            {% if page.chair %}
-                <h3>Chair</h3>
-                <p><a href='{{page.chair.url}}'>{{page.chair.title}}</a></p>
-            {% endif %}
+
+
             {% if page.co_chair %}
                 <h3 class='mt-2'>Co-Chair</h3>
                 <p><a href='{{page.co_chair.url}}'>{{page.co_chair.title}}</a></p>
