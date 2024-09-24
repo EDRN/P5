@@ -243,13 +243,6 @@ networks:
                 Internal bridge network so the services that comprise the EDRN Public Portal may communicate.
 
 
-# Misc
-# ----
-#
-# Only thing we have here is some Docker Compose metadata.
-
-version: '3.9'
-
 ...
 
 # -*- mode: YAML; tab-width: 4 -*-
