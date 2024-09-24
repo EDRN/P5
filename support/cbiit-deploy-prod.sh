@@ -87,8 +87,8 @@ docker container ls" || exit 1
 # idle connection because it's a despotic and horrible server.
 # sleep 400
 
-ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn pull --include-deps --quiet" || exit 1
+# ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
+# docker compose --project-name edrn pull --include-deps --quiet" || exit 1
 
 echo ""
 echo "👉 Use Docker compose to bring up all the containers, and list what's running once complete."
