@@ -77,15 +77,15 @@ docker compose --project-name edrn down --remove-orphans &&\
 docker compose rm --force --stop --volumes &&\
 docker container ls" || exit 1
 
-echo ""
-echo "🪢 Pulling the images anonymously"
-ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker logout ncidockerhub.nci.nih.gov && docker logout &&\
-docker image rm --force edrndocker/edrn-portal:$EDRN_VERSION &"
+# echo ""
+# echo "🪢 Pulling the images anonymously"
+# ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
+# docker logout ncidockerhub.nci.nih.gov && docker logout &&\
+# docker image rm --force edrndocker/edrn-portal:$EDRN_VERSION &"
 
 # The `docker image rm` step can take a long time, and sshd will time out the
 # idle connection because it's a despotic and horrible server.
-sleep 400
+# sleep 400
 
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn pull --include-deps --quiet" || exit 1
