@@ -90,7 +90,7 @@ docker image rm --force edrndocker/edrn-portal:$EDRN_VERSION &"
 
 # The `docker image rm` step can take a long time, and sshd will time out the
 # idle connection because it's a despotic and horrible server.
-sleep 400
+sleep 600
 
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn pull --include-deps --quiet" || exit 1

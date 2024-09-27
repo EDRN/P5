@@ -6,7 +6,7 @@
 # Download the latest production database, apply migrations, and get ready to rock and roll.
 
 
-jpl_sys_ipv4=172.16.16.3
+jpl_sys_ipv4=172.16.16.10
 
 
 # Argument check
@@ -48,6 +48,7 @@ createdb "edrn" 'P5 for the Early Detection Research Network'
 # Must use --checksum here because the nightly refresh from NCI to tumor munges all the timestamps
 # rsync --checksum --no-motd --recursive --delete --progress tumor.jpl.nasa.gov:/usr/local/edrn/portal/ops-nci/media .
 rsync --checksum --no-motd --recursive --delete --progress $jpl_sys_ipv4:/Users/kelly/P6/media .
+touch media/.nobackup
 scp $jpl_sys_ipv4:/Users/kelly/P6/edrn.sql.bz2 .
 bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --quiet
 
