@@ -27,6 +27,26 @@
                 </div>
         </div>
     </form>
+
+    {# Experimental AI summary feature #}
+    {% if page.paginator.count > 20 and query %}
+        <div class='row mb-3'>
+            <div class='col-md-12'>
+                <p class='d-inline-flex gap-1'>
+                    <a class='btn btn-primary btn-sm' data-bs-toggle='collapse' href='#aiResults'
+                        role='button' aria-expanded='false' aria-controls='aiResults'>
+                        AI Summary of these Results
+                    </a>
+                </p>
+                <div class='collapse' id='aiResults'>
+                    <div class='card card-body' id='aiResultsSummary'>
+                        Loading…
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
     <div class='row'>
         <div class='col-lg-1'>
             {% if page.paginator.count > 0 %}
@@ -143,4 +163,21 @@
         </div>
     </div>
 {% endblock content %}
+{% block extra_js %}
+<script>
+    $('#aiResults').on('shown.bs.collapse', function() {
+        summarizeResults();
+    });
+    function summarizeResults() {
+        var searchTerms = document.getElementById('searchTerms').value;
+        var url = '/summarize?query=' + encodeURIComponent(searchTerms);
+        fetch(url)
+            .then(response => response.text())
+            .then(result => {
+                document.querySelector('#aiResultsSummary').innerHTML = result;
+            })
+            .catch(error => console.error('Error getting AI summary:', error));
+    }
+</script>
+{% endblock extra_js %}
 {# -*- Django HTML -*- #}
