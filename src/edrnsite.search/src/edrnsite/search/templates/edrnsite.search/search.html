@@ -170,7 +170,10 @@
     });
     function summarizeResults() {
         var searchTerms = document.getElementById('searchTerms').value;
-        var url = '/summarize?query=' + encodeURIComponent(searchTerms);
+
+        // Need a better way to handle subpaths than this host-specific basePath computation:
+        var basePath = window.location.hostname == 'edrn-dev.jpl.nasa.gov'? '/portal/renaissance' : '';
+        var url = basePath + '/summarize?query=' + encodeURIComponent(searchTerms);
         fetch(url)
             .then(response => response.text())
             .then(result => {
