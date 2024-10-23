@@ -174,7 +174,7 @@ services:
     # Worker processes run Django functions so it needs all the same env vars as `portal`.
     worker:
         image: ${EDRN_IMAGE_OWNER-edrndocker/}edrn-portal:${EDRN_VERSION:-6.3.0-uid26013}
-        entrypoint: ['/usr/bin/django-admin', 'worker', '--verbosity', '2']
+        entrypoint: ['/app/bin/django-admin', 'worker', '--verbosity', '2']
         volumes:
             -
                 type: bind

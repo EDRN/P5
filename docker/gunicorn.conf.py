@@ -11,7 +11,7 @@ accesslog = '-'
 errorlog = '-'
 loglevel = 'debug'
 
-# workers = multiprocessing.cpu_count() * 2 + 1
+workers = multiprocessing.cpu_count() * 2 + 1
 # threads = 
 # worker_class = 'gevent'  # TODO: test this out
 

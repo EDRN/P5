@@ -15,7 +15,7 @@
 # `numpy-gitpod` and `numpy-dev`—and I'm not going to use a `-dev` image in production.) See the `py_deps`
 # below.
 
-FROM alpine:3.18
+FROM alpine:3.19
 
 
 # Configurable Arguments
@@ -58,8 +58,8 @@ RUN \
     :
 
 RUN \
-    build_deps="automake bzip2-dev cyrus-sasl-dev git g++ gcc libffi-dev libjpeg-turbo-dev libwebp-dev libxml2-dev libxslt-dev make musl-dev openjpeg-dev openldap-dev openssl-dev pcre-dev python3-dev postgresql-dev su-exec tiff-dev zlib-dev " &&\
-    run_deps="curl krb5-libs libgcc libjpeg-turbo libldap libpq libsasl libstdc++ libwebp libxml2 libxslt netcat-openbsd openjpeg python3 rsync tiff tidyhtml" &&\
+    build_deps="automake bzip2-dev cyrus-sasl-dev git g++ gcc libffi-dev libjpeg-turbo-dev libwebp-dev libxml2-dev libxslt-dev make musl-dev openjpeg-dev openldap-dev openssl-dev pcre-dev python3-dev postgresql-dev su-exec tiff-dev zlib-dev py3-pip" &&\
+    run_deps="curl krb5-libs libgcc libjpeg-turbo libldap libpq libsasl libstdc++ libwebp libxml2 libxslt netcat-openbsd openjpeg python3 rsync tiff tidyhtml py3-gunicorn py3-flask" &&\
     py_deps="py3-numpy py3-pandas py3-pillow py3-psycopg2 py3-biopython" &&\
     /sbin/apk update --quiet &&\
     /sbin/apk add --no-progress --quiet --virtual /edrn-build $build_deps &&\
@@ -69,20 +69,19 @@ RUN \
 
 # Over on GitHub Actions, we need to fail fast and not hit the six hour run limit, so make sure we got it right
 
-RUN [ "`/usr/bin/python3 --version`" = "Python 3.11.10" ]
-RUN [ "`/usr/bin/python3 -c 'import numpy; print(numpy.__version__)'`" = "1.24.4" ]
-RUN [ "`/usr/bin/python3 -c 'import pandas; print(pandas.__version__)'`" = "1.5.3" ]
-RUN [ "`/usr/bin/python3 -c 'import PIL; print(PIL.__version__)'`" = "9.5.0" ]
-RUN [ "`/usr/bin/python3 -c 'import psycopg2; print(psycopg2.__version__)'`" = "2.9.6 (dt dec pq3 ext lo64)" ]
-RUN [ "`/usr/bin/python3 -c 'import Bio; print(Bio.__version__)'`" = "1.81" ]
+RUN echo `/usr/bin/python3 --version` | grep -q '^Python 3\.11\.'
+RUN echo `/usr/bin/python3 -c 'import numpy; print(numpy.__version__)'` | grep -q '^1\.25\.'
+RUN echo `/usr/bin/python3 -c 'import pandas; print(pandas.__version__)'` | grep -q '^2\.0\.'
+RUN echo `/usr/bin/python3 -c 'import PIL; print(PIL.__version__)'` | grep -q '^10\.3\.'
+RUN echo `/usr/bin/python3 -c 'import psycopg2; print(psycopg2.__version__)'` | grep -q '^2\.9\.'
+# Note that Biopython does not use MAJOR.MINOR.MICRO versions so there's no trailing dot here
+RUN echo `/usr/bin/python3 -c 'import Bio; print(Bio.__version__)'` | grep -q '^1\.81'
 
 RUN \
     : See https://github.com/python-ldap/python-ldap/issues/432 for workaround to Python LDAP vs OpenLDAP 2.5 issue &&\
     echo 'INPUT ( libldap.so )' > /usr/lib/libldap_r.so &&\
-    /usr/bin/python3 -m ensurepip --upgrade &&\
-    /usr/bin/pip3 install --quiet --progress-bar off --upgrade pip setuptools wheel &&\
-    /usr/bin/pip3 install gunicorn==20.1.0 &&\
-    /usr/bin/install -o edrn -g edrn -d /app /app/media /app/static /app/wheels &&\
+    /usr/bin/python3 -m venv --system-site-packages --upgrade-deps /app &&\
+    /usr/bin/install -o edrn -g edrn -d /app/media /app/static /app/wheels &&\
     :
 
 COPY --chown=edrn:edrn ./dist/*.whl /app/wheels/
@@ -104,32 +103,30 @@ COPY --chown=edrn:edrn ./dist/*.whl /app/wheels/
 # Except the Docker plugin for Jenkins at CBIIT chokes with an HTTP 400 error because apparently
 # the single layer made above is too big. So, we have to do these in separate RUNs:
 
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.controls-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.streams-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.content-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrn.collabgroups-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrn.theme-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.ploneimport-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/eke.geocoding-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/eke.knowledge-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/eke.biomarkers-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.search-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrn.metrics-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.policy-*.whl
+RUN /app/bin/pip3 install --progress-bar off /app/wheels/edrnsite.controls-*.whl
+RUN /app/bin/pip3 install --progress-bar off /app/wheels/edrnsite.streams-*.whl
+RUN /app/bin/pip3 install --progress-bar off /app/wheels/edrnsite.content-*.whl
+RUN /app/bin/pip3 install --progress-bar off /app/wheels/edrn.collabgroups-*.whl
+RUN /app/bin/pip3 install --progress-bar off /app/wheels/edrn.theme-*.whl
+RUN /app/bin/pip3 install --progress-bar off /app/wheels/edrnsite.ploneimport-*.whl
+RUN /app/bin/pip3 install --progress-bar off /app/wheels/eke.geocoding-*.whl
+RUN /app/bin/pip3 install --progress-bar off /app/wheels/eke.knowledge-*.whl
+RUN /app/bin/pip3 install --progress-bar off /app/wheels/eke.biomarkers-*.whl
+RUN /app/bin/pip3 install --progress-bar off /app/wheels/edrnsite.search-*.whl
+RUN /app/bin/pip3 install --progress-bar off /app/wheels/edrn.metrics-*.whl
+RUN /app/bin/pip3 install --progress-bar off /app/wheels/edrnsite.policy-*.whl
 
 # And this too:
 
 RUN \
     cd /app &&\
     : Get the static files ready &&\
-    /sbin/su-exec edrn /usr/bin/env LDAP_BIND_PASSWORD=unused SIGNING_KEY=unused /usr/bin/django-admin collectstatic --settings edrnsite.policy.settings.ops --no-input --clear --link &&\
+    /sbin/su-exec edrn /usr/bin/env LDAP_BIND_PASSWORD=unused SIGNING_KEY=unused /app/bin/django-admin collectstatic --settings edrnsite.policy.settings.ops --no-input --clear --link &&\
     : Clean up clean up everybody everywhere &&\
-    : PrismaCloud does not like pip to be in the image &&\
-    /usr/bin/pip3 uninstall --yes --quiet pip &&\
     /sbin/apk del --quiet /edrn-build &&\
     /bin/rm -rf /app/wheels &&\
     /bin/rm -rf /var/cache/apk/* &&\
-    /bin/chown -R edrn:edrn /usr/lib/python3.*/site-packages &&\
+    /bin/chown -R edrn:edrn /app/lib/python3.*/site-packages &&\
     :
 
 COPY --chown=edrn:edrn docker/*.py /app/
@@ -144,7 +141,8 @@ EXPOSE      8000
 VOLUME      ["/app/media"]
 USER        edrn
 WORKDIR     /app
-ENTRYPOINT  ["/usr/bin/gunicorn"]
+ENTRYPOINT  ["/app/bin/python3"]
+CMD         ["/usr/bin/gunicorn", "-c", "/app/gunicorn.conf.py"]
 HEALTHCHECK --interval=5m --timeout=2m --start-period=10m CMD /usr/bin/curl --fail --retry 6 --max-time 5 --retry-delay 10 --retry-max-time 60 http://127.0.0.1:8000/ || /bin/sh -c 'killall5 -TERM && (/bin/sleep 10; killall5 -KILL)'
 
 
