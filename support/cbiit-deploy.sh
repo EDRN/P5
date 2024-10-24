@@ -83,14 +83,16 @@ docker compose rm --force --stop --volumes &&\
 docker container ls" || exit 1
 
 echo ""
-echo "🪢 Pulling the images anonymously"
+echo "👋 Logging out of docker"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker logout ncidockerhub.nci.nih.gov && docker logout &&\
-docker image rm --force edrndocker/edrn-portal:$EDRN_VERSION &"
+docker logout ncidockerhub.nci.nih.gov && docker logout"
 
-# The `docker image rm` step can take a long time, and sshd will time out the
-# idle connection because it's a despotic and horrible server.
-sleep 600
+echo ""
+echo "🪢 Deleting existing $EDRN_VERSION image"
+ssh -q -o ServerAliveInterval=63 -o ServerAliveCountMax=5 $USER@$WEBSERVER "cd $WEBROOT; \
+docker image rm --force edrndocker/edrn-portal:$EDRN_VERSION"
+
+# The `docker image rm` step can take a long time, but the ServerAliveInterval should help keep the connection alive
 
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn pull --include-deps --quiet" || exit 1
