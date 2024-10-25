@@ -124,7 +124,7 @@ services:
     #
     # Port 6379, not published.
     cache:
-        image: redis:7.0.11-alpine3.18
+        image: redis:7.4.1-alpine3.20
         networks:
             -   lattice
         restart: on-failure
