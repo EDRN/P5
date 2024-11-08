@@ -3304,10 +3304,18 @@
 													"});",
 													"pm.test('Journal appearance', () => {",
 													"    const body = pm.response.text();",
-													"    pm.expect(body).to.contain('J Urol, 2008, 180 (2)');",
+													"    pm.expect(body).to.contain('J Urol, 2008 Aug, volume 180 (issue 2)');",
 													"});",
 													""
 												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"packages": {},
 												"type": "text/javascript"
 											}
 										}
