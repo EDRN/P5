@@ -33,6 +33,18 @@ _logger = logging.getLogger(__name__)
 
 
 class PMCID(models.Model):
+    '''PMCID and PMID correlation.
+
+    In Medline's Entrez system, PMID (PubMed Identifier) is a unique identifier assigned to
+    articles in PubMed. It doesn't indicate if the article is free or accessible, just that it
+    exists.
+
+    A PubMed Central Identifier (PMCID) is a free digital archive of full-text biomedical
+    articles. If there's a PMCID, the article's full-text is free through PubMed Central.
+
+    This correlation is used by the ``pubmed_papers`` command to extract article texts for
+    use in AI training.
+    '''
     pmid = models.CharField(max_length=20, blank=True, null=False, help_text='Entrez Medline PMID code number')
     pmcid = models.CharField(max_length=20, blank=True, null=False, help_text='Entrez Medline PMCID code number')
     class Meta:
@@ -50,7 +62,9 @@ class Publication(KnowledgeObject):
     journal = models.CharField(max_length=250, blank=True, null=False, help_text='Name of the periodical')
     pubMedID = models.CharField(max_length=20, blank=True, null=False, help_text='Entrez Medline ID code number')
     year = models.IntegerField(blank=True, null=True, help_text='Year of publication')
+    month = models.CharField(max_length=16, blank=True, null=False, help_text='Month of publication')
     pubURL = models.URLField(blank=True, null=False, help_text='URL to read the publication')
+    pis = models.CharField(max_length=250, blank=True, null=False, help_text='EDRN PIs who wrote this')
 
     # siteID should be deleted and use the site_that_wrote_this relation instead
     siteID = models.CharField(
@@ -66,16 +80,19 @@ class Publication(KnowledgeObject):
 
     def data_table(self) -> dict:
         '''Return the JSON-compatible dictionary describing this publication.'''
-        return {'journal': self.journal, 'year': self.year, **super().data_table()}
+        return {'journal': self.journal, 'year': self.year, 'pis': self.pis, **super().data_table()}
 
     def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
         context = super().get_context(request, args, kwargs)
         appearances = []
         if self.journal: appearances.append(self.journal)
-        if self.year: appearances.append(str(self.year))
-        if self.volume: appearances.append(self.volume)
+        if self.year and self.month:
+            appearances.append(f'{self.year} {self.month}')
+        elif self.year:
+            appearances.append(str(self.year))
+        if self.volume: appearances.append(f'volume {self.volume}')
         appearances = ', '.join(appearances)
-        if self.issue: appearances += ' ({})'.format(html_escape(self.issue))
+        if self.issue: appearances += ' (issue {})'.format(html_escape(self.issue))
         context['appearance'] = appearances
 
         biomarkers = set([i for i in self.ekebiomarkers_biomarker_in_print.all()])
@@ -91,7 +108,10 @@ class Publication(KnowledgeObject):
         protocols = self.protocols.all().order_by('title')
         context['protocols'] = protocols
         context['num_protocols'] = protocols.count()
-
+        from .sites import Person
+        context['edrn_pis'] = Person.objects.filter(
+            pk__in=self.site_that_wrote_this.all().values_list('pi')
+        ).order_by('title')
         return context
 
     content_panels = KnowledgeObject.content_panels + [
@@ -100,8 +120,10 @@ class Publication(KnowledgeObject):
         FieldPanel('journal'),
         FieldPanel('pubMedID'),
         FieldPanel('year'),
+        FieldPanel('month'),
         FieldPanel('pubURL'),
         FieldPanel('abstract'),
+        FieldPanel('pis'),
         InlinePanel('authors', label='Authors')
     ]
     search_fields = KnowledgeObject.search_fields + [
@@ -325,9 +347,10 @@ class Ingestor(BaseIngestor):
                                 abstract = ''
                             issue = str(record['MedlineCitation']['Article']['Journal']['JournalIssue'].get('Issue'))
                             year = str(record['MedlineCitation']['Article']['Journal']['JournalIssue']['PubDate'].get('Year'))
+                            month = str(record['MedlineCitation']['Article']['Journal']['JournalIssue']['PubDate'].get('Month'))
                             journal = str(record['MedlineCitation']['Article']['Journal']['ISOAbbreviation'])
                             authors = self.get_authors(record)
-                            details[pubmed_id] = (title, abstract, issue, year, journal, authors)
+                            details[pubmed_id] = (title, abstract, issue, year, month, journal, authors)
                         break
                 except (HTTPError, HTTPException) as ex:
                     failures += 1
@@ -367,6 +390,26 @@ class Ingestor(BaseIngestor):
         if modifications: publication.save()
         return modifications
 
+    def add_missing_months(self):
+        monthless = Publication.objects.filter(month='')
+        if monthless.count() == 0:
+            _logger.info('No missing months on publications')
+            return
+
+        _logger.info('Querying pubmed to find missing months on %d publications', monthless.count())
+        details = self.get_pubmed_details(set(monthless.values_list('pubMedID', flat=True)))
+        for pub in monthless:
+            deets = details.get(pub.pubMedID, None)
+            if not deets:
+                _logger.warning('No pubmed info found for PMID «%s»; cannot update its month', pub.pubMedID)
+                continue
+            title, abstract, issue, year, month, journal, authors = deets
+            if month is not None and month != 'None':
+                pub.month = month
+            else:
+                pub.month = '(month unknown)'
+            pub.save()
+
     def create_new_publications(self, pmids: set, pmids_to_sites: dict, pmids_to_uris: dict) -> set:
         '''Create brand new publication objects for the pubmed IDs in ``pmids``.
 
@@ -380,12 +423,13 @@ class Ingestor(BaseIngestor):
             if not deets:
                 _logger.warning('No pubmed info found for PMID «%s», cannot create an object for it', pmid)
                 continue
-            title, abstract, issue, year, journal, authors = deets
+            title, abstract, issue, year, month, journal, authors = deets
             p = Publication(
                 # 🔮 Maybe truncate titles better?
                 title=title[:255], live=True, slug=self.slugify(pmid, title),
                 identifier=self.miriam_uri(pmid), pubMedID=pmid,
-                search_description='This is a pbulication by a member of the Early Detection Research Network.'
+                search_description='This is a publication by a member of the Early Detection Research Network.',
+                abstract=abstract, issue=issue, year=int(year), month=month, journal=journal
             )
             self.folder.add_child(instance=p)
             p.save()
@@ -419,6 +463,27 @@ class Ingestor(BaseIngestor):
         Publication.objects.filter(pubMedID__in=pmids).delete()
         return pmids
 
+    def denormalize_pis(self, pmids_to_sites: dict):
+        '''Populate the "pis" field of each Publication depending on the PIs of the sites
+        to which they belong.
+
+        Normally we could get this from Pub → Site → Person but when rendering the data table
+        of 3000+ pubs that got slow.
+        '''
+        from .sites import Site, Person
+        for pmid, site_uris in pmids_to_sites.items():
+            pub = Publication.objects.filter(pubMedID=pmid).first()
+            if not pub: continue
+            sites = Site.objects.filter(identifier__in=site_uris)
+            pis = '; '.join(
+                Person.objects.filter(
+                    pk__in=sites.values_list('pi')
+                ).order_by('title').values_list('title', flat=True)
+            )
+            if pub.pis != pis:
+                pub.pis = pis
+                pub.save()
+
     def update_publications(self, pmids: set, pmids_to_sites: dict, pmids_to_uris: dict) -> tuple:
         '''Update publications.
 
@@ -435,6 +500,7 @@ class Ingestor(BaseIngestor):
         new = self.create_new_publications(pmids_to_create, pmids_to_sites, pmids_to_uris)
         updated = self.update_existing_publications(pmids_to_update, pmids_to_sites, pmids_to_uris)
         deleted = self.delete_obsolete_publications(pmids_to_delete)
+        self.denormalize_pis(pmids_to_sites)
 
         return new, updated, deleted
 
@@ -468,6 +534,7 @@ class Ingestor(BaseIngestor):
         #         writer.writerow([pubMedID, title, in_dmcc, in_grants])
 
         new, updated, deleted = self.update_publications(pmids, pmids_to_sites, pmids_to_uris)
+        self.add_missing_months()
         return new, updated, deleted
 
 

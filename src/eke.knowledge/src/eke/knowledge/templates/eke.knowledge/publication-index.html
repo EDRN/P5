@@ -27,15 +27,17 @@
                     <thead>
                         <tr>
                             <th class='only-search-col'>Title</th>
+                            <th class='only-search-col'>EDRN PI</th>
                             <th>Journal</th>
                             <th>Year</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Title</th>
-                            <th>Journal</th>
-                            <th>Year</th>
+                            <th>Title</th>    {# 0 → 0 #}
+                            <th>EDRN PI</th>  {# 1 new #}
+                            <th>Journal</th>  {# 1 → 2 #}
+                            <th>Year</th>     {# 2 → 3 #}
                         </tr>
                     </tfoot>
                 </table>
@@ -52,8 +54,9 @@
         function headerFunction(data, columnIndex, node) {
             switch (columnIndex) {
                 case 0: return 'Title';
-                case 1: return 'Journal';
-                case 2: return 'Year';
+                case 1: return 'EDRN PI';
+                case 2: return 'Journal';
+                case 3: return 'Year';
                 default: return data;
             }
         }
@@ -73,6 +76,7 @@
                     {data: 'title', render: function(data, type, row) {
                         return '<a href="' + row['url'] + '">' + data + '</a>';
                     }},
+                    {data: 'pis'},
                     {data: 'journal'},
                     {data: 'year'}
                 ],
@@ -86,7 +90,7 @@
                 dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>B",
                 initComplete: function() {
-                    this.api().columns([1, 2]).every(function() {
+                    this.api().columns([2, 3]).every(function() {
                         var column = this;
                         var label = this.footer().innerHTML;
                         var select = $('<select><option value="">— ' + label + ' —</option></select>')
@@ -99,7 +103,7 @@
                             select.append('<option value="' + d + '">' + d + '</option>');
                         });
                     });
-                    this.api().columns([0]).every(function() {
+                    this.api().columns([0, 1]).every(function() {
                         var that = this;
                         $('input', this.header()).on('keyup change clear', function() {
                             if (that.search() !== this.value) {
