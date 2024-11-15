@@ -9,11 +9,11 @@ import os
 # Debug Mode
 # ----------
 #
-# This had better be off!
+# This had better be off! TURN THIS BACK TO FALSE!!!
 #
 # 🔗 https://docs.djangoproject.com/en/3.2/ref/settings/#debug
 
-DEBUG = True
+DEBUG = False
 
 
 # Secret Key

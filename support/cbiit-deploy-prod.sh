@@ -129,10 +129,10 @@ bzip2 --decompress --stdout /local/content/edrn/database-access/edrn.sql.bz2 | \
 echo ""
 echo "📀 Initial database setup"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal /app/bin/django-admin makemigrations &&\
-docker compose --project-name edrn exec portal /app/bin/django-admin migrate &&\
-docker compose --project-name edrn exec portal /app/bin/django-admin fixtree &&\
-docker compose --project-name edrn exec portal /app/bin/django-admin collectstatic --no-input --clear" || exit 1
+docker compose --project-name edrn exec portal /usr/bin/django-admin makemigrations &&\
+docker compose --project-name edrn exec portal /usr/bin/django-admin migrate &&\
+docker compose --project-name edrn exec portal /usr/bin/django-admin fixtree &&\
+docker compose --project-name edrn exec portal /usr/bin/django-admin collectstatic --no-input --clear" || exit 1
 
 echo ""
 echo "🤷‍♀️ Restarting the portal and stopping search engine"
@@ -145,7 +145,7 @@ docker compose --project-name edrn start portal" || exit 1
 echo ""
 echo "🆙 Applying upgrades"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal /app/bin/django-admin copy_daily_hits_from_wagtailsearch" || exit 1
+docker compose --project-name edrn exec portal /usr/bin/django-admin copy_daily_hits_from_wagtailsearch" || exit 1
 
 echo ""
 echo "🤷‍♀️ Final portal restart and restart of search engine"

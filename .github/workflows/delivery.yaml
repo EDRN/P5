@@ -18,7 +18,7 @@ on:
     push:
         branches:
             -   main
-            -   i374
+            -   i380
         paths:
             -   'src/**'
             -   'docker/Dockerfile'

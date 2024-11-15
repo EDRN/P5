@@ -277,6 +277,8 @@ class DataCollectionIndex(KnowledgeFolder):
         return ''.join(rows)
 
     def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
+        app = DjangoDash('ScienceDataDashboard')  # ← referenced in data-collection-index.html
+
         context = super().get_context(request, *args, **kwargs)
         context['statistics'] = DataStatistic.objects.child_of(self).order_by('title')
         matches = context['knowledge_objects']
@@ -317,7 +319,6 @@ class DataCollectionIndex(KnowledgeFolder):
         cats_figure.update_layout(showlegend=False, margin=dict(l=20, r=20, t=40, b=20))
         cats_legend = ghetto_plotly_legend([i[0] for i in c.most_common()], palette)
 
-        app = DjangoDash('ScienceDataDashboard')  # ← referenced in data-collection-index.html
         app.layout = html.Div(className='container', children=[
             html.Div(className='row', children=[
                 html.Div(className='col-md-4', children=[
