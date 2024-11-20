@@ -153,8 +153,7 @@ EXPOSE      8000
 VOLUME      ["/app/media"]
 USER        edrn
 WORKDIR     /app
-ENTRYPOINT  ["/usr/bin/python3"]
-CMD         ["/usr/bin/gunicorn", "-c", "/app/gunicorn.conf.py"]
+ENTRYPOINT  ["/usr/bin/gunicorn"]
 HEALTHCHECK --interval=5m --timeout=2m --start-period=10m CMD /usr/bin/curl --fail --retry 6 --max-time 5 --retry-delay 10 --retry-max-time 60 http://127.0.0.1:8000/ || /bin/sh -c 'killall5 -TERM && (/bin/sleep 10; killall5 -KILL)'
 
 

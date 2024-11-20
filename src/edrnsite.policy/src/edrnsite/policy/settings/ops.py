@@ -9,7 +9,7 @@ import os
 # Debug Mode
 # ----------
 #
-# This had better be off! TURN THIS BACK TO FALSE!!!
+# This had better be off!
 #
 # 🔗 https://docs.djangoproject.com/en/3.2/ref/settings/#debug
 
