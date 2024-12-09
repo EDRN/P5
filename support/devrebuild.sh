@@ -56,6 +56,7 @@ bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --qu
 ./manage.sh migrate
 ./manage.sh copy_daily_hits_from_wagtailsearch  # Wagtail 5
 ./manage.sh collectstatic --no-input --clear --link
+./manage.sh edrn_data_disclaimer
 ./manage.sh edrndevreset
 
 # Add additional upgrade steps here:
