@@ -384,6 +384,9 @@ class Ingestor(BaseIngestor):
         subject_uris = pmids_to_uris.get(publication.pubMedID, set())
         existing_subject_uris = set([i for i in publication.subject_uris.all().values_list('identifier', flat=True)])
         if subject_uris != existing_subject_uris:
+            # #383: remove existing PublicationSubjectURIs; covers the case when DMCC changes the
+            # pubMedID of a publication but keeps their same DMCC number (subject URI)
+            PublicationSubjectURI.objects.filter(identifier__in=subject_uris).delete()
             modifications = True
             publication.subject_uris.set([PublicationSubjectURI(identifier=i) for i in subject_uris], clear=True)
 
