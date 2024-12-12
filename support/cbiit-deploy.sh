@@ -123,9 +123,11 @@ docker compose --project-name edrn exec db dropdb --force --if-exists --username
 docker compose --project-name edrn exec db createdb --username=postgres --encoding=UTF8 --owner=postgres edrn" || exit 1
 
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-pwd && ls && [ -f edrn.sql.bz2 ] &&\
+pwd && ls -l && [ -f edrn.sql.bz2 ] &&\
 bzip2 --decompress --stdout edrn.sql.bz2 | \
     docker compose --project-name edrn exec --no-TTY db psql --username=postgres --dbname=edrn --echo-errors --quiet" || exit 1
+
+exit 128
 
 echo ""
 echo "📀 Initial database setup"
