@@ -78,7 +78,7 @@ in the data collection process.'''
     protocol = forms.ChoiceField(label='Protocol', help_text='Select the protocol that generated the data.', choices=protocol_choices)
     biomarkers_researched = forms.CharField(
         required=False, label='Biomarkers Researched', widget=forms.Textarea, max_length=5000,
-        help_text='Describe the cancer biomarkers being researched by this data.'
+        help_text='Enter the name(s) of the cancer biomarker(s) associated with the data being deposited.'
     )
     cg = forms.ChoiceField(
         label='Collaborative Group', help_text='Select the collaborative research group',

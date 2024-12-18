@@ -127,8 +127,6 @@ pwd && ls -l && [ -f edrn.sql.bz2 ] &&\
 bzip2 --decompress --stdout edrn.sql.bz2 | \
     docker compose --project-name edrn exec --no-TTY db psql --username=postgres --dbname=edrn --echo-errors --quiet" || exit 1
 
-exit 128
-
 echo ""
 echo "📀 Initial database setup"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
