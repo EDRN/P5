@@ -82,6 +82,7 @@ class FlexPage(MetadataPageMixin, Page):
         )),
         ('cards', blocks.CardsBlock()),
         ('table', blocks.TableBlock()),
+        ('data_explorer', blocks.DataElementExplorerBlock()),
         ('block_quote', blocks.BlockQuoteBlock(help_text='Block quote')),
         ('typed_table', blocks.TYPED_TABLE_BLOCK),
         ('carousel', blocks.CarouselBlock()),

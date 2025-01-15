@@ -1,0 +1,63 @@
+{% load wagtailcore_tags edrnsite_streams_tags %}
+<div class='offcanvas offcanvas-end' tabindex='-1' id='{{id}}' aria-labelledby='{{id}}-label'>
+    <div class='offcanvas-header'>
+        <h4 class='offcanvas-title' id='{{id}}-label'>{{text}}</h4>
+        <button type='button' class='btn-close' data-bs-dismiss='offcanvas' aria-label='Close'></button>
+    </div>
+    <div class='offcanvas-body'>
+        <dl>
+            <dt>Element text</dt>
+            <dd><code>{{text}}</code></dd>
+            <dt>Definition</dt>
+            <dd>
+                {% if definition %}
+                    {{definition}}
+                {% else %}
+                    <small>(No definition provided.)</small>
+                {% endif %}
+            </dd>
+            <dt>Requirement</dt>
+            <dd>
+                {% if required %}
+                    {{required}}
+                {% else %}
+                    <small>(Information not provided.)</small>
+                {% endif %}
+            </dd>
+            <dt>Inheritance</dt>
+            <dd>
+                {% if inheritance %}
+                    If no values are specified, this attribute inherits values from other objects.
+                {% else %}
+                    This attribute does not inherit values from other objects.
+                {% endif %}
+            </dd>
+            <dt>Data Type</dt>
+            <dd>
+                {% if data_type %}
+                    {{data_type}}
+                {% else %}
+                    <small>(Type information not available.)</small>
+                {% endif %}
+            </dd>
+            <dt>Explanatory Note</dt>
+            <dd>
+                {% if note %}
+                    {{note}}
+                {% else %}
+                    <small>(No notes were given for this element.)</small>
+                {% endif %}
+            </dd>
+        </dl>
+        {% if pvs %}
+            <h5>Permissible Values</h5>
+            <ul class='list-unstyled'>
+                {% for pv in pvs %}
+                    <li>{{pv.value}}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</div>
+{# -*- HTML (Jinja) -*- #}
+

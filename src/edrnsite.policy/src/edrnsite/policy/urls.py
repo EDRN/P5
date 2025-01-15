@@ -13,6 +13,7 @@ from edrn.auth.urls import urlpatterns as edrnAuthURLs
 from edrn.metrics.urls import urlpatterns as edrn_metrics_urls
 from edrnsite.controls.urls import urlpatterns as edrnsite_controls_urlpatterns
 from edrnsite.search.urls import urlpatterns as edrnSiteSearchURLs
+from edrnsite.streams.urls import urlpatterns as edrnsite_streams_urlpatterns
 from eke.knowledge.urls import urlpatterns as ekeKnowledgeURLs
 from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
@@ -21,7 +22,7 @@ from wagtail.documents import urls as wagtaildocs_urls
 from wagtail_favicon.urls import urls as favicon_urls
 
 
-urlpatterns = edrnsite_controls_urlpatterns + ekeKnowledgeURLs + edrnSiteSearchURLs + edrnAuthURLs + edrn_metrics_urls + [
+urlpatterns = edrnsite_streams_urlpatterns + edrnsite_controls_urlpatterns + ekeKnowledgeURLs + edrnSiteSearchURLs + edrnAuthURLs + edrn_metrics_urls + [
     path('clear-caches', clear_caches, name='clear_caches'),
     path('django-admin/', admin.site.urls),
     path('admin/', include(wagtailadmin_urls)),

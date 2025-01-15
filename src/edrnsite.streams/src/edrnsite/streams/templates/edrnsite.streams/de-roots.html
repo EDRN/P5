@@ -1,0 +1,7 @@
+{% load wagtailcore_tags edrnsite_streams_tags %}
+<ul>
+    {% for root in root_objects %}
+        {% render_de_node root %}
+    {% endfor %}
+</ul>
+{# -*- HTML (Jinja) -*- #}

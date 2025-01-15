@@ -1,4 +1,4 @@
-{% load wagtailcore_tags edrnsite_content_tags %}
+{% load wagtailcore_tags edrnsite_streams_tags %}
 <li>
     {{name}}
     <div class='tree_view_annotation'>
@@ -20,9 +20,12 @@
                 Attributes shown with <i class='text-danger bi bi-key-fill'></i> are <em>required</em>, while
                 those with <i class="text-secondary bi bi-arrow-down-up"></i> inherit values from other objects.
             </p>
+            <p class='small'>
+                Click/tap on an attribute text box below to view details about that attribute.
+            </p>
             <p style='line-height: 2rem;'>
                 {% for attribute in attributes %}
-                    {% render_cde_attribute_button attribute %}
+                    {% render_de_attribute_button attribute %}
                 {% endfor %}
             </p>
         {% endif %}
@@ -30,10 +33,9 @@
     {% if children %}
         <ul>
             {% for child in children %}
-                {% render_cde_node child %}
+                {% render_de_node child %}
             {% endfor %}
         </ul>
     {% endif %}
 </li>
-
-{# -*- Django HTML -*- #}
+{# -*- HTML (Jinja) -*- #}
