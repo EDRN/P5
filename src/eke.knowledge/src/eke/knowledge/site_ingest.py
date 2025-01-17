@@ -28,15 +28,18 @@ def full_ingest():
         settings.WAGTAILSEARCH_BACKENDS['default']['AUTO_UPDATE'] = False
         _logger.info('Commencing ingest for the following: %s', ', '.join([i.url for i in folders]))
         for folder in folders:
-            if isinstance(folder.RDFMeta.ingestor, str):
-                cls = get_class(folder.RDFMeta.ingestor)
-            else:
-                cls = folder.RDFMeta.ingestor
-            ingestor = cls(folder)
-            n, u, d = ingestor.ingest()
-            newObjects |= n
-            updatedObjects |= u
-            deadURIs |= d
+            try:
+                if isinstance(folder.RDFMeta.ingestor, str):
+                    cls = get_class(folder.RDFMeta.ingestor)
+                else:
+                    cls = folder.RDFMeta.ingestor
+                ingestor = cls(folder)
+                n, u, d = ingestor.ingest()
+                newObjects |= n
+                updatedObjects |= u
+                deadURIs |= d
+            except Exception as ex:
+                _logger.exception(f'⚠️ Error "{ex}" encounted at folder {folder.url}; continuing on')
 
         _logger.info(
             '🥳 Ingest completed with %d new objects, %d updated objects, and %d deleted',
