@@ -80,6 +80,7 @@ class Ingestor(object):
             self.statements[s] = predicates
         return self.statements
 
+    # Is the `-> typing.Iterator[tuple]` correct?
     def filter_by_rdf_type(self, statements: dict, type_uri: rdflib.URIRef) -> typing.Iterator[tuple]:
         '''Filter statements based on an RDF type URI.
 
