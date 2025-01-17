@@ -116,11 +116,15 @@ ssh -q $USER@$WEBSERVER "cd $WEBROOT && docker compose --project-name edrn ps"
 
 
 echo ""
-echo "👷‍♀️ Bring over latest production DB"
+echo "👷‍♀️ Dropping and re-creating 'edrn' DB"
 
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn exec db dropdb --force --if-exists --username=postgres edrn &&\
 docker compose --project-name edrn exec db createdb --username=postgres --encoding=UTF8 --owner=postgres edrn" || exit 1
+
+echo ""
+echo "👷‍♀️ Bringing over edrn.sql.bz2 and loading it"
+
 
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 pwd && ls -l && [ -f edrn.sql.bz2 ] &&\
