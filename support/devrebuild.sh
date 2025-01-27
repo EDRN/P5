@@ -56,14 +56,14 @@ bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --qu
 ./manage.sh migrate
 ./manage.sh copy_daily_hits_from_wagtailsearch  # Wagtail 5
 ./manage.sh collectstatic --no-input --clear --link
-./manage.sh edrn_data_disclaimer
-./manage.sh edrn_new_explorers
 ./manage.sh edrndevreset
 
 # Add additional upgrade steps here:
 #
 # Currently for 6.11 there is just this
 # ./manage.sh edrn_biomarker_submission
+# ./manage.sh edrn_data_disclaimer
+# ./manage.sh edrn_new_explorers
 # For 6.13 there's nothing yet
 
 # This may be optional if you want to save time:

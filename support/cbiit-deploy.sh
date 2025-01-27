@@ -150,9 +150,7 @@ docker compose --project-name edrn start portal" || exit 1
 echo ""
 echo "🆙 Applying upgrades"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal /usr/bin/django-admin copy_daily_hits_from_wagtailsearch &&\
-docker compose --project-name edrn exec portal /usr/bin/django-admin edrn_data_disclaimer &&\
-docker compose --project-name edrn exec portal /usr/bin/django-admin edrn_new_explorers" || exit 1
+docker compose --project-name edrn exec portal /usr/bin/django-admin copy_daily_hits_from_wagtailsearch" || exit 1
 
 
 echo ""
