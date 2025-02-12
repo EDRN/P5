@@ -2319,7 +2319,7 @@
 													"});",
 													"pm.test('Link to LabCAS info', () => {",
 													"    const body = pm.response.text();",
-													"    const exp = /href=.+labcas-cancer-biomarker-data-commons\\//;",
+													"    const exp = /href=.+labcas-help\\//;",
 													"    pm.expect(body).to.match(exp);",
 													"});",
 													"pm.test('Link to JPL', () => {",
@@ -2329,7 +2329,8 @@
 													"});",
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
