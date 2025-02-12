@@ -372,3 +372,9 @@ To contact the team as a whole, [email the Informatics Center](mailto:ic-portal@
 ## 📃 License
 
 The project is licensed under the [Apache version 2](LICENSE.md) license.
+
+
+## 🎨 Art Credits
+
+- Image by <a href="https://pixabay.com/users/openclipart-vectors-30363/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=160776">OpenClipart-Vectors</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=160776">Pixabay</a>
+- Image by <a href="https://pixabay.com/users/openclipart-vectors-30363/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=158813">OpenClipart-Vectors</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=158813">Pixabay</a>
