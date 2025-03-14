@@ -1,0 +1,147 @@
+# Taskfile
+# ========
+#
+# Convenient things to run. Depends on https://taskfile.dev/
+
+---
+
+env:
+    python: "python3.11"
+    LDAP_BIND_PASSWORD: "{{.edrn_service_password}}"
+    LDAP_URI: "ldaps://localhost:1636"
+    DATABASE_URL: "postgresql://:@/edrn"
+    port: 6468
+    EDRN_DATA_DIR: "{{.HOME}}/dockerdata/renaissance"
+
+tasks:
+    clean:
+        desc: "P5 Python virtual environment destruction"
+        summary: "Completely removes the Python venv used by P5."
+        preconditions:
+            -   test -d .venv
+        cmds:
+            -   rm -rf .venv
+
+    venv:
+        desc: "P5 Python virtual environment"
+        summary: "Creates the Python venv for P5 by running `pip install` on each src component."
+        sources:
+            -   Taskfile.yaml
+        generates:
+            -   .venv/**
+        cmds:
+            -   "rm -rf .venv"
+            -   "{{.python}} -m venv .venv"
+            # Curiously, we get different behavior between `python -m pip install` and `pip install`.
+            # The former doesn't install packages' scripts, but the latter does. We need the scripts.
+            -   ".venv/bin/pip install --quiet --upgrade setuptools pip wheel build"
+            -   ".venv/bin/pip install --editable 'src/eke.geocoding[dev]'"
+            -   ".venv/bin/pip install --editable 'src/edrnsite.streams[dev]'"
+            -   ".venv/bin/pip install --editable 'src/edrnsite.controls[dev]'"
+            -   ".venv/bin/pip install --editable 'src/edrnsite.content[dev]'"
+            -   ".venv/bin/pip install --editable 'src/edrn.collabgroups[dev]'"
+            -   ".venv/bin/pip install --editable 'src/eke.knowledge[dev]'"
+            -   ".venv/bin/pip install --editable 'src/eke.biomarkers[dev]'"
+            -   ".venv/bin/pip install --editable 'src/edrnsite.search[dev]'"
+            -   ".venv/bin/pip install --editable 'src/edrn.theme[dev]'"
+            -   ".venv/bin/pip install --editable 'src/edrnsite.ploneimport[dev]'"
+            -   ".venv/bin/pip install --editable 'src/edrn.metrics[dev]'"
+            -   ".venv/bin/pip install --editable 'src/edrnsite.policy[dev]'"
+            -   ".venv/bin/pip install --editable 'src/edrnsite.test[dev]'"
+
+    hello:
+        deps: [venv]
+        cmds:
+            - echo "{{.CLI_ARGS}}"
+
+    manage:
+        desc: "Local P5 Django admin"
+        summary: >
+            Run Django admin with a command=value command, defaults to shell_plus; pass additional
+            arguments after --. For example: `task manage command=ping_google -- https://my.com/sitemap.xml`
+        deps: [venv]
+        silent: true
+        interactive: true
+        vars:
+            command: "{{.command | default \"shell_plus\"}}"
+        cmds:
+            -   .venv/bin/django-admin {{.command}} --settings local --pythonpath . {{.CLI_ARGS}}
+
+    run:
+        desc: "Local P5 Django server"
+        summary: >
+            Run the Django lightweight web server for development and serving of static files. The
+            port is {{.port}} and can be overriden: `task run port=1234`.
+        aliases: [default]
+        deps: [venv]
+        # I thought we could use "task:" here to have one task call the "manage" task, but it doesn't
+        # work at all.
+        silent: true
+        interactive: true
+        cmds:
+            -   .venv/bin/django-admin runserver --settings local --pythonpath . {{.port}}
+
+    image:
+        desc: "P5 Docker image construction"
+        summary: >
+            Build the dependent wheels and the P5 Docker image. To skip the wheels, do
+            `task image wheels=false`
+        interactive: false
+        vars:
+            wheels: "{{.wheels | default \"true\"}}"
+        cmds:
+            -   "{{.wheels}} -eq true && support/build-wheels.sh || true"
+            -   docker buildx build --build-arg userid=500 --tag edrndocker/edrn-portal:latest --file docker/Dockerfile --load .
+
+    comp-portal-exec:
+        desc: "P5 Docker foreground composition interactive exec in portal"
+        summary: "For when you need a handy shell inside the portal container in a running Docker composition."
+        interactive: true
+        env:
+            ALLOWED_HOSTS: "*"
+            CERT_CN: "dev.dev"
+            EDRN_VERSION: "latest"
+            LDAP_URI: "ldaps://host.docker.internal:1636"
+            POSTGRES_PASSWORD: "s3cr3t"
+            SECURE_COOKIES: "False"
+            SIGNING_KEY: "s3cret"
+        cmds:
+            -   docker compose --file docker/docker-compose.yaml exec portal sh
+
+    comp-portal-restart:
+        desc: "P5 Docker foreground composition restart portal"
+        summary: "In a running Docker composition for P5, this restarts the portal service only."
+        interactive: false
+        env:
+            ALLOWED_HOSTS: "*"
+            CERT_CN: "dev.dev"
+            EDRN_VERSION: "latest"
+            LDAP_URI: "ldaps://host.docker.internal:1636"
+            POSTGRES_PASSWORD: "s3cr3t"
+            SECURE_COOKIES: "False"
+            SIGNING_KEY: "s3cret"
+        cmds:
+            -   docker compose --file docker/docker-compose.yaml restart portal
+
+    comp-up:
+        desc: "P5 Docker foreground composition running"
+        summary: "Starts the P5 Docker composition by bringing it `up` in the foreground."
+        interactive: false
+        env:
+            ALLOWED_HOSTS: "*"
+            CERT_CN: "dev.dev"
+            EDRN_VERSION: "latest"
+            LDAP_URI: "ldaps://host.docker.internal:1636"
+            POSTGRES_PASSWORD: "s3cr3t"
+            SECURE_COOKIES: "False"
+            SIGNING_KEY: "s3cret"
+        cmds:
+            -   docker compose --file docker/docker-compose.yaml up --remove-orphans 
+
+
+dotenv: ['env', '{{.HOME}}/.secrets/passwords.sh']
+version: '3'
+
+...
+
+# -*- mode: YAML; tab-width: 4 -*-
