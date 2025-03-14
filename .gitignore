@@ -6,6 +6,7 @@
 .*.cfg
 ._*
 .DS_Store
+.env
 .idea/
 .venv
 _build
