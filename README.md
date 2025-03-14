@@ -167,7 +167,7 @@ You don't need `src/edrnsite.test` since it's just used for testing.
 
 Repeat this for any other source directory in `src`. Then build the image:
 
-    docker image build --build-arg user_id=NUMBER --tag edrn-portal:latest --file docker/Dockerfile .
+    docker image build --build-arg user_id=NUMBER --tag edrndocker/edrn-portal:latest --file docker/Dockerfile .
 
 Replace `NUMBER` with the number of the user ID of the user under which to run the software in the container. Typically you'll want
 
@@ -190,7 +190,6 @@ The [environment variables listed above](#user-content-environment-variables) al
 | Variable              | Use                                                              | Default               |
 |-----------------------|------------------------------------------------------------------|-----------------------|
 | `EDRN_DATA_DIR`       | Volume to bind to provide media files and PostgreSQL DB          | `/local/content/edrn` |
-| `EDRN_IMAGE_OWNER`    | Name of image owning org.; use an empty string for a local image | `edrndocker/`         |
 | `EDRN_PUBLISHED_PORT` | TCP port on which to make the HTTP service available             | 8080                  |
 | `EDRN_TLS_PORT`       | Encrypted TCP port, if the `tls-proxy` profile is enabled        | 4134                  |
 | `EDRN_VERSION`        | Version of the image to use, such as `latest`                    | `6.0.0`               |
