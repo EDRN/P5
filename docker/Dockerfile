@@ -111,20 +111,22 @@ COPY --chown=edrn:edrn ./dist/*.whl /app/wheels/
 #     :
 #
 # Except the Docker plugin for Jenkins at CBIIT chokes with an HTTP 400 error because apparently
-# the single layer made above is too big. So, we have to do these in separate RUNs:
+# the single layer made above is too big. So, we have to do these in separate RUNs.
+#
+# ALSO: these used to be named with a `.` in the middle; now they're `_`s?
 
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.controls-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.streams-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.content-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrn.collabgroups-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrn.theme-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.ploneimport-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/eke.geocoding-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/eke.knowledge-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/eke.biomarkers-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.search-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrn.metrics-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.policy-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite?controls-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite?streams-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite?content-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrn?collabgroups-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrn?theme-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite?ploneimport-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/eke?geocoding-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/eke?knowledge-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/eke?biomarkers-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite?search-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrn?metrics-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite?policy-*.whl
 
 # And this too:
 
