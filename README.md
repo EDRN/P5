@@ -33,12 +33,13 @@ $ .venv/bin/pip install --editable 'src/eke.biomarkers[dev]'
 $ .venv/bin/pip install --editable 'src/edrnsite.search[dev]'
 $ .venv/bin/pip install --editable 'src/edrn.theme[dev]'
 $ .venv/bin/pip install --editable 'src/edrnsite.ploneimport[dev]'
+$ .venv/bin/pip install --editable 'src/edrn.metrics[dev]'
 $ .venv/bin/pip install --editable 'src/edrnsite.policy[dev]'
 $ .venv/bin/pip install --editable 'src/edrnsite.test[dev]'
+$ .venv/bin/django-admin makemigrations --pythonpath . --settings local
 $ .venv/bin/django-admin migrate --pythonpath . --settings local
 $ .venv/bin/django-admin createsuperuser --pythonpath . --settings local --username root --email edrn-ic@jpl.nasa.gov
 ```
-
 When prompted for a password, enter a suitably secure root-level password for the Django super user (twice).
 
 **👉 Note:** This password is for the application server's "manager" or "root" superuser and is unrelated to any usernames or passwords used with the EDRN Directory Service. But because it affords such deep and penetrative access, it must be kept double-plus super-secret probationary secure.
@@ -56,6 +57,18 @@ To see all the commands besides `runserver` and `migrate` that Django supports:
 ```console
 $ .venv/bin/django-admin help --pythonpath . --settings local
 ```
+
+## 📋 Taskfile.dev
+
+This repository provides a `Taskfile.yaml` which lets you use [Taskfile.dev](https://taskfile.dev) to simplify a lot of commands. For example, much of the above can be done with
+
+    task run
+
+which builds the virtual environment, installs the software, and starts the server. Run
+
+    task --list
+
+to see more. The environment variables used by the Taskfile (below) should be in a `.env` file.
 
 
 ### 🍃 Environment Variables
@@ -174,6 +187,10 @@ Replace `NUMBER` with the number of the user ID of the user under which to run t
 -   500 for running at the Jet Propulsion Laboratory.
 -   26013 for running at the National Cancer Institute.
 
+Or do it all at once with Taskfile:
+
+    task image
+
 Spot check: see if the image is working by running:
 
     docker container run --rm --env LDAP_BIND_PASSWORD='[REDACTED]' --env SIGNING_KEY='s3cr3t' \
@@ -200,6 +217,10 @@ These variables are also necessary while setting up the containerized database.
 Ater setting the needed variables, start the composition as follows:
 
     docker compose --project-name edrn --file docker/docker-compose.yaml up --detach
+
+Or more easily
+
+    task comp-up
 
 You can now proceed to set up the database, search engine, and populate the portal with its content.
 
