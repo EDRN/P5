@@ -6,15 +6,15 @@
 ---
 
 env:
-    python: "python3.11"
-    LDAP_BIND_PASSWORD: "{{.edrn_service_password}}"
-    LDAP_URI: "ldaps://localhost:1636"
     DATABASE_URL: "postgresql://:@/edrn"
-    port: 6468
     EDRN_DATA_DIR: "{{.HOME}}/dockerdata/renaissance"
     jpl_ipv4: "172.16.16.10"
+    LDAP_BIND_PASSWORD: "{{.edrn_service_password}}"
+    LDAP_URI: "ldaps://localhost:1636"
     p5_media_dir: "/Users/kelly/P6/media"
     p5_sql: "/Users/kelly/P6/edrn.sql.bz2"
+    port: 6468
+    python: "python3.11"
 
 tasks:
     clean:
@@ -51,11 +51,6 @@ tasks:
             -   ".venv/bin/pip install --editable 'src/edrn.metrics[dev]'"
             -   ".venv/bin/pip install --editable 'src/edrnsite.policy[dev]'"
             -   ".venv/bin/pip install --editable 'src/edrnsite.test[dev]'"
-
-    hello:
-        deps: [venv]
-        cmds:
-            - echo "{{.CLI_ARGS}}"
 
     dev-rebuild:
         desc: "Rebuild entire P5 for local development"
