@@ -2,7 +2,7 @@
 
 '''💁‍♀️ EDRN Knowledge Environment: Wagtail hooks and interceptors.'''
 
-from .models import RDFIngest, KnowledgeFolder
+from .models import RDFIngest, KnowledgeFolder, KnowledgeObject, KnowledgeObjectLogEntry
 from django.core.cache import cache
 from django.http import HttpRequest
 from django.template.loader import render_to_string
@@ -38,3 +38,11 @@ class IngestControlPanel(Component):
 def add_ingest_controls(request: HttpRequest, panels: list):
     '''Add the custom ingest control panel.'''
     panels.append(IngestControlPanel(request))
+
+
+@hooks.register('register_log_actions')
+def register_eke_ignoring_log_actions(actions):
+    '''We don't want to log anything happening with KnowledgeObjects because they happen automatically
+    every night and the audit log would overflow with them.
+    '''
+    actions.register_model(KnowledgeObject, KnowledgeObjectLogEntry)
