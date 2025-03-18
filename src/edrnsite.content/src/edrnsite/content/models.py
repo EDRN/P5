@@ -5,7 +5,6 @@
 
 from ._biomarker_submission_form import BiomarkerSubmissionFormPage  # noqa: F401
 from ._dataset_metadata_form import DatasetMetadataFormPage  # noqa: F401
-from ._explorer import CDEExplorerPage, CDEExplorerObject, CDEExplorerAttribute, CDEPermissibleValue  # noqa: F401
 from ._metadata_collection_form import MetadataCollectionFormPage  # noqa: F401
 from ._spec_ref_set_form import SpecimenReferenceSetRequestFormPage  # noqa: F401
 from .base_models import AbstractFormPage  # noqa: F401
