@@ -61,7 +61,8 @@ class CommitteeEvent(Page):
     )
     online_meeting_url = models.URLField(
         blank=True,
-        help_text='URL to online event; please remove any "URL-defense" before pasting in a URL'
+        help_text='URL to online event; please remove any "URL-defense" before pasting in a URL',
+        max_length=2000
     )
     body = StreamField([
         ('rich_text', wagtail_core_blocks.RichTextBlock(

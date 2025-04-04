@@ -11,8 +11,12 @@
         <div class='col-md-9'>
             {% if page.online_meeting_url %}
                 <p>
-                    Online meeting URL:
-                    <a href='{{page.online_meeting_url}}'><code>{{page.online_meeting_url}}</code></a>
+                    <a href='{{page.online_meeting_url}}' class='btn btn-outline-primary'>
+                        <span title='{{page.online_meeting_url}}'>
+                            <i class='bi bi-camera-video'></i>
+                            Join the online meeting
+                        </span>
+                    </a>
                 </p>
             {% else %}
                 <p class='small'>(This meeting is not online.)</p>
