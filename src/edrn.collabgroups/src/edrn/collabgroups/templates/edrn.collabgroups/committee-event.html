@@ -10,14 +10,18 @@
     <div class='row'>
         <div class='col-md-9'>
             {% if page.online_meeting_url %}
-                <p>
-                    <a href='{{page.online_meeting_url}}' class='btn btn-outline-primary'>
-                        <span title='{{page.online_meeting_url}}'>
-                            <i class='bi bi-camera-video'></i>
-                            Join the online meeting
-                        </span>
-                    </a>
-                </p>
+                {% if not hide_online_button %}
+                    <p>
+                        <a href='{{page.online_meeting_url}}' class='btn btn-outline-primary'>
+                            <span title='{{page.online_meeting_url}}'>
+                                <i class='bi bi-camera-video'></i>
+                                Join the online meeting
+                            </span>
+                        </a>
+                    </p>
+                {% else %}
+                    <p class='small'>This meeting was online but already occurred.</p>
+                {% endif %}
             {% else %}
                 <p class='small'>(This meeting is not online.)</p>
             {% endif %}

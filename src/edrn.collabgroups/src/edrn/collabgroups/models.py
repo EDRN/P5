@@ -2,17 +2,18 @@
 
 '''👥 EDRN Collaborative Groups: models.'''
 
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.db.models import F, ExpressionWrapper, DateTimeField, DurationField
 from django.http import HttpRequest
 from edrnsite.content.models import FlexPage
 from edrnsite.streams import blocks
 from eke.knowledge.models import Person
 from eke.knowledge.utils import aware_now
 from modelcluster.fields import ParentalManyToManyField
-from wagtail.admin.panels import FieldPanel
 from wagtail import blocks as wagtail_core_blocks
+from wagtail.admin.panels import FieldPanel
 from wagtail.fields import StreamField
 from wagtail.models import Page
 from wagtail.snippets.models import register_snippet
@@ -59,6 +60,7 @@ class CommitteeEvent(Page):
     timezone = models.CharField(
         max_length=19, choices=TIMEZONE_CHOICES, default=NEW_YORK, help_text='Timezone of this event'
     )
+    duration = models.IntegerField(default=60, help_text='How long the event is, in minutes')
     online_meeting_url = models.URLField(
         blank=True,
         help_text='URL to online event; please remove any "URL-defense" before pasting in a URL',
@@ -96,13 +98,16 @@ class CommitteeEvent(Page):
         )
         self.when, self.timezone = when.astimezone(timezone.utc), self.UTC
 
-    # def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
-    #     context = super().get_context(request, *args, **kwargs)
-    #     return context
+    def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
+        context = super().get_context(request, *args, **kwargs)
+        if self.online_meeting_url and (self.when + timedelta(minutes=self.duration)) < aware_now():
+            context['hide_online_button'] = True
+        return context
 
     content_panels = Page.content_panels + [
         FieldPanel('when'),
         FieldPanel('timezone'),
+        FieldPanel('duration'),
         FieldPanel('online_meeting_url'),
         FieldPanel('body'),
     ]
@@ -151,8 +156,6 @@ class Committee(Page):
     ]
 
     def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
-        context = super().get_context(request, args, kwargs)
-
         event_content_type = ContentType.objects.filter(app_label='edrncollabgroups', model='committeeevent').first()
         assert event_content_type is not None
 
@@ -160,8 +163,19 @@ class Committee(Page):
         context['members'] = self.members.all().order_by('title')
 
         now = aware_now()
-        future = CommitteeEvent.objects.child_of(self).filter(when__gte=now).live().order_by('-when')
-        past = CommitteeEvent.objects.child_of(self).filter(when__lte=now).live().order_by('-when')
+        past = CommitteeEvent.objects.annotate(
+            end_time=ExpressionWrapper(
+                F('when') + F('duration') * timedelta(minutes=1),
+                output_field=DateTimeField()
+            )    
+        ).child_of(self).live().filter(end_time__lt=now).order_by('-when')
+        future = CommitteeEvent.objects.annotate(
+            end_time=ExpressionWrapper(
+                F('when') + F('duration') * timedelta(minutes=1),
+                output_field=DateTimeField()
+            )    
+        ).child_of(self).live().filter(end_time__gt=now).order_by('-when')
+
         have_events = future.count() > 0 or past.count() > 0
         docs = self.get_children().exclude(content_type=event_content_type).live().all()
 
