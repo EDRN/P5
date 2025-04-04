@@ -1,9 +1,12 @@
+{% load edrnsite_content_tags %}
 {% if not form.is_valid and form.is_bound %}
     <div class='alert alert-warning' role='alert'>
         <i class='bi bi-exclamation-octagon-fill'></i> There's a problem with your submission.
         Please double-check your entries below.
     </div>
 {% endif %}
+
+<h1>{{form.booger}}</h1>
 
 <div class='row text-danger'>
     <div class='col-auto'>
@@ -64,6 +67,30 @@
         {{form.protocol.errors}}
         {{form.protocol}}
         <div class='form-text'>{{form.protocol.help_text|safe}}</div>
+    </div>
+</div>
+
+<div class='row'>
+    <div class='{{form.phase.css_classes}} mb-3 col-sm-2 form-group'>
+        {{form.phase.label_tag}}
+        {{form.phase.errors}}
+        {{form.phase}}
+        <div class='form-text'>{{form.phase.help_text|safe}}</div>
+    </div>
+    <div class='mb-3 col-sm-10'>
+        <p class='mb-1'>Phase definitions:</p>
+        <ul class='list-unstyled'>
+            <li>Phase 1: Preclinical exploratory studies</li>
+            <li>Phase 2: Clinical Assay Development for Clinical Disease</li>
+            <li>Phase 3: Retrospective Longitudinal Study</li>
+            <li>Phase 4: Prospective Screening Studies</li>
+            <li>Phase 5: Cancer Control Studies (RCT)</li>
+        </ul>
+        <p>
+            <a href='https://edrn.nci.nih.gov/about-edrn/five-phase-approach-and-prospective-specimen-collection-retrospective-blinded-evaluation-study-design/'>
+                See more information about the five phase approach and prospective specimen collection, retrospective
+                blinded evaluation study design</a>.
+        </p>
     </div>
 </div>
 
