@@ -219,16 +219,15 @@ class Ingestor(BaseIngestor):
         n, u, d = super().ingest()
         ingested = n | u
         for collection in [i for i in ingested if isinstance(i, DataCollection)]:
-            # First, clear up any PageViewRestrictions from last time
-            PageViewRestriction.objects.filter(page=collection).delete()
-
-            # Next get the groups
+            # If the public group is here, we don't need any group-based PVRs
             groups = set([self._de_dn(i) for i in collection.owner_principals.values_list('value', flat=True)])
-            if self._public_group not in groups:
-                # The public group "All Users" isn't here, so we need to restrict it
-                pvr = PageViewRestriction(page=collection, restriction_type='groups')
-                pvr.save()
+            if self._public_group in groups:
+                PageViewRestriction.objects.filter(page=collection, restriction_type='groups').delete()
+            else:
+                # Find or create a PVR
+                pvr, _ = PageViewRestriction.objects.get_or_create(page=collection, restriction_type='groups')
                 pvr.groups.set(Group.objects.filter(name__in=groups), clear=True)
+                pvr.save()
         self.add_search_promotions(n)
         return n, u, d
 
