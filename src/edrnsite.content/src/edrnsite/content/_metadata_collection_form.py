@@ -104,16 +104,18 @@ in the data collection process.'''
         required=True, label='Results and Conclusion Summary', widget=forms.Textarea,
         help_text='The results and conclusions from this data collection.'
     )
-    data_structure_description = forms.CharField(
-        required=True, label='Data Structure Description', widget=forms.Textarea,
-        help_text='Describe the structure of the data.'
-    )
-    data_capture_start_date = forms.DateField(
-        required=True, widget=forms.DateInput(attrs={'type': 'date'}), initial=datetime.date.today
-    )
-    data_capture_end_date = forms.DateField(
-        required=True, widget=forms.DateInput(attrs={'type': 'date'}), initial=datetime.date.today
-    )
+
+    # EDRN/P5#403 — HK wants to hold off
+    # data_structure_description = forms.CharField(
+    #     required=True, label='Data Structure Description', widget=forms.Textarea,
+    #     help_text='Describe the structure of the data.'
+    # )
+    # data_capture_start_date = forms.DateField(
+    #     required=True, widget=forms.DateInput(attrs={'type': 'date'}), initial=datetime.date.today
+    # )
+    # data_capture_end_date = forms.DateField(
+    #     required=True, widget=forms.DateInput(attrs={'type': 'date'}), initial=datetime.date.today
+    # )
     reference_url_description = forms.ChoiceField(
         required=False,
         widget=forms.RadioSelect,
@@ -264,8 +266,10 @@ class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
         else:
             disclaimer_text = disclaimer.text
         cp.set('Collection', 'DataDisclaimer', disclaimer_text)
-        cp.set('Collection', 'DataCaptureStartDate', data['data_capture_start_date'].isoformat())
-        cp.set('Collection', 'DataCaptureEndDate', data['data_capture_end_date'].isoformat())
+
+        # EDRN/P5#403 — HK wants to hold off
+        # cp.set('Collection', 'DataCaptureStartDate', data['data_capture_start_date'].isoformat())
+        # cp.set('Collection', 'DataCaptureEndDate', data['data_capture_end_date'].isoformat())
 
         if data['instrument']: cp.set('Collection', 'Instrument', data['instrument'])
         if data['method_details']: cp.set('Collection', 'MethodDetails', data['method_details'])
@@ -303,10 +307,11 @@ class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
             buffer.write('\n\nThe following was entered into the "other discipline" field:\n\n')
             buffer.write(data['other_discipline'])
 
-        if data['data_structure_description']:
-            buffer.write('\n\n\n')
-            buffer.write('-' * 40)
-            buffer.write('\n\nThe following was entered into the "data structure description" field:\n\n')
-            buffer.write(data['data_structure_description'])
+        # EDRN/P5#403 — HK wants to hold off
+        # if data['data_structure_description']:
+        #     buffer.write('\n\n\n')
+        #     buffer.write('-' * 40)
+        #     buffer.write('\n\nThe following was entered into the "data structure description" field:\n\n')
+        #     buffer.write(data['data_structure_description'])
 
         return buffer.getvalue()
