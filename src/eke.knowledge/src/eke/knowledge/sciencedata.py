@@ -14,7 +14,7 @@ from django.db import models
 from django.db.models import Q
 from django.db.models.fields import Field
 from django.db.models.functions import Lower
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django_plotly_dash import DjangoDash
 from modelcluster.fields import ParentalManyToManyField, ParentalKey
@@ -165,6 +165,7 @@ class DataCollection(KnowledgeObject):
             _pre('ownerPrincipal'): RDFAttribute('owner_principals', scalar=False),
             _pre('discipline'): RDFAttribute('data_collection_disciplines', scalar=False),
             _pre('dataCategory'): RDFAttribute('data_collection_categories', scalar=False),
+            **KnowledgeObject.RDFMeta.fields
         }
 
 
