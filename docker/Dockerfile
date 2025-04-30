@@ -58,7 +58,7 @@ RUN \
     :
 
 RUN \
-    build_deps="automake bzip2-dev cyrus-sasl-dev git g++ gcc libffi-dev libjpeg-turbo-dev libwebp-dev libxml2-dev libxslt-dev make musl-dev openjpeg-dev openldap-dev openssl-dev pcre-dev python3-dev postgresql-dev su-exec tiff-dev zlib-dev " &&\
+    build_deps="automake bzip2-dev cyrus-sasl-dev git g++ gcc libffi-dev libjpeg-turbo-dev libwebp-dev libxml2-dev libxslt-dev make musl-dev openjpeg-dev openldap-dev openssl-dev pcre-dev python3-dev postgresql-dev su-exec tiff-dev zlib-dev" &&\
     run_deps="curl krb5-libs libgcc libjpeg-turbo libldap libpq libsasl libstdc++ libwebp libxml2 libxslt netcat-openbsd openjpeg python3 rsync tiff tidyhtml" &&\
     py_deps="py3-numpy py3-pandas py3-pillow py3-psycopg2 py3-biopython" &&\
     /sbin/apk update --quiet &&\
@@ -69,12 +69,20 @@ RUN \
 
 # Over on GitHub Actions, we need to fail fast and not hit the six hour run limit, so make sure we got it right
 
-RUN [ "`/usr/bin/python3 --version`" = "Python 3.11.10" ]
+RUN [ "/usr/bin/python3 --version 2>/dev/null | grep -q '^Python 3\.11'" ]
 RUN [ "`/usr/bin/python3 -c 'import numpy; print(numpy.__version__)'`" = "1.24.4" ]
 RUN [ "`/usr/bin/python3 -c 'import pandas; print(pandas.__version__)'`" = "1.5.3" ]
 RUN [ "`/usr/bin/python3 -c 'import PIL; print(PIL.__version__)'`" = "9.5.0" ]
 RUN [ "`/usr/bin/python3 -c 'import psycopg2; print(psycopg2.__version__)'`" = "2.9.6 (dt dec pq3 ext lo64)" ]
 RUN [ "`/usr/bin/python3 -c 'import Bio; print(Bio.__version__)'`" = "1.81" ]
+
+# RUN echo `/usr/bin/python3 --version` | grep -q '^Python 3\.11\.'
+# RUN echo `/usr/bin/python3 -c 'import numpy; print(numpy.__version__)'` | grep -q '^1\.25\.'
+# RUN echo `/usr/bin/python3 -c 'import pandas; print(pandas.__version__)'` | grep -q '^2\.0\.'
+# RUN echo `/usr/bin/python3 -c 'import PIL; print(PIL.__version__)'` | grep -q '^10\.3\.'
+# RUN echo `/usr/bin/python3 -c 'import psycopg2; print(psycopg2.__version__)'` | grep -q '^2\.9\.'
+# Note that Biopython does not use MAJOR.MINOR.MICRO versions so there's no trailing dot here
+# RUN echo `/usr/bin/python3 -c 'import Bio; print(Bio.__version__)'` | grep -q '^1\.81'
 
 RUN \
     : See https://github.com/python-ldap/python-ldap/issues/432 for workaround to Python LDAP vs OpenLDAP 2.5 issue &&\
@@ -84,6 +92,7 @@ RUN \
     /usr/bin/pip3 install gunicorn==20.1.0 &&\
     /usr/bin/install -o edrn -g edrn -d /app /app/media /app/static /app/wheels &&\
     :
+
 
 COPY --chown=edrn:edrn ./dist/*.whl /app/wheels/
 
@@ -102,20 +111,22 @@ COPY --chown=edrn:edrn ./dist/*.whl /app/wheels/
 #     :
 #
 # Except the Docker plugin for Jenkins at CBIIT chokes with an HTTP 400 error because apparently
-# the single layer made above is too big. So, we have to do these in separate RUNs:
+# the single layer made above is too big. So, we have to do these in separate RUNs.
+#
+# ALSO: these used to be named with a `.` in the middle; now they're `_`s?
 
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.controls-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.streams-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.content-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrn.collabgroups-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrn.theme-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.ploneimport-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/eke.geocoding-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/eke.knowledge-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/eke.biomarkers-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.search-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrn.metrics-*.whl
-RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite.policy-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite?controls-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite?streams-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite?content-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrn?collabgroups-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrn?theme-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite?ploneimport-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/eke?geocoding-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/eke?knowledge-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/eke?biomarkers-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite?search-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrn?metrics-*.whl
+RUN /usr/bin/pip3 install --progress-bar off /app/wheels/edrnsite?policy-*.whl
 
 # And this too:
 

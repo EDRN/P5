@@ -1,0 +1,68 @@
+{% load wagtailcore_tags edrnsite_streams_tags %}
+{# 🔮 TODO: caching #}
+{% block extra_css %}
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.15/themes/default/style.min.css' rel='stylesheet'/>
+{% endblock extra_css %}
+{% block header_scripts %}
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.15/jstree.min.js'></script>
+{% endblock header_scripts %}
+<div class='row mt-2'>
+    <div class='col'>
+        {% if value.title %}
+            <h2>{{value.title}}</h2>
+        {% endif %}
+        {% if value.spreadsheet_id %}
+            <a href='https://docs.google.com/spreadsheets/d/{{value.spreadsheet_id}}/' class>
+                <i class="bi bi-box-arrow-up-right"></i> View as a spreadsheet
+            </a>
+        {% endif %}
+    </div>
+</div>
+{% if value.spreadsheet_id %}
+    <div class='row mb-3'>
+        <div id='{{value.block_id}}' class='col-sm-6 col-md-6'>
+            {% render_de_roots value.spreadsheet_id %}
+        </div>
+        <div id='{{value.block_id}}-details' class='col-sm-6 col-md-6'></div>
+    </div>
+
+    {% render_all_de_attribute_canvases value.spreadsheet_id %}
+{% endif %}
+
+{% block extra_js %}
+    <script>
+        $(function () {
+            $('#{{value.block_id}}')
+                .on(
+                    'changed.jstree', function(e, data) {
+                        let selector = '#' + data.node.id + ' .tree_view_annotation';
+                        let annotation = $(selector).html();
+                        if (annotation === undefined) annotation = '';
+                        $('#{{value.block_id}}-details').html(annotation);
+                    }
+                )
+                .jstree({
+                    'plugins': ['wholerow'],
+                    'core': {
+                        'multiple': false,
+                        'themes': {
+                            'variant': 'large',
+                            'responsive': true,
+                            'icons': false,
+                            'ellipsis': false,
+                            'stripes': false
+                        }
+                    },
+                    'search': {
+                        'fuzzy': true
+                    }
+                })
+                .bind('loaded.jstree', function(e, data) {
+                    $(this).jstree('open_all');
+                });
+            // 🔮 TODO: add search box
+        });
+
+    </script>
+{% endblock extra_js %}
+{# -*- HTML (Jinja) -*- #}

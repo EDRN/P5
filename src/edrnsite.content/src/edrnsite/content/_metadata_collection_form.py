@@ -16,6 +16,24 @@ from io import StringIO
 from urllib.parse import urlparse
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel
 from wagtail.contrib.forms.models import EmailFormMixin
+import datetime
+
+
+def _collab_groups():
+    '''Return a vocabulary of collaborative groups.
+
+    Normally we'd want to use CollaborativeGroupSnippet but there's a nasty
+    circular dependency that prevents it from being used here. This form should
+    be in its own module and not in edrnsite.content, which would fix that.
+
+    Also, LabCAS drops the "Cancers Research Group" from each collab group name.
+    '''
+    return [
+        ('breast', 'Breast and Gynecologic'),
+        ('gi', 'G.I. and Other Associated'),
+        ('lung', 'Lung and Upper Aerodigestive'),
+        ('prostate', 'Prostate and Urologic')
+    ]
 
 
 def _species():
@@ -61,17 +79,12 @@ in the data collection process.'''
     protocol = forms.ChoiceField(label='Protocol', help_text='Select the protocol that generated the data.', choices=protocol_choices)
     biomarkers_researched = forms.CharField(
         required=False, label='Biomarkers Researched', widget=forms.Textarea, max_length=5000,
-        help_text='Describe the cancer biomarkers being researched by this data.'
+        help_text='Enter the name(s) of the cancer biomarker(s) associated with the data being deposited.'
     )
     cg = forms.ChoiceField(
         label='Collaborative Group', help_text='Select the collaborative research group',
         widget=forms.RadioSelect,
-        choices=(
-            ('breast-gyn', 'Breast & Gynecological Cancers Research Group'),
-            ('colorect-gi', 'Colorectal & Other GI Cancers Research Group'),
-            ('lung', 'Lung & Upper Aerodigestive Cancers Research Group'),
-            ('prostate', 'Prostate & Other Urologic Cancers Research Group'),
-        )
+        choices=_collab_groups()
     )
     discipline = forms.MultipleChoiceField(label='Discipline', widget=forms.CheckboxSelectMultiple, choices=discipline_choices)
     other_discipline = forms.CharField(
@@ -91,6 +104,18 @@ in the data collection process.'''
         required=True, label='Results and Conclusion Summary', widget=forms.Textarea,
         help_text='The results and conclusions from this data collection.'
     )
+
+    # EDRN/P5#403 — HK wants to hold off
+    # data_structure_description = forms.CharField(
+    #     required=True, label='Data Structure Description', widget=forms.Textarea,
+    #     help_text='Describe the structure of the data.'
+    # )
+    # data_capture_start_date = forms.DateField(
+    #     required=True, widget=forms.DateInput(attrs={'type': 'date'}), initial=datetime.date.today
+    # )
+    # data_capture_end_date = forms.DateField(
+    #     required=True, widget=forms.DateInput(attrs={'type': 'date'}), initial=datetime.date.today
+    # )
     reference_url_description = forms.ChoiceField(
         required=False,
         widget=forms.RadioSelect,
@@ -177,38 +202,51 @@ class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
         site_id, pi_id = data['pi_site'].split('-')
 
         pi = Person.objects.filter(personID=pi_id).first()
-        cp.set('Collection', 'LeadPIID', pi_id)
-        cp.set('Collection', 'LeadPIName', pi.title)
+        cp.set('Collection', 'LeadPIId', pi_id)
+        cp.set('Collection', 'LeadPI', pi.title)
 
         cp.set('Collection', 'DataCustodian', data['custodian'])
         cp.set('Collection', 'DataCustodianEmail', data['custodian_email'])
 
         site = Site.objects.filter(dmccSiteID=site_id).first()
-        cp.set('Collection', 'InstitutionID', site_id)
-        cp.set('Collection', 'InstitutionName', site.title)
+        cp.set('Collection', 'InstitutionId', site_id)
+        cp.set('Collection', 'Institution', site.title)
 
         protocol = Protocol.objects.filter(identifier=data['protocol']).first()
-        cp.set('Collection', 'ProtocolID', self._code(data['protocol']))
+        cp.set('Collection', 'ProtocolId', self._code(data['protocol']))
         cp.set('Collection', 'ProtocolName', protocol.title)
         cp.set('Collection', 'ProtocolAbbreviatedName', protocol.abbreviation)
 
         if data['discipline']:
-            cp.set('Collection', 'Discipline', '|'.join(data['discipline']))
-        cp.set('Collection', 'DataCategory', data['category'])
+            disc_names = {i[0]: i[1] for i in discipline_choices()}
+            discs = [disc_names[i] for i in data['discipline']]
+            cp.set('Collection', 'Discipline', '|'.join(discs))
+        cp.set(
+            'Collection', 'DataCategory',
+            {i[0]: i[1] for i in data_category_choices()}[data['category']]
+        )
 
         bs = BodySystem.objects.filter(identifier=data['organ']).first()
-        cp.set('Collection', 'OrganID', self._code(data['organ']))
-        cp.set('Collection', 'OrganName', bs.title)
+        cp.set('Collection', 'OrganId', self._code(data['organ']))
+        cp.set('Collection', 'Organ', bs.title)
 
-        cp.set('Collection', 'CollaborativeGroup', data['cg'])
+        cp.set(
+            'Collection', 'CollaborativeGroup',
+            {i[0]: i[1] for i in _collab_groups()}[data['cg']]
+        )
+
         if data['results']: cp.set('Collection', 'ResultsAndConclusionSummary', data['results'])
         if data['pub_med_id']: cp.set('Collection', 'PubMedID', data['pub_med_id'])
-        if data['reference_url']: cp.set('Collection', 'ReferenceURL', data['reference_url'])
+        if data['reference_url']: cp.set('Collection', 'ReferenceURLLink', data['reference_url'])
+
         if data['reference_url_description']:
             cp.set('Collection', 'ReferenceURLDescription', data['reference_url_description'])
         if data['reference_url_other']: cp.set('Collection', 'ReferenceURLOther', data['reference_url_other'])
         cp.set('Collection', 'Consortium', 'EDRN')
-        cp.set('Collection', 'Species', data['species'])
+        cp.set(
+            'Collection', 'Species',
+            {i[0]: i[1] for i in _species()}[data['species']]
+        )
 
         if not data['private']: cp.set('Collection', 'OwnerPrincipal', ALL_USERS_DN)
         if data['access_groups']:
@@ -219,6 +257,22 @@ class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
 
         if data['doi']: cp.set('Collection', 'DOI', data['doi'])
         if data['doi_url']: cp.set('Collection', 'DOIURL', data['doi_url'])
+
+        # Always add the data disclaimer #372
+        from .models import BoilerplateSnippet
+        disclaimer = BoilerplateSnippet.objects.filter(bp_code='data-disclaimer').first()
+        if not disclaimer:
+            disclaimer_text = '«No data disclaimer snippet found in portal snippets»'
+        else:
+            disclaimer_text = disclaimer.text
+        cp.set('Collection', 'DataDisclaimer', disclaimer_text)
+
+        # EDRN/P5#403 — HK wants to hold off
+        # cp.set('Collection', 'DataCaptureStartDate', data['data_capture_start_date'].isoformat())
+        # cp.set('Collection', 'DataCaptureEndDate', data['data_capture_end_date'].isoformat())
+
+        if data['instrument']: cp.set('Collection', 'Instrument', data['instrument'])
+        if data['method_details']: cp.set('Collection', 'MethodDetails', data['method_details'])
 
         buffer = StringIO()
         cp.write(buffer)
@@ -247,22 +301,17 @@ class MetadataCollectionFormPage(AbstractFormPage, EmailFormMixin):
             buffer.write('\n\nThe following was entered into the "type of data" field:\n\n')
             buffer.write(data['type_of_data'])
 
-        if data['method_details']:
-            buffer.write('\n\n\n')
-            buffer.write('-' * 40)
-            buffer.write('\n\nThe following was entered into the "method details" field:\n\n')
-            buffer.write(data['method_details'])
-
-        if data['instrument']:
-            buffer.write('\n\n\n')
-            buffer.write('-' * 40)
-            buffer.write('\n\nThe following was entered into the "instrument" field:\n\n')
-            buffer.write(data['instrument'])
-
         if data['other_discipline']:
             buffer.write('\n\n\n')
             buffer.write('-' * 40)
             buffer.write('\n\nThe following was entered into the "other discipline" field:\n\n')
             buffer.write(data['other_discipline'])
+
+        # EDRN/P5#403 — HK wants to hold off
+        # if data['data_structure_description']:
+        #     buffer.write('\n\n\n')
+        #     buffer.write('-' * 40)
+        #     buffer.write('\n\nThe following was entered into the "data structure description" field:\n\n')
+        #     buffer.write(data['data_structure_description'])
 
         return buffer.getvalue()

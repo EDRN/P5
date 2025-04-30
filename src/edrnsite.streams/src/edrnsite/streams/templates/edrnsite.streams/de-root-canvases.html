@@ -1,0 +1,6 @@
+{% load wagtailcore_tags edrnsite_streams_tags %}
+{# We don't actually need any other surrounding markup so this template isn't strictly necessary #}
+{% for root in root_objects %}
+    {% render_de_attribute_canvases root %}
+{% endfor %}
+{# -*- HTML (Jinja) -*- #}

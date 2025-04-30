@@ -1,30 +1,28 @@
 # encoding: utf-8
 
-'''😌 EDRN Site Content: create explorer.'''
+'''💁‍♀️ EDRN Knowledge Environment: add months to publications.'''
+
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from edrnsite.content.models import CDEExplorerPage
-from edrnsite.policy.management.commands.utils import set_site
+from eke.knowledge.models import Publication
 
 
 class Command(BaseCommand):
-    help = 'Install explorers'
+    help = 'Add months to publications'
 
-    def _update_cde_explorer(self, home_page):
-        for page in CDEExplorerPage.objects.all():
-            page.update_nodes()
+    def fix_publications(self):
+        pmids = Publication.objects.filter(month='').values_list('pubMedID', flat=True)
+        breakpoint()
 
     def handle(self, *args, **options):
-        self.stdout.write('Updating CDE explorer')
+        self.stdout.write('Adding months to publications')
 
         old = getattr(settings, 'WAGTAILREDIRECTS_AUTO_CREATE', True)
         try:
             settings.WAGTAILREDIRECTS_AUTO_CREATE = False
             settings.WAGTAILSEARCH_BACKENDS['default']['AUTO_UPDATE'] = False
-            site, home_page = set_site()
-            self._update_cde_explorer(home_page)
-
+            self.fix_publications()
         finally:
             settings.WAGTAILREDIRECTS_AUTO_CREATE = old
             settings.WAGTAILSEARCH_BACKENDS['default']['AUTO_UPDATE'] = True

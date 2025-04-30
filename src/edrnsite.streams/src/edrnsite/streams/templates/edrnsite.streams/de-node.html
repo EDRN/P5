@@ -1,0 +1,41 @@
+{% load wagtailcore_tags edrnsite_streams_tags %}
+<li>
+    {{name}}
+    <div class='tree_view_annotation'>
+        <h3>{{name}}</h3>
+        {% if description %}
+            <p>{{description}}</p>
+        {% else %}
+            <p class='small'>(No description of this object is available.)</p>
+        {% endif %}
+
+        {% if stewardship %}
+            <h3>Stewardship</h3>
+            <p>{{stewardship}}</p>
+        {% endif %}
+
+        {% if attributes %}
+            <h4>Attributes</h4>
+            <p class='small'>
+                Attributes shown with <i class='text-danger bi bi-key-fill'></i> are <em>required</em>, while
+                those with <i class="text-secondary bi bi-arrow-down-up"></i> inherit values from other objects.
+            </p>
+            <p class='small'>
+                Click/tap on an attribute text box below to view details about that attribute.
+            </p>
+            <p style='line-height: 2rem;'>
+                {% for attribute in attributes %}
+                    {% render_de_attribute_button attribute %}
+                {% endfor %}
+            </p>
+        {% endif %}
+    </div>
+    {% if children %}
+        <ul>
+            {% for child in children %}
+                {% render_de_node child %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+</li>
+{# -*- HTML (Jinja) -*- #}

@@ -33,12 +33,13 @@ $ .venv/bin/pip install --editable 'src/eke.biomarkers[dev]'
 $ .venv/bin/pip install --editable 'src/edrnsite.search[dev]'
 $ .venv/bin/pip install --editable 'src/edrn.theme[dev]'
 $ .venv/bin/pip install --editable 'src/edrnsite.ploneimport[dev]'
+$ .venv/bin/pip install --editable 'src/edrn.metrics[dev]'
 $ .venv/bin/pip install --editable 'src/edrnsite.policy[dev]'
 $ .venv/bin/pip install --editable 'src/edrnsite.test[dev]'
+$ .venv/bin/django-admin makemigrations --pythonpath . --settings local
 $ .venv/bin/django-admin migrate --pythonpath . --settings local
 $ .venv/bin/django-admin createsuperuser --pythonpath . --settings local --username root --email edrn-ic@jpl.nasa.gov
 ```
-
 When prompted for a password, enter a suitably secure root-level password for the Django super user (twice).
 
 **👉 Note:** This password is for the application server's "manager" or "root" superuser and is unrelated to any usernames or passwords used with the EDRN Directory Service. But because it affords such deep and penetrative access, it must be kept double-plus super-secret probationary secure.
@@ -56,6 +57,18 @@ To see all the commands besides `runserver` and `migrate` that Django supports:
 ```console
 $ .venv/bin/django-admin help --pythonpath . --settings local
 ```
+
+## 📋 Taskfile.dev
+
+This repository provides a `Taskfile.yaml` which lets you use [Taskfile.dev](https://taskfile.dev) to simplify a lot of commands. For example, much of the above can be done with
+
+    task run
+
+which builds the virtual environment, installs the software, and starts the server. Run
+
+    task --list
+
+to see more. The environment variables used by the Taskfile (below) should be in a `.env` file.
 
 
 ### 🍃 Environment Variables
@@ -167,12 +180,16 @@ You don't need `src/edrnsite.test` since it's just used for testing.
 
 Repeat this for any other source directory in `src`. Then build the image:
 
-    docker image build --build-arg user_id=NUMBER --tag edrn-portal:latest --file docker/Dockerfile .
+    docker image build --build-arg user_id=NUMBER --tag edrndocker/edrn-portal:latest --file docker/Dockerfile .
 
 Replace `NUMBER` with the number of the user ID of the user under which to run the software in the container. Typically you'll want
 
 -   500 for running at the Jet Propulsion Laboratory.
 -   26013 for running at the National Cancer Institute.
+
+Or do it all at once with Taskfile:
+
+    task image
 
 Spot check: see if the image is working by running:
 
@@ -190,7 +207,6 @@ The [environment variables listed above](#user-content-environment-variables) al
 | Variable              | Use                                                              | Default               |
 |-----------------------|------------------------------------------------------------------|-----------------------|
 | `EDRN_DATA_DIR`       | Volume to bind to provide media files and PostgreSQL DB          | `/local/content/edrn` |
-| `EDRN_IMAGE_OWNER`    | Name of image owning org.; use an empty string for a local image | `edrndocker/`         |
 | `EDRN_PUBLISHED_PORT` | TCP port on which to make the HTTP service available             | 8080                  |
 | `EDRN_TLS_PORT`       | Encrypted TCP port, if the `tls-proxy` profile is enabled        | 4134                  |
 | `EDRN_VERSION`        | Version of the image to use, such as `latest`                    | `6.0.0`               |
@@ -201,6 +217,10 @@ These variables are also necessary while setting up the containerized database.
 Ater setting the needed variables, start the composition as follows:
 
     docker compose --project-name edrn --file docker/docker-compose.yaml up --detach
+
+Or more easily
+
+    task comp-up
 
 You can now proceed to set up the database, search engine, and populate the portal with its content.
 
@@ -372,3 +392,9 @@ To contact the team as a whole, [email the Informatics Center](mailto:ic-portal@
 ## 📃 License
 
 The project is licensed under the [Apache version 2](LICENSE.md) license.
+
+
+## 🎨 Art Credits
+
+- Image by <a href="https://pixabay.com/users/openclipart-vectors-30363/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=160776">OpenClipart-Vectors</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=160776">Pixabay</a>
+- Image by <a href="https://pixabay.com/users/openclipart-vectors-30363/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=158813">OpenClipart-Vectors</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=158813">Pixabay</a>

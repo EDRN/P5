@@ -1,14 +1,11 @@
 # encoding: utf-8
 
-'''😌 EDRN site content models for the CDE explorer.'''
+'''🦦 EDRN Site streams: data element trees.'''
 
 
-from wagtail.models import Page
 from django.db import models
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from wagtail.admin.panels import FieldPanel
-from django.utils import timezone
-import gdown, tempfile, pandas, logging, dataclasses, traceback, os
+import dataclasses, logging, traceback, tempfile, gdown, pandas, os
 
 _logger = logging.getLogger(__name__)
 
@@ -26,13 +23,13 @@ class _Attribute:
     def __hash__(self):
         return hash(self.text)
     def instantiate(self, obj):
-        attr_obj = CDEExplorerAttribute(
+        attr_obj = DataElementExplorerAttribute(
             text=self.text, definition=self.definition, required=self.required, data_type=self.data_type,
             explanatory_note=self.explanatory_note, obj=obj, inheritance=self.inheritance
         )
         attr_obj.save()
         for pv in self.permissible_values:
-            cde_pv = CDEPermissibleValue(value=pv, attribute=attr_obj)
+            cde_pv = DataElementExplorerPermissibleValue(value=pv, attribute=attr_obj)
             cde_pv.save()
         return attr_obj
 
@@ -48,7 +45,7 @@ class _Node:
     def __hash__(self):
         return hash(self.name)
     def instantiate(self, parent=None):
-        explorer_obj = CDEExplorerObject(
+        explorer_obj = DataElementExplorerObject(
             name=self.name, description=self.description, stewardship=self.stewardship, parent=parent
         )
         explorer_obj.save()
@@ -59,41 +56,55 @@ class _Node:
         return explorer_obj
 
 
-class CDEExplorerPage(Page):
-    page_description = 'A page that shows common data elements in a tree-like explorable display'
-    template = 'edrnsite.content/cde-explorer.html'
+class DataElementExplorerObject(models.Model):
+    name = models.CharField(null=False, blank=False, max_length=200, help_text='Name of this object in a CDE hierarchy')
+    description = models.TextField(null=False, blank=True, help_text='A nice long description of this object')
+    stewardship = models.TextField(null=False, blank=True, help_text="Who's responsible for this object")
+    parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE, related_name='children')
+    spreadsheet_id = models.CharField(null=False, blank=True, help_text='If a root node, the spreadsheet that generates this node')
+    panels = [FieldPanel('name'), FieldPanel('description'), FieldPanel('parent'), FieldPanel('spreadsheet_id')]
+    def __str__(self):
+        return self.name
+    class Meta:
+        indexes = [models.Index(fields=['spreadsheet_id'])]
 
-    spreadsheet_id = models.CharField(
-        null=False, blank=True, max_length=250, help_text='Optional file ID of a Google Drive spreadsheet'
+
+class DataElementExplorerAttribute(models.Model):
+    text = models.CharField(null=False, blank=False, max_length=100, help_text='Name of this common data element')
+    obj = models.ForeignKey(DataElementExplorerObject, null=True, on_delete=models.CASCADE, related_name='attributes')
+    definition = models.TextField(null=False, blank=True, help_text='A thorough definition of this CDE')
+    required = models.CharField(null=False, blank=True, max_length=50, help_text='Required, not, or something else?')
+    data_type = models.CharField(null=False, blank=True, max_length=30, help_text='Kind of data')
+    explanatory_note = models.TextField(null=False, blank=True, help_text='Note helping explain use of the CDE')
+    inheritance = models.BooleanField(null=False, blank=False, default=False, help_text='Attribute inherits values')
+    panels = [
+        FieldPanel('text'),
+        FieldPanel('obj'),
+        FieldPanel('definition'),
+        FieldPanel('required'),
+        FieldPanel('data_type'),
+        FieldPanel('explanatory_note'),
+        FieldPanel('inheritance')
+    ]
+    def __str__(self):
+        return self.text
+
+
+class DataElementExplorerPermissibleValue(models.Model):
+    value = models.CharField(
+        null=False, blank=False, max_length=200,
+        help_text='An enumerated value allowed for a data element that uses permissible values'
     )
-    # No need to include this in content_panels since it's machine-updated    
-    update_log = models.TextField(null=False, blank=True, help_text='Log of how well the last update went')
+    attribute = models.ForeignKey(DataElementExplorerAttribute, null=True,  on_delete=models.CASCADE, related_name='permissible_values')
+    panels = [FieldPanel('value'), FieldPanel('attribute')]
+    def __str__(self):
+        return self.value
 
-    content_panels = Page.content_panels + [FieldPanel('spreadsheet_id')]
 
-    def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
-        context = super().get_context(request, args, kwargs)
-        context['root_objects'] = self.root_objects.all().order_by('name')
-        return context
-
-    def _log(self, message):
-        '''Log a timestampped message to our update log and also to the _logger.'''
-        _logger.warning(message)
-        self.update_log += f'{timezone.now().isoformat(timespec="seconds")} {message}\n'
-
-    def _delete_obj(self, obj):
-        '''Delete all the CDE explorer objects at and beneath ``obj``.
-
-        It deletes all child objects of ``obj``. It also deletes all the attributes of ``obj`` and
-        its children, plus all their permissible values.
-        '''
-        for attr in obj.attributes.all():
-            for pv in attr.permissible_values.all():
-                pv.delete()
-            attr.delete()
-        for child in obj.children.all():
-            self._delete_obj(child)
-        obj.delete()
+class _ExplorerTreeUpdater:
+    def __init__(self, spreadsheet_id: str):
+        self.spreadsheet_id = spreadsheet_id
+        self.log = []
 
     def _read_sheet(self, url):
         '''Read the spreadsheet at ``url`` and return it.'''
@@ -165,15 +176,26 @@ class CDEExplorerPage(Page):
         self._log(f'Total root objects: {len(roots)}: {", ".join([i.name for i in roots])}')
         return roots
 
-    def update_nodes(self):
-        '''Update the CDE nodes of this page.
+    def _delete_obj(self, obj):
+        '''Delete all the CDE explorer objects at and beneath ``obj``.
 
-        ⚠️ Not re-entrant!
+        It deletes all child objects of ``obj``. It also deletes all the attributes of ``obj`` and
+        its children, plus all their permissible values.
         '''
-        self.update_log = ''
-        self.save()
+        for attr in obj.attributes.all():
+            for pv in attr.permissible_values.all():
+                pv.delete()
+            attr.delete()
+        for child in obj.children.all():
+            self._delete_obj(child)
+        obj.delete()
 
-        # Read the sheet, build the pseudo-structures
+    def _delete_old_explorer_objects(self):
+        self._log(f'Deleting old explorer objects for {self.spreadsheet_id}')
+        for obj in DataElementExplorerObject.objects.filter(spreadsheet_id=self.spreadsheet_id):
+            self._delete_obj(obj)
+
+    def update(self) -> list[str]:
         try:
             self._log(f'Reading spreadsheet {self.spreadsheet_id}')
             sheet_filename = self._read_sheet(self.spreadsheet_id)
@@ -182,78 +204,21 @@ class CDEExplorerPage(Page):
 
             # At this point, the data in the sheet passes muster, so we drop the old objects and
             # instantiate the new
-            self._log('Deleting all old explorer objects')
-            for root in self.root_objects.all():
-                self._delete_obj(root)
+            self._delete_old_explorer_objects()
+
             self._log('Installing new explorer objects')
             for root in roots:
                 explorer_obj = root.instantiate()
-                explorer_obj.page = self
-                explorer_obj.save()
+                explorer_obj.spreadsheet_id = self.spreadsheet_id
+                explorer_obj.save()       
 
         except Exception as ex:
-            self._log(f'Exception {ex.__class__.__name__}; aborting update')
+            self._log(f'Exception {ex.__class__.__name__}; aborting update on spreadsheet {self.spreadsheet_id}')
             self._log(traceback.format_exc())
             _logger.exception('Abort')
-            self.save()
-            return self.url
+        finally:
+            return self.log
 
-        self._log('Saving and done!')
-        self.save()
-        return self.url
-
-    def serve(self, request: HttpRequest) -> HttpResponse:
-        if request.GET.get('update') == 'true':
-            if request.user.is_staff or request.user.is_superuser:
-                if self.spreadsheet_id:
-                    return HttpResponseRedirect(self.update_nodes())
-                else:
-                    # No way to get here unless you have permissions and manually craft the request
-                    return HttpResponse("No spreadsheet ID defined")
-            else:
-                return HttpResponseForbidden()
-        else:
-            return super().serve(request)
-
-
-class CDEExplorerObject(models.Model):
-    name = models.CharField(null=False, blank=False, max_length=200, help_text='Name of this object in a CDE hierarchy')
-    description = models.TextField(null=False, blank=True, help_text='A nice long description of this object')
-    stewardship = models.TextField(null=False, blank=True, help_text="Who's responsible for this object")
-    parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE, related_name='children')
-    page = models.ForeignKey(CDEExplorerPage, blank=True, null=True, on_delete=models.SET_NULL, related_name='root_objects')
-    panels = [FieldPanel('name'), FieldPanel('description'), FieldPanel('parent'), FieldPanel('page')]
-    def __str__(self):
-        return self.name
-
-
-class CDEExplorerAttribute(models.Model):
-    text = models.CharField(null=False, blank=False, max_length=100, help_text='Name of this common data element')
-    obj = models.ForeignKey(CDEExplorerObject, null=True, on_delete=models.CASCADE, related_name='attributes')
-    definition = models.TextField(null=False, blank=True, help_text='A thorough definition of this CDE')
-    required = models.CharField(null=False, blank=True, max_length=50, help_text='Required, not, or something else?')
-    data_type = models.CharField(null=False, blank=True, max_length=30, help_text='Kind of data')
-    explanatory_note = models.TextField(null=False, blank=True, help_text='Note helping explain use of the CDE')
-    inheritance = models.BooleanField(null=False, blank=False, default=False, help_text='Attribute inherits values')
-    panels = [
-        FieldPanel('text'),
-        FieldPanel('obj'),
-        FieldPanel('definition'),
-        FieldPanel('required'),
-        FieldPanel('data_type'),
-        FieldPanel('explanatory_note'),
-        FieldPanel('inheritance')
-    ]
-    def __str__(self):
-        return self.text
-
-
-class CDEPermissibleValue(models.Model):
-    value = models.CharField(
-        null=False, blank=False, max_length=200,
-        help_text='An enumerated value allowed for a data element that uses permissible values'
-    )
-    attribute = models.ForeignKey(CDEExplorerAttribute, null=True,  on_delete=models.CASCADE, related_name='permissible_values')
-    panels = [FieldPanel('value'), FieldPanel('attribute')]
-    def __str__(self):
-        return self.value
+    def _log(self, message: str):
+        _logger.warning(message)
+        self.log.append(message)

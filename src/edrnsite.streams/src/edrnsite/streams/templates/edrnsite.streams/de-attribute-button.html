@@ -1,0 +1,15 @@
+{% load wagtailcore_tags edrnsite_streams_tags %}
+<a class='btn btn-sm
+    {% if required %}
+        btn-outline-danger
+    {% elif inheritance %}
+        btn-outline-secondary
+    {% else %}
+        btn-outline-primary
+    {% endif %}'
+    data-bs-toggle='offcanvas' href='#{{id}}' role='button'
+    data-bs-target='#{{id}}' aria-controls='{{id}}'>
+    {% if required %}<i class='bi bi-key-fill'></i>{% endif %}{% if inheritance %}<i class="bi bi-arrow-down-up"></i>{% endif %} {{text}}
+</a>
+{# -*- HTML (Jinja) -*- #}
+

@@ -10,6 +10,7 @@ from wagtail.blocks.struct_block import StructBlockValidationError
 from wagtail.contrib.table_block.blocks import TableBlock as BaseTableBlock
 from wagtail.contrib.typed_table_block.blocks import TypedTableBlock as BaseTypedTableBlock
 from wagtail.images.blocks import ImageChooserBlock
+from ._cde_blocks import DataElementExplorerBlock  # noqa
 
 
 class TitleBlock(blocks.StructBlock):

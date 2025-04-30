@@ -3,6 +3,7 @@
 '''💁‍♀️ EDRN Knowledge Environment: models.'''
 
 
+from .audit_log import KnowledgeObjectLogEntry, KnowledgeObjectLogEntryManager, KnowledgeObjectLogEntryQuerySet
 from .committees import CommitteeIndex
 from .knowledge import KnowledgeObject, KnowledgeFolder, RDFSource
 from .publications import Publication, PublicationIndex, PMCID, PublicationSubjectURI
@@ -45,6 +46,9 @@ __all__ = [
     DiseaseIndex,
     KnowledgeFolder,
     KnowledgeObject,
+    KnowledgeObjectLogEntry,
+    KnowledgeObjectLogEntryManager,
+    KnowledgeObjectLogEntryQuerySet,
     MemberFinderPage,
     MiscellaneousResource,
     MiscellaneousResourceIndex,

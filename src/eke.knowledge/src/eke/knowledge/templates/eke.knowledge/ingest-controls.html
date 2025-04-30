@@ -31,10 +31,13 @@
             <h2 class='title-wrapper'>Other EDRN Controls</h2>
             <div>
                 {# 🔮 TODO: find a better place for these buttons? #}
-                <a href='{% url "reindex_all_content" %}' class='button button-longrunning' role='button'>Reindex Content</a>
-                <a href='{% url "sync_ldap_groups" %}' class='button button-longrunning' role='button'>Sync LDAP Groups</a>
-                <a href='{% url "clear_caches" %}' class='button button-longrunning' role='button'>Clear Caches</a>
-                <a href='{% url "fixtree" %}' class='button button-longrunning' role='button'>Fix Tree</a>
+                <ul class='listing'>
+                    <li><a href='{% url "reindex_all_content" %}' class='button button-small button-longrunning' role='button'>Reindex Content</a></li>
+                    <li><a href='{% url "sync_ldap_groups" %}' class='button button-small button-longrunning' role='button'>Sync LDAP Groups</a></li>
+                    <li><a href='{% url "clear_caches" %}' class='button button-small button-longrunning' role='button'>Clear Caches</a></li>
+                    <li><a href='{% url "fixtree" %}' class='button button-small button-longrunning' role='button'>Fix Tree</a></li>
+                    <li><a href='{% url "update_data_element_explorers" %}' class='button button-small button-longrunning' role='button'>Update DEX Blocks from GDrive</a></li>
+                </ul>
             </div>
 
         </div>
@@ -67,4 +70,4 @@
         </div>
     </div>
 </section>
-{# -*- Django HTML -*- #}
+{# -*- HTML (Jinja) -*- #}

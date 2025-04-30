@@ -6,15 +6,15 @@ from .base_forms import (
     AbstractEDRNForm, pi_site_choices, protocol_choices, organ_choices
 )
 from .base_models import AbstractFormPage
+from .tasks import send_email
 from captcha.fields import ReCaptchaField
 from django import forms
-from .tasks import send_email
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from eke.knowledge.models import Person, Protocol, BodySystem, Site
 from urllib.parse import urlparse
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel
 from wagtail.contrib.forms.models import EmailFormMixin
-from django.core.exceptions import ValidationError
 
 
 class BiomarkerSubmissionForm(AbstractEDRNForm):
@@ -67,6 +67,19 @@ class BiomarkerSubmissionForm(AbstractEDRNForm):
             ('histologic', 'Histologic'),
             ('radiographic', 'Radiographic'),
             ('physiological', 'Physiological')
+        )
+    )
+    phase = forms.ChoiceField(
+        widget=forms.RadioSelect,
+        required=True,
+        label='Phase',
+        help_text='Select the research phase of the biomarker.',
+        choices=(
+            ('phase-1', 'Phase 1'),
+            ('phase-2', 'Phase 2'),
+            ('phase-3', 'Phase 3'),
+            ('phase-4', 'Phase 4'),
+            ('phase-5', 'Phase 5'),
         )
     )
     molecular_subtype = forms.ChoiceField(
@@ -167,6 +180,9 @@ class BiomarkerSubmissionFormPage(AbstractFormPage, EmailFormMixin):
         if protocol:
             rendered += f'\nProtocol ID: {self._code(data["protocol"])}'
             rendered += f'\nProtocol Name: {protocol.title}'
+
+        phase = data['phase']
+        rendered += f'\nPhase: {phase[-1]}'
 
         organ_identifiers = data.get('organs')
         if organ_identifiers:

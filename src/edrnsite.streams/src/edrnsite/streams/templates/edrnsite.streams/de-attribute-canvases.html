@@ -1,0 +1,8 @@
+{% load edrnsite_streams_tags %}
+{% for attribute in attributes %}
+    {% render_de_attribute_canvas attribute %}
+{% endfor %}
+{% for child in children %}
+    {% render_de_attribute_canvases child %}
+{% endfor %}
+{# -*- HTML (Jinja) -*- #}

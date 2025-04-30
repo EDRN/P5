@@ -11,7 +11,13 @@ accesslog = '-'
 errorlog = '-'
 loglevel = 'debug'
 
+# DO NOT ENABLE THIS LINE:
 # workers = multiprocessing.cpu_count() * 2 + 1
+# WHY?
+# IT COMPLETELY MESSES UP django_plotly_dash!
+
+
+
 # threads = 
 # worker_class = 'gevent'  # TODO: test this out
 

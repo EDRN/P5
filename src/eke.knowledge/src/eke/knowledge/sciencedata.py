@@ -14,7 +14,7 @@ from django.db import models
 from django.db.models import Q
 from django.db.models.fields import Field
 from django.db.models.functions import Lower
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django_plotly_dash import DjangoDash
 from modelcluster.fields import ParentalManyToManyField, ParentalKey
@@ -165,6 +165,7 @@ class DataCollection(KnowledgeObject):
             _pre('ownerPrincipal'): RDFAttribute('owner_principals', scalar=False),
             _pre('discipline'): RDFAttribute('data_collection_disciplines', scalar=False),
             _pre('dataCategory'): RDFAttribute('data_collection_categories', scalar=False),
+            **KnowledgeObject.RDFMeta.fields
         }
 
 
@@ -219,16 +220,15 @@ class Ingestor(BaseIngestor):
         n, u, d = super().ingest()
         ingested = n | u
         for collection in [i for i in ingested if isinstance(i, DataCollection)]:
-            # First, clear up any PageViewRestrictions from last time
-            PageViewRestriction.objects.filter(page=collection).delete()
-
-            # Next get the groups
+            # If the public group is here, we don't need any group-based PVRs
             groups = set([self._de_dn(i) for i in collection.owner_principals.values_list('value', flat=True)])
-            if self._public_group not in groups:
-                # The public group "All Users" isn't here, so we need to restrict it
-                pvr = PageViewRestriction(page=collection, restriction_type='groups')
-                pvr.save()
+            if self._public_group in groups:
+                PageViewRestriction.objects.filter(page=collection, restriction_type='groups').delete()
+            else:
+                # Find or create a PVR
+                pvr, _ = PageViewRestriction.objects.get_or_create(page=collection, restriction_type='groups')
                 pvr.groups.set(Group.objects.filter(name__in=groups), clear=True)
+                pvr.save()
         self.add_search_promotions(n)
         return n, u, d
 
@@ -277,6 +277,8 @@ class DataCollectionIndex(KnowledgeFolder):
         return ''.join(rows)
 
     def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
+        app = DjangoDash('ScienceDataDashboard')  # ← referenced in data-collection-index.html
+
         context = super().get_context(request, *args, **kwargs)
         context['statistics'] = DataStatistic.objects.child_of(self).order_by('title')
         matches = context['knowledge_objects']
@@ -317,7 +319,6 @@ class DataCollectionIndex(KnowledgeFolder):
         cats_figure.update_layout(showlegend=False, margin=dict(l=20, r=20, t=40, b=20))
         cats_legend = ghetto_plotly_legend([i[0] for i in c.most_common()], palette)
 
-        app = DjangoDash('ScienceDataDashboard')  # ← referenced in data-collection-index.html
         app.layout = html.Div(className='container', children=[
             html.Div(className='row', children=[
                 html.Div(className='col-md-4', children=[
