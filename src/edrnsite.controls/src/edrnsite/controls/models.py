@@ -5,7 +5,7 @@
 
 from django.core.validators import MinValueValidator
 from django.db import models
-from wagtail.admin.panels import FieldPanel
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.contrib.settings.models import BaseSiteSetting, register_setting
 from wagtail.fields import RichTextField
 from wagtail.snippets.models import register_snippet
@@ -123,9 +123,35 @@ class Search(BaseSiteSetting):
         default=2, null=False, validators=[MinValueValidator(0)],
         help_text='How many pages to show at the start and end of search pagination regardless of elision',
     )
+    when_to_enable_ai = models.IntegerField(
+        default=0, null=False, validators=[MinValueValidator(-1)],
+        help_text='How many search results there must be to offer AI summary; zero will always use AI while -1 will turn it off'
+    )
+    bedrock_access_key = models.CharField(
+        blank=False, null=False, help_text='AWS Access Key for Bedrock', default='key', max_length=192
+    )
+    bedrock_secret_key = models.CharField(
+        blank=False, null=False, help_text='AWS Secret Access Key for Bedrock', default='key', max_length=192
+    )
+    bedrock_region = models.CharField(
+        blank=False, null=False, help_text='AWS data center region', default='us-west-2', max_length=12
+    )
+    system_prompt = models.CharField(
+        blank=False, null=False, help_text='System prompt to present for search result summaries', max_length=1000,
+        default='Act as a search assistant for the Early Detection Research Network, summarizing voluminous search results into easily digestible summaries.'
+    )
     panels = [
-        FieldPanel('results_per_page'),
-        FieldPanel('orphans'),
-        FieldPanel('surrounding'),
-        FieldPanel('ends')
+        MultiFieldPanel(children=(
+            FieldPanel('results_per_page'),
+            FieldPanel('orphans'),
+            FieldPanel('surrounding'),
+            FieldPanel('ends')
+        ), heading='Result Display'),
+        MultiFieldPanel(children=(
+            FieldPanel('when_to_enable_ai'),
+            FieldPanel('system_prompt'),
+            FieldPanel('bedrock_access_key'),
+            FieldPanel('bedrock_secret_key'),
+            FieldPanel('bedrock_region')
+        ), heading='AI')
     ]

@@ -28,8 +28,8 @@
         </div>
     </form>
 
-    {# Experimental AI summary feature #}
-    {% if page.paginator.count > 20 and query %}
+    {# AI summary feature #}
+    {% if when_to_enable_ai != -1 and page.paginator.count >= when_to_enable_ai and query %}
         <div class='row mb-3'>
             <div class='col-md-12'>
                 <p class='d-inline-flex gap-1'>

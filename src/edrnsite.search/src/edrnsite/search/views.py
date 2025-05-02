@@ -10,15 +10,9 @@ from edrnsite.controls.models import Search
 from wagtail.contrib.search_promotions.models import Query, SearchPromotion
 from wagtail.models import Page
 from io import StringIO
-from openai import OpenAI
 from markdown import markdown
-
-
-# Which is better?
-
-# _system_prompt = '''You are a helpful assistant to the Early Detection Research Network summarizing search results.
-# You can build on the summary based on what you know about the Early Detection Research Network.'''
-_system_prompt = '''You are a helpful assistant to the Early Detection Research Network summarizing search results.'''
+from urllib.parse import urlencode, urljoin
+import boto3, json
 
 
 def search(request):
@@ -45,7 +39,8 @@ def search(request):
         page = paginator.page(pageNum)
     ranger = paginator.get_elided_page_range(pageNum, on_each_side=controls.surrounding, on_ends=controls.ends)
     context = {
-        'query': query, 'page': page, 'ranger': ranger, 'promotions': promotions, 'num_promotions': len(promotions)
+        'query': query, 'page': page, 'ranger': ranger, 'promotions': promotions, 'num_promotions': len(promotions),
+        'when_to_enable_ai': controls.when_to_enable_ai
     }
     return render(request, 'edrnsite.search/search.html', context)
 
@@ -73,23 +68,53 @@ def search_summary(request):
         results = Page.objects.live().search(query)
     if not results:
         return HttpResponse('<p>Sorry, no summary available for the given query.</p>', content_type='text/html')
+    controls = Search.for_request(request)
 
-    prompt = StringIO('Summarize the following search results:\n')
-    for result in results:
-        prompt.write(f'Title: {result.title}\n')
-        _add_description(prompt, result.specific)
-        prompt.write('\n')
+    # Hard-coding the model because in testing this gives us the best results and can access external
+    # resources. None of the others hold up.
+    model = 'us.amazon.nova-pro-v1:0'
+    system_list = [{'text': controls.system_prompt}]
 
-    client, markdown_response = OpenAI(api_key=settings.OPEN_AI_API_KEY), StringIO()
-    ai_response = client.chat.completions.create(
-        model='gpt-4o-mini',
-        messages=[
-            {'role': 'system', 'content': _system_prompt},
-            {'role': 'user', 'content': prompt.getvalue()}
-        ],
-        stream=True
-    )
-    for chunk in ai_response:
-        if chunk.choices[0].delta.content is not None:
-            markdown_response.write(chunk.choices[0].delta.content)
-    return HttpResponse(markdown(markdown_response.getvalue()), content_type='text/html')
+    # Deployment issue: we need the AI to retrieve the results from "the portal", but which instance?
+    # In development, this is on my Mac Studio. On the testing site, it's behind a firewall at JPL. And
+    # at NCI it's either edrn-dev (inaccessible), edrn-stage (inaccessble), or edrn.nci.nih.gov—but
+    # that's the production site.
+    #
+    # We may as well use the production site!
+
+    url = urljoin('https://edrn.nci.nih.gov/search/', '?' + urlencode({'query': query}))
+    prompt = f'Please visit the search results at url {url} and summarize the results in Markdown format.'
+    message_list = [{'role': 'user', 'content': [{'text': prompt}]}]
+    inf_params = {'max_new_tokens': 1000, 'top_p': 0.9, 'top_k': 20, 'temperature': 0.7}
+    request_body = {
+        'schemaVersion': 'messages-v1',
+        'messages': message_list,
+        'system': system_list,
+        'inferenceConfig': inf_params
+    }
+
+    # JPL does not allow us to use Bedrock outside of VPN; so I could try to build this app on the JPL
+    # MacBook Pro, but it requires tools that aren't available in JAMF Software Center.
+    #
+    # But using my user-based role I can access Bedrock anywhere, so when in debug mode (when I'm
+    # developing), I can first use the aws-login application and have it give the bedrock-runtime
+    # service.
+    #
+    # At JPL, debug mode is off, and then it can use the regular `SRV-edrn-dev-bedrock-app-backend`
+    # access key and secret key.
+
+    if settings.DEBUG:
+        session = boto3.Session(profile_name='saml-pub')
+        bedrock_runtime = session.client(service_name='bedrock-runtime')
+    else:
+        bedrock_runtime = boto3.client(
+            'bedrock-runtime',
+            aws_access_key_id=controls.bedrock_access_key, aws_secret_access_key=controls.bedrock_secret_key,
+            region_name=controls.bedrock_region
+        )
+
+    # Thinking machines
+    response = bedrock_runtime.invoke_model(modelId=model, body=json.dumps(request_body))
+    model_response = json.loads(response['body'].read())
+    response_text = model_response['output']['message']['content'][0]['text']
+    return HttpResponse(markdown(response_text), content_type='text/html')
