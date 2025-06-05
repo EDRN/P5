@@ -2739,7 +2739,8 @@
 															"});",
 															""
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -2747,14 +2748,14 @@
 												"method": "GET",
 												"header": [],
 												"url": {
-													"raw": "{{base_url}}/documents/157/MOO_clean_version_5.0.pdf",
+													"raw": "{{base_url}}/documents/157/EDRN_MOP_v6.0_C.pdf",
 													"host": [
 														"{{base_url}}"
 													],
 													"path": [
 														"documents",
 														"157",
-														"MOO_clean_version_5.0.pdf"
+														"EDRN_MOP_v6.0_C.pdf"
 													]
 												}
 											},

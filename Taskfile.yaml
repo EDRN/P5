@@ -6,6 +6,8 @@
 ---
 
 env:
+    BEDROCK_ACCESS_KEY: ""
+    BEDROCK_SECRET_KEY: ""
     DATABASE_URL: "postgresql://:@/edrn"
     EDRN_DATA_DIR: "{{.HOME}}/dockerdata/renaissance"
     jpl_ipv4: "172.16.16.10"
