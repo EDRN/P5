@@ -2693,12 +2693,13 @@
 															"});",
 															"pm.test('Link to manual of operations', () => {",
 															"    const body = pm.response.text();",
-															"    const exp = /href=.+\\/documents\\/[^\\/]+\\/MOO_clean_version_5\\.0\\.pdf.>EDRN Manual of Operations/;",
+															"    const exp = /href=.+\\/documents\\/[^\\/]+\\/EDRN_MOP_v6\\.0_C\\.pdf.>EDRN Manual of Operations/;",
 															"    pm.expect(body).to.match(exp);",
 															"});",
 															""
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
