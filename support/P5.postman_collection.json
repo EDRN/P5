@@ -2,6 +2,7 @@
 	"info": {
 		"_postman_id": "9dbe02c4-e236-4384-9e9d-76b3ba491f82",
 		"name": "EDRN P5",
+		"description": "\"P5\" is code for the EDRN Portal; specifically it means the Production Program for the Public/Private Portal.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "10615558"
 	},
@@ -2284,7 +2285,8 @@
 															"// bother testing anything else in it or under it.",
 															""
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -2292,13 +2294,13 @@
 												"method": "GET",
 												"header": [],
 												"url": {
-													"raw": "{{base_url}}/data-and-resources/cde/",
+													"raw": "{{base_url}}/data-and-resources/common-data-elements/",
 													"host": [
 														"{{base_url}}"
 													],
 													"path": [
 														"data-and-resources",
-														"cde",
+														"common-data-elements",
 														""
 													]
 												}
