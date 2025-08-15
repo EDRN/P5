@@ -2,7 +2,7 @@
 
 '''🧫 EDRN Knowledge Environment Biomarkers: models.'''
 
-from .biomarker import Biomarker
+from .biomarker import Biomarker, BiomarkerBodySystem
 from .biomarkerindex import BiomarkerIndex
 
-__all__ = [Biomarker, BiomarkerIndex]
+__all__ = [Biomarker, BiomarkerBodySystem, BiomarkerIndex]
