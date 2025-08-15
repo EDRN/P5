@@ -10,9 +10,9 @@ from eke.knowledge.models import Publication
 
 
 class Command(BaseCommand):
-    '''The EDRN Jackie's report command.'''
+    '''The EDRN publications report command.'''
 
-    help = 'Report on the numbers of publications'
+    help = 'Report on the numbers of publications for the EDRN quarterly report.'
 
     def handle(self, *args, **options):
         '''Handle the EDRN `edrn_publications_report` command.'''
