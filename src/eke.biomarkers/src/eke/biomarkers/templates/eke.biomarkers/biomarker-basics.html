@@ -20,21 +20,25 @@
             </dl>
         </div>
         <div class='col-lg-2'>
-            <h5>OncoMX</h5>
-            <p>
-                Search for this biomarker in
-                <a href='https://www.oncomx.org/searchview/?gene={{hgnc_name}}'>
-                    OncoMX&#x00a0;{% mark_external_link 'https://www.oncomx.org/searchview/?gene={{hgnc_name}}' %}
-                </a>
-            </p>
+            {% if hgnc_name %}
+                <h5>OncoMX</h5>
+                <p>
+                    Search for this biomarker in
+                    <a href='https://www.oncomx.org/searchview/?gene={{hgnc_name}}'>
+                        OncoMX&#x00a0;{% mark_external_link 'https://www.oncomx.org/searchview/?gene={{hgnc_name}}' %}
+                    </a>
+                </p>
+            {% endif %}
             <h5>Attributes</h5>
             <dl>
                 <dt>QA State</dt>
                 <dd>{{qa_state}}</dd>
                 <dt>Type</dt>
                 <dd>{{biomarker_type}}</dd>
-                <dt>HGNC Name</dt>
-                <dd>{{hgnc_name}}</dd>
+                {% if hgnc_name %}
+                    <dt>HGNC Name</dt>
+                    <dd>{{hgnc_name}}</dd>
+                {% endif %}
             </dl>
         </div>
     </div>
