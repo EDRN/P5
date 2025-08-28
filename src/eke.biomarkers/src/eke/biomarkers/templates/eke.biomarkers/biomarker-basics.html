@@ -1,4 +1,4 @@
-{% load biomarker_tags %}
+{% load biomarker_tags edrnsite_streams_tags %}
 {% if visible %}
     <div class='row'>
         <div class='col-lg-10'>
@@ -20,6 +20,13 @@
             </dl>
         </div>
         <div class='col-lg-2'>
+            <h5>OncoMX</h5>
+            <p>
+                Search for this biomarker in
+                <a href='https://www.oncomx.org/searchview/?gene={{hgnc_name}}'>
+                    OncoMX&#x00a0;{% mark_external_link 'https://www.oncomx.org/searchview/?gene={{hgnc_name}}' %}
+                </a>
+            </p>
             <h5>Attributes</h5>
             <dl>
                 <dt>QA State</dt>
