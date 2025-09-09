@@ -12,7 +12,11 @@
             {% for site in sites %}
                 <tr>
                     <td>{{site.dmccSiteID}}</td>
-                    <td><a href='{{site.pi.url}}'>{{site.pi.title}}</a></td>
+                    {% if site.pi %}
+                        <td><a href='{{site.pi.url}}'>{{site.pi.title}}</a></td>
+                    {% else %}
+                        <td><small>(No PI)</small></td>
+                    {% endif %}
                     <td><a href='{{site.url}}'>{{site.title}}</a></td>
                 </tr>
             {% endfor %}
