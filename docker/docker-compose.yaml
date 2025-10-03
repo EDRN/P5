@@ -102,7 +102,7 @@ services:
     #
     # Port 5432, non-published.
     db:
-        image: postgres:15.3-alpine3.18
+        image: postgres:17.6-alpine
         volumes:
             -
                 type: bind
@@ -174,7 +174,7 @@ services:
     # Worker processes run Django functions so it needs all the same env vars as `portal`.
     worker:
         image: edrndocker/edrn-portal:${EDRN_VERSION:-6.3.0-uid26013}
-        entrypoint: ['/usr/bin/django-admin', 'worker', '--verbosity', '2']
+        entrypoint: ['/app/bin/django-admin', 'worker', '--verbosity', '2']
         volumes:
             -
                 type: bind

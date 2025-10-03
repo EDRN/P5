@@ -3,16 +3,16 @@
 '''🧬 EDRN Site Policy: initial data.'''
 
 from wagtail.rich_text import RichText
-import pkg_resources, os.path, csv, codecs
+import importlib.resources, os.path, csv, codecs
 
 # The grant numbers come from the file `data/grant-numbers.txt`
-GRANT_NUMBERS = pkg_resources.resource_string(__name__, 'data/grant-numbers.txt').decode('utf-8').strip().split('\n')
+GRANT_NUMBERS = importlib.resources.read_text(__name__, 'data/grant-numbers.txt').strip().split('\n')
 
 # Boilerplate things like legal disclaimers or other notices
 _bp = 'data/boilerplate'
 BOILERPLATES = [
-    (os.path.splitext(i)[0], pkg_resources.resource_string(__name__, _bp + '/' + i).decode('utf-8').strip())
-for i in pkg_resources.resource_listdir(__name__, _bp)]  # noqa: E122
+    (os.path.splitext(i)[0], importlib.resources.read_text(__name__, _bp + '/' + i).strip())
+for i in importlib.resources.resource_listdir(__name__, _bp)]  # noqa: E122
 
 # Laboratory certifications
 CERTIFICATIONS = (
@@ -210,7 +210,7 @@ def _static_sites():
             static_sites.append('<table class="table"><thead><tr><th>Group</th><th>Site ID</th><th>Name</th><th>Institution</th><th>PI Type</th><th>Member Type</th><th>Organ</th></tr></thead><tbody>')
 
             reader = codecs.getreader('utf-8')
-            source = reader(pkg_resources.resource_stream(__name__, f'data/sites/{fn}.csv'))
+            source = reader(importlib.resources.resource_stream(__name__, f'data/sites/{fn}.csv'))
             reader = csv.reader(source)
 
             for row in reader:

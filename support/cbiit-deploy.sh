@@ -129,16 +129,16 @@ echo "👷‍♀️ Bringing over edrn.sql.bz2 and loading it"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 pwd && ls -l && [ -f edrn.sql.bz2 ] &&\
 bzip2 --decompress --stdout edrn.sql.bz2 | \
-    docker compose --project-name edrn exec --no-TTY db psql --username=postgres --dbname=edrn --echo-errors --quiet" || exit 1
+    docker compose --project-name edrn exec --no-tty db psql --username=postgres --dbname=edrn --echo-errors --quiet" || exit 1
 
 echo ""
 echo "📀 Initial database setup"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal /usr/bin/django-admin makemigrations &&\
-docker compose --project-name edrn exec portal /usr/bin/django-admin migrate &&\
-docker compose --project-name edrn exec portal /usr/bin/django-admin fixtree &&\
-docker compose --project-name edrn exec portal /usr/bin/django-admin collectstatic --no-input --clear &&\
-docker compose --project-name edrn exec portal /usr/bin/django-admin edrndevreset" || exit 1
+docker compose --project-name edrn exec portal /app/bin/django-admin makemigrations &&\
+docker compose --project-name edrn exec portal /app/bin/django-admin migrate &&\
+docker compose --project-name edrn exec portal /app/bin/django-admin fixtree &&\
+docker compose --project-name edrn exec portal /app/bin/django-admin collectstatic --no-input --clear &&\
+docker compose --project-name edrn exec portal /app/bin/django-admin edrndevreset" || exit 1
 echo ""
 echo "🤷‍♀️ Restarting the portal and stopping search engine"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
@@ -150,11 +150,11 @@ docker compose --project-name edrn start portal" || exit 1
 echo ""
 echo "🆙 Applying upgrades"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal /usr/bin/django-admin copy_daily_hits_from_wagtailsearch" || exit 1
+docker compose --project-name edrn exec portal /app/bin/django-admin help" || exit 1
 
 # This was for 6.18 … we can replace this with whatever steps are necessary for 6.19
 # ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-# docker compose --project-name edrn exec portal /usr/bin/django-admin edrn_audit_log" || exit 1
+# docker compose --project-name edrn exec portal /app/bin/django-admin edrn_audit_log" || exit 1
 
 echo ""
 echo "🤷‍♀️ Final portal restart and restart of search engine"

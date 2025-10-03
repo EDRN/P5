@@ -3,34 +3,34 @@
 '''🧬 EDRN Site Policy: RDF utilities for policy-level management commands.'''
 
 from eke.knowledge.models import RDFSource
-import pkg_resources
+import importlib.resources
 
 
 _testPkg       = 'eke.knowledge'
 _cdeOrgans     = 'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/body-systems/@@rdf'
-_testOrgans    = f'file:{pkg_resources.resource_filename(_testPkg, "data/body-systems.rdf")}'
+_testOrgans    = f'file:{importlib.resources.resource_filename(_testPkg, "data/body-systems.rdf")}'
 _cdeDiseases   = 'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/diseases/@@rdf'
-_testDiseases  = f'file:{pkg_resources.resource_filename(_testPkg, "data/diseases.rdf")}'
+_testDiseases  = f'file:{importlib.resources.resource_filename(_testPkg, "data/diseases.rdf")}'
 _bmdbResources = 'https://bmdb.jpl.nasa.gov/rdf/resources?all=yeah'
-_testResources = f'file:{pkg_resources.resource_filename(_testPkg, "data/misc-resources.rdf")}'
+_testResources = f'file:{importlib.resources.resource_filename(_testPkg, "data/misc-resources.rdf")}'
 _cdePubs       = 'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf'
 _bmdbPubs      = 'https://bmdb.jpl.nasa.gov/rdf/publications?all=yeah'
-_testPubs      = f'file:{pkg_resources.resource_filename(_testPkg, "data/pubs.rdf")}'
+_testPubs      = f'file:{importlib.resources.resource_filename(_testPkg, "data/pubs.rdf")}'
 _sites         = 'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/sites/@@rdf'
-_testSites     = f'file:{pkg_resources.resource_filename(_testPkg, "data/sites.rdf")}'
+_testSites     = f'file:{importlib.resources.resource_filename(_testPkg, "data/sites.rdf")}'
 _people        = 'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/registered-person/@@rdf'
-_testPeople    = f'file:{pkg_resources.resource_filename(_testPkg, "data/people.rdf")}'
+_testPeople    = f'file:{importlib.resources.resource_filename(_testPkg, "data/people.rdf")}'
 _protocols     = 'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/protocols/@@rdf'
-_testProtos    = f'file:{pkg_resources.resource_filename(_testPkg, "data/protocols.rdf")}'
+_testProtos    = f'file:{importlib.resources.resource_filename(_testPkg, "data/protocols.rdf")}'
 _data          = 'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/labcas/@@rdf'
-_testData      = f'file:{pkg_resources.resource_filename(_testPkg, "data/labcas.rdf")}'
+_testData      = f'file:{importlib.resources.resource_filename(_testPkg, "data/labcas.rdf")}'
 
 _bio       = 'https://bmdb.jpl.nasa.gov/rdf/biomarkers'
 _bioOrgans = 'https://bmdb.jpl.nasa.gov/rdf/biomarker-organs'
 _bioMuta   = 'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/fixed-biomuta/@@rdf'
-_testBio   = f'file:{pkg_resources.resource_filename("eke.biomarkers", "data/biomarkers.rdf")}'
-_testBO    = f'file:{pkg_resources.resource_filename("eke.biomarkers", "data/bio-org.rdf")}'
-_testBM    = f'file:{pkg_resources.resource_filename("eke.biomarkers", "data/muta.rdf")}'
+_testBio   = f'file:{importlib.resources.resource_filename("eke.biomarkers", "data/biomarkers.rdf")}'
+_testBO    = f'file:{importlib.resources.resource_filename("eke.biomarkers", "data/bio-org.rdf")}'
+_testBM    = f'file:{importlib.resources.resource_filename("eke.biomarkers", "data/muta.rdf")}'
 
 
 # Sources of RDF Data

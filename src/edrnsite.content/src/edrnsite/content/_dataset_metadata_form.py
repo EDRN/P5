@@ -4,7 +4,7 @@ from .base_forms import (
     AbstractEDRNForm, pi_site_choices, discipline_choices, data_category_choices, ALL_USERS_DN
 )
 from .base_models import AbstractFormPage
-from captcha.fields import ReCaptchaField
+from django_recaptcha.fields import ReCaptchaField
 from configparser import ConfigParser
 from django import forms
 from django.conf import settings

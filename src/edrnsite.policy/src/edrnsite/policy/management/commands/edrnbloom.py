@@ -33,7 +33,7 @@ from wagtail.models import Site, Page
 from wagtail.rich_text import RichText
 from wagtail_favicon.models import FaviconSettings
 from wagtailmenus.models import FlatMenu, FlatMenuItem
-import pkg_resources, os
+import importlib.resources, os
 
 
 class Command(BaseCommand):
@@ -70,7 +70,7 @@ class Command(BaseCommand):
         sm.save()
 
         # Favicon, manifest.json, and browser-config.xml support
-        with pkg_resources.resource_stream(__name__, 'data/images/nih.png') as f:
+        with importlib.resources.resource_stream(__name__, 'data/images/nih.png') as f:
             image_file = ImageFile(f, name='NIH')
             image = Image(title='National Institutes of Health', file=image_file)
             image.save()
@@ -160,7 +160,7 @@ class Command(BaseCommand):
             ('bone-cancer', CAROUSEL_CAPTIONS[1][0], CAROUSEL_CAPTIONS[1][1]),
             ('biosensor', CAROUSEL_CAPTIONS[2][0], CAROUSEL_CAPTIONS[2][1])
         ):
-            with pkg_resources.resource_stream(__name__, 'data/images/carousel-' + name + '.jpg') as f:
+            with importlib.resources.resource_stream(__name__, 'data/images/carousel-' + name + '.jpg') as f:
                 image_file = ImageFile(f, name='carousel-' + name)
                 image = Image(title=CAROUSEL_ALT_TEMPLATE.format(name), file=image_file)
                 image.save()
@@ -170,7 +170,7 @@ class Command(BaseCommand):
         # Next, the four major section cards. First we need their images
         images = {}
         for name in ('data', 'work', 'news', 'about'):
-            with pkg_resources.resource_stream(__name__, 'data/images/home-' + name + '.jpg') as f:
+            with importlib.resources.resource_stream(__name__, 'data/images/home-' + name + '.jpg') as f:
                 image_file = ImageFile(f, name='home-' + name)
                 image = Image(title=f'Home page image for the ‘{name}’ section', file=image_file)
                 image.save()
@@ -533,7 +533,7 @@ class Command(BaseCommand):
         cards = []
         for identifier, title, description, alt_text in DAR:
             # Make the image for the card
-            with pkg_resources.resource_stream(__name__, 'data/images/dr-' + identifier + '.jpg') as f:
+            with importlib.resources.resource_stream(__name__, 'data/images/dr-' + identifier + '.jpg') as f:
                 image_file = ImageFile(f, name='dr-' + identifier)
                 image = Image(title=alt_text, file=image_file)
                 image.save()

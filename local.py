@@ -14,3 +14,4 @@ for cache, settings in CACHES.items():
 
 
 SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+WAGTAILADMIN_BASE_URL = os.getenv('BASE_URL', 'http://localhost:6468/')

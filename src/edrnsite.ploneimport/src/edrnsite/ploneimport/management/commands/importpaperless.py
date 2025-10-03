@@ -16,7 +16,7 @@ from wagtail.documents.models import Document
 from wagtail.images.models import Image
 from wagtail.models import Page, PageViewRestriction
 from wagtail.rich_text import RichText
-import argparse, pkg_resources
+import argparse, importlib.resources
 
 
 _committees_url = 'https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/committees/@@rdf'
@@ -127,14 +127,14 @@ class Command(BaseCommand):
         overview = nct_page.get_children().filter(title='Overview').first().specific
         del overview.body[0]
         overview.body.append(('rich_text',
-            RichText(pkg_resources.resource_string(__name__, 'data/overview.html').decode('utf-8').strip())
+            RichText(importlib.resources.read_text(__name__, 'data/overview.html'))
         ))
         overview.save()
 
         objectives = nct_page.get_children().filter(title='Objectives and Responsibilities').first().specific
         del objectives.body[0]
         objectives.body.append(('rich_text',
-            RichText(pkg_resources.resource_string(__name__, 'data/objectives.html').decode('utf-8').strip())
+            RichText(importlib.resources.read_text(__name__, 'data/objectives.html'))
         ))
         objectives.save()
 
@@ -153,7 +153,7 @@ class Command(BaseCommand):
             'past': nct_page.get_children().filter(slug='meetings').first().pk,
             'reports': nct_page.get_children().filter(slug='program-reports').first().pk
         }
-        body = pkg_resources.resource_string(__name__, 'data/nct.html').decode('utf-8').strip()
+        body = importlib.resources.read_text(__name__, 'data/nct.html')
         del nct_page.body[0]
         nct_page.body.append(('rich_text', RichText(body.format(**pks))))
         nct_page.show_in_menus = False
@@ -245,7 +245,7 @@ class Command(BaseCommand):
         mas = FlexPage.objects.filter(slug='mission-and-structure').first()
         assert mas is not None
         del mas.body[0]
-        body = pkg_resources.resource_string(__name__, 'data/mas.html').decode('utf-8').strip()
+        body = importlib.resources.read_text(__name__, 'data/mas.html')
         groups = mas.get_siblings().filter(slug='groups').first()
         assert groups is not None
         pks = {
