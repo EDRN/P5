@@ -30,7 +30,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
 # App layout & user
 WORKDIR /app
 RUN addgroup --system --gid ${user_id} edrn \
-    && adduser  --system --uid ${user_id} --ingroup edrn edrn \
+    && adduser --system --uid ${user_id} --ingroup edrn edrn \
     && install --owner=edrn --group=edrn --directory /app/media /app/static /app/wheels
 
 # Install Gunicorn
@@ -62,10 +62,12 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 # Test to make sure edrnsite.controls is installed
 RUN /app/bin/python -c "import edrnsite.controls"
 
-# Collect static as the app user
+# Collect static as the app user, clean up, and add a symlink for compatibility
 RUN gosu edrn env LDAP_BIND_PASSWORD=unused SIGNING_KEY=unused /app/bin/django-admin collectstatic \
     --settings edrnsite.policy.settings.ops --no-input --clear --link \
-    && rm -rf /app/wheels
+    && rm -rf /app/wheels \
+    && chown -R edrn:edrn /app \
+    && ln -s /app/bin/django-admin /usr/bin/django-admin
 
 # Runtime helpers / scripts
 COPY --chown=edrn:edrn docker/*.py /app/

@@ -48,6 +48,7 @@ POSTGRES_USER_ID=$POSTGRES_USER_ID
 SIGNING_KEY=$SIGNING_KEY
 RECAPTCHA_PRIVATE_KEY=$RECAPTCHA_PRIVATE_KEY
 RECAPTCHA_PUBLIC_KEY=$RECAPTCHA_PUBLIC_KEY
+BASE_URL=https://${FINAL_HOSTNAME:-edrn.nci.nih.gov}
 EOF
 ls -la .env
 
@@ -129,7 +130,6 @@ bzip2 --decompress --stdout /local/content/edrn/database-access/edrn.sql.bz2 | \
 echo ""
 echo "📀 Initial database setup"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal /app/bin/django-admin makemigrations &&\
 docker compose --project-name edrn exec portal /app/bin/django-admin migrate &&\
 docker compose --project-name edrn exec portal /app/bin/django-admin fixtree &&\
 docker compose --project-name edrn exec portal /app/bin/django-admin collectstatic --no-input --clear" || exit 1

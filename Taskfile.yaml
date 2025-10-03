@@ -143,7 +143,7 @@ tasks:
             wheels: "{{.wheels | default \"true\"}}"
         cmds:
             -   "{{.wheels}} -eq true && support/build-wheels.sh || true"
-            -   docker buildx build --build-arg userid=500 --tag edrndocker/edrn-portal:latest --file docker/Dockerfile --load .
+            -   docker buildx build --progress plain --build-arg userid=500 --tag edrndocker/edrn-portal:latest --file docker/Dockerfile --load .
 
     comp-portal-shell:
         desc: "P5 Docker foreground composition interactive exec in portal"
