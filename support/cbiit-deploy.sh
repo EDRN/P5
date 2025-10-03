@@ -134,7 +134,6 @@ bzip2 --decompress --stdout edrn.sql.bz2 | \
 echo ""
 echo "📀 Initial database setup"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal /usr/bin/django-admin makemigrations &&\
 docker compose --project-name edrn exec portal /usr/bin/django-admin migrate &&\
 docker compose --project-name edrn exec portal /usr/bin/django-admin fixtree &&\
 docker compose --project-name edrn exec portal /usr/bin/django-admin collectstatic --no-input --clear &&\
@@ -150,7 +149,7 @@ docker compose --project-name edrn start portal" || exit 1
 echo ""
 echo "🆙 Applying upgrades"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal /usr/bin/django-admin copy_daily_hits_from_wagtailsearch" || exit 1
+docker compose --project-name edrn exec portal /usr/bin/django-admin help" || exit 1
 
 # This was for 6.18 … we can replace this with whatever steps are necessary for 6.19
 # ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
