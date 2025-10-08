@@ -185,7 +185,7 @@ tasks:
             SECURE_COOKIES: "False"
             SIGNING_KEY: "s3cret"
         cmds:
-            -   docker compose --file docker/docker-compose.yaml up --remove-orphans 
+            -   docker compose --profile tls --file docker/docker-compose.yaml up --remove-orphans
 
     compose:
         desc: "P5 Docker Compose shortcut"
