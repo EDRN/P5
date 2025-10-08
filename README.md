@@ -252,7 +252,7 @@ Normally we'd also sync the LDAP groups, but this command [will fail until the n
 
     task compose -- exec portal /app/bin/django-admin ldap_group_sync
 
-Then you can point a browser at http://localhost:8080/ (or whatever the `EDRN_PUBLISHED_PORT` is) and see if it worked. Note that things won't look quite right because static resources aren't loaded on this endpoint URL. The front-end application load balancer or reverse-proxy must serve those.
+Then you can point a browser at https://localhost:2348/ (or whatever the `HTTPS_PORT` is) and see if it worked. Note that this uses a self-signed certificate so ignore any certificate warnings.
 
 
 ### 🕸 Reverse Proxy: ELB, ALB, Nginx, Apache HTTPD, etc.
