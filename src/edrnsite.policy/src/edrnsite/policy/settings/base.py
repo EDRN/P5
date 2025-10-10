@@ -349,7 +349,9 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 #
 # 🔗 https://docs.djangoproject.com/en/4.1/ref/settings/#csrf-trusted-origins
 
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'http://*.nci.nih.gov,https://*.nci.nih.gov').split(',')
+CSRF_TRUSTED_ORIGINS = os.getenv(
+    'CSRF_TRUSTED_ORIGINS', 'http://*.nci.nih.gov,https://*.nci.nih.gov,https://*.cancer.gov'
+).split(',')
 
 
 # reCAPTChA
