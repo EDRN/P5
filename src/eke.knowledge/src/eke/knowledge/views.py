@@ -14,6 +14,7 @@ from wagtail.models import Site as WagtailSite
 from django.http import (
     HttpRequest, HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseNotFound, HttpResponseBadRequest
 )
+import time
 
 
 def _get_referrer(request: HttpRequest) -> str:
@@ -38,6 +39,9 @@ def start_full_ingest(request: HttpRequest) -> HttpResponse:
     '''Start a full ingest and redirect to our referrer.'''
     if request.user.is_staff or request.user.is_superuser:
         do_full_ingest.delay()
+        # The sleep here is to give the worker time to start and set the lock condition
+        # so the "Ingest running: yes" shows up correctly.
+        time.sleep(1)
         return HttpResponseRedirect(_get_referrer(request))
     else:
         return HttpResponseForbidden()

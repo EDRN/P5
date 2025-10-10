@@ -7,27 +7,47 @@
 
 # Services
 # --------
-#
 
 services:
+    # Static Data
+    # ~~~~~~~~~~~
+    #
+    # This "service" is used to gather the static data from the EDRN portal image so it can be
+    # served by the HTTPS proxy frontend.
+    static_initializer:
+        image: edrndocker/edrn-portal:${EDRN_VERSION:-latest-uid26013}
+        entrypoint: /bin/sh
+        command: ['-c', 'cp -aRL /app/static/* /mnt/volume']
+        user: root
+        volumes:
+            -   static:/mnt/volume
+
+
     # HTTPS proxy frontend
     # ~~~~~~~~~~~~~~~~~~~~
     #
     # Gives an encrypted entrypoint to the whole kit 'n kaboodle on EDRN_TLS_PORT or 4134
-    tls-termination:
-        image: nasapds/proxycrypt:1.0.2
+    tls:
+        image: edrndocker/proxycrypt:latest
         profiles:
-            -   tls-proxy
+            -   tls
         environment:
             PROXY_URL: http://portal:8000/
             CERT_CN: ${CERT_CN:-edrn-docker.jpl.nasa.gov}
+            PROXY_PATH: /
+            PROXY_PORT: ${HTTPS_PORT:-2348}
+            PROXY_REDIRECT: default
+        volumes:
+            -   media:/app/media
+            -   static:/app/static
         ports:
             -
                 target: 443
-                published: ${EDRN_TLS_PORT:-4134}
+                published: ${EDRN_TLS_PORT:-2348}
                 protocol: tcp
                 mode: host
         depends_on:
+            -   static_initializer
             -   portal
         networks:
             -   lattice
@@ -39,16 +59,10 @@ services:
     # Nominally on port 8000, published to ${EDRN_PUBLISHED_TLS_PORT} or 8080.
     # For a TLS endpoint, enable the profile `tls-proxy` and use portal 4134.
     portal:
-        image: edrndocker/edrn-portal:${EDRN_VERSION:-6.3.0-uid26013}
+        image: edrndocker/edrn-portal:${EDRN_VERSION:-latest-uid26013}
         volumes:
-            -
-                type: bind
-                source: ${EDRN_DATA_DIR:-/local/content/edrn}/media
-                target: /app/media
-            -
-                type: bind
-                source: ${EDRN_DATA_DIR:-/local/content/edrn}/static
-                target: /app/static
+            -   media:/app/media
+            -   static:/app/static
         ports:
             -
                 target: 8000
@@ -86,6 +100,7 @@ services:
             CACHE_URL: redis://cache
             DJANGO_SETTINGS_MODULE: edrnsite.policy.settings.ops
         depends_on:
+            -   static_initializer
             -   db
             -   cache
             -   search
@@ -102,12 +117,9 @@ services:
     #
     # Port 5432, non-published.
     db:
-        image: postgres:15.3-alpine3.18
+        image: postgres:17.6-alpine
         volumes:
-            -
-                type: bind
-                source: ${EDRN_DATA_DIR:-/local/content/edrn}/postgresql
-                target: /var/lib/postgresql/data
+            -   "database_volume:/var/lib/postgresql/data"
         networks:
             -   lattice
         environment:
@@ -140,10 +152,7 @@ services:
         image: elasticsearch:8.10.2
         # :crystal-ball-emoji: TODO: user ID 500/26013 issue … do we need a custom elasticsearch image?
         volumes:
-            -
-                type: volume
-                source: elasticdata
-                target: /usr/share/elasticsearch/data
+            -   "elasticdata:/usr/share/elasticsearch/data"
         networks:
             -   lattice
         environment:
@@ -161,6 +170,7 @@ services:
                 # Disable swapping
                 soft: -1
                 hard: -1
+        mem_limit: 4g
         restart: on-failure
         labels:
             org.label-schema.name: EDRN Search Engine
@@ -173,13 +183,10 @@ services:
     # A "celery" instance that handles background tasks; does not listen on any port.
     # Worker processes run Django functions so it needs all the same env vars as `portal`.
     worker:
-        image: edrndocker/edrn-portal:${EDRN_VERSION:-6.3.0-uid26013}
-        entrypoint: ['/usr/bin/django-admin', 'worker', '--verbosity', '2']
+        image: edrndocker/edrn-portal:${EDRN_VERSION:-latest-uid26013}
+        entrypoint: ['/app/bin/django-admin', 'worker', '--verbosity', '2']
         volumes:
-            -
-                type: bind
-                source: ${EDRN_DATA_DIR:-/local/content/edrn}/media
-                target: /app/media
+            -   "media:/app/media"
         networks:
             -   lattice
         environment:
@@ -227,6 +234,32 @@ volumes:
             org.label-schema.description: >
                 Indexes and other data for Elasticsearch for full-text indexing and ranking on the EDRN site.
 
+    # This volume can't be called "database"; it conflicts with something in Docker. But
+    # "database_volume" is okay.
+    database_volume:
+        driver: local
+        driver_opts:
+            type: none
+            device: ${EDRN_DATA_DIR:-/local/content/edrn}/postgresql
+            o: bind
+        labels:
+            org.label-schema.name: EDRN Portal Database Data
+            org.label-schema.description: PostgreSQL database data for the EDRN portal.
+    media:
+        driver: local
+        driver_opts:
+            type: none
+            device: ${EDRN_MEDIA_DIR:-${EDRN_DATA_DIR:-/local/content/edrn}/media}
+            o: bind
+        labels:
+            org.label-schema.name: EDRN Portal Media Data
+            org.label-schema.description: Media blobs (images, PDFs, etc.) for the EDRN portal.
+    static:
+        driver: local
+        labels:
+            org.label-schema.name: EDRN Portal Static Data
+            org.label-schema.description: Static files (css, images, js) for the EDRN portal.
+
 
 # Networks
 # --------
@@ -241,7 +274,6 @@ networks:
             org.label-schema.name: EDRN Portal Lattice Network
             org.label-schema.description: >
                 Internal bridge network so the services that comprise the EDRN Public Portal may communicate.
-
 
 ...
 

@@ -2,8 +2,8 @@
 
 '''📐 EDRN Metrics.'''
 
-import pkg_resources
+import importlib.metadata
 
 
 PACKAGE_NAME = __name__
-__version__ = VERSION = pkg_resources.resource_string(__name__, 'VERSION.txt').decode('utf-8').strip()
+__version__ = VERSION = importlib.metadata.version(__name__)

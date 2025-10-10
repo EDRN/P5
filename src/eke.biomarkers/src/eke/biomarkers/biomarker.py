@@ -123,7 +123,10 @@ class Biomarker(KnowledgeObject, QualityAssuredObject, ResearchedObject):
         index.SearchField('hgnc_name', boost=4),
         index.RelatedFields('biomarker_aliases', [index.SearchField('value', boost=3)])
     ]
-    search_fields[0].boost = 5
+    # Search field 0 is the "title", but for biomarkers we want them super-promoted, so we boost
+    # these to 10.
+    search_fields[0].boost = 10
+
     def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
         context = super().get_context(request, *args, **kwargs)
 

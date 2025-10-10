@@ -15,7 +15,6 @@ class IngestControlPanel(Component):
 
     name = 'ingest_controls'
     order = 200
-    _ip_service = 'https://api64.ipify.org'
 
     def __init__(self, request: HttpRequest):
         self.request = request

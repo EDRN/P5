@@ -7,7 +7,7 @@ from .base_forms import (
     protocol_choices, organ_choices
 )
 from .base_models import AbstractFormPage
-from captcha.fields import ReCaptchaField
+from django_recaptcha.fields import ReCaptchaField
 from configparser import ConfigParser
 from django import forms
 from django.conf import settings

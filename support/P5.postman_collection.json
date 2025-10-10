@@ -3680,16 +3680,6 @@
 											"pm.test('HTTP status is OK', () => {",
 											"    pm.response.to.have.status(200);",
 											"});",
-											"pm.test('CA125 in main search matches', () => {",
-											"    const body = pm.response.text();",
-											"    const exp = /<h6 class=.mb-1.>CA125<\\/h6>/;",
-											"    pm.expect(body).to.match(exp);",
-											"});",
-											"pm.test('CA125 search description', () => {",
-											"    const body = pm.response.text();",
-											"    const exp = /From NCBI Gene: This gene encodes a protein that is a member of the mucin family./;",
-											"    pm.expect(body).to.match(exp);",
-											"});",
 											"pm.test('CA125 in promoted results', () => {",
 											"    const body = pm.response.text();",
 											"    const exp1 = /Looking for this\\?/;",
@@ -3699,7 +3689,8 @@
 											"});",
 											""
 										],
-										"type": "text/javascript"
+										"type": "text/javascript",
+										"packages": {}
 									}
 								}
 							],

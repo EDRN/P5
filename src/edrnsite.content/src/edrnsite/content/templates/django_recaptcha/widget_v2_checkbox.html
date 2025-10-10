@@ -1,0 +1,10 @@
+{% include "django_recaptcha/includes/js_v2_checkbox.html" %}
+{% comment %}
+Version 3.0.0 hard-coded the class name to "g-recaptcha" but this was removed in 4.0.0.
+However in the EDRN portal this broke the rendering of the reCAPTCHA widget, so we override
+the template and add it back.
+{% endcomment %}
+<div class="g-recaptcha"
+    {% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}
+>
+</div>

@@ -17,7 +17,7 @@ fi
 for src_dir in src/*; do
     echo "🧱 Building $src_dir" 1>&2
     find $src_dir -name __pycache__ -type d -exec rm -r {} +
-    docker container run --rm --volume ${PWD}:/mnt edrndocker/python-build:3.11 --outdir /mnt/dist /mnt/$src_dir
+    docker container run --rm --volume ${PWD}:/mnt edrndocker/python-build:3.13 --outdir /mnt/dist /mnt/$src_dir
 done
 
 echo "👋 All done" 1>&2

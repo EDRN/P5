@@ -19,7 +19,7 @@ import eke.biomarkers.settings as ekeBiomarkersSettings
 #
 # 🔗 https://docs.djangoproject.com/en/3.2/ref/settings/#installed-apps
 
-INSTALLED_APPS = edrnSiteSearchSettings.INSTALLED_APPS + ekeKnowlegeSettings.INSTALLED_APPS + edrnSiteContentSettings.INSTALLED_APPS + edrnThemeSettings.INSTALLED_APPS + [
+INSTALLED_APPS = edrnSiteSearchSettings.INSTALLED_APPS + ekeKnowlegeSettings.INSTALLED_APPS + edrnThemeSettings.INSTALLED_APPS + [
     # Early Detection Research Network:
     'edrn.auth',
     'edrn.theme',
@@ -59,7 +59,7 @@ INSTALLED_APPS = edrnSiteSearchSettings.INSTALLED_APPS + ekeKnowlegeSettings.INS
     'django.contrib.sitemaps',
 
     # Add-ons:
-    'wagtail.contrib.modeladmin',  # Needed by wagtailmenus and wagtail-robots
+    'wagtail_modeladmin',          # Needed by wagtailmenus and wagtail-robots
     'wagtailmenus',                # Navigation menus
     'robots',                      # wagtail-robots's robots.txt handling
     'django_celery_results',       # Background task support (RDF ingest)
@@ -68,7 +68,7 @@ INSTALLED_APPS = edrnSiteSearchSettings.INSTALLED_APPS + ekeKnowlegeSettings.INS
 
     # This Is Us™:
     'edrnsite.policy',
-]
+] + edrnSiteContentSettings.INSTALLED_APPS
 
 
 # Middleware
@@ -334,12 +334,24 @@ CACHES = {
     }
 }
 
+# Max upload number of fields
+#
+# Wagtail recommends bumping this to 10000, up from Django's default of 1000.
+#
+# This helps with complex page models that might hit the limit.
+#
+# 🔗 https://docs.wagtail.org/en/stable/reference/settings.html#max-upload-number-of-fields
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
+
 
 # CSRF
 #
 # 🔗 https://docs.djangoproject.com/en/4.1/ref/settings/#csrf-trusted-origins
 
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'http://*.nci.nih.gov,https://*.nci.nih.gov').split(',')
+CSRF_TRUSTED_ORIGINS = os.getenv(
+    'CSRF_TRUSTED_ORIGINS', 'http://*.nci.nih.gov,https://*.nci.nih.gov,https://*.cancer.gov'
+).split(',')
 
 
 # reCAPTChA

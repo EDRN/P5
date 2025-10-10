@@ -6,9 +6,11 @@
 ---
 
 env:
+    ALLOWED_HOSTS: "*"
     BEDROCK_ACCESS_KEY: ""
     BEDROCK_SECRET_KEY: ""
     DATABASE_URL: "postgresql://:@/edrn"
+    BASE_URL: "http://localhost:6468/"
     EDRN_DATA_DIR: "{{.HOME}}/dockerdata/renaissance"
     jpl_ipv4: "172.16.16.10"
     LDAP_BIND_PASSWORD: "{{.edrn_service_password}}"
@@ -16,7 +18,7 @@ env:
     p5_media_dir: "/Users/kelly/P6/media"
     p5_sql: "/Users/kelly/P6/edrn.sql.bz2"
     port: 6468
-    python: "python3.11"
+    python: "python3.13"
 
 tasks:
     clean:
@@ -32,6 +34,19 @@ tasks:
         summary: "Creates the Python venv for P5 by running `pip install` on each src component."
         sources:
             -   Taskfile.yaml
+            -   src/edrn.collabgroups/setup.cfg
+            -   src/edrn.metrics/setup.cfg
+            -   src/edrn.theme/setup.cfg
+            -   src/edrnsite.content/setup.cfg
+            -   src/edrnsite.controls/setup.cfg
+            -   src/edrnsite.ploneimport/setup.cfg
+            -   src/edrnsite.policy/setup.cfg
+            -   src/edrnsite.search/setup.cfg
+            -   src/edrnsite.streams/setup.cfg
+            -   src/edrnsite.test/setup.cfg
+            -   src/eke.biomarkers/setup.cfg
+            -   src/eke.geocoding/setup.cfg
+            -   src/eke.knowledge/setup.cfg
         generates:
             -   .venv/**
         cmds:
@@ -81,7 +96,6 @@ tasks:
             -   bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --quiet
             -   .venv/bin/django-admin makemigrations --settings local --pythonpath .
             -   .venv/bin/django-admin migrate --settings local --pythonpath .
-            -   .venv/bin/django-admin copy_daily_hits_from_wagtailsearch --settings local --pythonpath .
             -   .venv/bin/django-admin collectstatic --settings local --pythonpath . --no-input --clear --link
             # Add additional upgrade steps here:
             -   .venv/bin/django-admin edrn_ai_search --settings local --pythonpath .
@@ -129,14 +143,13 @@ tasks:
             wheels: "{{.wheels | default \"true\"}}"
         cmds:
             -   "{{.wheels}} -eq true && support/build-wheels.sh || true"
-            -   docker buildx build --build-arg userid=500 --tag edrndocker/edrn-portal:latest --file docker/Dockerfile --load .
+            -   docker buildx build --progress plain --build-arg userid=500 --tag edrndocker/edrn-portal:latest --file docker/Dockerfile --load .
 
-    comp-portal-exec:
+    comp-portal-shell:
         desc: "P5 Docker foreground composition interactive exec in portal"
         summary: "For when you need a handy shell inside the portal container in a running Docker composition."
         interactive: true
         env:
-            ALLOWED_HOSTS: "*"
             CERT_CN: "dev.dev"
             EDRN_VERSION: "latest"
             LDAP_URI: "ldaps://host.docker.internal:1636"
@@ -151,7 +164,6 @@ tasks:
         summary: "In a running Docker composition for P5, this restarts the portal service only."
         interactive: false
         env:
-            ALLOWED_HOSTS: "*"
             CERT_CN: "dev.dev"
             EDRN_VERSION: "latest"
             LDAP_URI: "ldaps://host.docker.internal:1636"
@@ -161,12 +173,11 @@ tasks:
         cmds:
             -   docker compose --file docker/docker-compose.yaml restart portal
 
-    comp-up:
+    compose-up:
         desc: "P5 Docker foreground composition running"
         summary: "Starts the P5 Docker composition by bringing it `up` in the foreground."
         interactive: false
         env:
-            ALLOWED_HOSTS: "*"
             CERT_CN: "dev.dev"
             EDRN_VERSION: "latest"
             LDAP_URI: "ldaps://host.docker.internal:1636"
@@ -174,8 +185,21 @@ tasks:
             SECURE_COOKIES: "False"
             SIGNING_KEY: "s3cret"
         cmds:
-            -   docker compose --file docker/docker-compose.yaml up --remove-orphans 
+            -   docker compose --profile tls --file docker/docker-compose.yaml up --remove-orphans
 
+    compose:
+        desc: "P5 Docker Compose shortcut"
+        summary: "Shortcut for `docker compose`"
+        interactive: false
+        env:
+            CERT_CN: "dev.dev"
+            EDRN_VERSION: "latest"
+            LDAP_URI: "ldaps://host.docker.internal:1636"
+            POSTGRES_PASSWORD: "s3cr3t"
+            SECURE_COOKIES: "False"
+            SIGNING_KEY: "s3cret"
+        cmds:
+            -   docker compose --file docker/docker-compose.yaml {{.CLI_ARGS}}
 
 dotenv: ['env', '{{.HOME}}/.secrets/passwords.sh']
 version: '3'

@@ -14,7 +14,7 @@ from wagtail.rich_text import RichText
 from edrnsite.content.models import (
     SpecimenReferenceSetRequestFormPage, MetadataCollectionFormPage, BoilerplateSnippet, FlexPage
 )
-import pkg_resources
+import importlib.resources
 
 
 class _SpecRefSetLinkFixer(HTMLParser):
@@ -60,9 +60,9 @@ class Command(BaseCommand):
     def _create_specimen_ref_set_req_form_page(self, home_page: Page):
         parent = home_page.get_descendants().filter(slug='specimen-reference-sets').first()
         assert parent is not None
-        intro = RichText(pkg_resources.resource_string(__name__, 'content/spec-intro.html').decode('utf-8').strip())
-        advice = RichText(pkg_resources.resource_string(__name__, 'content/spec-advice.html').decode('utf-8').strip())
-        outro = RichText(pkg_resources.resource_string(__name__, 'content/spec-outro.html').decode('utf-8').strip())
+        intro = RichText(importlib.resources.read_text(__name__, 'content/spec-intro.html'))
+        advice = RichText(importlib.resources.read_text(__name__, 'content/spec-advice.html'))
+        outro = RichText(importlib.resources.read_text(__name__, 'content/spec-outro.html'))
         self.stdout.write('🧫 Creating the specimen reference set request form page')
         form_page = SpecimenReferenceSetRequestFormPage(
             title='Specimen Set Request Form',
@@ -77,7 +77,7 @@ class Command(BaseCommand):
         form_page.save()
 
         self.stdout.write('👩‍⚖️ Adding boilerplate text for specimen requests')
-        next_steps = pkg_resources.resource_string(__name__, 'content/spec-next-steps.html').decode('utf-8').strip()
+        next_steps = importlib.resources.read_text(__name__, 'content/spec-next-steps.html')
         try:
             BoilerplateSnippet.objects.get_or_create(bp_code='specimen-request-next-steps', text=next_steps)
         except IntegrityError:
@@ -87,8 +87,8 @@ class Command(BaseCommand):
     def _create_metadata_collection_form(self, home_page: Page):
         parent = home_page.get_descendants().filter(slug='data-and-resources').first()
         assert parent is not None
-        intro = RichText(pkg_resources.resource_string(__name__, 'content/meta-intro.html').decode('utf-8').strip())
-        outro = RichText(pkg_resources.resource_string(__name__, 'content/meta-outro.html').decode('utf-8').strip())
+        intro = RichText(importlib.resources.read_text(__name__, 'content/meta-intro.html'))
+        outro = RichText(importlib.resources.read_text(__name__, 'content/meta-outro.html'))
         self.stdout.write('📀 Creating the metadata collection form page')
         form_page = MetadataCollectionFormPage(
             title='Metadata Collection Form',

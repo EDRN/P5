@@ -29,5 +29,5 @@ INSTALLED_APPS = [
     'wagtail.contrib.forms',
     'widget_tweaks',
     'wagtailcaptcha',
-    'captcha',
+    'django_recaptcha',
 ]

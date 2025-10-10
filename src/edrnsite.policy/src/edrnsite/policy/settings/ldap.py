@@ -41,6 +41,26 @@ AUTHENTICATION_BACKENDS = ['django_auth_ldap.backend.LDAPBackend', 'django.contr
 AUTH_LDAP_SERVER_URI = os.getenv('LDAP_URI', 'ldaps://edrn-ds.jpl.nasa.gov')
 AUTH_LDAP_CACHE_TIMEOUT = int(os.getenv('LDAP_CACHE_TIMEOUT', '3600'))
 
+# TLS Configuration for Self-Signed Certificates
+# ------------------------------------------------
+#
+# These settings allow the LDAP client to work with self-signed certificates
+# by disabling certificate verification. This is useful for local development
+# but should be used with caution in production.
+#
+# 🔗 https://django-auth-ldap.readthedocs.io/en/latest/reference.html#auth-ldap-connection-options
+
+# Only disable certificate verification for local development
+uri = os.getenv('LDAP_URI', '')
+if uri.startswith('ldaps://localhost') or uri.startswith('ldaps://host.docker.internal'):
+    AUTH_LDAP_CONNECTION_OPTIONS = {
+        ldap.OPT_X_TLS_REQUIRE_CERT: ldap.OPT_X_TLS_NEVER,
+        ldap.OPT_X_TLS_NEWCTX: 0,
+    }
+    os.environ['LDAPTLS_REQCERT'] = 'never'
+else:
+    AUTH_LDAP_CONNECTION_OPTIONS = {}
+
 
 # How to Find Users
 # -----------------

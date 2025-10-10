@@ -7,7 +7,7 @@ from .base_forms import (
 )
 from .base_models import AbstractFormPage
 from .tasks import send_email
-from captcha.fields import ReCaptchaField
+from django_recaptcha.fields import ReCaptchaField
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError

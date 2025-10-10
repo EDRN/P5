@@ -4,7 +4,7 @@
 
 from django.core.management.base import BaseCommand
 from eke.geocoding.models import InvestigatorAddress
-import pkg_resources, csv, argparse, sys, codecs
+import importlib.resources, csv, argparse, sys, codecs
 
 
 class Command(BaseCommand):
@@ -21,7 +21,7 @@ class Command(BaseCommand):
             source = open(filename, newline='')
         else:
             reader = codecs.getreader('utf-8')
-            source = reader(pkg_resources.resource_stream(__name__, 'ia.csv'))
+            source = reader(importlib.resources.resource_stream(__name__, 'ia.csv'))
         try:
             InvestigatorAddress.objects.all().delete()
             reader = csv.reader(source)

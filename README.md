@@ -187,40 +187,43 @@ Replace `NUMBER` with the number of the user ID of the user under which to run t
 -   500 for running at the Jet Propulsion Laboratory.
 -   26013 for running at the National Cancer Institute.
 
-Or do it all at once with Taskfile:
+**Or do it all at once with Taskfile:**
 
     task image
+
+That builds the wheels and the image for you.
 
 Spot check: see if the image is working by running:
 
     docker container run --rm --env LDAP_BIND_PASSWORD='[REDACTED]' --env SIGNING_KEY='s3cr3t' \
-        --env ALLOWED_HOSTS='*' --publish 8000:8000 edrn-portal:latest
+        --env ALLOWED_HOSTS='*' --publish 8000:8000 edrndocker/edrn-portal:latest
 
 and visit http://localhost:8000/ and you should get `Sever Error (500)` since the database connection isn't established.
 
-For a Docker Composition, the accompanying `docker/docker-compose.yaml` file enables you to run the orchestrated set of needed processes in production, including the portal, maintenance worker, search engine, cache and message queue, and a database. You can launch all the processes at once with `docker compose up`.
+For a Docker Composition, the accompanying `docker/docker-compose.yaml` file enables you to run the orchestrated set of needed processes in production, including the portal, maintenance worker, search engine, cache and message queue, and a database. You can launch all the processes at once with `docker compose up` when at the National Cancer Institute. For local development, use `task compose-up`.
 
-**👉 Note:** On some systems, `docker compose` is actually `docker-compose`.
+Next, establish an SSH tunnel to the EDRN Directory Service `ldaps://edrn-ds.jpl.nasa.gov` to localhost port 1636, so that `ldaps://localhost:1636` will be the EDRN Directory Service—and therefore `ldaps://host.docker.internal:1636` is also be the EDRN Directory Service, but from a container's point of view.
 
-The [environment variables listed above](#user-content-environment-variables) also apply to the `docker compose` command. The defaults in `docker/docker-compose.yaml` are suitable for running at the National Cancer Institute, but the environment variables absolutely need to be adjusted for _every_ other context. A table of the additional environment variables follows:
+Finally, pick a convenient directory to contain the database (the PostgreSQL database plus the media blobs and static files); @nutjob4life uses `~/dockerdata/renaissance`. Call this the `$EDRN_DATA_DIR`. Copy the daily database copies from production to tumor.jpl.nasa.gov as follows:
 
-| Variable              | Use                                                              | Default               |
-|-----------------------|------------------------------------------------------------------|-----------------------|
-| `EDRN_DATA_DIR`       | Volume to bind to provide media files and PostgreSQL DB          | `/local/content/edrn` |
-| `EDRN_PUBLISHED_PORT` | TCP port on which to make the HTTP service available             | 8080                  |
-| `EDRN_TLS_PORT`       | Encrypted TCP port, if the `tls-proxy` profile is enabled        | 4134                  |
-| `EDRN_VERSION`        | Version of the image to use, such as `latest`                    | `6.0.0`               |
-| `POSTGRES_PASSWORD`   | Root-level password to the PostgreSQL database server            | Unset                 |
+```console
+$ mkdir ${HOME}/dockerdata/renaissance
+$ export EDRN_DATA_DIR=${HOME}/dockerdata/renaissance
+$ env WORKSPACE=$EDRN_DATA_DIR support/sync-from-dev.sh
+```
 
-These variables are also necessary while setting up the containerized database.
+Feel free to do this as often as you like. Monthly is more than sufficient unless you're looking for some specific items recently added to the production database.
 
-Ater setting the needed variables, start the composition as follows:
+You'll also need to  ensure your Docker environment can support the EDRN P5 application stack, which is large. If you're using Docker Desktop, you might want to adjust the settings as follows (under Settings → Resources):
 
-    docker compose --project-name edrn --file docker/docker-compose.yaml up --detach
+- CPU limit: 20
+- Memory limit: 48 GB
+- Swap: 2 GB
+- Disk usage limit: 96 GB
 
-Or more easily
+Ater setting the needed variables and resource limits, start the composition as follows:
 
-    task comp-up
+    task compose-up
 
 You can now proceed to set up the database, search engine, and populate the portal with its content.
 
@@ -229,91 +232,27 @@ You can now proceed to set up the database, search engine, and populate the port
 
 Next, we need to set up the database with initial structure and content. This section tells you how.
 
-
 #### 🏛 Database Structure
 
-To set up the initial database and its schema inside a Docker Composition, we start by creating the database:
+To set up the initial database and its schema inside a Docker Composition, we start by deleting and then creating the database and loading the current production data:
 
-    docker compose --project-name edrn --file docker/docker-compose.yaml \
-        exec db createdb --username=postgres --encoding=UTF8 --owner=postgres edrn
+    rm -rf $EDRN_DATA_HOME/postgresql
+    mkdir $EDRN_DATA_HOME/postgresql
+    task compose -- exec db createdb --username=postgres --encoding=UTF8 --owner=postgres edrn
+    bzip2 --decompress --stdout $EDRN_DATA_HOME/edrn.sql.bz2 | task compose -- \
+        exec --no-tty db psql --username=postgres --dbname=edrn --echo-errors
 
-**👉 Note:** You must set the same environment variables in the above command—and the subsequent commands—as running the entire composition—especially the `POSTGRES_PASSWORD`.
+We can then upgrade the database schema to the latest software, fix any database tree issues, and collect the static files:
 
-Next, run the Django database migrations (again, with the environment set):
+    task compose -- exec portal /app/bin/django-admin migrate
+    task compose -- exec portal /app/bin/django-admin fixtree
+    task compose -- exec portal /app/bin/django-admin collectstatic --no-input --clear
 
-    docker compose --project-name edrn --file docker/docker-compose.yaml \
-        exec portal django-admin makemigrations
-    docker compose --project-name edrn --file docker/docker-compose.yaml \
-        exec portal django-admin migrate
+Normally we'd also sync the LDAP groups, but this command [will fail until the number of groups in EDRN is reduced](https://github.com/EDRN/jpl.edrn.ldap.sync/issues/2); so just carry right on:
 
+    task compose -- exec portal /app/bin/django-admin ldap_group_sync
 
-#### 👴 Import Content from Plone
-
-👉 **Note:** This is no longer necessary. Plone hasn't been used in a while now; instead you just upgrade from the previous Wagtail-based version. However, I'm leaving this information intact for posterity and reference. Skip down to "Populate the Rest of the Content".
-
-The next step is to bring the content from the older Plone-based site into the new Wagtailb-ased site. You will need the following:
-
--   `edrn.json`, a file containing the hierarchical content; ask the portal developer for a copy.
--   `export_defaultpages.json`, a file indicating the view for "folderish" content types; ask the portal developer for a copy.
--   The Plone URL prefix used to construct the `edrn.json` file; ask the developer for the correct value.
--   The `blobstorage` directory used by Plone; this is available on the host running the Plone version of the portal.
-
-Import the content from the old Plone site (with the environment variables from above still set):
-
-    docker compose --project-name edrn --file docker/docker-compose.yaml \
-        run --volume PLONE_EXPORTS_DIR:/mnt/zope --volume PLONE_BLOBS:/mnt/blobs \
-        --entrypoint /usr/bin/django-admin --no-deps portal importfromplone \
-        PLONE_URL /mnt/zope/edrn.json /mnt/zope/export_defaultpages.json /mnt/blobs
-
-Subsituting:
-
--   `PLONE_EXPORTS_DIR` with the path to the directory containing the `edrn.json` and `export_defaultpages.json` files (sold separately)
--   `PLONE_BLOBS` with the path to the Zope `blobstorage` directory, such as `/local/content/edrn/blobstorage`
--   `PLONE_URL` with the prefix URL (provided by the portal developer)
-
-For example, you might save `edrn.json` and `export_defaultpages.json` to `/tmp`, have your blobs in `/local/content/edrn/blobstorage`, and be told that the prefix URL is `http://nohost/edrn/`; in that case, you'd run:
-
-    docker compose --project-name edrn --file docker/docker-compose.yaml \
-        run --volume /tmp:/mnt/zope --volume /local/content/edrn/blobstorage:/mnt/blobs \
-        --entrypoint /usr/bin/django-admin --no-deps portal importfromplone \
-        http://nohost/edrn/ /mnt/zope/edrn.json /mnt/zope/export_defaultpages.json /mnt/blobs
-
-
-#### 🥤 Populate the Rest of the Content
-
-You can then populate the rest of the database with EDRN content, maps, menus, and so forth (with the environment still set) by running:
-
-    docker compose --project-name edrn --file docker/docker-compose.yaml \
-        exec portal django-admin collectstatic --no-input
-
-This step is no longer necessary; it was used only for the first instance of the Wagtail-based site. I'm leaving it here for future reference. Don't try to run it; it won't work.
-
-    env AWS_ACCESS_KEY_ID=KEY AWS_SECRET_ACCESS_KEY=SECRET docker compose --project-name edrn \
-        --file docker/docker-compose.yaml \
-        exec portal django-admin edrnbloom --hostname HOSTNAME
-
-Instead, skip down to this next step:
-
-    docker compose --project-name edrn --file docker/docker-compose.yaml \
-        exec portal django-admin ldap_group_sync
-    docker compose --project-name edrn --file docker/docker-compose.yaml \
-        exec portal django-admin rdfingest  # This can take a long time, 10–20 minutes
-    docker compose --project-name edrn --file docker/docker-compose.yaml \
-        exec portal django-admin autopopulate_main_menus
-
-In the above, replace `HOSTNAME` with the host name of the portal, such as `edrn-dev.nci.nih.gov` or `edrn-stage.nci.nih.gov` or even `edrn.nci.nih.gov`. Replace `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` with their corresponding values. If you don't know them, leave them unset.
-
-Lastly, stop the entire service and remove the orphaned containers made during the above steps:
-
-    docker compose --project-name edrn --file docker/docker-compose.yaml \
-        down --remove-orphans
-
-Then, start it up again, officially!
-
-    docker compose --project-name edrn --file docker/docker-compose.yaml \
-        up --detach
-
-Then you can point a browser at http://localhost:4135/ (or whatever the `EDRN_PUBLISHED_PORT` is) and see if it worked. Note that things won't look quite right because static resources aren't loaded on this endpoint URL. The front-end application load balancer or reverse-proxy must serve those.
+Then you can point a browser at https://localhost:2348/ (or whatever the `HTTPS_PORT` is) and see if it worked. Note that this uses a self-signed certificate so ignore any certificate warnings.
 
 
 ### 🕸 Reverse Proxy: ELB, ALB, Nginx, Apache HTTPD, etc.
@@ -359,8 +298,8 @@ As an example, if the web server is reverse-proxying to the Docker composition f
 
 To develop for this system, you'll need 
 
--   PostgreSQL 13 or later, but not 15 or later
--   Python 3.9 or later, but not 4.0 or later
+-   PostgreSQL 17 or later
+-   Python 3.12 or later, but not 4.0 or later
 -   Elasticsearch 7.17 or later, but not 8.0 or later
 -   Redis 7.0 or later, but not 8.0 or later
    

@@ -6,8 +6,6 @@
     </div>
 {% endif %}
 
-<h1>{{form.booger}}</h1>
-
 <div class='row text-danger'>
     <div class='col-auto'>
         {{form.non_field_errors}}
@@ -128,7 +126,10 @@
     <div class='{{form.captcha.css_classes}} mb-3 form-group col-sm-4'>
         {{form.captcha.label_tag}}
         {{form.captcha.errors}}
+        {% comment %}
+        Why is Django rendering this widget even when we don't call it? Commenting out so it doesn't appear twice }
         {{form.captcha}}
+        {% endcomment %}
         <div class='form-text'>{{form.captcha.help_text|safe}}</div>
     </div>
 </div>
