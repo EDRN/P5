@@ -15,7 +15,7 @@ services:
     # This "service" is used to gather the static data from the EDRN portal image so it can be
     # served by the HTTPS proxy frontend.
     static_initializer:
-        image: edrndocker/edrn-portal:${EDRN_VERSION:-6.3.0-uid26013}
+        image: edrndocker/edrn-portal:${EDRN_VERSION:-latest-uid26013}
         entrypoint: /bin/sh
         command: ['-c', 'cp -aRL /app/static/* /mnt/volume']
         user: root
@@ -59,7 +59,7 @@ services:
     # Nominally on port 8000, published to ${EDRN_PUBLISHED_TLS_PORT} or 8080.
     # For a TLS endpoint, enable the profile `tls-proxy` and use portal 4134.
     portal:
-        image: edrndocker/edrn-portal:${EDRN_VERSION:-6.3.0-uid26013}
+        image: edrndocker/edrn-portal:${EDRN_VERSION:-latest-uid26013}
         volumes:
             -   media:/app/media
             -   static:/app/static
@@ -183,7 +183,7 @@ services:
     # A "celery" instance that handles background tasks; does not listen on any port.
     # Worker processes run Django functions so it needs all the same env vars as `portal`.
     worker:
-        image: edrndocker/edrn-portal:${EDRN_VERSION:-6.3.0-uid26013}
+        image: edrndocker/edrn-portal:${EDRN_VERSION:-latest-uid26013}
         entrypoint: ['/app/bin/django-admin', 'worker', '--verbosity', '2']
         volumes:
             -   "media:/app/media"
