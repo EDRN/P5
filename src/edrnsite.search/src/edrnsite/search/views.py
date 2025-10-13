@@ -12,12 +12,15 @@ from wagtail.models import Page
 from io import StringIO
 from markdown import markdown
 from urllib.parse import urlencode, urljoin
-import boto3, json
+import boto3, json, logging
+
+_logger = logging.getLogger(__name__)
 
 
 def search(request):
     '''Extremely basic search.'''
     query = request.GET.get('query')
+    _logger.info('🔎 Search query: %s', query)
     if query:
         promotions = Query.get(query).editors_picks.all()
         results = Page.objects.live().autocomplete(query)
