@@ -6,12 +6,12 @@ This document describes how to accomplish this.
 
 👉 **Note:** By "database", we are referring to _both_ the PostgreSQL database that contains the portal content and the `media` folder that contains the media blobs (images, PDF files, PowerPoints, etc.)
 
-Up to and including version 6.19.0 of the portal, [NCI Drupal Jenkins](https://nci-drupal-jenkins.nci.nih.gov/jenkins/login?from=%2Fjenkins%2F) automated the deployment of the software to the development, staging, and production tiers. This procedure document is intended to codify and replace what Jenkins does.
+Up to and including version 6.19.0 of the portal, [NCI Drupal Jenkins](https://nci-drupal-jenkins.nci.nih.gov/jenkins/login?from=%2Fjenkins%2F) automated the deployment of the software to the development, staging, and production tiers. Based on information from [Mahdi Dayan](mahdi.dayan@nih.gov), this will still be the case with the transition to [Oracle Linux 8](https://docs.oracle.com/en/operating-systems/oracle-linux/8/index.html) (OL8) and version 6.20.0 and later versions.
 
 
 ## Current Hosts
 
-For version 6.19.0, the current deployment hosts for the portal are as follows:
+For version 6.19.0 and OL7, the current deployment hosts for the portal are as follows:
 
 | Tier        | Host                        | Via                             |
 |:------------|:----------------------------|:--------------------------------|
@@ -21,20 +21,21 @@ For version 6.19.0, the current deployment hosts for the portal are as follows:
 
 👉 **Note:** The new canonical URL for the EDRN portal will be https://edrn.cancer.gov/
 
-For version 6.20.0 and later, the new hosts are to be determined. The above hosts are all Oracle Linux 7 and will be decommissioned in favor of new Oracle Linux 8 platforms.
+For version 6.20.0 and later, the new hosts are to be determined. The above hosts are all OL7 and will be decommissioned in favor of new OL8 platforms.
 
 👉 **Note:** The EDRN portal software is completely containerized with Docker; [investigation into deploying with ECS Fargate](https://github.com/EDRN/P5/issues/418) is on the docket.
 
 
-## The Environment
+## The Properties and the Environment
 
-The portal is deployed using a Docker Composition ("`docker compose`"), which itself uses a number of environment variables that are all contained within a `.env` file. Some of these variables have well-known values, some are arbitrary, and some contain secrets.
+The portal is deployed using the [CBIIT Drupal Jenkins instance]() which starts a Docker Composition ("`docker compose`") on a remote server. The Docker Composition uses an `.env` files that's populated with values from the "Properties" section on the Jenkins configurations for each portal tier.
+
+ which itself uses a number of environment variables that are all contained within a `.env` file. Some of these variables have well-known values, some are arbitrary, and some contain secrets.
 
 The following table describes the values that must go into the `.env` file before the portal is deployed and is required for the portal to run:
 
 | Variable                | Purpose                                                  | Value                             |
 |:------------------------|:---------------------------------------------------------|:----------------------------------|
-| `ALLOWED_HOSTS`         | Hosts allowed to connect to portal `EDRN_PUBLISHED_PORT` | See below                         |
 | `BASE_URL`              | The URL of the portal, varies on tier                    | See below                         |
 | `EDRN_DATA_DIR`         | Folder for `media` and `postgresql` Docker bind volumes  | Defaults to `/local/content/edrn` |
 | `EDRN_PUBLISHED_PORT`   | Host port where portal answers `http:`                   | Defaults to 8080                  |
@@ -47,7 +48,6 @@ The following table describes the values that must go into the `.env` file befor
 
 Some notes on the above:
 
-- The `ALLOWED_HOSTS` is a comma-separated list of partial domains that tell what hosts are allowed to connect to the `EDRN_PUBLISHED_PORT`. There is almost never a reason to override the default, which is `.jpl.nasa.gov,.nci.nih.gov,.cancer.gov,localhost`.
 - The `BASE_URL` is either `https://edrn.cancer.gov/` (for production), `https://edrn-stage.nci.nih.gov/` (staging tier), for `https://edrn-dev.nci.nih.gov/` (development tier).
 - See the following section on "Secrets" for additional details.
 
@@ -72,6 +72,12 @@ The portal uses three secrets that are maintained by JPL and must be provided to
 - `LDAP_BIND_PASSWORD` is used to authenticate a "service" account in the EDRN Directory at `ldaps://edrn-ds.jpl.nasa.gov`. This is used to look up users and groups in the portal when a user is not logged into the portal.
 - `RECAPTCHA_PUBLIC_KEY` and `RECAPTCHA_PRIVATE_KEY` are the public and private API keys for the [reCAPTCHA](https://developers.google.com/recaptcha) service, which is used to protect against abuse of several web forms provided on the portal.
 
+
+### Deprecated Properties
+
+The following properties may still appear in the Jenkins configuration, however, they are no longer used:
+
+- 
 
 ## Docker Images
 
@@ -159,12 +165,12 @@ NCIDOCKERHUB_USER=edrndocker-user
 EDRN_DATA_DIR=/local/content/edrn
 EDRN_PUBLISHED_PORT=8080
 FINAL_HOSTNAME=edrn-dev.nci.nih.gov
-POSTGRES_PASSWORD=+OrOMtX3Y+ThyFHWphhKYDDXujNtLVSLhapp2GJyTXM=
-LDAP_BIND_PASSWORD=w4YLdLYAT9eCWxsZ
-SIGNING_KEY=kux9rU6tz+x13jO9KTUi8VBTe3A3hmJ3AhD6MnIXW+M=
+POSTGRES_PASSWORD=rotated
+LDAP_BIND_PASSWORD=changed
+SIGNING_KEY=rotated
 EDRN_LITE=--lite
-RECAPTCHA_PRIVATE_KEY=6LctQ6MUAAAAAJdEyx6aHPh5egs_EVxlxxelp9u1
-RECAPTCHA_PUBLIC_KEY=6LctQ6MUAAAAAJSJgG5cSHcqpxKUWbFL3v94ptQI
+RECAPTCHA_PRIVATE_KEY=rotated
+RECAPTCHA_PUBLIC_KEY=rotated
 
 Do RECAPTCHA still need to be set? Yes
 
