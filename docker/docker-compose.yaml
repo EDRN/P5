@@ -95,7 +95,7 @@ services:
             ALLOWED_HOSTS: ${ALLOWED_HOSTS:-.jpl.nasa.gov,.nci.nih.gov,.cancer.gov,localhost}
             STATIC_URL: ${STATIC_URL:-/static/}
             MEDIA_URL: ${MEDIA_URL:-/media/}
-            BASE_URL: ${BASE_URL:-https://edrn.nci.nih.gov/}
+            BASE_URL: ${BASE_URL:-https://${FINAL_HOSTNAME:-edrn.nci.nih.gov}/}
             MQ_URL: redis://cache
             CACHE_URL: redis://cache
             DJANGO_SETTINGS_MODULE: edrnsite.policy.settings.ops
@@ -203,7 +203,7 @@ services:
             ALLOWED_HOSTS: ${ALLOWED_HOSTS:-.jpl.nasa.gov,.nci.nih.gov,.cancer.gov}
             STATIC_URL: ${STATIC_URL:-/static/}
             MEDIA_URL: ${MEDIA_URL:-/media/}
-            BASE_URL: ${BASE_URL:-https://edrn.nci.nih.gov/}
+            BASE_URL: ${BASE_URL:-https://${FINAL_HOSTNAME:-edrn.nci.nih.gov}/}
             MQ_URL: redis://cache
             CACHE_URL: redis://cache
             DJANGO_SETTINGS_MODULE: edrnsite.policy.settings.ops

@@ -6,7 +6,7 @@ This document describes how to accomplish this.
 
 👉 **Note:** By "database", we are referring to _both_ the PostgreSQL database that contains the portal content and the `media` folder that contains the media blobs (images, PDF files, PowerPoints, etc.)
 
-Up to and including version 6.19.0 of the portal, [NCI Drupal Jenkins](https://nci-drupal-jenkins.nci.nih.gov/jenkins/login?from=%2Fjenkins%2F) automated the deployment of the software to the development, staging, and production tiers. Based on information from [Mahdi Dayan](mahdi.dayan@nih.gov), this will still be the case with the transition to [Oracle Linux 8](https://docs.oracle.com/en/operating-systems/oracle-linux/8/index.html) (OL8) and version 6.20.0 and later versions.
+Up to and including version 6.19.0 of the portal running on [Oracle Linux 7](https://docs.oracle.com/en/operating-systems/oracle-linux/7/), [NCI Drupal Jenkins](https://nci-drupal-jenkins.nci.nih.gov/jenkins/login?from=%2Fjenkins%2F) automated the deployment of the software to the development, staging, and production tiers. Based on information from [Mahdi Dayan](mahdi.dayan@nih.gov), this will still be the case with the transition to version 6.20.0 of the portal on [Oracle Linux 8](https://docs.oracle.com/en/operating-systems/oracle-linux/8/index.html) (OL8).
 
 
 ## Current Hosts
@@ -28,27 +28,33 @@ For version 6.20.0 and later, the new hosts are to be determined. The above host
 
 ## The Properties and the Environment
 
-The portal is deployed using the [CBIIT Drupal Jenkins instance]() which starts a Docker Composition ("`docker compose`") on a remote server. The Docker Composition uses an `.env` files that's populated with values from the "Properties" section on the Jenkins configurations for each portal tier.
+The portal is deployed using the [CBIIT Drupal Jenkins instance](https://nci-drupal-jenkins.nci.nih.gov/jenkins) which starts a Docker Composition ("`docker compose`") on a remote server. The Docker Composition uses a `.env` file that's populated with values from the "Properties" section on the Jenkins configurations for each portal tier.
 
- which itself uses a number of environment variables that are all contained within a `.env` file. Some of these variables have well-known values, some are arbitrary, and some contain secrets.
+Some of these properties have common and well-known values, some are arbitrary, and some contain secrets.
 
 The following table describes the values that must go into the `.env` file before the portal is deployed and is required for the portal to run:
 
 | Variable                | Purpose                                                  | Value                             |
 |:------------------------|:---------------------------------------------------------|:----------------------------------|
-| `BASE_URL`              | The URL of the portal, varies on tier                    | See below                         |
 | `EDRN_DATA_DIR`         | Folder for `media` and `postgresql` Docker bind volumes  | Defaults to `/local/content/edrn` |
+| `EDRN_LITE`             | Not used                                                 | Not used |
 | `EDRN_PUBLISHED_PORT`   | Host port where portal answers `http:`                   | Defaults to 8080                  |
 | `EDRN_VERSION`          | EDRN Docker image tag                                    | Defaults to `latest-uid26013`     |
+| `FINAL_HOSTNAME`        | Host part of the portal URL, varies by tier              | See below                         |
 | `LDAP_BIND_PASSWORD`    | For service account on ldaps://edrn-ds.jpl.nasa.gov      | Provided; see "Secrets"           |
+| `NCIDOCKERHUB_USER`     | Not used                                                 | Not used |
 | `POSTGRES_PASSWORD`     | Password to use for PostgreSQL                           | Can be anything; see "Secrets"    |
+| `POSTGRES_USER_ID`      | Not used                                                 | Not used |
 | `RECAPTCHA_PRIVATE_KEY` | Private API key for the reCAPTCHA service                | Provided; see "Secrets"           |
 | `RECAPTCHA_PUBLIC_KEY`  | Public API key for the reCAPTCHA service                 | Provided; see "Secrets"           |
 | `SIGNING_KEY`           | Hash input for creating session IDs, etc.                | Can be anything; see "Secrets"    |
+| `USER`                  | Username to ssh into on `WEBSERVER`                      | `edrn` |
+| `WEBSERVER`             | Hostname where the software is deployed                  | `nciws-d2094-c`, `nciws-s2101-c`, `nciws-p2102-c` |
+
 
 Some notes on the above:
 
-- The `BASE_URL` is either `https://edrn.cancer.gov/` (for production), `https://edrn-stage.nci.nih.gov/` (staging tier), for `https://edrn-dev.nci.nih.gov/` (development tier).
+- The `FINAL_HOSTNAME` is either `edrn.cancer.gov` (for production), `edrn-stage.nci.nih.gov` (staging tier), or `edrn-dev.nci.nih.gov` (development tier).
 - See the following section on "Secrets" for additional details.
 
 
@@ -77,7 +83,10 @@ The portal uses three secrets that are maintained by JPL and must be provided to
 
 The following properties may still appear in the Jenkins configuration, however, they are no longer used:
 
-- 
+- `EDRN_LITE`
+- `NCIDOCKERHUB_USER`
+- `POSTGRES_USER_ID`
+ 
 
 ## Docker Images
 
@@ -155,22 +164,6 @@ Git repo: https://github.com/EDRN/P5.git
 Secrets? I think we can skip these now — unless we need the NED secrets to fetch the DB?
 
 Properties → .env
-
-DEPLOYER_URL=https://raw.githubusercontent.com/EDRN/P5/main/support/cbiit-deploy.sh
-WEBSERVER=nciws-d2094-c
-USER=edrn
-POSTGRES_USER_ID=26013
-WEBROOT=/local/content/edrn/docker
-NCIDOCKERHUB_USER=edrndocker-user
-EDRN_DATA_DIR=/local/content/edrn
-EDRN_PUBLISHED_PORT=8080
-FINAL_HOSTNAME=edrn-dev.nci.nih.gov
-POSTGRES_PASSWORD=rotated
-LDAP_BIND_PASSWORD=changed
-SIGNING_KEY=rotated
-EDRN_LITE=--lite
-RECAPTCHA_PRIVATE_KEY=rotated
-RECAPTCHA_PUBLIC_KEY=rotated
 
 Do RECAPTCHA still need to be set? Yes
 
