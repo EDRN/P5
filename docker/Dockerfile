@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     PIP_DISABLE_PIP_VERSION_CHECK=1
 
 # Only runtime libs (no compilers)
-RUN --mount=type=cache,target=/var/cache/apt \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update --quiet --yes \
     && apt-get install --quiet --yes --no-install-recommends \
     ca-certificates \
@@ -40,21 +40,6 @@ RUN python -m venv /app &&\
 
 # Copy prebuilt wheels
 COPY --chown=edrn:edrn ./dist/*.whl /app/wheels/
-
-# Install local wheels first
-# RUN --mount=type=cache,target=/root/.cache/pip \
-#     /app/bin/python -m pip install --progress-bar off /app/wheels/edrnsite?controls-*.whl \
-#     && /app/bin/python -m pip install --progress-bar off /app/wheels/edrnsite?streams-*.whl \
-#     && /app/bin/python -m pip install --progress-bar off /app/wheels/edrnsite?content-*.whl \
-#     && /app/bin/python -m pip install --progress-bar off /app/wheels/edrn?collabgroups-*.whl \
-#     && /app/bin/python -m pip install --progress-bar off /app/wheels/edrn?theme-*.whl \
-#     && /app/bin/python -m pip install --progress-bar off /app/wheels/edrnsite?ploneimport-*.whl \
-#     && /app/bin/python -m pip install --progress-bar off /app/wheels/eke?geocoding-*.whl \
-#     && /app/bin/python -m pip install --progress-bar off /app/wheels/eke?knowledge-*.whl \
-#     && /app/bin/python -m pip install --progress-bar off /app/wheels/eke?biomarkers-*.whl \
-#     && /app/bin/python -m pip install --progress-bar off /app/wheels/edrnsite?search-*.whl \
-#     && /app/bin/python -m pip install --progress-bar off /app/wheels/edrn?metrics-*.whl
-#     && /app/bin/python -m pip install --progress-bar off /app/wheels/edrnsite?policy-*.whl
 
 RUN --mount=type=cache,target=/root/.cache/pip \
     /app/bin/pip install --progress-bar off /app/wheels/*.whl
