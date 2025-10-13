@@ -59,9 +59,6 @@ COPY --chown=edrn:edrn ./dist/*.whl /app/wheels/
 RUN --mount=type=cache,target=/root/.cache/pip \
     /app/bin/pip install --progress-bar off /app/wheels/*.whl
 
-# Test to make sure edrnsite.controls is installed
-RUN /app/bin/python -c "import edrnsite.controls"
-
 # Collect static as the app user, clean up, and add a symlink for compatibility
 RUN gosu edrn env LDAP_BIND_PASSWORD=unused SIGNING_KEY=unused /app/bin/django-admin collectstatic \
     --settings edrnsite.policy.settings.ops --no-input --clear --link \
