@@ -5,6 +5,8 @@ This is the software for the Early Detection Research Network (EDRN) public port
 
 ## 🤓 Development
 
+First, clone the repository and then run `pre-commit install` to get the pre-commit hooks installed.
+
 To develop the portal software for the Early Detection Research Network, you'll need Python, PostgreSQL, Elasticsearch, Redis, and a couple of environment variables. Note that these environment variables should be provided in the development environment, by the continuous integration, by the containerization system, etc. They must be set *always*:
 
 | Variable Name        | Use                                                | Value                               |
