@@ -60,7 +60,7 @@ compose exec db createdb --username=postgres --encoding=UTF8 --owner=postgres ed
 
 echo "Loading latest production database"
 bzip2 --decompress --stdout edrn.sql.bz2 | \
-    compose exec --no-TTY db psql --username=postgres --dbname=edrn --echo-errors --quiet
+    compose exec -T db psql --username=postgres --dbname=edrn --echo-errors --quiet
 
 echo "🏢 Applying new portal DB structure"
 compose exec portal /app/bin/django-admin migrate --no-input

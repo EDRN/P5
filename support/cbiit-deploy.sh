@@ -130,7 +130,7 @@ echo "👷‍♀️ Bringing over edrn.sql.bz2 and loading it"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 pwd && ls -l && [ -f edrn.sql.bz2 ] &&\
 bzip2 --decompress --stdout edrn.sql.bz2 | \
-    docker compose --project-name edrn exec --no-tty db psql --username=postgres --dbname=edrn --echo-errors --quiet" || exit 1
+    docker compose --project-name edrn exec -T db psql --username=postgres --dbname=edrn --echo-errors --quiet" || exit 1
 
 echo ""
 echo "📀 Initial database setup"

@@ -125,7 +125,7 @@ echo "👷‍♀️ Applying dump from edrn.sql.bz2"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 [ -f /local/content/edrn/database-access/edrn.sql.bz2 ] &&\
 bzip2 --decompress --stdout /local/content/edrn/database-access/edrn.sql.bz2 | \
-    docker compose --project-name edrn exec --no-tty db psql --username=postgres --dbname=edrn --echo-errors" || exit 1
+    docker compose --project-name edrn exec -T db psql --username=postgres --dbname=edrn --echo-errors" || exit 1
 
 
 echo ""
