@@ -18,7 +18,7 @@ ls
 
 echo ""
 echo "👉 What docker (and version) are we using on $USER@$WEBSERVER"
-ssh -q $USER@$WEBSERVER "which docker ; docker --version" || exit 1
+ssh $USER@$WEBSERVER "which docker ; docker --version" || exit 1
 
 echo "🏃 Begin deployment to $WEBSERVER"
 
