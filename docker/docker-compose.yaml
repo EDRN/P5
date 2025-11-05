@@ -256,6 +256,10 @@ volumes:
             org.label-schema.description: Media blobs (images, PDFs, etc.) for the EDRN portal.
     static:
         driver: local
+        driver_opts:
+            type: none
+            device: ${EDRN_STATIC_DIR:-${EDRN_DATA_DIR:-/local/content/edrn}/static}
+            o: bind
         labels:
             org.label-schema.name: EDRN Portal Static Data
             org.label-schema.description: Static files (css, images, js) for the EDRN portal.
