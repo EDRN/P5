@@ -522,6 +522,9 @@ class Ingestor(BaseIngestor):
 
         pmids, pmids_to_sites, pmids_to_uris = self.parse_statements(statements)
 
+        # Remove all forbidden pub med IDs
+        pmids -= set[str](self.folder.specific.forbidden_publications.all().values_list('value', flat=True))
+
         # Make a report of which publications come from the DMCC and which come from grant numbers;
         # note that this works only if you disable the BMDB RDF source first.
         #
@@ -620,7 +623,10 @@ class PublicationIndex(KnowledgeFolder):
 
         return context
 
-    content_panels = KnowledgeFolder.content_panels + [InlinePanel('grant_numbers', label='Grant Numbers')]
+    content_panels = KnowledgeFolder.content_panels + [
+        InlinePanel('forbidden_publications', label='Forbidden Publications'),
+        InlinePanel('grant_numbers', label='Grant Numbers')
+    ]
 
     class Meta:
         pass
@@ -636,3 +642,19 @@ class GrantNumber(Orderable):
     value = models.CharField(max_length=20, blank=False, null=False, help_text='Grant Number')
     page = ParentalKey(PublicationIndex, on_delete=models.CASCADE, related_name='grant_numbers')
     panels = [FieldPanel('value')]
+
+
+class ForbiddenPublication(Orderable):
+    '''A publication that is forbidden from existing on the site.
+
+    EDRN/P5#424 is to work around bad data in PubMed.
+    '''
+    value = models.CharField(
+        max_length=20, blank=False, null=False,
+        help_text='PubMed ID (Entrez Medline ID code number) of forbidden publication'
+    )
+    page = ParentalKey(PublicationIndex, on_delete=models.CASCADE, related_name='forbidden_publications')
+    panels = [FieldPanel('value')]
+
+    def __str__(self):
+        return self.value

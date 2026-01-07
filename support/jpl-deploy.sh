@@ -68,7 +68,14 @@ compose exec portal /app/bin/django-admin migrate --no-input
 echo "📺 Collecting static files and so forth"
 compose exec portal /app/bin/django-admin fixtree
 compose exec portal /app/bin/django-admin collectstatic --no-input --clear
+
+echo "🆙 Applying upgrades"
+compose exec portal /app/bin/django-admin edrn_upgrade
+
+echo "🔍 Ingesting RDF"
 compose exec portal /app/bin/django-admin rdfingest  # Also rebuilds the Wagtail indexes in Elasticsearch
+
+echo "🧹 Resetting to development environment"
 compose exec portal /app/bin/django-admin edrndevreset
 
 echo "🎉 Done!"

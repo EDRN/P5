@@ -148,9 +148,8 @@ echo "🆙 Applying upgrades"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn exec portal /app/bin/django-admin help" || exit 1
 
-# This was for 6.18 … we can replace this with whatever steps are necessary for 6.19
-# ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-# docker compose --project-name edrn exec portal /app/bin/django-admin edrn_audit_log" || exit 1
+ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
+    docker compose --project-name edrn exec portal /app/bin/django-admin edrn_upgrade" || exit 1
 
 echo ""
 echo "🤷‍♀️ Final portal restart and restart of search engine"

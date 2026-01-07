@@ -6,7 +6,7 @@
 from .audit_log import KnowledgeObjectLogEntry, KnowledgeObjectLogEntryManager, KnowledgeObjectLogEntryQuerySet
 from .committees import CommitteeIndex
 from .knowledge import KnowledgeObject, KnowledgeFolder, RDFSource
-from .publications import Publication, PublicationIndex, PMCID, PublicationSubjectURI
+from .publications import Publication, PublicationIndex, PMCID, PublicationSubjectURI, ForbiddenPublication
 from .bodysystems import BodySystem, BodySystemIndex
 from .diseases import Disease, DiseaseIndex
 from .miscresources import MiscellaneousResource, MiscellaneousResourceIndex
@@ -44,6 +44,7 @@ __all__ = [
     DataCollectionIndex,
     Disease,
     DiseaseIndex,
+    ForbiddenPublication,
     KnowledgeFolder,
     KnowledgeObject,
     KnowledgeObjectLogEntry,
