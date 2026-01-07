@@ -1,23 +1,24 @@
-# EDRN Portal Continuous Delivery
-# ===============================
+# EDRN Portal Imaging
+# ===================
 #
 # This workflow builds and registers an image of the "Renaissance" of P5, the Early Detection Research
 # Network's public portal.
 
 ---
 
-name: P5 Continuous Delivery
+name: P5 Imaging
 
 
 # Triggers
 # --------
 #
-# Run on any push to the Renaissance branch of the P5 code.
+# Run on any push to main or release branches of the P5 code.
 
 on:
     push:
         branches:
             -   main
+            -   release/*
         paths:
             -   'src/**'
             -   'docker/Dockerfile'
@@ -30,23 +31,23 @@ on:
 
 jobs:
     imaging:
-        name: 🏞 P5 Renaissance Imaging
+        name: 🏞 P5 Imaging
         runs-on: ubuntu-latest
         steps:
             -
                 name: 💳 Docker Hub Identification
-                uses: docker/login-action@v2
+                uses: docker/login-action@v3
                 with:
                     username: ${{secrets.DOCKERHUB_USERNAME}}
                     password: ${{secrets.DOCKERHUB_TOKEN}}
             -
                 name: 📚 Repository Checkout
-                uses: actions/checkout@v3
+                uses: actions/checkout@v6
             -
                 name: 🐍 Python Wrangling
-                uses: actions/setup-python@v4
+                uses: actions/setup-python@v6
                 with:
-                    python-version: '3.10'
+                    python-version: '3.13'
             -
                 name: ☸️ Wheel Generation
                 run: |
@@ -56,13 +57,13 @@ jobs:
                     done
             -
                 name: 🎰 QEMU Multiple Machine Emulation
-                uses: docker/setup-qemu-action@v2
+                uses: docker/setup-qemu-action@v3
             -
                 name: 🚢 Docker Buildx
-                uses: docker/setup-buildx-action@v2
+                uses: docker/setup-buildx-action@v3
             -
                 name: 🧱 Image Construction and Publication — user ID 500
-                uses: docker/build-push-action@v3
+                uses: docker/build-push-action@v6
                 with:
                     build-args: user_id=500
                     context: .
@@ -74,7 +75,7 @@ jobs:
                         ${{secrets.DOCKERHUB_USERNAME}}/edrn-portal:latest-uid500
             -
                 name: 🧱 Image Construction and Publication — user ID 26013
-                uses: docker/build-push-action@v3
+                uses: docker/build-push-action@v6
                 with:
                     build-args: user_id=26013
                     context: .
