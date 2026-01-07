@@ -98,7 +98,7 @@ tasks:
             -   .venv/bin/django-admin migrate --settings local --pythonpath .
             -   .venv/bin/django-admin collectstatic --settings local --pythonpath . --no-input --clear --link
             # Add additional upgrade steps here:
-            -   .venv/bin/django-admin edrn_ai_search --settings local --pythonpath .
+            # -   .venv/bin/django-admin edrn_ai_search --settings local --pythonpath .
             # End of additional ugprade steps
             -   .venv/bin/django-admin edrndevreset --settings local --pythonpath .
             -   "{{.rdf}} -eq true && .venv/bin/django-admin rdfingest --settings local --pythonpath . || true"
