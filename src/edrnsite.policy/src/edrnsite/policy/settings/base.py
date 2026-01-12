@@ -380,3 +380,17 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'False') == 'True'
 EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', 'False') == 'True'
+
+
+# Secure proxy HTTP header
+#
+# 🔗 https://docs.djangoproject.com/en/6.0/ref/settings/#secure-proxy-ssl-header
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
+# Use X-Forwarded-Host
+#
+# 🔗 https://docs.djangoproject.com/en/6.0/ref/settings/#use-x-forwarded-host
+
+USE_X_FORWARDED_HOST = True
