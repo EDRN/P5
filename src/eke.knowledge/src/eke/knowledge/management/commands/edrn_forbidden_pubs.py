@@ -9,7 +9,7 @@ from typing import Any
 from django.core.management.base import BaseCommand, CommandError
 from eke.knowledge.models import PublicationIndex, ForbiddenPublication, Publication, PMCID
 
-_forbidden_pubmed_IDs = set(['4083999'])
+_forbidden_pubmed_IDs = set(['4083999', '3660184'])
 
 
 class Command(BaseCommand):
