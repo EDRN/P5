@@ -155,11 +155,10 @@ ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
     docker compose --project-name edrn exec portal /app/bin/django-admin edrn_upgrade" || exit 1
 
 echo ""
-echo "🤷‍♀️ Final portal restart and restart of search engine"
+echo "🤷‍♀️ Final portal restart"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn stop portal &&\
 sleep 60 &&\
-docker compose --project-name edrn start search &&\
 docker compose --project-name edrn start portal" || exit 1
 
 echo ""
