@@ -140,10 +140,9 @@ docker compose --project-name edrn exec portal /app/bin/django-admin fixtree &&\
 docker compose --project-name edrn exec portal /app/bin/django-admin collectstatic --no-input --clear &&\
 docker compose --project-name edrn exec portal /app/bin/django-admin edrndevreset" || exit 1
 echo ""
-echo "🤷‍♀️ Restarting the portal and stopping search engine"
+echo "🤷‍♀️ Restarting the portal"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn stop portal &&\
-docker compose --project-name edrn stop search &&\
 sleep 60 &&\
 docker compose --project-name edrn start portal" || exit 1
 
