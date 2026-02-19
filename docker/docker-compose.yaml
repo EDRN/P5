@@ -96,8 +96,9 @@ services:
             STATIC_URL: ${STATIC_URL:-/static/}
             MEDIA_URL: ${MEDIA_URL:-/media/}
             BASE_URL: ${BASE_URL:-https://${FINAL_HOSTNAME:-edrn.nci.nih.gov}/}
-            MQ_URL: redis://cache
-            CACHE_URL: redis://cache
+            MQ_URL: redis://:${REDIS_PASSWORD}@cache
+            CACHE_URL: redis://:${REDIS_PASSWORD}@cache
+            REDIS_PASSWORD:
             DJANGO_SETTINGS_MODULE: edrnsite.policy.settings.ops
         depends_on:
             -   static_initializer
@@ -136,9 +137,31 @@ services:
     #
     # Port 6379, not published.
     cache:
-        image: redis:7.0.11-alpine3.18
+        image: redis:8.6.0-alpine3.23
+        command: redis-server --requirepass ${REDIS_PASSWORD}
+        user: "999:999"
+        # "read_only" must be false or Redis will be unable to save state
+        read_only: false
+        security_opt:
+            -   no-new-privileges:true
+            -   label=type:container_t
+            -   label=level:s0
+        pids_limit: 50
+        mem_limit: 128m
+        cpu_shares: 512
+        tmpfs:
+            -   /tmp
+            -   /var/run/redis
+        # This "expose" is to see if the Twistlock scanner will shut up; we don't publish this port to
+        # the host or the outside world anyway. Twistlock also complained about port 37267, but no
+        # version of Redis ever used that. Weird, huh.
+        expose:
+            -   "6379"
+            -   "37267"
         networks:
             -   lattice
+        environment:
+            REDIS_PASSWORD:
         restart: on-failure
         labels:
             org.label-schema.name: EDRN Cache and Message Broker
@@ -204,8 +227,9 @@ services:
             STATIC_URL: ${STATIC_URL:-/static/}
             MEDIA_URL: ${MEDIA_URL:-/media/}
             BASE_URL: ${BASE_URL:-https://${FINAL_HOSTNAME:-edrn.nci.nih.gov}/}
-            MQ_URL: redis://cache
-            CACHE_URL: redis://cache
+            MQ_URL: redis://:${REDIS_PASSWORD}@cache
+            CACHE_URL: redis://:${REDIS_PASSWORD}@cache
+            REDIS_PASSWORD:
             DJANGO_SETTINGS_MODULE: edrnsite.policy.settings.ops
         depends_on:
             -   db
@@ -240,7 +264,8 @@ volumes:
         driver: local
         driver_opts:
             type: none
-            device: ${EDRN_DATA_DIR:-/local/content/edrn}/postgresql
+            # device: ${EDRN_DATA_DIR:-/local/content/edrn}/postgresql
+            device: /Users/kelly/dockerdata/renaissance/postgresql
             o: bind
         labels:
             org.label-schema.name: EDRN Portal Database Data
@@ -249,7 +274,8 @@ volumes:
         driver: local
         driver_opts:
             type: none
-            device: ${EDRN_MEDIA_DIR:-${EDRN_DATA_DIR:-/local/content/edrn}/media}
+            # device: ${EDRN_MEDIA_DIR:-${EDRN_DATA_DIR:-/local/content/edrn}/media}
+            device: /Users/kelly/dockerdata/renaissance/media
             o: bind
         labels:
             org.label-schema.name: EDRN Portal Media Data
@@ -258,7 +284,8 @@ volumes:
         driver: local
         driver_opts:
             type: none
-            device: ${EDRN_STATIC_DIR:-${EDRN_DATA_DIR:-/local/content/edrn}/static}
+            # device: ${EDRN_STATIC_DIR:-${EDRN_DATA_DIR:-/local/content/edrn}/static}
+            device: /Users/kelly/dockerdata/renaissance/static
             o: bind
         labels:
             org.label-schema.name: EDRN Portal Static Data

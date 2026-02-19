@@ -152,10 +152,11 @@ tasks:
             EDRN_VERSION: "latest"
             LDAP_URI: "ldaps://host.docker.internal:1636"
             POSTGRES_PASSWORD: "s3cr3t"
+            REDIS_PASSWORD: "s3cr3t"
             SECURE_COOKIES: "False"
             SIGNING_KEY: "s3cret"
         cmds:
-            -   docker compose --file docker/docker-compose.yaml exec portal sh
+            -   docker compose --project-name p5 --profile tls --file docker/docker-compose.yaml exec portal sh
 
     comp-portal-restart:
         desc: "P5 Docker foreground composition restart portal"
@@ -166,10 +167,11 @@ tasks:
             EDRN_VERSION: "latest"
             LDAP_URI: "ldaps://host.docker.internal:1636"
             POSTGRES_PASSWORD: "s3cr3t"
+            REDIS_PASSWORD: "s3cr3t"
             SECURE_COOKIES: "False"
             SIGNING_KEY: "s3cret"
         cmds:
-            -   docker compose --file docker/docker-compose.yaml restart portal
+            -   docker compose --project-name p5 --profile tls --file docker/docker-compose.yaml restart portal
 
     compose-up:
         desc: "P5 Docker foreground composition running"
@@ -180,10 +182,11 @@ tasks:
             EDRN_VERSION: "latest"
             LDAP_URI: "ldaps://host.docker.internal:1636"
             POSTGRES_PASSWORD: "s3cr3t"
+            REDIS_PASSWORD: "s3cr3t"
             SECURE_COOKIES: "False"
             SIGNING_KEY: "s3cret"
         cmds:
-            -   docker compose --profile tls --file docker/docker-compose.yaml up --remove-orphans
+            -   docker compose --project-name p5 --profile tls --file docker/docker-compose.yaml up --remove-orphans
 
     compose:
         desc: "P5 Docker Compose shortcut"
@@ -194,10 +197,11 @@ tasks:
             EDRN_VERSION: "latest"
             LDAP_URI: "ldaps://host.docker.internal:1636"
             POSTGRES_PASSWORD: "s3cr3t"
+            REDIS_PASSWORD: "s3cr3t"
             SECURE_COOKIES: "False"
             SIGNING_KEY: "s3cret"
         cmds:
-            -   docker compose --file docker/docker-compose.yaml {{.CLI_ARGS}}
+            -   docker compose --project-name p5 --profile tls --file docker/docker-compose.yaml {{.CLI_ARGS}}
 
 dotenv: ['env', '{{.HOME}}/.secrets/passwords.sh']
 version: '3'

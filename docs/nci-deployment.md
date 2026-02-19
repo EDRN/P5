@@ -45,6 +45,7 @@ The following table describes the properties that automatically end up in the `.
 | `NCIDOCKERHUB_USER`     | Not used                                                 | Doesn't matter                    |
 | `POSTGRES_PASSWORD`     | Password to use for PostgreSQL                           | Can be anything; see "Secrets"    |
 | `POSTGRES_USER_ID`      | Not used                                                 | Doesn't matter                    |
+| `REDIS_PASSWORD`        | Password to use for Redis cache and message broker       | Can be anything; see "Secrets"    |
 | `RECAPTCHA_PRIVATE_KEY` | Private API key for the reCAPTCHA service                | Provided; see "Secrets"           |
 | `RECAPTCHA_PUBLIC_KEY`  | Public API key for the reCAPTCHA service                 | Provided; see "Secrets"           |
 | `SIGNING_KEY`           | Hash input for creating session IDs, etc.                | Can be anything; see "Secrets"    |
@@ -72,9 +73,10 @@ The portal uses several secrets in its operation. Some of these are arbitrary va
 
 #### Arbitrary Secrets
 
-The portal uses two arbitrary secrets; when updating the Jenkins properties, you can use any random text for these, but high-entropy strings of mixed letters and numbers are recommended. These can and should be changed with each deployment.
+The portal uses three arbitrary secrets; when updating the Jenkins properties, you can use any random text for these, but high-entropy strings of mixed letters and numbers are recommended. These can and should be changed with each deployment.
  
 - `POSTGRES_PASSWORD` is used to create and to connect to the portal database in PostgreSQL.
+- `REDIS_PASSWORD` is used to authenticate connections to the Redis cache and message broker service.
 - `SIGNING_KEY` is used to sign secure data, such as for signing session cookies and generating cross-site request forgery (CRSF) tokens for forms. It should be unique per portal installation and kept secret once created. 
 
 
@@ -115,7 +117,7 @@ The `edrndocker/edrn-portal` image is the actual portal software, based on the [
 
 ## Deployment
 
-The remainder of this document tells how to deploy the portal to the development, staging, and production tiers. All deployment is accomplished with [NCI Drupal Jenkins](https://nci-drupal-jenkins.nci.nih.gov/jenkins/login?from=%2Fjenkins%2F). This enables "one-click" deployment for the most part—although a review and rotation of the `POSTGRES_PASSWORD` and `SIGNING_KEY` properties is recommended. The production tier should be backed-up first, as well, but that is described below.
+The remainder of this document tells how to deploy the portal to the development, staging, and production tiers. All deployment is accomplished with [NCI Drupal Jenkins](https://nci-drupal-jenkins.nci.nih.gov/jenkins/login?from=%2Fjenkins%2F). This enables "one-click" deployment for the most part—although a review and rotation of the `POSTGRES_PASSWORD`, `REDIS_PASSWORD`, and `SIGNING_KEY` properties is recommended. The production tier should be backed-up first, as well, but that is described below.
 
 
 ### Development and Staging Tiers

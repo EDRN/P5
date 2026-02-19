@@ -46,7 +46,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 # Collect static as the app user, clean up, and add a symlink for compatibility
 RUN gosu edrn env LDAP_BIND_PASSWORD=unused SIGNING_KEY=unused /app/bin/django-admin collectstatic \
-    --settings edrnsite.policy.settings.ops --no-input --clear --link \
+    --settings edrnsite.policy.settings.ops --no-input --clear \
     && rm -rf /app/wheels \
     && chown -R edrn:edrn /app \
     && ln -s /app/bin/django-admin /usr/bin/django-admin
