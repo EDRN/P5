@@ -118,9 +118,23 @@ services:
     #
     # Port 5432, non-published.
     db:
-        image: postgres:17.6-alpine
+        image: postgres:17.8-alpine3.23
+        # Note: setting the user may cause this service to fail on its first start with an
+        # empty database volume. Running as "root" might be a workaround.
+        user: "999:999"
+        read_only: true
+        tmpfs:
+            -   /tmp
+            -   /var/run/postgresql
         volumes:
             -   "database_volume:/var/lib/postgresql/data"
+        security_opt:
+            -   no-new-privileges:true
+            -   label=type:container_t
+            -   label=level:s0
+        pids_limit: 50
+        mem_limit: 128m
+        cpu_shares: 512
         networks:
             -   lattice
         environment:
