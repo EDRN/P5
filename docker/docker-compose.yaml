@@ -129,9 +129,9 @@ services:
     # Port 5432, non-published.
     db:
         image: postgres:17.8-alpine3.23
-        # Note: setting the user may cause this service to fail on its first start with an
-        # empty database volume. Running as "root" might be a workaround.
-        user: "999:999"
+        # Note: using a user like "999:999" causes this service to fail on its first start.
+        # Do _not_ use this next line:
+        # user: "999:999"
         read_only: true
         tmpfs:
             -   /tmp
@@ -307,8 +307,7 @@ volumes:
         driver: local
         driver_opts:
             type: none
-            # device: ${EDRN_DATA_DIR:-/local/content/edrn}/postgresql
-            device: /Users/kelly/dockerdata/renaissance/postgresql
+            device: ${EDRN_DATA_DIR:-/local/content/edrn}/postgresql
             o: bind
         labels:
             org.label-schema.name: EDRN Portal Database Data
@@ -317,8 +316,7 @@ volumes:
         driver: local
         driver_opts:
             type: none
-            # device: ${EDRN_MEDIA_DIR:-${EDRN_DATA_DIR:-/local/content/edrn}/media}
-            device: /Users/kelly/dockerdata/renaissance/media
+            device: ${EDRN_MEDIA_DIR:-${EDRN_DATA_DIR:-/local/content/edrn}/media}
             o: bind
         labels:
             org.label-schema.name: EDRN Portal Media Data
@@ -327,8 +325,7 @@ volumes:
         driver: local
         driver_opts:
             type: none
-            # device: ${EDRN_STATIC_DIR:-${EDRN_DATA_DIR:-/local/content/edrn}/static}
-            device: /Users/kelly/dockerdata/renaissance/static
+            device: ${EDRN_STATIC_DIR:-${EDRN_DATA_DIR:-/local/content/edrn}/static}
             o: bind
         labels:
             org.label-schema.name: EDRN Portal Static Data
