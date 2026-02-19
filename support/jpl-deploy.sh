@@ -29,12 +29,18 @@ compose() {
     docker compose --project-name portal --profile tls "$@"
 }
 
-echo "🛑 Stopping and removing any existing containers and services"
+echo "🛑 Stopping and removing any existing containers and services" 1>&2
 compose down --remove-orphans --volumes
 
-compose run --rm --volume ${PWD}/docker-data:/mnt --no-TTY --entrypoint /bin/rm db -rf /mnt/postgresql || :
+# Rather than this:
+# compose run --rm --volume ${PWD}/docker-data:/mnt --no-TTY --entrypoint /bin/rm db -rf /mnt/postgresql || :
+# Let's try this:
+docker container run --privileged --user root --rm --volume ${PWD}/docker-data:/mnt/dd --entrypoint rm busybox -r /mnt/dd/postgresql || :
+
+# Then clean up the rest:
 [ -d docker-data ] || mkdir docker-data
 for sub in media postgresql; do
+    echo "🧹 Removing docker-data/$sub directory" 1>&2
     rm -rf docker-data/$sub
     mkdir docker-data/$sub
 done
