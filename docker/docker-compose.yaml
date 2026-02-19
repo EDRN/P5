@@ -69,6 +69,16 @@ services:
                 published: ${EDRN_PUBLISHED_PORT:-8080}
                 protocol: tcp
                 mode: host
+        security_opt:
+            -   no-new-privileges:true
+            -   label=type:container_t
+            -   label=level:s0
+        pids_limit: 50
+        mem_limit: 1g
+        cpu_shares: 1024
+        read_only: true
+        tmpfs:
+            -   /tmp
         networks:
             -   lattice
             -   default
@@ -186,12 +196,20 @@ services:
     #
     # Ports 9200 and 9300, not published.
     search:
-        image: elasticsearch:8.10.2
-        # :crystal-ball-emoji: TODO: user ID 500/26013 issue … do we need a custom elasticsearch image?
+        image: elasticsearch:8.19.11
+        # Note: setting read_only to true will cause the search engine to fail to work. It must
+        # be false.
+        read_only: false
         volumes:
             -   "elasticdata:/usr/share/elasticsearch/data"
         networks:
             -   lattice
+        security_opt:
+            -   no-new-privileges:true
+            -   label=type:container_t
+            -   label=level:s0
+        pids_limit: 200
+        cpu_shares: 512
         environment:
             node.name: search
             discovery.type: single-node
