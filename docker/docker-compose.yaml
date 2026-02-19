@@ -134,7 +134,7 @@ services:
             -   label=level:s0
         pids_limit: 50
         mem_limit: 128m
-        cpu_shares: 512
+        cpu_shares: 768
         networks:
             -   lattice
         environment:
@@ -222,8 +222,19 @@ services:
     worker:
         image: edrndocker/edrn-portal:${EDRN_VERSION:-latest-uid26013}
         entrypoint: ['/app/bin/django-admin', 'worker', '--verbosity', '2']
+        # Note: setting read_only to true will cause the worker to fail to do a "full ingest"
+        # of remote content. It must be false.
+        read_only: false
         volumes:
             -   "media:/app/media"
+        security_opt:
+            -   no-new-privileges:true
+            -   label=type:container_t
+            -   label=level:s0
+        pids_limit: 50
+        # The worker needs a lot of memory to do a full ingest of remote content.
+        mem_limit: 2g
+        cpu_shares: 512
         networks:
             -   lattice
         environment:
