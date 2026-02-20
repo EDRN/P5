@@ -145,9 +145,6 @@ docker compose --project-name edrn start portal" || exit 1
 echo ""
 echo "🆙 Applying upgrades"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
-docker compose --project-name edrn exec portal /app/bin/django-admin help" || exit 1
-
-ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
     docker compose --project-name edrn exec portal /app/bin/django-admin edrn_upgrade" || exit 1
 
 echo ""

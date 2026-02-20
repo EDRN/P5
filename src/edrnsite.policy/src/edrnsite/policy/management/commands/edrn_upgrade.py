@@ -16,8 +16,11 @@ class Command(BaseCommand):
         '''Handle the EDRN upgrade command.'''
         self.stdout.write(f'🆙 Upgrading EDRN site to version {VERSION}')
 
+        # For 6.22.0, there's nothing special that needs to be done
+        self.stdout.write('🤷‍♀️ No special upgrade needed for 6.22.0')
+
         # For 6.21.0, we add the forbidden publications to the site
-        self.stdout.write('🔍 Adding forbidden publications to the site')
-        call_command('edrn_forbidden_pubs')
+        # self.stdout.write('🔍 Adding forbidden publications to the site')
+        # call_command('edrn_forbidden_pubs')
 
         self.stdout.write("🎉 Job's done!")
