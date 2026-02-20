@@ -76,7 +76,8 @@ services:
         pids_limit: 50
         mem_limit: 1g
         cpu_shares: 1024
-        read_only: true
+        # read_only must be false or else Entrez PubMed cached lookups will fail
+        read_only: false
         tmpfs:
             -   /tmp
         networks:
