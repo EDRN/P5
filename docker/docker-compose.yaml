@@ -129,7 +129,7 @@ services:
     #
     # Port 5432, non-published.
     db:
-        image: postgres:17.8-alpine3.23
+        image: postgres:17.9-alpine3.23
         # Note: using a user like "999:999" causes this service to fail on its first start.
         # Do _not_ use this next line:
         # user: "999:999"
