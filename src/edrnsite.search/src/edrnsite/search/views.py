@@ -17,15 +17,24 @@ import boto3, json, logging
 _logger = logging.getLogger(__name__)
 
 
+def _search_live_pages(query: str):
+    '''Search live pages, using full search for numeric IDs that autocomplete does not cover.'''
+    pages = Page.objects.live()
+    if query.strip().isdigit():
+        return pages.search(query)
+    results = pages.autocomplete(query)
+    if not results:
+        results = pages.search(query)
+    return results
+
+
 def search(request):
     '''Extremely basic search.'''
     query = request.GET.get('query')
     _logger.info('🔎 Search query: %s', query)
     if query:
         promotions = Query.get(query).editors_picks.all()
-        results = Page.objects.live().autocomplete(query)
-        if not results:
-            results = Page.objects.live().search(query)
+        results = _search_live_pages(query)
         Query.get(query).add_hit()
     else:
         results, promotions = Page.objects.none(), SearchPromotion.objects.none()
@@ -66,9 +75,7 @@ def search_summary(request):
     if not query:
         return HttpResponse('<p>Sorry, no summary available for no query.</p>', content_type='text/html')
 
-    results = Page.objects.live().autocomplete(query)
-    if not results:
-        results = Page.objects.live().search(query)
+    results = _search_live_pages(query)
     if not results:
         return HttpResponse('<p>Sorry, no summary available for the given query.</p>', content_type='text/html')
     controls = Search.for_request(request)
