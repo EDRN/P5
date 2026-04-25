@@ -26,7 +26,7 @@ source=tumor.jpl.nasa.gov:/usr/local/edrn/portal/ops-nci
 
 echo "📈 Retrieving database" 1>&2
 rm -f "edrn.sql.bz2"
-scp -q -p $source/edrn.sql.bz2 ${WORKSPACE}
+scp -q -p $source/db/edrn.sql.bz2 ${WORKSPACE}
 
 if [ \! -f "edrn.sql.bz2" ]; then
     echo "Failed to get $source/edrn.sql.bz2" 1>&2
