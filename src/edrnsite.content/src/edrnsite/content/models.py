@@ -85,6 +85,7 @@ class FlexPage(MetadataPageMixin, Page):
         ('block_quote', blocks.BlockQuoteBlock(help_text='Block quote')),
         ('typed_table', blocks.TYPED_TABLE_BLOCK),
         ('carousel', blocks.CarouselBlock()),
+        ('dashboard', blocks.DashboardBlock()),
         ('raw_html', wagtail_core_blocks.RawHTMLBlock(help_text='Raw HTML (use with care)')),
     ], null=True, blank=True, use_json_field=True)
     content_panels = Page.content_panels + [

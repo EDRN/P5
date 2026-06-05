@@ -175,3 +175,66 @@ TYPED_TABLE_BLOCK = TypedTableBlock([
 #         icon = 'user'
 #         label = 'Hero Unit'
 #         help_text = 'An eye-catching display of a headline, imagery, optional text, and buttoned-links'
+
+
+_dashboard_intro = (
+    '<p>EDRN discovers and validates <strong>biomarkers</strong> for the early detection of cancer — through research '
+    'protocols, scientific data, publications, and curated specimen reference sets, spanning dozens of '
+    'diseases and the organs they affect</p>'
+)
+
+class DashboardBlock(blocks.StructBlock):
+    title = blocks.CharBlock(
+        max_length=120, required=True, help_text='Title of the dashboard',
+        default='The Early Detection Research Network'
+    )
+    intro = blocks.RichTextBlock(
+        required=True, help_text='Introductory text',
+        default=_dashboard_intro
+    )
+    num_reference_sets = blocks.IntegerBlock(required=True, help_text='Number of reference sets', default=16)
+    num_data_collections = blocks.IntegerBlock(required=True, help_text='Number of data collections', default=4)
+    num_diseases = blocks.IntegerBlock(required=True, help_text='Number of diseases', default=24)
+    num_organs = blocks.IntegerBlock(required=True, help_text='Number of organs', default=10)
+
+    def get_context(self, value, parent_context=None):
+        from eke.biomarkers.biomarker import BiomarkerBodySystem
+        context = super().get_context(value, parent_context=parent_context)
+
+        # Some of the info in this block comes from the block settings itself (above),
+        # and others are derived based on available data. Number of biomarkers is one:
+        context['num_biomarkers'] = BiomarkerBodySystem.objects.distinct().count()
+
+        # Number of publications is another. We want to use only those publications that are on the
+        # Publications page.
+        #
+        # 🔮 TODO: refactor this since it's the same computation as in the PublicationIndex view.
+        from eke.knowledge.models import Publication, PublicationIndex
+        publication_index = PublicationIndex.objects.first()
+        if publication_index:
+            dmcc_pubs = Publication.objects.filter(
+                subject_uris__identifier__startswith='http://edrn.nci.nih.gov/data/pubs/'
+            ).child_of(publication_index).live().public().filter(year__isnull=False)
+            grant_pubs = Publication.objects.filter(
+                subject_uris__identifier__startswith='urn:edrn:knowledge:publication:via-grants:'
+            ).child_of(publication_index).live().public().filter(year__isnull=False)
+            matches = dmcc_pubs.union(grant_pubs).order_by('-year')
+            context['num_publications'] = matches.count()
+        else:
+            context['num_publications'] = 0
+
+        # Number of protocols next. Easy one.
+        from eke.knowledge.models import Protocol
+        context['num_protocols'] = Protocol.objects.count()
+
+        # Number of science data collections next. Easy one.
+        from eke.knowledge.models import DataCollection
+        context['num_data_collections'] = DataCollection.objects.count()
+
+        return context
+
+    class Meta:
+        template = 'edrnsite.streams/dashboard-block.html'
+        icon = 'globe'
+        label = 'Dashboard'
+        help_text = 'An EDRN-specific dashboard showing key metrics with some customizable features'
