@@ -31,7 +31,7 @@ echo "ℹ️ Syncing with username «${NIH_USERNAME}» to «${WORKSPACE}» in lo
 
 db=${WORKSPACE}/db
 media=${WORKSPACE}/media
-source=https://edrn.nci.nih.gov/database-access
+source=https://edrn.cancer.gov/database-access
 
 
 # PostgreSQL Database
