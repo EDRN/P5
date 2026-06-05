@@ -52,16 +52,16 @@ class Ingestor(BaseIngestor):
 
             new_co_chairs = set(predicates.get(_co_chair, []))
             co_chairs = Person.objects.filter(identifier__in=new_co_chairs).order_by('title')
-            committee.co_chairs.set(co_chairs, bulk=True, clear=True)
+            committee.co_chairs.set(co_chairs, clear=True)
             new_members = set(predicates.get(_member, [])) | set(predicates.get(_consultant, []))
             members = Person.objects.filter(identifier__in=new_members).order_by('title')
-            committee.members.set(members, bulk=True, clear=True)
+            committee.members.set(members, clear=True)
             new_scientists = set(predicates.get(_project_scientist, []))
             scientists = Person.objects.filter(identifier__in=new_scientists).order_by('title')
-            committee.project_scientists.set(scientists, bulk=True, clear=True)
+            committee.project_scientists.set(scientists, clear=True)
             new_officers = set(predicates.get(_program_officer, []))
             officers = Person.objects.filter(identifier__in=new_officers).order_by('title')
-            committee.program_officers.set(officers, bulk=True, clear=True)
+            committee.program_officers.set(officers, clear=True)
             try:
                 committee.save()
             except ValidationError:

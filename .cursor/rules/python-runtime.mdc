@@ -1,0 +1,38 @@
+---
+description: Always use the project's .venv interpreter for Python commands
+alwaysApply: true
+---
+
+# Python Runtime
+
+This project uses the virtual environment at `.venv/` (configured in
+`.cursor/settings.json`). The IDE auto-activates it in interactive terminals,
+but the agent's Shell tool spawns a non-interactive shell that does NOT, so bare
+`python`/`pip` resolve to a different global interpreter (e.g. Homebrew) with
+different package versions. This produces misleading results.
+
+## Rules
+
+- Always invoke Python through the project venv explicitly:
+
+```bash
+.venv/bin/python ...
+.venv/bin/pip ...
+.venv/bin/python -m <module> ...
+```
+
+- To check an installed package version, use the venv's metadata:
+
+```bash
+.venv/bin/python -c "from importlib.metadata import version; print(version('django-modelcluster'))"
+```
+
+- Never rely on bare `python`, `python3`, or `pip` for anything version- or
+  dependency-sensitive.
+
+## Relationship to `ignore-venv`
+
+The `ignore-venv` rule means: do not read, edit, lint, or review the source
+*files* under `.venv/`. It does NOT forbid *running* `.venv/bin/python`. To
+inspect a dependency's source, read it from its upstream repository instead of
+opening files inside `.venv/`.
