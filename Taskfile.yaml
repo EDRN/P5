@@ -6,19 +6,19 @@
 ---
 
 env:
-    ALLOWED_HOSTS: "*"
-    BEDROCK_ACCESS_KEY: ""
-    BEDROCK_SECRET_KEY: ""
-    DATABASE_URL: "postgresql://:@/edrn"
-    BASE_URL: "http://localhost:6468/"
-    EDRN_DATA_DIR: "{{.HOME}}/dockerdata/renaissance"
-    jpl_ipv4: "172.16.16.10"
-    LDAP_BIND_PASSWORD: "{{.edrn_service_password}}"
-    LDAP_URI: "ldaps://localhost:1636"
-    p5_media_dir: "/Users/kelly/P6/media"
-    p5_sql: "/Users/kelly/P6/edrn.sql.bz2"
-    port: 6468
-    python: "python3.13"
+    ALLOWED_HOSTS: '{{.ALLOWED_HOSTS | default "*"}}'
+    BEDROCK_ACCESS_KEY: '{{.BEDROCK_ACCESS_KEY | default ""}}'
+    BEDROCK_SECRET_KEY: '{{.BEDROCK_SECRET_KEY | default ""}}'
+    DATABASE_URL: '{{.DATABASE_URL | default "postgresql://:@/edrn"}}'
+    BASE_URL: '{{.BASE_URL | default "http://localhost:6468/"}}'
+    EDRN_DATA_DIR: '{{.EDRN_DATA_DIR | default (print .HOME "/dockerdata/renaissance")}}'
+    jpl_ipv4: '{{.jpl_ipv4 | default "172.16.16.10"}}'
+    LDAP_BIND_PASSWORD: '{{.LDAP_BIND_PASSWORD | default .edrn_service_password}}'
+    LDAP_URI: '{{.LDAP_URI | default "ldaps://localhost:1636"}}'
+    p5_media_dir: '{{.p5_media_dir | default "/Users/kelly/P6/media"}}'
+    p5_sql: '{{.p5_sql | default "/Users/kelly/P6/edrn.sql.bz2"}}'
+    port: '{{.port | default 6468}}'
+    python: '{{.python | default "python3.13"}}'
 
 tasks:
     clean:
@@ -203,7 +203,7 @@ tasks:
         cmds:
             -   docker compose --project-name p5 --profile tls --file docker/docker-compose.yaml {{.CLI_ARGS}}
 
-dotenv: ['env', '{{.HOME}}/.secrets/passwords.sh']
+dotenv: ['.env', 'env', '{{.HOME}}/.secrets/passwords.sh']
 version: '3'
 
 ...
