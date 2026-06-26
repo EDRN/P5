@@ -193,7 +193,6 @@ class DashboardBlock(blocks.StructBlock):
         default=_dashboard_intro
     )
     num_reference_sets = blocks.IntegerBlock(required=True, help_text='Number of reference sets', default=16)
-    num_imaging_reference_sets = blocks.IntegerBlock(required=True, help_text='Number of imaging reference sets', default=3)
     num_diseases = blocks.IntegerBlock(required=True, help_text='Number of diseases', default=24)
     num_organs = blocks.IntegerBlock(required=True, help_text='Number of organs', default=10)
 
