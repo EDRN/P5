@@ -16,9 +16,12 @@ class Command(BaseCommand):
         '''Handle the EDRN upgrade command.'''
         self.stdout.write(f'🆙 Upgrading EDRN site to version {VERSION}')
 
-        # For 6.22.0, add the "At a glance" page with the dashboard block
+        # For 6.22.0, add the "At a glance" page with the dashboard block and the five-phase page
+        # to the Biomarkers index
         self.stdout.write('🔍 Adding the "At a glance" page with the dashboard block')
         call_command('edrn_at_a_glance')
+        self.stdout.write('🔍 Adding the five-phase page to the Biomarkers index')
+        call_command('edrn_five_phase_page_for_biomarkers')
 
         # For 6.21.0, we add the forbidden publications to the site
         # self.stdout.write('🔍 Adding forbidden publications to the site')

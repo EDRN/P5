@@ -163,27 +163,27 @@ class Biomarker(KnowledgeObject, QualityAssuredObject, ResearchedObject):
         context['visible_sections'] = visible_sections
         return context
 
-    def data_table(self) -> dict:
-        '''Return the JSON-compatible dictionary describing this biomarker.'''
-        attrs = super().data_table()
-        attrs['kind'] = self.biomarker_type
+    def _phases_for_body_system(self, bbs: 'BiomarkerBodySystem') -> str:
+        '''Return the phase for a single biomarker–organ pair.'''
+        return '' if bbs.phase is None else str(bbs.phase)
 
-        organs = self.biomarker_body_systems.values_list('title', flat=True).distinct().order_by(Lower('title'))
-        attrs['organs'] = ', '.join([str(i) for i in organs])
-
-        phases, fallback = set(), set()
-        for bbs in self.biomarker_body_systems.all():
-            phase = bbs.phase
-            if phase is not None:
-                fallback.add(phase)
-            for bss in bbs.body_system_studies.all():
-                phase = bss.phase
-                if phase is not None:
-                    phases.add(bss.phase)
-        phases = phases if phases else fallback
-        attrs['phases'] = ', '.join([str(i) for i in sorted(list(phases))])
-
-        return attrs
+    def data_table(self) -> list:
+        '''Return JSON-compatible row dicts: one per biomarker–organ pair.'''
+        base = super().data_table()
+        base['kind'] = self.biomarker_type
+        base['biomarker'] = self.title
+        body_systems = self.biomarker_body_systems.all().order_by(Lower('title'))
+        if not body_systems.exists():
+            return [{**base, 'organ': '', 'phases': ''}]
+        rows = []
+        for bbs in body_systems:
+            rows.append({
+                **base,
+                'title': f'{self.title} - {bbs.title}',
+                'organ': bbs.title,
+                'phases': self._phases_for_body_system(bbs),
+            })
+        return rows
 
     class RDFMeta:
         fields = {

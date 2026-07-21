@@ -4,16 +4,18 @@
 
 from .biomarker import Biomarker, BiomarkerBodySystem, BiomarkerCollaborativeGroupName, Protocol, BodySystemStudy
 from .constants import HGNC_PREDICATE_URI, ORGAN_GROUPS
-from django.db.models.functions import Lower
+from django_plotly_dash import DjangoDash
 from django.core.exceptions import ValidationError
+from django.db import models
+from django.db.models.functions import Lower
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.template.loader import render_to_string
 from django.utils.text import slugify
-from django_plotly_dash import DjangoDash
 from eke.knowledge.models import KnowledgeFolder
 from eke.knowledge.rdf import RelativeRDFAttribute
 from eke.knowledge.utils import Ingestor as BaseIngestor
 from sortedcontainers import SortedList
+from wagtail.admin.panels import FieldPanel
 from wagtail.models import Page
 import dash_core_components as dcc
 import dash_html_components as html
@@ -203,6 +205,11 @@ class BiomarkerIndex(KnowledgeFolder):
     subpage_types = [Biomarker, 'edrnsitecontent.BiomarkerSubmissionFormPage']
     page_description = 'Container for biomarkers'
 
+    five_phase_page = models.ForeignKey(
+        Page, null=True, blank=True, verbose_name='Five phase page', related_name='+',
+        help_text='Which page to use as the link for the Five Phase page', on_delete=models.SET_NULL
+    )
+
     def get_vocabulary(self, name) -> list:
         '''Get a "vocabulary" of known values for the field ``name`` for our contained subpage.
 
@@ -227,8 +234,6 @@ class BiomarkerIndex(KnowledgeFolder):
         if phases:
             matches = matches.filter(biomarker_body_systems__phase__in=phases)
 
-        # TBD what we do with phases
-
         query = request.GET.get('query')
         if query: matches = matches.search(query)
         return matches
@@ -240,6 +245,13 @@ class BiomarkerIndex(KnowledgeFolder):
             rows.append(render_to_string('eke.biomarkers/biomarker-row.html', {'biomarker': page.specific}))
         return ''.join(rows)
 
+    def json(self, request: HttpRequest) -> dict:
+        '''Build DataTables rows: one per biomarker–organ pair.'''
+        data = []
+        for biomarker in self.get_contents(request):
+            data.extend(biomarker.data_table())
+        return {'data': data}
+
     def get_context(self, request: HttpRequest, *args, **kwargs) -> dict:
         context = super().get_context(request, *args, **kwargs)
         matches = context['knowledge_objects']
@@ -247,6 +259,9 @@ class BiomarkerIndex(KnowledgeFolder):
         submission_form = self.get_children().filter(slug='biomarker-submission-form').first()
         if submission_form:
             context['submission_form'] = submission_form.url
+        
+        if self.five_phase_page:
+            context['five_phase_page'] = self.five_phase_page.url
 
         bbs = BiomarkerBodySystem.objects.filter(biomarker__in=matches).all()
         by_organs = {i: 0 for i in bbs.values_list('title', flat=True).distinct()}
@@ -256,25 +271,15 @@ class BiomarkerIndex(KnowledgeFolder):
                 p1 += 1
                 by_organs[organ.title] += 1
             elif organ.phase == 2:
-                p1 += 1
                 p2 += 1
                 by_organs[organ.title] += 2
             elif organ.phase == 3:
-                p1 += 1
-                p2 += 1
                 p3 += 1
                 by_organs[organ.title] += 3
             elif organ.phase == 4:
-                p1 += 1
-                p2 += 1
-                p3 += 1
                 p4 += 1
                 by_organs[organ.title] += 4
             elif organ.phase == 5:
-                p1 += 1
-                p2 += 1
-                p3 += 1
-                p4 += 1
                 p5 += 1
                 by_organs[organ.title] += 5
 
@@ -302,6 +307,8 @@ class BiomarkerIndex(KnowledgeFolder):
             return JsonResponse({'data': [i for i in organs]})
         else:
             return super().serve(request)
+
+    content_panels = KnowledgeFolder.content_panels + [FieldPanel('five_phase_page')]
 
     class Meta:
         pass

@@ -94,7 +94,9 @@ def biomarker_organs(context: Context) -> dict:
     return {
         'supplemental_visible': ds.SUPPLEMENTAL in context['visible_sections'],
         'biomarker': biomarker,
-        'organs': [(slugify(i.title), i, i.qa_state == 'Accepted' or visible) for i in organs],
+        'organs': [
+            (slugify(i.title), i, i.qa_state == 'Accepted' or visible, i.phase) for i in organs
+        ],
         'request': context.get('request')
     }
 

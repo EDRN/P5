@@ -8,14 +8,20 @@
 {% endblock %}
 {% block knowledge_content %}
 
-    {% if submission_form %}
-        <div class='row'>
-            <p class='col-auto'>
+    <ul class='row'>
+        {% if submission_form %}
+            <li>
                 Missing your biomarkers?
                 <a href='{{submission_form}}'>Inform us about your EDRN-funded project's biomarkers</a>.
-            </p>
-        </div>
-    {% endif %}
+            </li>
+        {% endif %}
+
+        {% if five_phase_page %}
+            <li>
+                Learn about EDRN's <a href='{{five_phase_page}}'>five-phase biomarker research approach</a>.
+            </li>
+        {% endif %}
+    </ul>
 
     <div class='row d-flex justify-content-center mb-3 mt-3'>
         <div class='col-sm-2'>
@@ -75,7 +81,6 @@
                         <tr>
                             <th class='only-search-col'>Title</th>
                             <th>Type</th>
-                            <th>Organ</th>
                             <th>Phase</th>
                         </tr>
                     </thead>
@@ -83,7 +88,6 @@
                         <tr>
                             <th>Title</th>
                             <th>Type</th>
-                            <th>Organ</th>
                             <th>Phase</th>
                         </tr>
                     </tfoot>
@@ -108,38 +112,40 @@
             switch (columnIndex) {
                 case 0: return 'Title';
                 case 1: return 'Type';
-                case 2: return 'Organ';
-                case 3: return 'Phase';
+                case 2: return 'Phase';
                 default: return data;
             }
         }
         $(document).ready(function() {
             $('#the-datatable thead tr th.only-search-col').each(function() {
-                var title = $(this).text();
-                $(this).html('<input type="text" placeholder="Search ' + title + 's"/>');
+                $(this).html('<input type="text" placeholder="Search biomarker names"/>');
             });
             $('#the-datatable').DataTable({
                 ajax: {url: '{% pageurl page %}?ajax=json', dataSrc: 'data'},
                 columns: [
                     {data: 'title', render: function(data, type, row) {
-                        return '<a href="' + row['url'] + '">' + data + '</a>';
+                        if (type !== 'display') return data;
+                        var html = '<a href="' + row['url'] + '"><strong>' + row['biomarker'] + '</strong></a>';
+                        if (row['organ']) {
+                            html += ' <span class="badge text-bg-secondary">' + row['organ'] + '</span>';
+                        }
+                        return html;
                     }},
                     {data: 'kind'},
-                    {data: 'organs'},
                     {data: 'phases'}
                 ],
                 fixedHeader: true,
                 buttons: [
-                    {extend: 'copyHtml5', exportOptions: {format: {header: headerFunction}}},
-                    {extend: 'excelHtml5', exportOptions: {format: {header: headerFunction}}},
-                    {extend: 'csvHtml5', exportOptions: {format: {header: headerFunction}}},
-                    {extend: 'pdfHtml5', exportOptions: {format: {header: headerFunction}}}
+                    {extend: 'copyHtml5', exportOptions: {orthogonal: 'export', format: {header: headerFunction}}},
+                    {extend: 'excelHtml5', exportOptions: {orthogonal: 'export', format: {header: headerFunction}}},
+                    {extend: 'csvHtml5', exportOptions: {orthogonal: 'export', format: {header: headerFunction}}},
+                    {extend: 'pdfHtml5', exportOptions: {orthogonal: 'export', format: {header: headerFunction}}}
                 ],
                 dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>B",
                 initComplete: function() {
                     // Set up the phase selector
-                    var phase_column = this.api().column(3);
+                    var phase_column = this.api().column(2);
                     var select = $('<select><option value="">— Phase —</option></select>')
                         .appendTo($(phase_column.header()).empty())
                         .on('change', function() {
@@ -150,26 +156,6 @@
                         select.append('<option value="' + phase + '">' + phase + '</option>');
                     }
 
-                    // Set up the organ selector
-                    var organ_column = this.api().column(2);
-                    var organ_select = $('<select><option value="">— Organ —</option></select>')
-                        .appendTo($(organ_column.header()).empty())
-                        .on('change', function() {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                            organ_column.search(val? val : '', true, false).draw();
-                        });
-                    var organ_retriever = new XMLHttpRequest();
-                    organ_retriever.open('GET', '{% pageurl page %}?ajax=organs', true);
-                    organ_retriever.onreadystatechange = function() {
-                        if (organ_retriever.readyState === 4 && organ_retriever.status === 200) {
-                            var organs = JSON.parse(organ_retriever.responseText)['data'];
-                            organs.forEach(organ => {
-                                organ_select.append('<option value="' + organ + '">' + organ + '</option>');
-                            })
-                        }
-                    }
-                    organ_retriever.send();
-
                     // Add a search box for the title column
                     var title_column = this.api().column(0);
                     $('input', title_column.header()).on('keyup change clear', function() {
@@ -178,8 +164,7 @@
                         }
                     });
 
-                    // For the rest of the columns, just use the distinct values in <select> pulldowns
-                    // (which is just column 1 for now!).
+                    // Type column: distinct values in a <select> pulldown
                     this.api().columns([1]).every(function() {
                         var column = this;
                         var label = this.footer().innerHTML;
@@ -189,7 +174,6 @@
                                 var val = $.fn.dataTable.util.escapeRegex($(this).val());
                                 column.search(val? '^' + val + '$' : '', true, false).draw();
                             });
-                        // Here: try to find better data for organs and phases
                         column.data().unique().sort().each(function(d, j) {
                             select.append('<option value="' + d + '">' + d + '</option>');
                         });

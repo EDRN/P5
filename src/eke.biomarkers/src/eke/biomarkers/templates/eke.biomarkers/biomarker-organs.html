@@ -5,7 +5,7 @@
             <div class='d-flex align-items-start'>
                 <div class='nav flex-column nav-pills me-4 pe-3' id='organs-tabs' role='tablist'
                     aria-oreintation='vertical'>
-                    {% for organ_id, organ, visible in organs %}
+                    {% for organ_id, organ, visible, phase in organs %}
                         <button class='nav-link {% if forloop.first %}active{% endif %}'
                             id='organ-{{organ_id}}-tab' data-bs-toggle='pill' type='button' role='tab'
                             data-bs-target='#organ-{{organ_id}}-section'
@@ -16,11 +16,13 @@
                     {% endfor %}
                 </div>
                 <div class='tab-content ml-3' id='organs-sections'>
-                    {% for organ_id, organ, visible in organs %}
+                    {% for organ_id, organ, visible, phase in organs %}
                         <div class='tab-pane fade {% if forloop.first %}show active{% endif %}' role='tabpanel'
                             id='organ-{{organ_id}}-section' aria-labelledby='organ-{{organ_id}}-tab'>
 
                             <dl>
+                                <dt>Phase</dt>
+                                <dd>{% if phase %}{{phase}}{% else %}<span class='small'>None</span>{% endif %}</dd>
                                 <dt>Certifications</dt>
                                 <dd>
                                     <ul class='list-inline'>
