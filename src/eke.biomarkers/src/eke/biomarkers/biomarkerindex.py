@@ -284,6 +284,7 @@ class BiomarkerIndex(KnowledgeFolder):
                 by_organs[organ.title] += 5
 
         context['phase_1'], context['phase_2'], context['phase_3'], context['phase_4'], context['phase_5'] = p1, p2, p3, p4, p5
+        context['total_biomarker_organs'] = p1 + p2 + p3 + p4 + p5
         phases_frame = pandas.DataFrame({'Phase': ['1', '2', '3', '4', '5'], 'Count': [p1, p2, p3, p4, p5]})
         phases_figure = plotly.express.pie(phases_frame, values='Count', names='Phase', title='Phases')
         organs, amounts = [i[0] for i in by_organs.items()], [i[1] for i in by_organs.items()]

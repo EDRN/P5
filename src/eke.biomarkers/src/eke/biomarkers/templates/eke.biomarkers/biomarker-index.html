@@ -5,6 +5,22 @@
 {% block extra_css %}
     {% plotly_header %}
     <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.12.1/b-2.2.3/b-colvis-2.2.3/b-html5-2.2.3/b-print-2.2.3/fh-3.2.4/kt-2.7.0/r-2.3.0/datatables.min.css'/>
+    <style>
+        .biomarker-count-cards .card-total {
+            background: linear-gradient(135deg, #ffe08a 0%, #ffc24d 45%, #f9a921 100%);
+            border-color: rgba(232, 148, 16, .35);
+            color: #0a3554;
+        }
+        .biomarker-count-cards .card-phase {
+            background: linear-gradient(145deg, #f0f4f8 0%, #e2eaf1 55%, #d5e0ea 100%);
+            border-color: rgba(13, 102, 161, .15);
+            color: #0d3a5c;
+        }
+        .biomarker-count-cards .card-title,
+        .biomarker-count-cards .card-text {
+            color: inherit;
+        }
+    </style>
 {% endblock %}
 {% block knowledge_content %}
 
@@ -23,9 +39,17 @@
         {% endif %}
     </ul>
 
-    <div class='row d-flex justify-content-center mb-3 mt-3'>
+    <div class='row d-flex justify-content-center mb-3 mt-3 biomarker-count-cards'>
         <div class='col-sm-2'>
-            <div class='card'>
+            <div class='card card-total'>
+                <div class='card-body text-center'>
+                    <h2 class='card-title h6'>Total biomarker–organs</h2>
+                    <div class='card-text fw-semibold'>{{total_biomarker_organs}}</div>
+                </div>
+            </div>
+        </div>
+        <div class='col-sm-2'>
+            <div class='card card-phase'>
                 <div class='card-body text-center'>
                     <h2 class='card-title h6'>Biomarkers-organs in phase 1</h2>
                     <div class='card-text'>{{phase_1}}</div>
@@ -33,7 +57,7 @@
             </div>
         </div>
         <div class='col-sm-2'>
-            <div class='card'>
+            <div class='card card-phase'>
                 <div class='card-body text-center'>
                     <h2 class='card-title h6'>Biomarkers-organs in phase 2</h2>
                     <div class='card-text'>{{phase_2}}</div>
@@ -41,7 +65,7 @@
             </div>
         </div>
         <div class='col-sm-2'>
-            <div class='card'>
+            <div class='card card-phase'>
                 <div class='card-body text-center'>
                     <h2 class='card-title h6'>Biomarkers-organs in phase 3</h2>
                     <div class='card-text'>{{phase_3}}</div>
@@ -49,7 +73,7 @@
             </div>
         </div>
         <div class='col-sm-2'>
-            <div class='card'>
+            <div class='card card-phase'>
                 <div class='card-body text-center'>
                     <h2 class='card-title h6'>Biomarkers-organs in phase 4</h2>
                     <div class='card-text'>{{phase_4}}</div>
@@ -57,7 +81,7 @@
             </div>
         </div>
         <div class='col-sm-2'>
-            <div class='card'>
+            <div class='card card-phase'>
                 <div class='card-body text-center'>
                     <h2 class='card-title h6'>Biomarkers-organs in phase 5</h2>
                     <div class='card-text'>{{phase_5}}</div>

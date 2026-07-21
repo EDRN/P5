@@ -168,15 +168,14 @@ class Biomarker(KnowledgeObject, QualityAssuredObject, ResearchedObject):
         return '' if bbs.phase is None else str(bbs.phase)
 
     def data_table(self) -> list:
-        '''Return JSON-compatible row dicts: one per biomarker–organ pair.'''
+        '''Return JSON-compatible row dicts: one per biomarker–organ pair with a known phase.'''
         base = super().data_table()
         base['kind'] = self.biomarker_type
         base['biomarker'] = self.title
-        body_systems = self.biomarker_body_systems.all().order_by(Lower('title'))
-        if not body_systems.exists():
-            return [{**base, 'organ': '', 'phases': ''}]
         rows = []
-        for bbs in body_systems:
+        for bbs in self.biomarker_body_systems.all().order_by(Lower('title')):
+            if bbs.phase is None:
+                continue
             rows.append({
                 **base,
                 'title': f'{self.title} - {bbs.title}',
