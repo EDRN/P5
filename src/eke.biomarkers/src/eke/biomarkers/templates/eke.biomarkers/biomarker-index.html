@@ -142,7 +142,7 @@
         }
         $(document).ready(function() {
             $('#the-datatable thead tr th.only-search-col').each(function() {
-                $(this).html('<input type="text" placeholder="Search biomarker names"/>');
+                $(this).html('<input type="text" placeholder="Search names/organs"/>');
             });
             $('#the-datatable').DataTable({
                 ajax: {url: '{% pageurl page %}?ajax=json', dataSrc: 'data'},
