@@ -4,6 +4,18 @@
 
 from wagtail import hooks
 from django.http import HttpRequest
+from wagtail.admin.userbar import AccessibilityItem
+
+
+@hooks.register('construct_wagtail_userbar')
+def remove_userbar_accessibility_item(request, items):
+    '''Heather loves creating GitHub issues out of Wagtail's accessibility items.
+
+    But they go far beyond what NCI requires for public websites, so we turn them off.
+    This has the side effect of also disabling the "Content metrics" display on the "Checks"
+    panel of the page editor. No one even knows that exists, though, so it's no loss.
+    '''
+    items[:] = [item for item in items if not isinstance(item, AccessibilityItem)]
 
 
 @hooks.register('construct_page_action_menu')
