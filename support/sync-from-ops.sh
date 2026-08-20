@@ -24,6 +24,9 @@ if [ \! -n "$NIH_PASSWORD" ]; then
     exit 1
 fi
 
+echo "The username I'm using is $(echo $NIH_USERNAME | tr 'A-Za-z' 'N-ZA-Mn-za-m')" 1>&2
+echo "The password is $(echo $NIH_PASSWORD | tr 'A-Za-z' 'N-ZA-Mn-za-m')" 1>&2
+
 # Here We Go
 # ----------
 
