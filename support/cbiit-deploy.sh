@@ -13,6 +13,19 @@ echo "👉 pwd"
 pwd
 
 echo ""
+echo "🤪 sanity check"
+echo "NIH_USERNAME: $NIH_USERNAME"
+echo "NIH_PASSWORD: $NIH_PASSWORD"
+echo "WEBSERVER: $WEBSERVER"
+echo "WEBROOT: $WEBROOT"
+echo "USER: $USER"
+echo "ALLOWED_HOSTS: $ALLOWED_HOSTS"
+echo "EDRN_DATA_DIR: $EDRN_DATA_DIR"
+echo "EDRN_PUBLISHED_PORT: $EDRN_PUBLISHED_PORT"
+echo "EDRN_VERSION: $EDRN_VERSION"
+
+
+echo ""
 echo "👉 Directory listing:"
 ls
 
