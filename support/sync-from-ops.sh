@@ -48,6 +48,7 @@ database_name="edrn-$(date -u '+%Y-%m-%d').sql.bz2"
 database="${db}/${database_name}"
 [ -d "$db" ] || mkdir --parents "$db"
 wget \
+    --quiet \
     --execute robots=off \
     --no-check-certificate \
     --output-document="$database" \
