@@ -16,7 +16,7 @@
 # Inherit settings from environment
 NIH_USERNAME=${NIH_USERNAME:-kellysc}
 NIH_PASSWORD=${NIH_PASSWORD:-}
-WORKSPACE="/usr/local/edrn/portal/ops-nci"
+WORKSPACE=${WORKSPACE:-/usr/local/edrn/portal/ops-nci}
 
 # Check the password
 if [ \! -n "$NIH_PASSWORD" ]; then
