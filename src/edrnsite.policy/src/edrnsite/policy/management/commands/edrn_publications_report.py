@@ -24,6 +24,13 @@ class Command(BaseCommand):
                 'Omit FILE or use - to write to stdout.'
             ),
         )
+        parser.add_argument(
+            '--correlate', metavar='FILE', nargs='?', default=None,
+            help=(
+                'Read FILE of PubMedIDs and write a report of which are found in DMCC, which in grant numbers, '
+                'and which are missing'
+            )
+        )
 
     def _dmcc_and_grant_pubs(self):
         '''Return DMCC and grant-number Publication querysets.'''
@@ -64,6 +71,10 @@ class Command(BaseCommand):
             rows += 1
         return rows
 
+    def _checkmark(self, value):
+        '''Return a checkmark or an empty string.'''
+        return '✓' if value else ''
+
     def handle(self, *args, **options):
         '''Handle the EDRN `edrn_publications_report` command.'''
         if options['csv'] is not None:
@@ -78,6 +89,20 @@ class Command(BaseCommand):
             return
 
         dmcc_pubs, grant_pubs = self._dmcc_and_grant_pubs()
+
+        if options['correlate'] is not None:
+            results = []
+            with open(options['correlate'], 'r', encoding='UTF-8') as infile:
+                for line in infile:
+                    pubmed_id = line.strip()
+                    if pubmed_id:
+                        dmcc, grant = dmcc_pubs.filter(pubMedID=pubmed_id).first(), grant_pubs.filter(pubMedID=pubmed_id).first()
+                        found_in_dmcc, found_in_grant = dmcc is not None, grant is not None
+                        results.append((pubmed_id, found_in_dmcc, found_in_grant))
+            writer = csv.writer(self.stdout)
+            writer.writerow(['pubMedID', 'Pub found in DMCC SOAP API', 'Pub found in EDRN grant numbers'])
+            for result in results:
+                writer.writerow((result[0], self._checkmark(result[1]), self._checkmark(result[2])))
 
         on_page = dmcc_pubs.filter(year__isnull=False).union(grant_pubs.filter(year__isnull=False)).count()
         self.stdout.write(f'Reported on Publications page: {on_page}')
