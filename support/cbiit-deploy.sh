@@ -31,7 +31,7 @@ ls
 
 echo ""
 echo "👉 What docker (and version) are we using on $USER@$WEBSERVER"
-ssh $USER@$WEBSERVER "which docker ; docker --version" || exit 1
+ssh -q $USER@$WEBSERVER "which docker ; docker --version" || exit 1
 
 echo "🏃 Begin deployment to $WEBSERVER"
 
@@ -153,6 +153,7 @@ ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn exec portal /app/bin/django-admin migrate &&\
 docker compose --project-name edrn exec portal /app/bin/django-admin fixtree &&\
 docker compose --project-name edrn exec portal /app/bin/django-admin collectstatic --no-input --clear &&\
+docker compose --project-name edrn exec portal /app/bin/django-admin edrn_upgrade &&\
 docker compose --project-name edrn exec portal /app/bin/django-admin edrndevreset" || exit 1
 echo ""
 echo "🤷‍♀️ Restarting the portal"

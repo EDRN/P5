@@ -11,6 +11,19 @@ echo "👉 pwd"
 pwd
 
 echo ""
+echo "🤪 sanity check"
+echo "NIH_USERNAME: $NIH_USERNAME"
+echo "NIH_PASSWORD: $NIH_PASSWORD"
+echo "WEBSERVER: $WEBSERVER"
+echo "WEBROOT: $WEBROOT"
+echo "USER: $USER"
+echo "ALLOWED_HOSTS: $ALLOWED_HOSTS"
+echo "EDRN_DATA_DIR: $EDRN_DATA_DIR"
+echo "EDRN_PUBLISHED_PORT: $EDRN_PUBLISHED_PORT"
+echo "EDRN_VERSION: $EDRN_VERSION"
+
+
+echo ""
 echo "👉 Directory listing:"
 ls
 
@@ -48,7 +61,7 @@ POSTGRES_USER_ID=$POSTGRES_USER_ID
 SIGNING_KEY=$SIGNING_KEY
 RECAPTCHA_PRIVATE_KEY=$RECAPTCHA_PRIVATE_KEY
 RECAPTCHA_PUBLIC_KEY=$RECAPTCHA_PUBLIC_KEY
-
+REDIS_PASSWORD=$REDIS_PASSWORD
 BASE_URL=https://${FINAL_HOSTNAME:-edrn.nci.nih.gov}/
 EOF
 ls -la .env
@@ -56,6 +69,7 @@ ls -la .env
 echo ""
 echo "© Copying .env file to $WEBROOT"
 scp .env $USER@$WEBSERVER:$WEBROOT
+rm -f .env
 
 echo ""
 echo "👉 Fetching the latest docker-compose.yaml"
@@ -133,7 +147,8 @@ echo "📀 Initial database setup"
 ssh -q $USER@$WEBSERVER "cd $WEBROOT ; \
 docker compose --project-name edrn exec portal /app/bin/django-admin migrate &&\
 docker compose --project-name edrn exec portal /app/bin/django-admin fixtree &&\
-docker compose --project-name edrn exec portal /app/bin/django-admin collectstatic --no-input --clear" || exit 1
+docker compose --project-name edrn exec portal /app/bin/django-admin collectstatic --no-input --clear &&\
+docker compose --project-name edrn exec portal /app/bin/django-admin edrn_upgrade" || exit 1
 
 echo ""
 echo "🤷‍♀️ Restarting the portal"
