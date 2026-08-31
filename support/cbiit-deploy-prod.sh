@@ -47,8 +47,9 @@ echo "🎉 Success! We can SSH to $WEBSERVER as $USER from `hostname`"
 echo ""
 echo "🧹Cleaning up remote production workspace and keeping the media dir around"
 
-ssh -q $USER@$WEBSERVER "chown -R $USER:$USER /local/content/edrn &&\
-rm -rf $WEBROOT/docker-compose.yaml $WEBROOT/../static $WEBROOT/../postgresql $WEBROOT/.env &&\
+ssh -q $USER@$WEBSERVER "docker container run --rm --volume /local/content/edrn:/mnt/edrn busybox rm -rf /mnt/edrn/postgresql" || exit 1
+
+ssh -q $USER@$WEBSERVER "rm -rf $WEBROOT/docker-compose.yaml $WEBROOT/../static $WEBROOT/.env &&\
 mkdir $WEBROOT/../static $WEBROOT/../postgresql &&\
 ls -lF $WEBROOT" || exit 1
 
