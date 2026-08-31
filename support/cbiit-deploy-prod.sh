@@ -38,10 +38,16 @@ echo "👉 Here is what is on $WEBSERVER in $WEBROOT"
 
 ssh -q $USER@$WEBSERVER "ls -l $WEBROOT"
 
+
 echo ""
-echo "🧹Cleaning up remote production workspace and keeping the media dir around"
+echo "🩺 TESTING SSH CONNECTION ======================="
 
 ssh $USER@$WEBSERVER "echo TESTING SSH CONNECTION" || exit 1
+echo "🎉 Success! We can SSH to $WEBSERVER as $USER from `hostname`"
+
+
+echo ""
+echo "🧹Cleaning up remote production workspace and keeping the media dir around"
 
 ssh -q $USER@$WEBSERVER "sudo chown -R $USER:$USER /local/content/edrn &&\
 rm -rf $WEBROOT/docker-compose.yaml $WEBROOT/../static $WEBROOT/../postgresql $WEBROOT/.env &&\
