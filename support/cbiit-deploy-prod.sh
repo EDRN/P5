@@ -41,6 +41,8 @@ ssh -q $USER@$WEBSERVER "ls -l $WEBROOT"
 echo ""
 echo "🧹Cleaning up remote production workspace and keeping the media dir around"
 
+ssh $USER@$WEBSERVER "TESTING SSH CONNECTION" || exit 1"
+
 ssh -q $USER@$WEBSERVER "sudo chown -R $USER:$USER /local/content/edrn &&\
 rm -rf $WEBROOT/docker-compose.yaml $WEBROOT/../static $WEBROOT/../postgresql $WEBROOT/.env &&\
 mkdir $WEBROOT/../static $WEBROOT/../postgresql &&\
