@@ -27,8 +27,7 @@ class Command(BaseCommand):
                 self.stdout.write('No "at-a-glance" page found; creating it under "about-edrn"')
                 page = FlexPage(
                     title='At a Glance', slug='at-a-glance', live=True,
-                    meta_description='A summary of the Early Detection Research Network'
-                    # search_image=wagtail.images.get_image_model().objects.filter(title='EDRN Logo').first()
+                    search_description='A summary of the Early Detection Research Network'
                 )
                 parent.add_child(instance=page)
             else:
