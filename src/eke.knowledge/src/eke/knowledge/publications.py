@@ -427,12 +427,14 @@ class Ingestor(BaseIngestor):
                 _logger.warning('No pubmed info found for PMID «%s», cannot create an object for it', pmid)
                 continue
             title, abstract, issue, year, month, journal, authors = deets
+            try: year = int(year)
+            except ValueError: year = None
             p = Publication(
                 # 🔮 Maybe truncate titles better?
                 title=title[:255], live=True, slug=self.slugify(pmid, title),
                 identifier=self.miriam_uri(pmid), pubMedID=pmid,
                 search_description='This is a publication by a member of the Early Detection Research Network.',
-                abstract=abstract, issue=issue, year=int(year), month=month, journal=journal
+                abstract=abstract, issue=issue, year=year, month=month, journal=journal
             )
             self.folder.add_child(instance=p)
             p.save()
@@ -524,20 +526,6 @@ class Ingestor(BaseIngestor):
 
         # Remove all forbidden pub med IDs
         pmids -= set[str](self.folder.specific.forbidden_publications.all().values_list('value', flat=True))
-
-        # Make a report of which publications come from the DMCC and which come from grant numbers;
-        # note that this works only if you disable the BMDB RDF source first.
-        #
-        # import csv
-        # with open('/tmp/pubs.csv', 'w', newline='') as f:
-        #     writer = csv.writer(f)
-        #     writer.writerow(['PubMed ID', 'Title', 'In DMCC', 'In Grants'])
-        #     for pubMedID in both:
-        #         qs = Publication.objects.filter(pubMedID=pubMedID).first()
-        #         title = qs.title if qs else '«unknown»'
-        #         in_dmcc = pubMedID in pmids
-        #         in_grants = pubMedID in grant_pmids
-        #         writer.writerow([pubMedID, title, in_dmcc, in_grants])
 
         new, updated, deleted = self.update_publications(pmids, pmids_to_sites, pmids_to_uris)
         self.add_missing_months()

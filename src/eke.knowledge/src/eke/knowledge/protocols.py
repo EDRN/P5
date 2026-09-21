@@ -44,18 +44,9 @@ class _ProjectFlagRDFAttribute(RDFAttribute):
         return super().compute_new_value(modelField, value == 'Project', predicates)
 
 
-class _ComplexDescriptionRDFAttribute(RDFAttribute):
+class _YesNoRDFAttribute(RDFAttribute):
     def compute_new_value(self, modelField: Field, value: str, predicates: dict) -> object:
-        for pred in (
-            rdflib.DCTERMS.description,
-            rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#objective'),
-            rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#aims'),
-            rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#outcome'),
-            rdflib.URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#secureOutcome')
-        ):
-            text = predicates.get(pred, [''])[0]
-            if text:
-                return super().compute_new_value(modelField, text, predicates)
+        return super().compute_new_value(modelField, value.lower() in ('yes', 'true', '1'), predicates)
 
 
 class _CollaborativeGroupRDFAttribute(RDFAttribute):
@@ -105,9 +96,14 @@ class Protocol(KnowledgeObject):
         max_length=120, null=False, blank=True, help_text='Short and more convenient name for the protocol'
     )
     phasedStatus = models.PositiveIntegerField(blank=True, null=True, help_text='Not sure what this is')
+    abstract = models.TextField(null=False, blank=True, help_text='The short, structured summary of the protocol')
     aims = models.TextField(null=False, blank=True, help_text='The long term goals of this protocol')
+    objective = models.TextField(null=False, blank=True, help_text='The immediate goals of this protocol')
+    blinding = models.TextField(null=False, blank=True, help_text='Summary of how blinding procedures are managed')
     analyticMethod = models.TextField(null=False, blank=True, help_text='How things in this protocol are analyzed')
     comments = models.TextField(null=False, blank=True, help_text='Your feedback on this protocol is appreciated!')
+    data_sharing_plan = models.TextField(null=False, blank=True, help_text='How data will be shared')
+    in_situ_data_sharing_plan = models.BooleanField(null=False, blank=False, default=False, help_text='True if the data sharing plan is in situ')
     start_date = models.TextField(null=False, blank=True, help_text='When this protocol began')
     estimated_finish_date = models.TextField(null=False, blank=True, help_text='A guess as to when this protocol will end')
     finish_date = models.TextField(null=False, blank=True, help_text='When this protocol ceased')
@@ -126,9 +122,14 @@ class Protocol(KnowledgeObject):
         FieldPanel('protocolID'),
         FieldPanel('abbreviation'),
         FieldPanel('phasedStatus'),
+        FieldPanel('abstract'),
         FieldPanel('aims'),
+        FieldPanel('blinding'),
+        FieldPanel('objective'),
         FieldPanel('analyticMethod'),
         FieldPanel('comments'),
+        FieldPanel('data_sharing_plan'),
+        FieldPanel('in_situ_data_sharing_plan'),
         FieldPanel('start_date'),
         FieldPanel('estimated_finish_date'),
         FieldPanel('finish_date'),
@@ -146,6 +147,10 @@ class Protocol(KnowledgeObject):
         index.FilterField('cancer_types'),
         index.FilterField('outcome'),
         index.FilterField('secure_outcome'),
+        index.FilterField('abstract'),
+        index.FilterField('objective'),
+        index.FilterField('blinding'),
+        index.FilterField('data_sharing_plan'),
     ]
     class Meta:
         pass
@@ -161,17 +166,21 @@ class Protocol(KnowledgeObject):
             esu('collaborativeGroupText'): _CollaborativeGroupRDFAttribute('collaborativeGroup', scalar=True),
             esu('phasedStatus'): RDFAttribute('phasedStatus', scalar=True),
             esu('aims'): RDFAttribute('aims', scalar=True),
+            esu('objective'): RDFAttribute('objective', scalar=True),
+            esu('blinding'): RDFAttribute('blinding', scalar=True),
             esu('analyticMethod'): RDFAttribute('analyticMethod', scalar=True),
             esu('comments'): RDFAttribute('comments', scalar=True),
+            esu('dataSharingPlan'): RDFAttribute('data_sharing_plan', scalar=True),
+            esu('inSituDataSharingPlan'): _YesNoRDFAttribute('in_situ_data_sharing_plan', scalar=True),
             esu('startDate'): RDFAttribute('start_date', scalar=True),
             esu('estimatedFinishDate'): RDFAttribute('estimated_finish_date', scalar=True),
             esu('finishDate'): RDFAttribute('finish_date', scalar=True),
             esu('publication'): _PublicationSubjectURIRDFAttribute('publications', scalar=False),
             _internalIDPredicate: RDFAttribute('protocolID', scalar=True),
             str(rdflib.DCTERMS.title): RDFAttribute('title', scalar=True),
-            str(rdflib.DCTERMS.description): _ComplexDescriptionRDFAttribute('description', scalar=True),
-            esu('outcome'): _ComplexDescriptionRDFAttribute('outcome', scalar=True),
-            esu('secureOutcome'): _ComplexDescriptionRDFAttribute('secure_outcome', scalar=True),
+            str(rdflib.DCTERMS.description): RDFAttribute('abstract', scalar=True),
+            esu('outcome'): RDFAttribute('outcome', scalar=True),
+            esu('secureOutcome'): RDFAttribute('secure_outcome', scalar=True),
             esu('protocolType'): RDFAttribute('kind', scalar=True)
         }
 
