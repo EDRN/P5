@@ -14,9 +14,11 @@
         </div>
     </div>
 
+    {% comment %}
     <div class='row mb-3'>
         {% plotly_direct name='SitesChart' %}
     </div>
+    {% endcomment %}
 
     {% if knowledge_empty %}
         <p>(There are no sites.)</p>
