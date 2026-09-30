@@ -74,6 +74,22 @@
                     <small>(Not specified)</small>
                 {% endif %}
             </div>
+            <h5>Sources</h5>
+            <ul class='list-unstyled mb-3'>
+                {% for source in sources %}
+                    <li>
+                        {% if source.kind == 'grant' %}
+                            Grant number
+                            <a href='https://reporter.nih.gov/quickSearch/{{source.value}}'
+                               rel='noopener noreferrer' target='_blank'>{{source.value}}</a>
+                        {% else %}
+                            {{source.value}}
+                        {% endif %}
+                    </li>
+                {% empty %}
+                    <li class='small'>(Unknown)</li>
+                {% endfor %}
+            </ul>
             <h5>Appears In</h5>
             {{appearance}}
         </div>

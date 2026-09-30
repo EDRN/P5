@@ -112,6 +112,7 @@ class Publication(KnowledgeObject):
         context['edrn_pis'] = Person.objects.filter(
             pk__in=self.site_that_wrote_this.all().values_list('pi')
         ).order_by('title')
+        context['sources'] = self.sources.order_by('kind', 'value')
         return context
 
     content_panels = KnowledgeObject.content_panels + [
@@ -166,11 +167,23 @@ class Author(Orderable):
         return self.value
 
 
+class PublicationSource(Orderable):
+    '''A source (grant number or RDF feed) that identified this publication.'''
+    class Kind(models.TextChoices):
+        GRANT = 'grant', 'Grant Number'
+        RDF = 'rdf', 'RDF Feed'
+    kind = models.CharField(max_length=10, choices=Kind.choices, default=Kind.RDF)
+    value = models.CharField(max_length=255, blank=False, null=False, help_text='Grant number or RDF feed name')
+    page = ParentalKey(Publication, on_delete=models.CASCADE, related_name='sources')
+    panels = [FieldPanel('kind'), FieldPanel('value')]
+    def __str__(self):
+        return f'{self.get_kind_display()}: {self.value}'
+
+
 class Ingestor(BaseIngestor):
     '''Publications use a special ingest based on PubMedIDs and grant numbers, not the statements made in
     the RDF.
     '''
-    _grant_search_size = 17                                                   # How many grants to get at once
     _max_failures      = 5                                                    # Accept no more HTTP failures than this
     _pub_med_predicate = URIRef(esu('pmid'))                                  # RDF predicate for PubMed ID
     _pub_type          = 'http://edrn.nci.nih.gov/rdf/types.rdf#Publication'  # RDF type URI for publications
@@ -189,6 +202,25 @@ class Ingestor(BaseIngestor):
         '''Make an appropriate URI slug component for a publication.'''
         return slugify(f'{pubMedID} {title}')[:MAX_SLUG_LENGTH]
 
+    def readRDF(self) -> dict:
+        '''Read all the RDF sources of our folder and return the statements.
+
+        Unlike the base Ingestor, this also records which RDF source name(s)
+        contributed each subject URI in ``self.subject_sources``.
+        '''
+        self.statements, self.subject_sources = {}, {}
+        sources = self.folder.rdf_sources.all().filter(active=True)
+        if len(sources) == 0:
+            _logger.warn('For folder %r none of my RDF sources are active', self.folder)
+        for source in sources:
+            graph = rdflib.Graph()
+            graph.parse(source.url)
+            for s, p, o in graph:
+                predicates = self.statements.setdefault(s, {})
+                predicates.setdefault(p, SortedList()).add(o)
+                self.subject_sources.setdefault(str(s), set()).add(source.name)
+        return self.statements
+
     def configure_entrez(self):
         '''Set up the Entrez API.
 
@@ -206,11 +238,12 @@ class Ingestor(BaseIngestor):
         return f'urn:miriam:pubmed:{pmid}'
 
     def parse_statements(self, statements: dict) -> tuple:
-        '''Parse the ``statements`` and return a triple of a set of discovered pubmed IDs,
-        a mapping of pubmed IDs to sets of site RDF URIs, and a mapping of pubmed IDs to sets
-        of RDF subject URIs.
+        '''Parse the ``statements`` and return a 4-tuple of a set of discovered pubmed IDs,
+        a mapping of pubmed IDs to sets of site RDF URIs, a mapping of pubmed IDs to sets
+        of RDF subject URIs, and a mapping of pubmed IDs to sets of (kind, value) source pairs.
         '''
-        pmids, pmids_to_sites, pmids_to_uris = set(), dict(), dict()
+        pmids, pmids_to_sites, pmids_to_uris, pmids_to_sources = set(), dict(), dict(), dict()
+        subject_sources = getattr(self, 'subject_sources', {})
 
         # Go through every subject
         for subject, predicates in statements.items():
@@ -242,54 +275,51 @@ class Ingestor(BaseIngestor):
             uris_so_far.add(str(subject))
             pmids_to_uris[pmid] = uris_so_far
 
-        return pmids, pmids_to_sites, pmids_to_uris
+            # Record RDF feed provenance for this subject
+            sources_so_far = pmids_to_sources.get(pmid, set())
+            for source_name in subject_sources.get(str(subject), set()):
+                sources_so_far.add((PublicationSource.Kind.RDF, source_name))
+            pmids_to_sources[pmid] = sources_so_far
 
-    def get_pmids_from_grants(self) -> set:
-        '''Return the pubmed IDs for all the grant numbers specified in this folder.'''
+        return pmids, pmids_to_sites, pmids_to_uris, pmids_to_sources
 
-        pmids, last_group = set(), False
+    def get_pmids_from_grants(self) -> dict:
+        '''Return a mapping of pubmed ID to the set of grant numbers that found it.
 
-        # This list→set→list makes grant numbers unique and in sliceable form:
+        Queries Entrez once per grant number so we can attribute each publication
+        to the exact grant number(s) that identified it.
+        '''
+        pmids_to_grants = dict()
+
         grant_numbers = list(set([i.value for i in self.folder.grant_numbers.all()]))
         random.shuffle(grant_numbers)
         if not grant_numbers:
             _logger.info('No grant numbers found in %r; skipping grant number lookup', self.folder)
-            return pmids
+            return pmids_to_grants
 
-        # Batching
-        def divide():
-            '''Divide the grant_numbers in groups for API sensitivty.'''
-            nonlocal grant_numbers, last_group
-            while len(grant_numbers) > 0:
-                group, grant_numbers = grant_numbers[:self._grant_search_size], grant_numbers[self._grant_search_size:]
-                if len(grant_numbers) == 0:
-                    last_group = True
-                yield group
-
-        # Find pmids for grant numbers
-        for group in divide():
-            _logger.info('Querying Entrez for grants «%r»', group)
-            search_term = u' OR '.join([u'({}[Grant Number])'.format(i) for i in group])
+        for index, grant_number in enumerate(grant_numbers):
+            _logger.info('Querying Entrez for grant «%s»', grant_number)
+            search_term = f'({grant_number}[Grant Number])'
             # #80: PubMed API is really unreliable; try to press on even if it fails
             try:
                 # FIXME: This'll break if it returns more than 9999 publications 😅
                 with closing(Entrez.esearch(db='pubmed', rettype='medline', retmax=9999, term=search_term)) as es:
                     record = Entrez.read(es)
-                    if not record: continue
-                    found = set(record.get('IdList', []))
-                    if not found: continue
-                    pmids |= found
-                    if last_group:
-                        # We're immediately going to do pubmed queries after these grant queries, so wait at
-                        # least a little bit after the last group instead of immediately relinquishing control.
-                        time.sleep(self._wait_time / 2)
-                    else:
+                    if record:
+                        for pmid in record.get('IdList', []):
+                            grants_so_far = pmids_to_grants.get(pmid, set())
+                            grants_so_far.add(grant_number)
+                            pmids_to_grants[pmid] = grants_so_far
+                    if index < len(grant_numbers) - 1:
                         time.sleep(self._wait_time)
+                    else:
+                        # We're immediately going to do pubmed queries after these grant queries, so wait at
+                        # least a little bit after the last grant instead of immediately relinquishing control.
+                        time.sleep(self._wait_time / 2)
             except (HTTPError, HTTPException) as ex:
                 _logger.warning('Entrez search failed for «%s» but pressing on', ex.getcode(), search_term)
 
-        # That's it
-        return pmids
+        return pmids_to_grants
 
     def get_authors(self, record) -> list:
         '''Get the authors from the given medline ``record``.'''
@@ -366,8 +396,11 @@ class Ingestor(BaseIngestor):
                 time.sleep(self._wait_time)
         return details
 
-    def associate_publication(self, publication: Publication, pmids_to_sites: dict, pmids_to_uris: dict):
-        '''Associate the ``publication`` with ``Site`` and RDF ``PublicationSubjectURI`` objects.
+    def associate_publication(
+        self, publication: Publication, pmids_to_sites: dict, pmids_to_uris: dict, pmids_to_sources: dict
+    ):
+        '''Associate the ``publication`` with ``Site``, RDF ``PublicationSubjectURI``, and
+        ``PublicationSource`` objects.
 
         Return True if we made any udpates to either, False otherwise.
         '''
@@ -389,6 +422,14 @@ class Ingestor(BaseIngestor):
             PublicationSubjectURI.objects.filter(identifier__in=subject_uris).delete()
             modifications = True
             publication.subject_uris.set([PublicationSubjectURI(identifier=i) for i in subject_uris], clear=True)
+
+        sources = pmids_to_sources.get(publication.pubMedID, set())
+        existing_sources = set(publication.sources.all().values_list('kind', 'value'))
+        if sources != existing_sources:
+            modifications = True
+            publication.sources.set(
+                [PublicationSource(kind=k, value=v) for k, v in sources], clear=True
+            )
 
         if modifications: publication.save()
         return modifications
@@ -413,11 +454,13 @@ class Ingestor(BaseIngestor):
                 pub.month = '(month unknown)'
             pub.save()
 
-    def create_new_publications(self, pmids: set, pmids_to_sites: dict, pmids_to_uris: dict) -> set:
+    def create_new_publications(
+        self, pmids: set, pmids_to_sites: dict, pmids_to_uris: dict, pmids_to_sources: dict
+    ) -> set:
         '''Create brand new publication objects for the pubmed IDs in ``pmids``.
 
-        Map those objects to sites in ``pmids_to_sites`` and to subject URIs in ``pmids_to_uris``.
-        Return a set of the newly created objects.
+        Map those objects to sites in ``pmids_to_sites``, to subject URIs in ``pmids_to_uris``,
+        and to sources in ``pmids_to_sources``. Return a set of the newly created objects.
         '''
         new_pubs = set()
         details = self.get_pubmed_details(pmids)
@@ -439,16 +482,19 @@ class Ingestor(BaseIngestor):
             self.folder.add_child(instance=p)
             p.save()
             p.authors.add(*[Author(value=i) for i in authors])
-            self.associate_publication(p, pmids_to_sites, pmids_to_uris)
+            self.associate_publication(p, pmids_to_sites, pmids_to_uris, pmids_to_sources)
             new_pubs.add(p)
         return new_pubs
 
-    def update_existing_publications(self, pmids: set, pmids_to_sites: dict, pmids_to_uris: dict) -> set:
+    def update_existing_publications(
+        self, pmids: set, pmids_to_sites: dict, pmids_to_uris: dict, pmids_to_sources: dict
+    ) -> set:
         '''Update existing publication objects for the pubmed IDs in ``pmids``.
 
-        Map those objects to sites in ``pmids_to_sites`` and to subject URIs in ``pmids_to_uris``
-        as needed for changes. Note that data from Entrez API is not updated. We assume it's correct
-        eternally. If that's not the case, manually delete the publication object and re-ingest.
+        Map those objects to sites in ``pmids_to_sites``, to subject URIs in ``pmids_to_uris``,
+        and to sources in ``pmids_to_sources`` as needed for changes. Note that data from Entrez
+        API is not updated. We assume it's correct eternally. If that's not the case, manually
+        delete the publication object and re-ingest.
 
         Return a set of publication objects that actually got updated. The cardinally of that
         set will always be equal to or lower than the cardinality of ``pmids``, and frequently
@@ -456,7 +502,7 @@ class Ingestor(BaseIngestor):
         '''
         modified = set()
         for pub in Publication.objects.filter(pubMedID__in=pmids):
-            if self.associate_publication(pub, pmids_to_sites, pmids_to_uris):
+            if self.associate_publication(pub, pmids_to_sites, pmids_to_uris, pmids_to_sources):
                 modified.add(pub)
         return modified
 
@@ -489,7 +535,9 @@ class Ingestor(BaseIngestor):
                 pub.pis = pis
                 pub.save()
 
-    def update_publications(self, pmids: set, pmids_to_sites: dict, pmids_to_uris: dict) -> tuple:
+    def update_publications(
+        self, pmids: set, pmids_to_sites: dict, pmids_to_uris: dict, pmids_to_sources: dict
+    ) -> tuple:
         '''Update publications.
 
         Go through the currently populated publications and the given set of ``pmids`` to figure out
@@ -502,8 +550,8 @@ class Ingestor(BaseIngestor):
         pmids_to_update = current_pmids & pmids
         pmids_to_delete = current_pmids - pmids
 
-        new = self.create_new_publications(pmids_to_create, pmids_to_sites, pmids_to_uris)
-        updated = self.update_existing_publications(pmids_to_update, pmids_to_sites, pmids_to_uris)
+        new = self.create_new_publications(pmids_to_create, pmids_to_sites, pmids_to_uris, pmids_to_sources)
+        updated = self.update_existing_publications(pmids_to_update, pmids_to_sites, pmids_to_uris, pmids_to_sources)
         deleted = self.delete_obsolete_publications(pmids_to_delete)
         self.denormalize_pis(pmids_to_sites)
 
@@ -522,12 +570,21 @@ class Ingestor(BaseIngestor):
             }
             statements[rdflib.URIRef(self._grant_prefix + grant_pmid)] = predicates
 
-        pmids, pmids_to_sites, pmids_to_uris = self.parse_statements(statements)
+        pmids, pmids_to_sites, pmids_to_uris, pmids_to_sources = self.parse_statements(statements)
+
+        # Merge grant attributions into source provenance
+        for pmid, grant_numbers in grant_pmids.items():
+            sources_so_far = pmids_to_sources.get(pmid, set())
+            for grant_number in grant_numbers:
+                sources_so_far.add((PublicationSource.Kind.GRANT, grant_number))
+            pmids_to_sources[pmid] = sources_so_far
 
         # Remove all forbidden pub med IDs
         pmids -= set[str](self.folder.specific.forbidden_publications.all().values_list('value', flat=True))
 
-        new, updated, deleted = self.update_publications(pmids, pmids_to_sites, pmids_to_uris)
+        new, updated, deleted = self.update_publications(
+            pmids, pmids_to_sites, pmids_to_uris, pmids_to_sources
+        )
         self.add_missing_months()
         return new, updated, deleted
 
