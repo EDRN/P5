@@ -12,7 +12,6 @@ env:
     DATABASE_URL: '{{.DATABASE_URL | default "postgresql://:@/edrn"}}'
     BASE_URL: '{{.BASE_URL | default "http://localhost:6468/"}}'
     EDRN_DATA_DIR: '{{.EDRN_DATA_DIR | default (print .HOME "/dockerdata/renaissance")}}'
-    jpl_ipv4: '{{.jpl_ipv4 | default "172.16.16.10"}}'
     LDAP_BIND_PASSWORD: '{{.LDAP_BIND_PASSWORD | default .edrn_service_password}}'
     LDAP_URI: '{{.LDAP_URI | default "ldaps://localhost:1636"}}'
     p5_media_dir: '{{.p5_media_dir | default "/Users/kelly/P6/media"}}'
@@ -88,11 +87,8 @@ tasks:
             -   sleep 5
             -   dropdb --force --if-exists "edrn"
             -   createdb "edrn" "P5 for the Early Detection Research Network"
-            -   rsync --checksum --no-motd --recursive --delete --progress {{.jpl_ipv4}}:{{.p5_media_dir}} .
+            -   ./support/sync-from-dev.sh
             -   touch media/.nobackup
-            # We could just "ssh cat" this but I like having an extra copy of the .sql.bz2 file locally
-            # in case of disaster.
-            -   scp {{.jpl_ipv4}}:{{.p5_sql}} .
             -   bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --quiet
             -   .venv/bin/django-admin makemigrations --settings local --pythonpath .
             -   .venv/bin/django-admin migrate --settings local --pythonpath .

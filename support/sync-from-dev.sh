@@ -15,7 +15,7 @@ WORKSPACE=${WORKSPACE:-${PWD:-`pwd`}}
 echo "ℹ️ Syncing P5 database and blobs to «${WORKSPACE}»" 1>&2
 
 media=${WORKSPACE}/media
-source=tumor.jpl.nasa.gov:/usr/local/edrn/portal/ops-nci
+source=cancer.jpl.nasa.gov:/usr/local/edrn/edrn/portal/ops-nci
 
 
 # PostgreSQL Database
