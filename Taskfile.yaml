@@ -80,14 +80,16 @@ tasks:
         deps: [venv]
         silent: false
         interactive: false
+        # `bzip2 | psql` would otherwise succeed when bzip2 fails and psql exits 0.
+        set: [pipefail]
         vars:
             rdf: "{{.rdf | default \"true\"}}"
         cmds:
             -   echo "⏱️ Starting in 5 seconds; doing RDF ingest is {{.rdf}}"
             -   sleep 5
+            -   ./support/sync-from-dev.sh
             -   dropdb --force --if-exists "edrn"
             -   createdb "edrn" "P5 for the Early Detection Research Network"
-            -   ./support/sync-from-dev.sh
             -   touch media/.nobackup
             -   bzip2 --decompress --stdout edrn.sql.bz2 | psql --dbname=edrn --echo-errors --quiet
             -   .venv/bin/django-admin makemigrations --settings local --pythonpath .

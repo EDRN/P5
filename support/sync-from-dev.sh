@@ -33,6 +33,16 @@ if [ \! -f "edrn.sql.bz2" ]; then
     exit 1
 fi
 
+if [ \! -s "edrn.sql.bz2" ]; then
+    echo "Failed to get $source/db/edrn.sql.bz2: file is empty" 1>&2
+    exit 1
+fi
+
+if ! bzip2 --test "edrn.sql.bz2"; then
+    echo "Failed to get $source/db/edrn.sql.bz2: not a valid bzip2 archive" 1>&2
+    exit 1
+fi
+
 
 # Media Blobs
 # -----------
