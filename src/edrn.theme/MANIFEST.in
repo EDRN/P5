@@ -1,2 +1,3 @@
 graft src
 recursive-include src *.html *.css *.js *.txt
+global-exclude *.py[cod]

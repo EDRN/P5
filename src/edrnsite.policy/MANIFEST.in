@@ -1,2 +1,3 @@
 graft src
 recursive-include src *.txt
+global-exclude *.py[cod]
